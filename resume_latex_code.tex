@@ -1,0 +1,167 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    top=1.2cm,
+    bottom=1.2cm,
+    left=1.5cm,
+    right=1.5cm,
+}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+\usepackage{xcolor}
+\usepackage{tabularx}
+% --- FONT CHANGE: Added the tgpagella package for Palatino font (a clearer, more professional look) ---
+\usepackage{tgpagella}
+
+% --- Section Formatting (Color set to Black, Font size set to \large) ---
+\titleformat{\section}
+  {\normalfont\large\bfseries\centering\color{black}\MakeUppercase}
+  {}
+  {0em}
+  {\hrule height 0.8pt\vspace{0.2cm}}
+\titlespacing{\section}{0pt}{0.5cm}{0.2cm}
+
+% --- List Formatting ---
+\setlist[itemize]{
+  label=\textbullet,
+  leftmargin=*,
+  itemsep=2pt,
+  parsep=0pt,
+  topsep=2pt,
+  partopsep=0pt
+}
+
+% --- Custom Commands ---
+\newcommand{\jobtitle}[3]{
+  \vspace{3pt}
+  \noindent\textbf{\large #1}
+  \hfill
+  \textbf{#3}
+  \\
+  \textit{#2}
+  \vspace{2pt}
+}
+
+\newcommand{\educationentry}[4]{
+  \vspace{3pt}
+  \noindent\textbf{#1}
+  \hfill
+  \textbf{#4}
+  \\
+  \textit{#2}
+  \\
+  #3
+  \vspace{2pt}
+}
+
+\pagestyle{empty}
+\begin{document}
+
+% --- NAME HEADER ---
+\begin{center}
+    \Huge\bfseries \textbf{BIBEK SUBEDI}
+\end{center}
+\hrule height 1pt\vspace{2pt}
+
+% --- CONTACT AND STATUS FIELDS (Updated with LinkedIn and GitHub) ---
+\noindent
+\begin{tabularx}{\textwidth}{@{}l X}
+\textbf{Email:} & \href{mailto:078bce035.bibek@pcampus.edu.np}{078bce035.bibek@pcampus.edu.np} \\
+\textbf{Contact Number:} & +977-9845092439 \\
+\textbf{Current Location:} & Bharatpur, Nepal  \\
+\textbf{Recent Educational Qualification:} & B.E. Civil Engineering, \textbf{Fourth Year} (IOE Pulchowk Campus) \\
+\textbf{Professional License Status:} & No (Student) \\
+\textbf{Website:} & \href{https://bibeksubedi0001.com.np}{www.bibeksubedi0001.com.np} \\
+\textbf{LinkedIn:} & \href{https://www.linkedin.com/in/bibek-subediiii/}{www.linkedin.com/in/bibek-subediiii} \\
+\textbf{GitHub:} & \href{https://github.com/bibeksubedi0001}{github.com/bibeksubedi0001} \\
+\end{tabularx}
+\vspace{0.3cm}
+
+% --- PROFILE SUMMARY (Adapted from the required structure) ---
+\section*{Commitment}
+\noindent Dedicated Civil Engineering student with specialized expertise in \textbf{GIS Mapping}, \textbf{Data Analytics}, and \textbf{Infrastructure Modeling}. Experienced in high-stakes \textbf{Logistical Planning} and \textbf{Team Coordination} through extensive leadership roles. Highly committed to leveraging technical skills and leadership experience.
+\vspace{0.3cm}
+
+% --- RESEARCH AND PROFESSIONAL EXPERIENCE (Combined to match the template section) ---
+\section*{Research and Professional Experience}
+
+\jobtitle{Research Cohort Member}{Kathmandu Geo Lab}{Current}
+\begin{itemize}
+    \item Conducting research on \textbf{Shear Wave Velocity ($V_s$) prediction} using \textbf{Machine Learning (ML)} models for enhanced seismic hazard assessment.
+    \item Utilizing advanced data analysis techniques to integrate geological, geotechnical, and geographical data for predictive modeling.
+\end{itemize}
+
+\jobtitle{Research Wing Correspondent}{CESS-Nepal}{Jul 2025 – Present}
+\begin{itemize}
+    \item Fostered a culture of \textbf{evidence-based decision-making} by guiding peers in research methodologies and report generation.
+    \item Supported students in presenting and publishing their research in civil engineering.
+\end{itemize}
+
+\jobtitle{Vice President}{MAPS Pulchowk (Mathematics and Physics Society)}{Dec 2024 – Present}
+\begin{itemize}
+    \item Directed and managed large-scale academic events, including the Integration Bee, engaging over \textbf{500 student participants}.
+    \item Demonstrated strong \textbf{Team Coordination} and organizational capacity in hosting institution-wide Olympiads and technical talks.
+\end{itemize}
+
+\jobtitle{Event Coordinator }{Civil Engineering Hackathon (CESS Nepal)}{Nov 2024 – Jan 2025}
+\begin{itemize}
+    \item Designed and led the first Civil Engineering Hackathon to promote the use of \textbf{programming tools} for optimizing design precision.
+    \item Bridged the gap between civil engineering and programming, modeling the integration of technology with core principles.
+\end{itemize}
+
+\jobtitle{IOE Entrance Mentor }{Clamphook Academy}{2021 – Present}
+\begin{itemize}
+    \item Prepared over \textbf{2,000 students annually}, honing strong communication and simplified teaching skills vital for technical outreach.
+\end{itemize}
+
+% --- RELEVANT SKILLS AND APPLICATIONS (Combined to match the template section) ---
+\section*{Relevant Skills and Certificates}
+
+\noindent\textbf{Technical Skills for Assessment \& Planning:}
+\begin{itemize}
+    \item \textbf{Geospatial Analysis (GIS):} Proficient in \textbf{Arc GIS}, {SWAT}, and {Earth Google Engine} for mapping, site surveying, and resource allocation.
+    \item \textbf{Modeling \& Design:} \textbf{AutoCAD}, \textbf{ETABS}, Revit, HEC-RAS, and \textbf{Python-based FEA} for structural analysis and design verification.
+    \item \textbf{Data Analytics:} Practical experience with \textbf{Python} (for data processing/predictive modeling), C programming, and Advanced Ms-Excel.
+\end{itemize}
+
+\noindent\textbf{Projects Demonstrating Applicable Expertise:}
+\begin{itemize}
+    \item \textbf{Structural Health Monitoring (SHM):} Developed analysis for structural health monitoring, including \textbf{anomaly detection}, relevant for post-damage structural integrity checks.
+    \item \textbf{Accident Data Analysis in Kathmandu:} Utilized Python to analyze municipal data and identify trends—methodology transferable to property loss assessment.
+    \item \textbf{Flood Mapping of Karnali River :} Ongoing project utilizing \textbf{GIS} Software and \textbf{Python} for environmental modeling.
+\end{itemize}
+
+\noindent\textbf{Leadership and Volunteer Experience:}
+\begin{itemize}
+    \item \textbf{Nepal Scout (2014 – 2019):} Extensive background in community development, demonstrating discipline and social commitment.
+    \item \textbf{Hult Prize Startup Mentor:} Focused on creating sustainable, scalable business models for social challenges.
+    \item \textbf{Soft Skills:} Adaptability, Team Coordination, Logistical Planning, Analytical Skills.
+\end{itemize}
+
+% --- CERTIFICATIONS AND TRAINING (With clickable links to hosted images) ---
+\section*{Certifications and Training}
+\begin{itemize}
+    % Replace "https://link.to.your.hosted.image/..." with your actual direct links.
+    \item \href{https://drive.google.com/file/d/13FP420V4N3kIEH3vpe95hI6ZSyCQbWbq/view?usp=drive_link}{\textbf{Civil Engineering Hackathon Coordination}} | CESS-Nepal | 2025
+    \item \href{https://drive.google.com/file/d/1hF1ZjcDjblOYg0p8WRuVM5oQv6S5h06k/view?usp=drive_link}{\textbf{Research Colioquium Sub-Coordinator}} | CESS-Nepal | 2025
+    \item \href{https://drive.google.com/file/d/1vEiYuM20NYa5MXKmoSCZbO5wKgD9Xm-h/view?usp=drive_link}{\textbf{From Scratch to Structure: A Complete Building Design and Analysis Workshop}} | CESS-Nepal | 2024
+    \item \href{https://drive.google.com/file/d/1LbZ5KcrILpWjn3JX_L3XufUkdAfEaXi4/view?usp=drive_link}{\textbf{Autodesk Certified Professional: AutoCAD for Design and Drafting Exam Prep}} | Coursera | 2023
+    \item \href{https://drive.google.com/file/d/1MT2GzxbKQUI-PNYvOCNUv6Mh0RzW0R7F/view?usp=drive_link}{\textbf{REVIT Workshop}} | CESS-Nepal | 2024
+    \item \href{https://drive.google.com/file/d/1KJXJMNAqku5jqxrENo2VmJ9n2NDD5k5n/view?usp=drive_link}{\textbf{Software Fellowship}} | LOCUS | 2025
+\end{itemize}
+\vspace{0.3cm}
+
+% --- EDUCATION ---
+\section*{Education}
+\educationentry{Bachelor in Civil Engineering}{IOE Pulchowk Campus, Institute of Engineering(IoE), TU}{Pulchowk, Lalitpur}{\textit{2021 – Present}}\\
+\educationentry{+2 Science}{SOS Hermann Gmeiner Secondary School}{Bharatpur}{\textit{2019 – 2021}}
+\begin{itemize}
+    \item \textbf{GPA 3.78/4.0}
+\end{itemize}
+
+\vspace{0.3cm}
+
+\end{document}
