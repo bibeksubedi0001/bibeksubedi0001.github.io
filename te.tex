@@ -1,0 +1,93 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}      % For math equations
+\usepackage{mathptmx}     % Use Times New Roman font
+\usepackage{geometry}     % For setting margins
+\usepackage{siunitx}      % For units
+\usepackage{graphicx}     % For \times
+
+\geometry{a4paper, margin=1in}
+
+\title{Solution: Sediment Concentration Estimation (Varshney's Formula)}
+\author{}
+\date{} % No date
+
+\begin{document}
+
+\maketitle
+
+\section{Objective}
+To estimate the sediment concentration in a Nepalese river using the provided empirical formulas (Varshney's and Khosla's).
+
+\section{Given Data}
+\begin{itemize}
+    \item \textbf{Catchment Area ($A$):} $160 \text{ km}^2$
+    \item \textbf{Mean Monsoon Discharge ($Q$):} $1.90 \text{ m}^3\text{/s}$
+    \item \textbf{Monsoon Duration ($T$):} 3 months (assumed to be 90 days)
+\end{itemize}
+
+\section{Formulas}
+The problem provides the following formulas:
+\begin{enumerate}
+    \item \textbf{Varshney's Formula (c):} For areas greater than $130 \text{ km}^2$
+    $$Q_s = 1.534 \times A^{-0.264}$$
+    
+    \item \textbf{Khosla's Formula:}
+    $$Q_s = 0.323 \times A^{-0.28}$$
+\end{enumerate}
+Where $Q_s$ is the sediment load in million $\text{m}^3$ per $100 \text{ km}^2$ per year. We will use Varshney's formula (c) as the catchment area $A = 160 \text{ km}^2$, which is greater than $130 \text{ km}^2$.
+
+\section{Step-by-Step Solution}
+
+\subsection{Step 1: Calculate Annual Sediment Load ($Q_s$)}
+Using Varshney's formula:
+$$Q_s = 1.534 \times (160)^{-0.264}$$
+$$Q_s = 1.534 \times (0.2925)$$
+$$Q_s = 0.4487 \text{ million m}^3 \text{ / } 100 \text{ km}^2 \text{ / year}$$
+
+\subsection{Step 2: Calculate Total Annual Sediment Volume ($V_s$)}
+The value $Q_s$ is "per $100 \text{ km}^2$". We must scale it to our $160 \text{ km}^2$ catchment.
+$$V_s = Q_s \times \left( \frac{\text{Catchment Area}}{100 \text{ km}^2} \right)$$
+$$V_s = (0.4487 \text{ million m}^3) \times \left( \frac{160 \text{ km}^2}{100 \text{ km}^2} \right)$$
+$$V_s = 0.7179 \text{ million m}^3 \text{ / year}$$
+$$V_s = 717,900 \text{ m}^3 \text{ / year}$$
+
+\subsection{Step 3: Estimate Sediment Mass ($M_s$)}
+We must state our assumptions to convert sediment volume to mass.
+\begin{itemize}
+    \item \textbf{Sediment Bulk Density ($\rho_s$):} Assume a standard value of $1.5 \text{ tons/m}^3$.
+    \item \textbf{Monsoon Transport:} Assume $90\%$ of the annual sediment load is transported during the 3-month monsoon.
+\end{itemize}
+
+First, find the total annual mass:
+$$M_s (\text{annual}) = V_s \times \rho_s$$
+$$M_s (\text{annual}) = 717,900 \text{ m}^3 \times 1.5 \text{ tons/m}^3$$
+$$M_s (\text{annual}) = 1,076,850 \text{ tons/year}$$
+
+Next, find the monsoon sediment mass:
+$$M_s (\text{monsoon}) = 1,076,850 \text{ tons} \times 0.90$$
+$$M_s (\text{monsoon}) = 969,165 \text{ tons}$$
+
+\subsection{Step 4: Calculate Total Water Volume ($V_w$)}
+First, find the total time in seconds:
+$$T = 90 \text{ days} \times 24 \text{ hr/day} \times 3600 \text{ s/hr} = 7,776,000 \text{ s}$$
+
+Next, find the total water volume:
+$$V_w = Q \times T$$
+$$V_w = 1.90 \text{ m}^3\text{/s} \times 7,776,000 \text{ s}$$
+$$V_w = 14,774,400 \text{ m}^3$$
+
+\subsection{Step 5: Calculate Sediment Concentration ($C_s$)}
+Divide the sediment mass by the water volume.
+$$C_s = \frac{M_s (\text{monsoon})}{V_w}$$
+$$C_s = \frac{969,165 \text{ tons}}{14,774,400 \text{ m}^3}$$
+$$C_s = 0.0656 \text{ tons/m}^3$$
+
+Finally, convert to $\text{g/L}$ (noting that $1 \text{ ton/m}^3 = 1000 \text{ g/L}$):
+$$C_s \text{ (in g/L)} = 0.0656 \times 1000$$
+$$C_s = 65.6 \text{ g/L}$$
+
+\section{Final Answer}
+Using Varshney's empirical formula, the estimated mean sediment concentration is \textbf{65.6 g/L} (or $65,600 \text{ mg/L}$).
+
+\end{document}
