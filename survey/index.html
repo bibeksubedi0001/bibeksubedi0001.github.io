@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Household Sanitation Survey</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- SheetJS for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --surface: #ffffff;
+            --background: #f1f5f9;
+            --text-main: #1e293b;
+            --text-nepali: #475569;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Typography */
+        h1, h2, h3 { font-weight: 700; }
+        .nepali-text { font-family: 'Noto Sans Devanagari', sans-serif; }
+
+        /* Form Elements */
+        .section-card {
+            background: var(--surface);
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-header {
+            background-color: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 1.25rem;
+        }
+
+        .question-block {
+            padding: 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .question-block:last-child { border-bottom: none; }
+
+        .q-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+        .q-num { color: var(--primary); font-weight: 700; margin-right: 0.25rem; }
+        .q-eng { font-weight: 600; color: #0f172a; }
+        .q-nep { color: #64748b; font-size: 0.95em; display: block; margin-top: 0.1rem; }
+
+        /* Custom Inputs */
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background-color: #f8fafc;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Option Cards (Radio/Checkbox) */
+        .option-grid {
+            display: grid;
+            gap: 0.75rem;
+        }
+        .option-card {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0.875rem;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option-card:active { transform: scale(0.98); }
+        
+        /* Hide default radio/checkbox but keep accessible */
+        .option-card input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        /* Selected State Styling */
+        .option-card:has(input:checked) {
+            border-color: var(--primary);
+            background-color: #eff6ff;
+        }
+        
+        /* Custom Checkmark/Radio Circle */
+        .custom-check {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 4px;
+            margin-right: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: #fff;
+        }
+        .option-card input[type="radio"] ~ .custom-check { border-radius: 50%; }
+        
+        .option-card input:checked ~ .custom-check {
+            border-color: var(--primary);
+            background-color: var(--primary);
+        }
+        .option-card input:checked ~ .custom-check::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: white;
+            font-size: 0.75rem;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid var(--primary);
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Save Status Indicator */
+        .save-status {
+            font-size: 0.7rem;
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
+        .save-status.visible { opacity: 1; }
+    </style>
+</head>
+<body class="pb-32">
+
+    <!-- Header -->
+    <header class="bg-blue-700 text-white p-4 shadow-md sticky top-0 z-30">
+        <div class="flex justify-between items-center max-w-3xl mx-auto">
+            <div>
+                <h1 class="text-lg font-bold">Sanitation Survey</h1>
+                <div class="flex items-center gap-2">
+                    <p class="text-xs text-blue-100">घरधुरी सरसफाइ सर्वेक्षण</p>
+                    <span id="draft-status" class="save-status text-green-300 font-bold bg-blue-800 px-1.5 rounded ml-2">
+                        <i class="fas fa-save mr-1"></i>Draft Saved
+                    </span>
+                </div>
+            </div>
+            <div id="connection-status" class="text-xs bg-blue-800 bg-opacity-50 px-3 py-1.5 rounded-full flex items-center gap-2 border border-blue-600">
+                <div class="w-2 h-2 rounded-full bg-red-400 animate-pulse" id="status-dot"></div>
+                <span id="status-text" class="font-medium">Offline</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Form -->
+    <form id="surveyForm" class="max-w-3xl mx-auto p-4">
+        
+        <!-- SECTION 1 -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="text-blue-800 font-bold uppercase text-sm tracking-wide">Section 1: Basic Information / खण्ड १: आधारभूत जानकारी</h2>
+            </div>
+            
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">1.</span>
+                    <span class="q-eng">Respondent Name (Optional)</span>
+                    <span class="q-nep">उत्तरदाताको नाम (ऐच्छिक)</span>
+                </label>
+                <input type="text" name="respondent_name" placeholder="Name">
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">2.</span>
+                    <span class="q-eng">Settlement / Tole Name</span>
+                    <span class="q-nep">बस्ती / टोलको नाम</span>
+                </label>
+                <input type="text" name="settlement" required placeholder="Tole Name">
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">3.</span>
+                    <span class="q-eng">House Number (if any)</span>
+                    <span class="q-nep">घर नम्बर (भएमा)</span>
+                </label>
+                <input type="text" name="house_number" placeholder="#">
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">4.</span>
+                    <span class="q-eng">Gender</span>
+                    <span class="q-nep">लिङ्ग</span>
+                </label>
+                <div class="option-grid grid-cols-3">
+                    <label class="option-card">
+                        <input type="radio" name="gender" value="Male" required>
+                        <span class="custom-check"></span>
+                        <div class="text-sm">Male<br><span class="text-xs text-gray-500">पुरुष</span></div>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="gender" value="Female">
+                        <span class="custom-check"></span>
+                        <div class="text-sm">Female<br><span class="text-xs text-gray-500">महिला</span></div>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="gender" value="Other">
+                        <span class="custom-check"></span>
+                        <div class="text-sm">Other<br><span class="text-xs text-gray-500">अन्य</span></div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="q-label">
+                            <span class="q-num">5.</span>
+                            <span class="q-eng">Age</span>
+                            <span class="q-nep">उमेर</span>
+                        </label>
+                        <input type="number" name="age" placeholder="Years">
+                    </div>
+                    <div>
+                        <label class="q-label">
+                            <span class="q-num">6.</span>
+                            <span class="q-eng">Religion</span>
+                            <span class="q-nep">धर्म</span>
+                        </label>
+                        <input type="text" name="religion" placeholder="Hindu, Buddhist, etc.">
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">7.</span>
+                    <span class="q-eng">Caste / Ethnic Group (Optional)</span>
+                    <span class="q-nep">जाति / समुदाय (ऐच्छिक)</span>
+                </label>
+                <input type="text" name="caste" placeholder="Caste">
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">8.</span>
+                    <span class="q-eng">GPS Coordinates</span>
+                    <span class="q-nep">GPS स्थानाङ्क (अक्षांश / देशान्तर)</span>
+                </label>
+                <div class="flex gap-2">
+                    <input type="text" id="gps_input" name="gps_coords" readonly placeholder="Lat, Long" class="bg-gray-100 cursor-not-allowed">
+                    <button type="button" onclick="getGPS()" class="bg-blue-600 text-white px-5 rounded-lg font-medium active:bg-blue-700 transition flex items-center gap-2 whitespace-nowrap">
+                        <i class="fas fa-location-arrow"></i> Get
+                    </button>
+                </div>
+                <p id="gps_status" class="text-xs mt-2 font-medium"></p>
+            </div>
+        </div>
+
+        <!-- SECTION 2 -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="text-blue-800 font-bold uppercase text-sm tracking-wide">Section 2: Household Composition / खण्ड २: परिवारको विवरण</h2>
+            </div>
+            
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">8.</span>
+                    <span class="q-eng">Total Household Members</span>
+                    <span class="q-nep">कुल परिवार सदस्य संख्या</span>
+                </label>
+                <input type="number" name="total_members" placeholder="0">
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">9.</span>
+                    <span class="q-eng">Age Distribution</span>
+                    <span class="q-nep">उमेर अनुसार सदस्य संख्या</span>
+                </label>
+                <div class="bg-gray-50 rounded-lg border p-3">
+                    <div class="grid grid-cols-1 gap-3">
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm"><span class="font-bold">Children (<15)</span><br><span class="text-xs text-gray-500">बालबालिका (१५ वर्ष मुनि)</span></div>
+                            <input type="number" name="count_children" class="w-24 text-center" placeholder="0">
+                        </div>
+                        <div class="flex items-center justify-between border-t pt-2">
+                            <div class="text-sm"><span class="font-bold">Adults (15–59)</span><br><span class="text-xs text-gray-500">वयस्क (१५–५९ वर्ष)</span></div>
+                            <input type="number" name="count_adults" class="w-24 text-center" placeholder="0">
+                        </div>
+                        <div class="flex items-center justify-between border-t pt-2">
+                            <div class="text-sm"><span class="font-bold">Elderly (60+)</span><br><span class="text-xs text-gray-500">जेष्ठ नागरिक (६० वर्ष माथि)</span></div>
+                            <input type="number" name="count_elderly" class="w-24 text-center" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3 -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="text-blue-800 font-bold uppercase text-sm tracking-wide">Section 3: Socio-Economic Status / खण्ड ३: सामाजिक–आर्थिक अवस्था</h2>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">10.</span>
+                    <span class="q-eng">Main Sources of Income / Food</span>
+                    <span class="q-nep">मुख्य आम्दानी वा जीविकोपार्जनका स्रोत</span>
+                </label>
+                <div class="option-grid">
+                    <label class="option-card">
+                        <input type="checkbox" name="income_source" value="Farming">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">Farming <span class="text-gray-500 font-normal">(खेती)</span></div>
+                    </label>
+                    <label class="option-card">
+                        <input type="checkbox" name="income_source" value="Livestock">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">Livestock <span class="text-gray-500 font-normal">(पशुपालन)</span></div>
+                    </label>
+                    <label class="option-card">
+                        <input type="checkbox" name="income_source" value="Daily Wage">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">Daily Wage <span class="text-gray-500 font-normal">(दैनिक ज्याला)</span></div>
+                    </label>
+                    <label class="option-card">
+                        <input type="checkbox" name="income_source" value="Forest Products">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">Forest Products <span class="text-gray-500 font-normal">(वन उत्पादन)</span></div>
+                    </label>
+                    <label class="option-card">
+                        <input type="checkbox" name="income_source" value="Small Business">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">Small Business <span class="text-gray-500 font-normal">(सानो व्यापार)</span></div>
+                    </label>
+                    <label class="option-card">
+                        <input type="checkbox" name="income_source" value="Gov Allowance">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">Gov Allowance <span class="text-gray-500 font-normal">(सरकारी भत्ता)</span></div>
+                    </label>
+                    <label class="option-card">
+                        <input type="checkbox" name="income_source" value="Remittance">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">Remittance <span class="text-gray-500 font-normal">(वैदेशिक आम्दानी)</span></div>
+                    </label>
+                    <input type="text" name="income_other" placeholder="Other (अन्य)" class="mt-2">
+                </div>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">11.</span>
+                    <span class="q-eng">Education Level of Household Head</span>
+                    <span class="q-nep">घरमुलीको शैक्षिक स्तर</span>
+                </label>
+                <select name="education">
+                    <option value="">Select...</option>
+                    <option value="Illiterate">Illiterate (अशिक्षित)</option>
+                    <option value="Basic">Basic (आधारभूत)</option>
+                    <option value="Secondary">Secondary (माध्यमिक)</option>
+                    <option value="Higher">Higher (उच्च)</option>
+                </select>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">12.</span>
+                    <span class="q-eng">Migration / Origin History</span>
+                    <span class="q-nep">बसोबास इतिहास / बसाइँसराइ</span>
+                </label>
+                <select name="migration">
+                    <option value="">Select...</option>
+                    <option value="Native">Native to this area (स्थानीय)</option>
+                    <option value="From District">Migrated from another district (अन्य जिल्लाबाट)</option>
+                    <option value="From Abroad">Migrated from another country (अन्य देशबाट)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION 4 -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="text-blue-800 font-bold uppercase text-sm tracking-wide">Section 4: Food Security / खण्ड ४: खाद्य सुरक्षा</h2>
+            </div>
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">13.</span>
+                    <span class="q-eng">Food availability in past year</span>
+                    <span class="q-nep">गत वर्षमा खाद्यान्न अवस्था</span>
+                </label>
+                <select name="food_security">
+                    <option value="12 months">Enough for 12 months (१२ महिना पुग्ने)</option>
+                    <option value="9-12 months">9–12 months (९–१२ महिना)</option>
+                    <option value="6-9 months">6–9 months (६–९ महिना)</option>
+                    <option value="3-6 months">3–6 months (३–६ महिना)</option>
+                    <option value="<3 months">Less than 3 months (३ महिना भन्दा कम)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION 5 -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="text-blue-800 font-bold uppercase text-sm tracking-wide">Section 5: Housing Condition / खण्ड ५: आवास अवस्था</h2>
+            </div>
+            
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">14.</span>
+                    <span class="q-eng">Main house construction material</span>
+                    <span class="q-nep">घरको मुख्य निर्माण सामग्री</span>
+                </label>
+                <div class="option-grid grid-cols-2">
+                    <label class="option-card"><input type="radio" name="house_material" value="Mud"><span class="custom-check"></span><div class="text-sm">Mud <br><span class="text-gray-500 text-xs">(माटो)</span></div></label>
+                    <label class="option-card"><input type="radio" name="house_material" value="Bamboo"><span class="custom-check"></span><div class="text-sm">Bamboo <br><span class="text-gray-500 text-xs">(बाँस)</span></div></label>
+                    <label class="option-card"><input type="radio" name="house_material" value="Wood"><span class="custom-check"></span><div class="text-sm">Wood <br><span class="text-gray-500 text-xs">(काठ)</span></div></label>
+                    <label class="option-card"><input type="radio" name="house_material" value="CGI Sheet"><span class="custom-check"></span><div class="text-sm">CGI Sheet <br><span class="text-gray-500 text-xs">(टिन)</span></div></label>
+                    <label class="option-card"><input type="radio" name="house_material" value="Stone"><span class="custom-check"></span><div class="text-sm">Stone <br><span class="text-gray-500 text-xs">(ढुंगा)</span></div></label>
+                    <label class="option-card"><input type="radio" name="house_material" value="Brick/Cement"><span class="custom-check"></span><div class="text-sm">Brick <br><span class="text-gray-500 text-xs">(इँटा/सिमेन्ट)</span></div></label>
+                </div>
+                <input type="text" name="house_material_other" placeholder="Other (अन्य)" class="mt-3">
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">15.</span>
+                    <span class="q-eng">Land Ownership</span>
+                    <span class="q-nep">जग्गाको स्वामित्व</span>
+                </label>
+                <select name="land_ownership">
+                    <option value="Own">Own land (आफ्नो)</option>
+                    <option value="Rented">Rented (भाडामा)</option>
+                    <option value="Others Land">Living on others' land (अरूको जग्गामा)</option>
+                    <option value="No Legal">No legal ownership (कानुनी स्वामित्व छैन)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION 6 -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="text-blue-800 font-bold uppercase text-sm tracking-wide">Section 6: Water Access / खण्ड ६: पानीको पहुँच</h2>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">16.</span>
+                    <span class="q-eng">Main Water Source</span>
+                    <span class="q-nep">मुख्य पानीको स्रोत</span>
+                </label>
+                <div class="option-grid grid-cols-2">
+                    <label class="option-card"><input type="radio" name="water_source" value="Tap"><span class="custom-check"></span><div class="text-sm">Tap <span class="text-gray-500">(धारा)</span></div></label>
+                    <label class="option-card"><input type="radio" name="water_source" value="Handpump"><span class="custom-check"></span><div class="text-sm">Handpump <span class="text-gray-500">(हातेपम्प)</span></div></label>
+                    <label class="option-card"><input type="radio" name="water_source" value="Well"><span class="custom-check"></span><div class="text-sm">Well <span class="text-gray-500">(इनार)</span></div></label>
+                    <label class="option-card"><input type="radio" name="water_source" value="Spring"><span class="custom-check"></span><div class="text-sm">Spring <span class="text-gray-500">(मुहान)</span></div></label>
+                    <label class="option-card"><input type="radio" name="water_source" value="River"><span class="custom-check"></span><div class="text-sm">River <span class="text-gray-500">(नदी)</span></div></label>
+                </div>
+                <input type="text" name="water_source_other" placeholder="Other (अन्य)" class="mt-3">
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">17.</span>
+                    <span class="q-eng">Water Availability</span>
+                    <span class="q-nep">पानी उपलब्धता</span>
+                </label>
+                <div class="option-grid">
+                    <label class="option-card"><input type="radio" name="water_availability" value="Year-round"><span class="custom-check"></span><div class="text-sm">Year-round <span class="text-gray-500">(सधैं उपलब्ध)</span></div></label>
+                    <label class="option-card"><input type="radio" name="water_availability" value="Seasonal shortage"><span class="custom-check"></span><div class="text-sm">Seasonal shortage <span class="text-gray-500">(मौसमी अभाव)</span></div></label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">18.</span>
+                    <span class="q-eng">Distance to water source</span>
+                    <span class="q-nep">पानीको स्रोतसम्मको दूरी</span>
+                </label>
+                <select name="water_distance">
+                    <option value="Within compound">Within compound (घरभित्र)</option>
+                    <option value="<5 min">< 5 minutes (५ मिनेट भित्र)</option>
+                    <option value=">5 min">> 5 minutes (५ मिनेट भन्दा बढी)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION 7 -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="text-blue-800 font-bold uppercase text-sm tracking-wide">Section 7: Sanitation Practices / खण्ड ७: शौचालय प्रयोग</h2>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">19.</span>
+                    <span class="q-eng">Current toilet practice</span>
+                    <span class="q-nep">हाल शौचालय प्रयोग गर्ने स्थान</span>
+                </label>
+                <div class="option-grid">
+                    <label class="option-card"><input type="radio" name="toilet_practice" value="Open field"><span class="custom-check"></span><div class="text-sm">Open field <span class="text-gray-500">(खुला ठाउँ)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_practice" value="Jungle"><span class="custom-check"></span><div class="text-sm">Jungle <span class="text-gray-500">(जंगल)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_practice" value="Shared toilet"><span class="custom-check"></span><div class="text-sm">Shared toilet <span class="text-gray-500">(साझा शौचालय)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_practice" value="Own toilet"><span class="custom-check"></span><div class="text-sm">Own toilet <span class="text-gray-500">(आफ्नै शौचालय)</span></div></label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">20.</span>
+                    <span class="q-eng">Do women/girls face challenges related to toilet or bathing?</span>
+                    <span class="q-nep">महिला तथा किशोरीलाई शौच वा स्नानमा समस्या छ?</span>
+                </label>
+                <textarea name="women_challenges" rows="3" placeholder="Write here..."></textarea>
+            </div>
+        </div>
+
+        <!-- SECTION 8 -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="text-blue-800 font-bold uppercase text-sm tracking-wide">Section 8: Living Challenges / खण्ड ८: मुख्य समस्याहरू</h2>
+            </div>
+            
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">21.</span>
+                    <span class="q-eng">What are the biggest challenges your family faces? (Multiple allowed)</span>
+                    <span class="q-nep">परिवारले सामना गर्ने मुख्य समस्या</span>
+                </label>
+                <div class="option-grid">
+                    <label class="option-card"><input type="checkbox" name="challenges" value="Not enough food"><span class="custom-check"></span><div class="text-sm">Not enough food <span class="text-gray-500">(खाद्य अभाव)</span></div></label>
+                    <label class="option-card"><input type="checkbox" name="challenges" value="No safe toilet"><span class="custom-check"></span><div class="text-sm">No safe/private toilet <span class="text-gray-500">(सुरक्षित शौचालय अभाव)</span></div></label>
+                    <label class="option-card"><input type="checkbox" name="challenges" value="Clean water"><span class="custom-check"></span><div class="text-sm">Lack of clean water <span class="text-gray-500">(सफा पानी अभाव)</span></div></label>
+                    <label class="option-card"><input type="checkbox" name="challenges" value="Cold winter"><span class="custom-check"></span><div class="text-sm">Cold in winter <span class="text-gray-500">(जाडो समस्या)</span></div></label>
+                    <label class="option-card"><input type="checkbox" name="challenges" value="Smoke"><span class="custom-check"></span><div class="text-sm">Smoke inside house <span class="text-gray-500">(धुवाँ)</span></div></label>
+                    <label class="option-card"><input type="checkbox" name="challenges" value="Hot summer"><span class="custom-check"></span><div class="text-sm">Too hot in summer <span class="text-gray-500">(गर्मी समस्या)</span></div></label>
+                    <label class="option-card"><input type="checkbox" name="challenges" value="Income"><span class="custom-check"></span><div class="text-sm">Lack of income <span class="text-gray-500">(आम्दानी अभाव)</span></div></label>
+                    <label class="option-card"><input type="checkbox" name="challenges" value="Services Distance"><span class="custom-check"></span><div class="text-sm">Distance to services <span class="text-gray-500">(सेवाको दूरी)</span></div></label>
+                    <label class="option-card"><input type="checkbox" name="challenges" value="Health"><span class="custom-check"></span><div class="text-sm">Health problems <span class="text-gray-500">(स्वास्थ्य समस्या)</span></div></label>
+                    <input type="text" name="challenges_other" placeholder="Other (अन्य)" class="mt-2">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 9 -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="text-blue-800 font-bold uppercase text-sm tracking-wide">Section 9: Toilet Acceptance / खण्ड ९: शौचालय स्वीकृति</h2>
+            </div>
+            
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">22.</span>
+                    <span class="q-eng">Biggest benefit of having toilet at home</span>
+                    <span class="q-nep">घरमै शौचालय हुँदा मुख्य फाइदा</span>
+                </label>
+                <div class="option-grid">
+                    <label class="option-card"><input type="radio" name="toilet_benefit" value="Safety"><span class="custom-check"></span><div class="text-sm">Safety <span class="text-gray-500">(सुरक्षा)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_benefit" value="Privacy"><span class="custom-check"></span><div class="text-sm">Privacy <span class="text-gray-500">(गोपनीयता)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_benefit" value="Better health"><span class="custom-check"></span><div class="text-sm">Better health <span class="text-gray-500">(स्वास्थ्य सुधार)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_benefit" value="Convenience"><span class="custom-check"></span><div class="text-sm">Convenience <span class="text-gray-500">(सजिलो)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_benefit" value="Children/Elderly"><span class="custom-check"></span><div class="text-sm">Safety for children/elderly <span class="text-gray-500">(बालबालिका/जेष्ठ सुरक्षा)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_benefit" value="Modern"><span class="custom-check"></span><div class="text-sm">Modern feeling <span class="text-gray-500">(आधुनिकता)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_benefit" value="No benefit"><span class="custom-check"></span><div class="text-sm">No benefit <span class="text-gray-500">(फाइदा छैन)</span></div></label>
+                    <input type="text" name="benefit_other" placeholder="Other (अन्य)" class="mt-2">
+                </div>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">23.</span>
+                    <span class="q-eng">Main concern about building toilet</span>
+                    <span class="q-nep">शौचालय बनाउँदा मुख्य चिन्ता</span>
+                </label>
+                <div class="option-grid">
+                    <label class="option-card"><input type="radio" name="toilet_concern" value="No space"><span class="custom-check"></span><div class="text-sm">No space <span class="text-gray-500">(ठाउँ छैन)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_concern" value="Cost high"><span class="custom-check"></span><div class="text-sm">Cost high <span class="text-gray-500">(महँगो)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_concern" value="No water"><span class="custom-check"></span><div class="text-sm">No water <span class="text-gray-500">(पानी छैन)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_concern" value="Emptying issue"><span class="custom-check"></span><div class="text-sm">Emptying issue <span class="text-gray-500">(खाल्डो खाली गर्ने समस्या)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_concern" value="Knowledge"><span class="custom-check"></span><div class="text-sm">Lack of knowledge <span class="text-gray-500">(ज्ञान अभाव)</span></div></label>
+                    <label class="option-card"><input type="radio" name="toilet_concern" value="Not used to"><span class="custom-check"></span><div class="text-sm">Not used to it <span class="text-gray-500">(अभ्यस्त छैन)</span></div></label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">24.</span>
+                    <span class="q-eng">Willingness to use toilet if supported</span>
+                    <span class="q-nep">सहयोग भए प्रयोग गर्नुहुन्छ?</span>
+                </label>
+                <select name="willingness">
+                    <option value="Definitely">Yes, definitely (निश्चित)</option>
+                    <option value="Probably">Probably yes (सायद)</option>
+                    <option value="Not sure">Not sure (निश्चित छैन)</option>
+                    <option value="Probably no">Probably no (सायद होइन)</option>
+                    <option value="No">No (होइन)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION 10 -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="text-blue-800 font-bold uppercase text-sm tracking-wide">Section 10: Agriculture & Community / खण्ड १०: कृषि तथा सामुदायिक</h2>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">25.</span>
+                    <span class="q-eng">What kind of fertilizer do you use?</span>
+                    <span class="q-nep">खेतीमा कस्तो मल प्रयोग गर्नुहुन्छ?</span>
+                </label>
+                <div class="option-grid">
+                    <label class="option-card"><input type="radio" name="fertilizer" value="Chemical only"><span class="custom-check"></span><div class="text-sm">Chemical only <span class="text-gray-500">(रासायनिक मात्र)</span></div></label>
+                    <label class="option-card"><input type="radio" name="fertilizer" value="Cow/Buffalo dung"><span class="custom-check"></span><div class="text-sm">Cow/Buffalo dung <span class="text-gray-500">(गोबर मल)</span></div></label>
+                    <label class="option-card"><input type="radio" name="fertilizer" value="Both"><span class="custom-check"></span><div class="text-sm">Both <span class="text-gray-500">(दुबै)</span></div></label>
+                    <label class="option-card"><input type="radio" name="fertilizer" value="None"><span class="custom-check"></span><div class="text-sm">Do not use fertilizer <span class="text-gray-500">(मल प्रयोग गर्दिन)</span></div></label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">26.</span>
+                    <span class="q-eng">Would you be willing to use treated human waste (odorless) as fertilizer?</span>
+                    <span class="q-nep">मानव मलमूत्रबाट बनेको गन्धरहित मल प्रयोग गर्न इच्छुक हुनुहुन्छ?</span>
+                </label>
+                <div class="option-grid">
+                    <label class="option-card"><input type="radio" name="human_fertilizer" value="Yes"><span class="custom-check"></span><div class="text-sm">Yes <span class="text-gray-500">(छु)</span></div></label>
+                    <label class="option-card"><input type="radio" name="human_fertilizer" value="Maybe"><span class="custom-check"></span><div class="text-sm">Maybe <span class="text-gray-500">(सायद)</span></div></label>
+                    <label class="option-card"><input type="radio" name="human_fertilizer" value="No, religious"><span class="custom-check"></span><div class="text-sm">No, religious/cultural reason <span class="text-gray-500">(धार्मिक / सांस्कृतिक कारण)</span></div></label>
+                    <label class="option-card"><input type="radio" name="human_fertilizer" value="No, disgusting"><span class="custom-check"></span><div class="text-sm">No, I find it disgusting <span class="text-gray-500">(घिन लाग्छ)</span></div></label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">27.</span>
+                    <span class="q-eng">If toilet is community-based, how should cleaning be managed?</span>
+                    <span class="q-nep">यदि शौचालय सामुदायिक भयो भने कसरी सफा गर्ने?</span>
+                </label>
+                <div class="option-grid">
+                    <label class="option-card"><input type="radio" name="cleaning_mgmt" value="Family rotate"><span class="custom-check"></span><div class="text-sm">Family members rotate <span class="text-gray-500">(पालैपालो परिवार)</span></div></label>
+                    <label class="option-card"><input type="radio" name="cleaning_mgmt" value="Women only"><span class="custom-check"></span><div class="text-sm">Women only <span class="text-gray-500">(महिला मात्र)</span></div></label>
+                    <label class="option-card"><input type="radio" name="cleaning_mgmt" value="Hire cleaner"><span class="custom-check"></span><div class="text-sm">Hire cleaner <span class="text-gray-500">(मान्छे राख्ने)</span></div></label>
+                    <label class="option-card"><input type="radio" name="cleaning_mgmt" value="Committee"><span class="custom-check"></span><div class="text-sm">Community committee <span class="text-gray-500">(समुदाय समिति)</span></div></label>
+                    <label class="option-card"><input type="radio" name="cleaning_mgmt" value="Dont know"><span class="custom-check"></span><div class="text-sm">Don't know <span class="text-gray-500">(थाहा छैन)</span></div></label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">28.</span>
+                    <span class="q-eng">Are you willing to contribute labor or materials for construction?</span>
+                    <span class="q-nep">शौचालय निर्माणमा श्रमदान वा सामग्री सहयोग गर्नुहुन्छ?</span>
+                </label>
+                <div class="option-grid">
+                    <label class="option-card"><input type="radio" name="contribution" value="Labor only"><span class="custom-check"></span><div class="text-sm">Labor only <span class="text-gray-500">(श्रमदान मात्र)</span></div></label>
+                    <label class="option-card"><input type="radio" name="contribution" value="Materials only"><span class="custom-check"></span><div class="text-sm">Materials only <span class="text-gray-500">(सामग्री मात्र)</span></div></label>
+                    <label class="option-card"><input type="radio" name="contribution" value="Both"><span class="custom-check"></span><div class="text-sm">Both <span class="text-gray-500">(दुबै)</span></div></label>
+                    <label class="option-card"><input type="radio" name="contribution" value="No"><span class="custom-check"></span><div class="text-sm">No <span class="text-gray-500">(छैन)</span></div></label>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 11 -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="text-blue-800 font-bold uppercase text-sm tracking-wide">Section 11: Transportation Access / खण्ड ११: यातायात पहुँच</h2>
+            </div>
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-num">29.</span>
+                    <span class="q-eng">Nearest road access</span>
+                    <span class="q-nep">नजिकको बाटोसम्म पहुँच</span>
+                </label>
+                <select name="road_access">
+                    <option value="Within 5 min">Within 5 minutes (५ मिनेट भित्र)</option>
+                    <option value="5-15 min">5–15 minutes (५–१५ मिनेट)</option>
+                    <option value="More than 15 min">More than 15 minutes (१५ मिनेट भन्दा बढी)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION 12 -->
+        <div class="section-card border-l-4 border-l-yellow-400">
+            <div class="section-header bg-yellow-50">
+                <h2 class="text-yellow-800 font-bold uppercase text-sm tracking-wide">Section 12: Enumerator Observation / खण्ड १२: गणकको अवलोकन</h2>
+                <p class="text-xs text-yellow-600 mt-1">Not asked to respondent / उत्तरदातालाई नसोध्ने</p>
+            </div>
+            
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-eng">House condition</span>
+                    <span class="q-nep">घरको अवस्था</span>
+                </label>
+                <div class="flex gap-2 text-sm">
+                    <label class="flex-1 p-3 border rounded text-center bg-white cursor-pointer hover:bg-gray-50 option-card justify-center">
+                        <input type="radio" name="house_condition" value="Very poor"> 
+                        <span>Very Poor<br><span class="text-xs text-gray-500">अत्यन्त कमजोर</span></span>
+                    </label>
+                    <label class="flex-1 p-3 border rounded text-center bg-white cursor-pointer hover:bg-gray-50 option-card justify-center">
+                        <input type="radio" name="house_condition" value="Poor"> 
+                        <span>Poor<br><span class="text-xs text-gray-500">कमजोर</span></span>
+                    </label>
+                    <label class="flex-1 p-3 border rounded text-center bg-white cursor-pointer hover:bg-gray-50 option-card justify-center">
+                        <input type="radio" name="house_condition" value="Average"> 
+                        <span>Average<br><span class="text-xs text-gray-500">सामान्य</span></span>
+                    </label>
+                    <label class="flex-1 p-3 border rounded text-center bg-white cursor-pointer hover:bg-gray-50 option-card justify-center">
+                        <input type="radio" name="house_condition" value="Good"> 
+                        <span>Good<br><span class="text-xs text-gray-500">राम्रो</span></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="space-y-3">
+                    <label class="option-card">
+                        <input type="checkbox" name="obs_toilet">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">Visible toilet present? <span class="text-gray-500 font-normal">(शौचालय देखिन्छ?)</span></div>
+                    </label>
+                    <label class="option-card">
+                        <input type="checkbox" name="obs_water">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">Visible water source nearby? <span class="text-gray-500 font-normal">(पानीको स्रोत नजिकै छ?)</span></div>
+                    </label>
+                    <label class="option-card">
+                        <input type="checkbox" name="obs_health">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">Health post nearby? <span class="text-gray-500 font-normal">(स्वास्थ्य चौकी नजिक छ?)</span></div>
+                    </label>
+                    <label class="option-card">
+                        <input type="checkbox" name="obs_school">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">School nearby? <span class="text-gray-500 font-normal">(विद्यालय नजिक छ?)</span></div>
+                    </label>
+                     <label class="option-card">
+                        <input type="checkbox" name="obs_photo">
+                        <span class="custom-check"></span>
+                        <div class="text-sm font-medium">Photo taken? <span class="text-gray-500 font-normal">(फोटो खिचियो?)</span></div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <label class="q-label">
+                    <span class="q-eng">Enumerator Name</span>
+                    <span class="q-nep">गणकको नाम</span>
+                </label>
+                <input type="text" name="enumerator_name" required>
+            </div>
+             <div class="question-block">
+                <label class="q-label">
+                    <span class="q-eng">Date</span>
+                    <span class="q-nep">मिति</span>
+                </label>
+                <input type="date" name="survey_date" class="bg-gray-50" required>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 shadow-2xl flex gap-3 max-w-3xl mx-auto z-40">
+             <button type="button" onclick="toggleAdmin()" class="px-4 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition w-1/4 flex flex-col items-center justify-center text-xs">
+                <i class="fas fa-file-excel text-lg mb-1"></i>
+                Export
+            </button>
+            <button type="submit" id="submitBtn" class="flex-1 bg-blue-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-blue-700 active:scale-95 transition flex items-center justify-center gap-2 py-3">
+                <span>Submit to Cloud</span>
+                <i class="fas fa-cloud-upload-alt"></i>
+            </button>
+        </div>
+
+    </form>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl p-8 w-full max-w-sm text-center transform transition-all scale-100 shadow-2xl">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-sm">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Saved!</h3>
+            <p class="text-gray-500 mb-8">The survey data has been successfully uploaded to the cloud.</p>
+            <button onclick="closeModal()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg text-lg">
+                Start New Survey
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-md p-6 animate-slide-up sm:animate-none shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fas fa-database text-blue-600"></i> Data Export
+                </h3>
+                <button onclick="toggleAdmin()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-blue-50 p-6 rounded-2xl text-center border border-blue-100">
+                    <p class="text-sm text-blue-800 font-semibold mb-1 uppercase tracking-wider">Total Surveys</p>
+                    <p id="totalCount" class="text-5xl font-bold text-blue-600">--</p>
+                </div>
+
+                <button onclick="exportToExcel()" class="w-full bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-green-700 flex items-center justify-center gap-3 transition active:scale-95">
+                    <i class="fas fa-file-excel text-2xl"></i>
+                    <span class="text-lg">Download Excel</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Config
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'sanitation-survey';
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // State
+        let currentUser = null;
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
+
+        // --- AUTOSAVE LOGIC ---
+        const DRAFT_KEY = 'sanitation_survey_draft';
+        const draftStatus = document.getElementById('draft-status');
+
+        function showDraftStatus() {
+            draftStatus.classList.add('visible');
+            setTimeout(() => {
+                draftStatus.classList.remove('visible');
+            }, 3000);
+        }
+
+        function saveDraft() {
+            const form = document.getElementById('surveyForm');
+            const formData = new FormData(form);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (data[key]) {
+                    if (!Array.isArray(data[key])) {
+                        data[key] = [data[key]];
+                    }
+                    data[key].push(value);
+                } else {
+                    data[key] = value;
+                }
+            }
+            
+            // Handle unchecked checkboxes (FormData misses them, but we want to know state if needed, 
+            // though for simple restoration, just storing checked ones is usually enough)
+            
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+            showDraftStatus();
+        }
+
+        function loadDraft() {
+            const raw = localStorage.getItem(DRAFT_KEY);
+            if (!raw) return;
+            
+            try {
+                const data = JSON.parse(raw);
+                const form = document.getElementById('surveyForm');
+                
+                // Populate inputs
+                for (const key in data) {
+                    const val = data[key];
+                    const inputs = form.querySelectorAll(`[name="${key}"]`);
+                    
+                    if (inputs.length > 0) {
+                        const type = inputs[0].type;
+                        if (type === 'radio') {
+                            const radio = [...inputs].find(r => r.value === val);
+                            if (radio) radio.checked = true;
+                        } else if (type === 'checkbox') {
+                            if (Array.isArray(val)) {
+                                val.forEach(v => {
+                                    const cb = [...inputs].find(i => i.value === v);
+                                    if (cb) cb.checked = true;
+                                });
+                            } else {
+                                const cb = [...inputs].find(i => i.value === val);
+                                if (cb) cb.checked = true;
+                            }
+                        } else {
+                            inputs[0].value = val;
+                        }
+                    }
+                }
+                console.log("Draft Restored");
+            } catch (e) {
+                console.error("Failed to load draft", e);
+            }
+        }
+
+        // Debounce helper
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Attach listeners
+        const form = document.getElementById('surveyForm');
+        form.addEventListener('input', debounce(saveDraft, 1000));
+        form.addEventListener('change', saveDraft); // Immediate save for radio/select
+
+        // Load on startup
+        document.addEventListener('DOMContentLoaded', loadDraft);
+
+        // --- END AUTOSAVE LOGIC ---
+
+
+        // Auth Init
+        const initAuth = async () => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Auth Error:", error);
+                statusText.innerText = "Error";
+            }
+        };
+        initAuth();
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                statusDot.classList.remove('bg-red-400');
+                statusDot.classList.add('bg-green-400', 'animate-none');
+                statusText.innerText = "Online";
+                updateCount();
+            } else {
+                statusDot.classList.add('bg-red-400');
+                statusDot.classList.remove('bg-green-400');
+                statusText.innerText = "Offline";
+            }
+        });
+
+        // Set Date to Today if not set
+        const dateInput = document.querySelector('input[name="survey_date"]');
+        if (!dateInput.value) dateInput.valueAsDate = new Date();
+
+        // GPS Logic
+        window.getGPS = () => {
+            const btn = document.querySelector('button[onclick="getGPS()"]');
+            const status = document.getElementById('gps_status');
+            const input = document.getElementById('gps_input');
+            
+            btn.innerHTML = '<div class="loader w-4 h-4 border-2"></div>';
+            
+            if (!navigator.geolocation) {
+                status.innerText = "GPS not supported.";
+                status.className = "text-xs mt-2 font-medium text-red-500";
+                btn.innerHTML = '<i class="fas fa-redo"></i> Retry';
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude.toFixed(6);
+                    const long = position.coords.longitude.toFixed(6);
+                    input.value = `${lat}, ${long}`;
+                    status.innerText = `Accuracy: ${Math.round(position.coords.accuracy)}m`;
+                    status.className = "text-xs mt-2 font-medium text-green-600";
+                    btn.innerHTML = '<i class="fas fa-check"></i> Captured';
+                    btn.classList.replace('bg-blue-600', 'bg-green-600');
+                    saveDraft(); // Trigger save
+                },
+                (error) => {
+                    status.innerText = "Error: " + error.message;
+                    status.className = "text-xs mt-2 font-medium text-red-500";
+                    btn.innerHTML = '<i class="fas fa-redo"></i> Retry';
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        };
+
+        // Form Submit
+        document.getElementById('surveyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) { alert("Offline. Wait for connection."); return; }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalBtnContent = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<div class="loader border-white border-t-transparent w-5 h-5"></div> Saving...';
+
+            try {
+                const formData = new FormData(e.target);
+                
+                // Helper to get multiselect values
+                const getMulti = (name) => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+
+                const data = {
+                    metadata: {
+                        userId: currentUser.uid,
+                        timestamp: serverTimestamp(),
+                        appId: appId
+                    },
+                    basic_info: {
+                        respondent_name: formData.get('respondent_name'),
+                        settlement: formData.get('settlement'),
+                        house_number: formData.get('house_number'),
+                        gender: formData.get('gender'),
+                        age: formData.get('age'),
+                        religion: formData.get('religion'),
+                        caste: formData.get('caste'),
+                        gps: formData.get('gps_coords')
+                    },
+                    household: {
+                        total_members: formData.get('total_members'),
+                        children: formData.get('count_children'),
+                        adults: formData.get('count_adults'),
+                        elderly: formData.get('count_elderly')
+                    },
+                    socio_economic: {
+                        income_sources: getMulti('income_source'),
+                        income_other: formData.get('income_other'),
+                        education: formData.get('education'),
+                        migration: formData.get('migration')
+                    },
+                    living_conditions: {
+                        food_security: formData.get('food_security'),
+                        house_material: formData.get('house_material'),
+                        house_material_other: formData.get('house_material_other'),
+                        land_ownership: formData.get('land_ownership')
+                    },
+                    water: {
+                        source: formData.get('water_source'),
+                        source_other: formData.get('water_source_other'),
+                        availability: formData.get('water_availability'),
+                        distance: formData.get('water_distance')
+                    },
+                    sanitation: {
+                        practice: formData.get('toilet_practice'),
+                        women_challenges: formData.get('women_challenges')
+                    },
+                    challenges: {
+                        list: getMulti('challenges'),
+                        other: formData.get('challenges_other')
+                    },
+                    toilet_acceptance: {
+                        benefit: formData.get('toilet_benefit'),
+                        benefit_other: formData.get('benefit_other'),
+                        concern: formData.get('toilet_concern'),
+                        willingness: formData.get('willingness')
+                    },
+                    community: {
+                        fertilizer: formData.get('fertilizer'),
+                        human_fertilizer_willingness: formData.get('human_fertilizer'),
+                        cleaning_mgmt: formData.get('cleaning_mgmt'),
+                        contribution: formData.get('contribution')
+                    },
+                    access: {
+                        road: formData.get('road_access')
+                    },
+                    observation: {
+                        house_condition: formData.get('house_condition'),
+                        toilet_visible: formData.get('obs_toilet') ? 'Yes' : 'No',
+                        water_visible: formData.get('obs_water') ? 'Yes' : 'No',
+                        health_nearby: formData.get('obs_health') ? 'Yes' : 'No',
+                        school_nearby: formData.get('obs_school') ? 'Yes' : 'No',
+                        photo_taken: formData.get('obs_photo') ? 'Yes' : 'No',
+                        enumerator: formData.get('enumerator_name'),
+                        date: formData.get('survey_date')
+                    }
+                };
+
+                const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'surveys');
+                await addDoc(colRef, data);
+                
+                // Clear draft only on success
+                localStorage.removeItem(DRAFT_KEY);
+                
+                document.getElementById('successModal').classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Save Error:", error);
+                alert("Error: " + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnContent;
+            }
+        });
+
+        // Export Logic
+        window.exportToExcel = async () => {
+             if (!currentUser) return;
+             const btn = document.querySelector('button[onclick="exportToExcel()"]');
+             btn.innerHTML = '<div class="loader w-5 h-5 border-white border-t-transparent"></div>';
+             
+             try {
+                const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'surveys');
+                const q = query(colRef, orderBy('metadata.timestamp', 'desc'));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    alert("No data found.");
+                    btn.innerHTML = '<i class="fas fa-file-excel text-2xl"></i><span class="text-lg">Download Excel</span>';
+                    return;
+                }
+
+                const flatData = snapshot.docs.map(doc => {
+                    const d = doc.data();
+                    return {
+                        'Date': d.observation?.date,
+                        'Enumerator': d.observation?.enumerator,
+                        'Settlement': d.basic_info?.settlement,
+                        'House No': d.basic_info?.house_number,
+                        'Respondent': d.basic_info?.respondent_name,
+                        'Gender': d.basic_info?.gender,
+                        'Age': d.basic_info?.age,
+                        'Religion': d.basic_info?.religion,
+                        'Caste': d.basic_info?.caste,
+                        'GPS': d.basic_info?.gps,
+                        'Total Members': d.household?.total_members,
+                        'Children': d.household?.children,
+                        'Adults': d.household?.adults,
+                        'Elderly': d.household?.elderly,
+                        'Income Sources': d.socio_economic?.income_sources?.join(', '),
+                        'Education': d.socio_economic?.education,
+                        'Migration': d.socio_economic?.migration,
+                        'Food Security': d.living_conditions?.food_security,
+                        'House Material': d.living_conditions?.house_material,
+                        'Land Ownership': d.living_conditions?.land_ownership,
+                        'Water Source': d.water?.source,
+                        'Water Availability': d.water?.availability,
+                        'Water Distance': d.water?.distance,
+                        'Toilet Practice': d.sanitation?.practice,
+                        'Women Challenges': d.sanitation?.women_challenges,
+                        'Main Challenges': d.challenges?.list?.join(', '),
+                        'Toilet Benefit': d.toilet_acceptance?.benefit,
+                        'Toilet Concern': d.toilet_acceptance?.concern,
+                        'Willingness': d.toilet_acceptance?.willingness,
+                        'Fertilizer': d.community?.fertilizer,
+                        'Human Fertilizer': d.community?.human_fertilizer_willingness,
+                        'Cleaning Mgmt': d.community?.cleaning_mgmt,
+                        'Contribution': d.community?.contribution,
+                        'Road Access': d.access?.road,
+                        'Obs: House Cond': d.observation?.house_condition,
+                        'Obs: Toilet': d.observation?.toilet_visible,
+                        'Obs: Water': d.observation?.water_visible,
+                        'Obs: Health': d.observation?.health_nearby,
+                        'Obs: School': d.observation?.school_nearby,
+                        'Obs: Photo': d.observation?.photo_taken
+                    };
+                });
+
+                const ws = XLSX.utils.json_to_sheet(flatData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Survey Data");
+                XLSX.writeFile(wb, `Sanitation_Survey_${new Date().toISOString().slice(0,10)}.xlsx`);
+                
+             } catch (error) {
+                 console.error("Export Error:", error);
+                 alert("Export Failed: " + error.message);
+             } finally {
+                 btn.innerHTML = '<i class="fas fa-file-excel text-2xl"></i><span class="text-lg">Download Excel</span>';
+             }
+        };
+
+        // UI Helpers
+        window.toggleAdmin = () => {
+            const modal = document.getElementById('adminModal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) updateCount();
+        };
+
+        window.closeModal = () => {
+            document.getElementById('successModal').classList.add('hidden');
+            document.getElementById('surveyForm').reset();
+            window.scrollTo(0,0);
+            localStorage.removeItem(DRAFT_KEY); // Clear draft on intentional new start
+            
+            // Reset GPS styling
+            const gpsBtn = document.querySelector('button[onclick="getGPS()"]');
+            gpsBtn.innerHTML = '<i class="fas fa-location-arrow"></i> Get';
+            gpsBtn.classList.replace('bg-green-600', 'bg-blue-600');
+            document.getElementById('gps_status').innerText = '';
+        };
+
+        async function updateCount() {
+            if (!currentUser) return;
+            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'surveys');
+            const snapshot = await getDocs(colRef);
+            document.getElementById('totalCount').innerText = snapshot.size;
+        }
+    </script>
+</body>
+</html>
