@@ -762,12 +762,72 @@
             const rawData = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
             if(!rawData.length) { alert("No data to export"); return; }
             
-            const ws = XLSX.utils.json_to_sheet(rawData);
+            // Map data to human-readable headers with proper ordering
+            const exportData = rawData.map(item => ({
+                "ID": item.id,
+                "Survey Date": item.surveyDate,
+                "Timestamp": new Date(item.timestamp).toLocaleString(),
+                "Enumerator": item.enumerator || '',
+                "GPS Coordinates": item.gps || '',
+                
+                // Section 1: Basic Info
+                "Settlement": item.settlement || '',
+                "Ward No": item.ward || '',
+                "Respondent Name": item.respondent || '',
+                "Gender": item.gender || '',
+                "Age": item.age || '',
+                "Occupation": item.occupation || '',
+                "Years in Community": item.yearsLived || '',
+
+                // Section 2: Community Relations
+                "Community Relationship": item.relationship || '',
+                "Social Interaction": item.interaction || '',
+                "Shared Facilities": item.sharedFacilities || '',
+
+                // Section 3: Development & Impact
+                "Priority Needs": item.priorityNeeds || '',
+                "Sanitation Impact": item.impact || '',
+                "Concerns": item.concerns || '',
+
+                // Section 4: Resource Sharing
+                "Water Shared?": item.waterShared || '',
+                "Resource Understandings?": item.understandings || '',
+                "Past Disagreements": item.disagreements || '',
+
+                // Section 5: Cooperation
+                "Joint Participation": item.participation || '',
+                "Future Cooperation": item.willingness || '',
+                "Suggestions": item.suggestions || '',
+                
+                "Signature Collected": item.signed
+            }));
+
+            // Create worksheet
+            const ws = XLSX.utils.json_to_sheet(exportData);
+            
+            // Auto-calculate column widths
+            const range = XLSX.utils.decode_range(ws['!ref']);
+            const wscols = [];
+            for (let C = range.s.c; C <= range.e.c; ++C) {
+                let max_width = 0;
+                for (let R = range.s.r; R <= range.e.r; ++R) {
+                    const cell_address = {c: C, r: R};
+                    const cell_ref = XLSX.utils.encode_cell(cell_address);
+                    if (!ws[cell_ref]) continue;
+                    const text_len = (ws[cell_ref].v ? String(ws[cell_ref].v).length : 0);
+                    if (text_len > max_width) max_width = text_len;
+                }
+                // Add a little padding to the width
+                wscols.push({ wch: max_width + 5 });
+            }
+            ws['!cols'] = wscols;
+
+            // Create workbook and write file
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "PerceptionData");
+            XLSX.utils.book_append_sheet(wb, ws, "Survey Data");
             
             const dateStr = new Date().toISOString().split('T')[0];
-            XLSX.writeFile(wb, `Perception_Survey_${dateStr}.xlsx`);
+            XLSX.writeFile(wb, `Community_Survey_Data_${dateStr}.xlsx`);
         }
 
         function clearAllData() {
