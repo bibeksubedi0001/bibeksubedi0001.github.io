@@ -633,11 +633,65 @@
 
         function exportLocal() {
             const data = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
-            if(!data.length) { alert("No data"); return; }
-            const ws = XLSX.utils.json_to_sheet(data);
+            if(!data.length) { alert("No data available to export."); return; }
+            
+            // Map data to a well-formatted structure with Header names
+            const formattedData = data.map(item => ({
+                "Date": new Date(item.date).toLocaleDateString(),
+                "Time": new Date(item.date).toLocaleTimeString(),
+                "Household Head Name": item.hh_name,
+                "House No.": item.house_no,
+                "GPS Coordinates": item.gps,
+                "Space Available": item.space_avail,
+                "Land Length (m)": item.length,
+                "Land Width (m)": item.width,
+                "Dist. from House": item.dist_house,
+                "Dist. from Water Source": item.dist_water,
+                "Land Slope": item.slope,
+                "Soil Type": item.soil,
+                "Excavation Difficulty": item.excavation,
+                "Local Materials": item.materials,
+                "Access Type": item.access,
+                "Walk Time (min)": item.walk_time,
+                "Surveyor Remarks": item.remarks,
+                "Surveyor Name": item.surveyor,
+                "Sketch Saved": item.sketch_saved
+            }));
+
+            // Create Worksheet
+            const ws = XLSX.utils.json_to_sheet(formattedData);
+
+            // Set Column Widths for better readability
+            const wscols = [
+                {wch: 12}, // Date
+                {wch: 10}, // Time
+                {wch: 25}, // Household Head
+                {wch: 12}, // House No
+                {wch: 25}, // GPS
+                {wch: 15}, // Space
+                {wch: 15}, // Length
+                {wch: 15}, // Width
+                {wch: 20}, // Dist House
+                {wch: 25}, // Dist Water
+                {wch: 15}, // Slope
+                {wch: 15}, // Soil
+                {wch: 20}, // Excavation
+                {wch: 30}, // Materials
+                {wch: 15}, // Access
+                {wch: 15}, // Walk Time
+                {wch: 40}, // Remarks
+                {wch: 20}, // Surveyor
+                {wch: 15}  // Sketch
+            ];
+            ws['!cols'] = wscols;
+
+            // Create Workbook and Append Sheet
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "TechData");
-            XLSX.writeFile(wb, "Engineering_Recce_Data.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "Technical_Data");
+            
+            // Generate filename with current date
+            const dateStr = new Date().toISOString().split('T')[0];
+            XLSX.writeFile(wb, `Engineering_Survey_${dateStr}.xlsx`);
         }
 
         function clearAllData() {
