@@ -1035,12 +1035,105 @@
         }
 
         function exportLocal() {
-            const data = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
-            if(!data.length) { alert("No data"); return; }
-            const ws = XLSX.utils.json_to_sheet(data);
+            const rawData = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+            if(!rawData.length) { alert("No data to export"); return; }
+
+            // 1. Map data to human-readable headers
+            const formattedData = rawData.map(item => ({
+                "Survey ID": item.id,
+                "Date Time": item.date,
+                "Enumerator": item.enumerator,
+                "Settlement": item.settlement,
+                "House No": item.houseNo,
+                "Respondent": item.respondent,
+                "GPS Coordinates": item.gps,
+                "Gender": item.gender,
+                "Age": item.age,
+                "Religion": item.religion,
+                "Marital Status": item.marital,
+                "Caste/Ethnicity": item.caste,
+                
+                "Total Members": item.totalMembers,
+                "Children (<15)": item.children,
+                "Adults (15-59)": item.adults,
+                "Elderly (60+)": item.elderly,
+                "Family Type": item.familyType,
+                
+                "Income Sources": item.incomeSources,
+                "Other Income": item.incomeOther,
+                "Monthly Income": item.monthlyIncome,
+                "Education": item.education,
+                "Edu Remarks": item.eduRemarks,
+                "Migration": item.migration,
+                
+                "Food Security": item.foodSecurity,
+                
+                "House Material": item.houseMaterial,
+                "Other Material": item.matOther,
+                "Land Ownership": item.landOwn,
+                
+                "Water Source": item.waterSource,
+                "Other Water": item.waterOther,
+                "Water Availability": item.waterAvail,
+                "Water Distance": item.waterDist,
+                
+                "Toilet Practice": item.toiletPrac,
+                "Other Practice": item.pracOther,
+                "Women Challenges": item.womenChal,
+                "Challenge Details": item.womenChalDetail,
+                
+                "Major Challenges": item.challenges,
+                "Other Challenge": item.chalOther,
+                "Priority 1": item.rank1,
+                "Priority 2": item.rank2,
+                "Priority 3": item.rank3,
+                
+                "Toilet Benefit": item.benefit,
+                "Other Benefit": item.benOther,
+                "Toilet Concern": item.concern,
+                "Other Concern": item.conOther,
+                "Willingness to Use": item.willingness,
+                
+                "Fertilizer Use": item.fertilizer,
+                "Human Waste Use": item.humanWaste,
+                "Cleaning Mgmt": item.cleaning,
+                "Contribution": item.contrib,
+                
+                "Road Access": item.road,
+                
+                "Obs: Internet": item.obs_internet,
+                "Obs: Electricity": item.obs_elec,
+                "Obs: Road (Palika)": item.obs_roadP,
+                "Obs: Road (Ward)": item.obs_roadW,
+                "Obs: DRR Issues": item.obs_drr,
+                "Obs: Women Group": item.obs_wgrp,
+                "Obs: Youth Club": item.obs_yclub,
+                "Obs: Child Club": item.obs_cclub,
+                "Obs: Finance": item.obs_fin,
+                "Obs: Gov School": item.obs_gsch,
+                "Obs: Pvt School": item.obs_psch,
+                "Obs: Health Post": item.obs_hp,
+                "House Condition": item.houseCond,
+                "Toilet Visible": item.obs_toilet,
+                "Water Visible": item.obs_water,
+                "Photo Taken": item.obs_photo,
+                "Signed": item.signed
+            }));
+
+            // 2. Create Sheet
+            const ws = XLSX.utils.json_to_sheet(formattedData);
+
+            // 3. Auto-adjust column widths (simple estimation)
+            const wscols = Object.keys(formattedData[0]).map(k => ({ wch: k.length + 10 }));
+            ws['!cols'] = wscols;
+
+            // 4. Export
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "SurveyData");
-            XLSX.writeFile(wb, "Sanitation_Survey_Full.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "Survey Data");
+            
+            // Generate filename with timestamp
+            const dateStr = new Date().toISOString().split('T')[0];
+            XLSX.writeFile(wb, `Sanitation_Survey_${dateStr}.xlsx`);
         }
 
         function clearAllData() {
