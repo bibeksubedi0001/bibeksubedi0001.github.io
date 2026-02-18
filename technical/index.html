@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Engineering Reconnaissance Survey</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- SheetJS for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        nepali: ['"Noto Sans Devanagari"', 'sans-serif'],
+                    },
+                    colors: {
+                        eng: { 50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 800: '#065f46', 900: '#064e3b' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .option-card {
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+        .option-card:active { transform: scale(0.97); background-color: #f0fdf4; }
+        
+        .option-card:has(input:checked) {
+            border-color: #059669;
+            background-color: #ecfdf5;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+        }
+        .option-card:has(input:checked)::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 4px; right: 4px;
+            color: #059669;
+            font-size: 12px;
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .section-badge {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+        }
+
+        canvas { touch-action: none; background: #fff; background-image: radial-gradient(#e2e8f0 1px, transparent 1px); background-size: 20px 20px; }
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
+        #progress-bar { transition: width 0.3s ease; }
+    </style>
+</head>
+<body class="pb-32 text-slate-800 antialiased" onscroll="updateProgress()">
+
+    <!-- Header -->
+    <header class="glass-header fixed top-0 left-0 right-0 z-50">
+        <div class="h-1 bg-slate-200 w-full">
+            <div id="progress-bar" class="h-full bg-emerald-600 w-0"></div>
+        </div>
+        <div class="flex justify-between items-center max-w-4xl mx-auto p-3 px-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg shadow-sm border border-emerald-100">
+                    <i class="fas fa-drafting-compass"></i>
+                </div>
+                <div class="leading-tight">
+                    <h1 class="text-xs font-bold text-slate-900 uppercase tracking-wide">Technical Recce</h1>
+                    <p class="text-[10px] text-slate-500 font-nepali">प्राविधिक सर्वेक्षण (Phase I)</p>
+                </div>
+            </div>
+            
+            <button onclick="toggleView()" id="navBtn" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold transition active:scale-95 shadow-lg flex items-center gap-2">
+                <i class="fas fa-th-large"></i> Data
+            </button>
+        </div>
+    </header>
+
+    <div class="h-20"></div>
+
+    <!-- SURVEY FORM -->
+    <div id="survey-view" class="view-section active">
+        <form id="techForm" class="max-w-4xl mx-auto p-4 space-y-6">
+            
+            <!-- SECTION 1: ID & LOCATION -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-emerald-50/50 p-4 border-b border-emerald-100 flex items-center gap-3">
+                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">A</div>
+                    <div>
+                        <h2 class="font-bold text-slate-800 text-sm uppercase">Site Identification</h2>
+                        <p class="font-nepali text-xs text-slate-500">स्थान पहिचान</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Household Head Name</label>
+                            <input type="text" name="hh_name" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">House No. (Refer Social Survey)</label>
+                            <input type="text" name="house_no" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <!-- GPS -->
+                    <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-100">
+                        <label class="text-xs font-bold text-emerald-800 uppercase mb-1 block">Site GPS Coordinates</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="gps_input" name="gps_coords" readonly class="flex-1 bg-white border border-emerald-200 rounded px-2 py-1 text-xs font-mono" placeholder="Lat, Long">
+                            <button type="button" id="btn_track" onclick="getGPS()" class="bg-emerald-600 text-white px-3 py-1 rounded text-xs font-bold shadow-sm hover:bg-emerald-700">
+                                <i class="fas fa-satellite-dish mr-1"></i> GPS
+                            </button>
+                            <button type="button" id="btn_stop" onclick="finishGPS(true)" class="hidden bg-red-500 text-white px-3 py-1 rounded text-xs font-bold shadow-sm hover:bg-red-600 animate-pulse">
+                                <i class="fas fa-stop-circle mr-1"></i> Stop
+                            </button>
+                        </div>
+                        <div id="gps_status" class="text-[10px] mt-1 text-slate-500 min-h-[1.5em]"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: SPACE & LAYOUT -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-emerald-50/50 p-4 border-b border-emerald-100 flex items-center gap-3">
+                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">B</div>
+                    <div>
+                        <h2 class="font-bold text-slate-800 text-sm uppercase">Space Availability</h2>
+                        <p class="font-nepali text-xs text-slate-500">जग्गाको उपलब्धता (Use Tape/Pacing)</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">1. Is there sufficient space for a new toilet?</label>
+                        <div class="flex gap-2">
+                            <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1 text-center"><input type="radio" name="space_avail" value="Yes" class="hidden"><span class="text-sm font-bold">Yes (> 3m x 3m)</span></label>
+                            <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1 text-center"><input type="radio" name="space_avail" value="Limited" class="hidden"><span class="text-sm font-bold">Limited (< 2m x 2m)</span></label>
+                            <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1 text-center"><input type="radio" name="space_avail" value="No" class="hidden"><span class="text-sm font-bold">No Space</span></label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">2. Approx Length (m)</label>
+                            <input type="number" step="0.1" name="land_length" placeholder="meters" class="w-full bg-white border border-slate-300 rounded px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">3. Approx Width (m)</label>
+                            <input type="number" step="0.1" name="land_width" placeholder="meters" class="w-full bg-white border border-slate-300 rounded px-3 py-2">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">4. Distance from Kitchen/Main House</label>
+                        <select name="dist_house" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            <option value="<5m">Too Close (< 5m)</option>
+                            <option value="5-10m">Ideal (5m - 10m)</option>
+                            <option value="10-20m">Far (10m - 20m)</option>
+                            <option value=">20m">Very Far (> 20m)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">5. Distance from Water Source (Pollution Risk)</label>
+                        <select name="dist_water" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            <option value="<10m">High Risk (< 10m)</option>
+                            <option value="10-20m">Moderate Risk (10-20m)</option>
+                            <option value=">20m">Safe (> 20m)</option>
+                            <option value="No Source">No Water Source Nearby</option>
+                        </select>
+                        <p class="text-[10px] text-slate-400 mt-1 italic">*WHO recommends min 10m horizontal distance from leach pit to water source.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: TOPOGRAPHY & SOIL (Crucial for Design) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-emerald-50/50 p-4 border-b border-emerald-100 flex items-center gap-3">
+                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">C</div>
+                    <div>
+                        <h2 class="font-bold text-slate-800 text-sm uppercase">Topography & Soil</h2>
+                        <p class="font-nepali text-xs text-slate-500">जमिनको बनावट र माटो (Visual Estimate)</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <!-- Slope -->
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">6. Land Slope (Gradient)</label>
+                        <div class="space-y-2">
+                            <label class="option-card p-3 rounded-lg bg-white cursor-pointer flex items-center gap-3">
+                                <input type="radio" name="slope" value="Flat" class="accent-emerald-600">
+                                <div>
+                                    <span class="font-bold text-sm block">Flat / Level Ground (< 5°)</span>
+                                    <span class="text-xs text-slate-500">No retaining wall needed. Easy construction.</span>
+                                </div>
+                            </label>
+                            <label class="option-card p-3 rounded-lg bg-white cursor-pointer flex items-center gap-3">
+                                <input type="radio" name="slope" value="Gentle" class="accent-emerald-600">
+                                <div>
+                                    <span class="font-bold text-sm block">Gentle Slope (5° - 15°)</span>
+                                    <span class="text-xs text-slate-500">Minor leveling required.</span>
+                                </div>
+                            </label>
+                            <label class="option-card p-3 rounded-lg bg-white cursor-pointer flex items-center gap-3">
+                                <input type="radio" name="slope" value="Steep" class="accent-emerald-600">
+                                <div>
+                                    <span class="font-bold text-sm block">Steep Slope (> 15°)</span>
+                                    <span class="text-xs text-slate-500 text-red-500 font-medium">Requires Retaining Wall / Bio-engineering.</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soil Type -->
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">7. Visual Soil Classification</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="option-card p-2 rounded bg-white cursor-pointer text-center">
+                                <input type="radio" name="soil_type" value="Clay" class="hidden">
+                                <div class="text-sm font-bold mb-1">Red/Black Clay</div>
+                                <div class="text-[10px] text-slate-500">Sticky when wet. Low infiltration.</div>
+                            </label>
+                            <label class="option-card p-2 rounded bg-white cursor-pointer text-center">
+                                <input type="radio" name="soil_type" value="Sandy" class="hidden">
+                                <div class="text-sm font-bold mb-1">Sandy/Loam</div>
+                                <div class="text-[10px] text-slate-500">Gritty. Good infiltration.</div>
+                            </label>
+                            <label class="option-card p-2 rounded bg-white cursor-pointer text-center">
+                                <input type="radio" name="soil_type" value="Rocky" class="hidden">
+                                <div class="text-sm font-bold mb-1">Rocky/Gravel</div>
+                                <div class="text-[10px] text-slate-500">Hard to dig pits.</div>
+                            </label>
+                            <label class="option-card p-2 rounded bg-white cursor-pointer text-center">
+                                <input type="radio" name="soil_type" value="Marshy" class="hidden">
+                                <div class="text-sm font-bold mb-1">Marshy/Wet</div>
+                                <div class="text-[10px] text-slate-500 text-red-500">High water table risk.</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Diggability -->
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">8. Ease of Excavation (Ask local)</label>
+                        <select name="excavation" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            <option value="Easy">Easy (Soft soil)</option>
+                            <option value="Moderate">Moderate (Some stones)</option>
+                            <option value="Hard">Hard (Requires breaker/heavy labor)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: MATERIALS & LOGISTICS -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-emerald-50/50 p-4 border-b border-emerald-100 flex items-center gap-3">
+                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">D</div>
+                    <div>
+                        <h2 class="font-bold text-slate-800 text-sm uppercase">Local Resources</h2>
+                        <p class="font-nepali text-xs text-slate-500">निर्माण सामग्री र पहुँच</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <!-- Materials -->
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">9. Materials Available within 1km?</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Stone" class="mr-2">Stone (Wall)</label>
+                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Sand" class="mr-2">Sand (River)</label>
+                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Bamboo" class="mr-2">Bamboo</label>
+                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Wood" class="mr-2">Timber/Wood</label>
+                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Water" class="mr-2">Construction Water</label>
+                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Gravel" class="mr-2">Aggregates</label>
+                        </div>
+                    </div>
+
+                    <!-- Access -->
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">10. Material Transport Access</label>
+                        <select name="access_type" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            <option value="Truck">Road Access (Truck/Tractor)</option>
+                            <option value="Narrow">Narrow Path (Mini-tiller/Bike)</option>
+                            <option value="Foot">Foot Trail Only (Head loading required)</option>
+                        </select>
+                        <div class="mt-2 text-xs text-slate-500">
+                            If Foot Trail, approx walking distance (min): <input type="number" name="walking_time" class="border border-slate-300 rounded w-16 p-1 text-center"> min
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: SKETCH PAD (Crucial for Engineers) -->
+            <div class="bg-slate-800 rounded-2xl shadow-lg border border-slate-700 overflow-hidden">
+                <div class="bg-slate-900 p-4 border-b border-slate-700 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center font-bold text-sm">E</div>
+                        <div>
+                            <h2 class="font-bold text-white text-sm uppercase">Site Layout Sketch</h2>
+                            <p class="font-nepali text-xs text-slate-400">साइटको नक्सा कोर्नुहोस्</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="clearSketch()" class="text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-600">Clear</button>
+                </div>
+                <div class="p-2 bg-slate-200">
+                    <p class="text-[10px] text-slate-600 mb-1 text-center font-mono">Draw: House, Slope Direction (Arrow), Proposed Toilet Location</p>
+                    <div class="bg-white rounded-lg shadow-inner overflow-hidden cursor-crosshair">
+                        <canvas id="sketch-pad" width="350" height="300" class="w-full h-64 touch-none"></canvas>
+                    </div>
+                    <input type="hidden" name="sketch_data" id="sketch_data">
+                </div>
+            </div>
+
+            <!-- SECTION 6: SURVEYOR COMMENTS -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">11. Surveyor's Technical Recommendation</label>
+                <textarea name="tech_remarks" rows="3" class="w-full border border-slate-300 rounded-lg p-2 text-sm" placeholder="E.g., Need 1.5m retaining wall, Soil looks good for soak pit..."></textarea>
+                
+                <div class="mt-4">
+                    <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Surveyor Name</label>
+                    <input type="text" name="surveyor_name" required class="w-full p-2 rounded text-sm border border-slate-300">
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="h-20"></div>
+            <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-lg border-t border-slate-200 flex gap-3 max-w-4xl mx-auto z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+                <button type="button" onclick="if(confirm('Reset form?')) { document.getElementById('techForm').reset(); clearSketch(); window.scrollTo(0,0); }" class="px-4 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button type="submit" id="submitBtn" class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-lg rounded-xl shadow-lg shadow-emerald-200 hover:shadow-emerald-300 transition-all flex items-center justify-center gap-2 py-3">
+                    <span>Save Technical Data</span>
+                    <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboard-view" class="view-section max-w-4xl mx-auto p-4 space-y-6">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-gradient-to-br from-emerald-500 to-emerald-700 text-white p-5 rounded-2xl shadow-lg relative overflow-hidden">
+                <i class="fas fa-hard-hat absolute -bottom-4 -right-4 text-7xl text-white/20"></i>
+                <p class="text-emerald-100 text-xs font-bold uppercase tracking-wider">Sites Surveyed</p>
+                <p id="totalCount" class="text-4xl font-bold mt-1">0</p>
+            </div>
+            <button onclick="exportLocal()" class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md transition active:scale-95 flex flex-col items-center justify-center gap-2 text-slate-700 group">
+                <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition">
+                    <i class="fas fa-file-excel text-2xl"></i>
+                </div>
+                <span class="font-bold text-sm">Export Data</span>
+            </button>
+        </div>
+
+        <div>
+            <div class="flex justify-between items-end mb-3 px-1">
+                <h3 class="font-bold text-slate-800 text-lg">Engineering Logs</h3>
+                <button onclick="clearAllData()" class="text-[10px] text-red-500 font-bold hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-full uppercase tracking-wide">Clear All</button>
+            </div>
+            <div id="dashboardList" class="space-y-3 pb-20">
+                <!-- Items injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 fade-in">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-sm text-center shadow-2xl scale-100">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-1">Technical Data Saved</h3>
+            <p class="text-slate-500 text-sm mb-6">Ready for next site.</p>
+            <div class="space-y-3">
+                <button onclick="closeModal()" class="w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl hover:bg-slate-800 transition active:scale-95">Next Survey</button>
+                <button onclick="toggleView(); closeModal();" class="w-full text-slate-600 font-semibold py-2 text-sm hover:text-slate-900">View Logs</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DB_KEY = 'engineering_db_v1';
+        
+        // --- Sketch Pad Logic (Canvas) ---
+        const canvas = document.getElementById('sketch-pad');
+        const ctx = canvas.getContext('2d');
+        // Set white background immediately
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        let isDrawing = false;
+        
+        // Setup line style
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+
+        function getPos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            // Scale for different screen densities
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            let clientX = evt.clientX;
+            let clientY = evt.clientY;
+            
+            if(evt.touches && evt.touches.length > 0) {
+                clientX = evt.touches[0].clientX;
+                clientY = evt.touches[0].clientY;
+            }
+
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDraw(e) { e.preventDefault(); isDrawing = true; const pos = getPos(canvas, e); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
+        function draw(e) { if (!isDrawing) return; e.preventDefault(); const pos = getPos(canvas, e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); }
+        function endDraw() { if(isDrawing) { isDrawing = false; saveSketch(); } }
+
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', endDraw);
+        canvas.addEventListener('touchstart', startDraw, {passive: false});
+        canvas.addEventListener('touchmove', draw, {passive: false});
+        canvas.addEventListener('touchend', endDraw);
+
+        function clearSketch() {
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('sketch_data').value = "";
+        }
+
+        function saveSketch() {
+            document.getElementById('sketch_data').value = canvas.toDataURL('image/png');
+        }
+
+        // --- GPS Logic (Same as Social Survey for robustness) ---
+        let watchId = null;
+        let bestAccuracy = Infinity;
+        let bestCoords = null;
+        let gpsTimeout = null;
+        let updateCount = 0;
+
+        function getGPS() {
+            const status = document.getElementById('gps_status');
+            const input = document.getElementById('gps_input');
+            const btnTrack = document.getElementById('btn_track');
+            const btnStop = document.getElementById('btn_stop');
+            
+            if (watchId) navigator.geolocation.clearWatch(watchId);
+            if (gpsTimeout) clearTimeout(gpsTimeout);
+            bestAccuracy = Infinity; bestCoords = null; updateCount = 0;
+            
+            btnTrack.classList.add('hidden');
+            btnStop.classList.remove('hidden');
+            input.value = "Acquiring...";
+            status.innerHTML = '<span class="text-emerald-600"><i class="fas fa-spinner fa-spin"></i> Satellite Lock...</span>';
+
+            if (!navigator.geolocation) { finishGPS(false); status.innerText = "GPS not supported."; return; }
+
+            watchId = navigator.geolocation.watchPosition(
+                (pos) => {
+                    updateCount++;
+                    const currentAcc = pos.coords.accuracy;
+                    const lat = pos.coords.latitude.toFixed(7);
+                    const lng = pos.coords.longitude.toFixed(7);
+                    
+                    if (currentAcc < bestAccuracy) {
+                        bestAccuracy = currentAcc;
+                        bestCoords = `${lat}, ${lng}`;
+                        input.value = bestCoords; 
+                    }
+
+                    let color = bestAccuracy < 10 ? 'text-emerald-600' : 'text-orange-500';
+                    status.innerHTML = `<span class="${color} font-mono">Best: <b>${bestAccuracy.toFixed(1)}m</b></span>`;
+                    
+                    if (bestAccuracy <= 3) finishGPS(true);
+                },
+                (err) => { if (bestAccuracy === Infinity) { status.innerText = "Error: " + err.message; finishGPS(false); } },
+                { enableHighAccuracy: true, timeout: 45000, maximumAge: 0 }
+            );
+
+            gpsTimeout = setTimeout(() => { finishGPS(true); if(bestAccuracy === Infinity) status.innerText = "Timeout."; }, 45000);
+        }
+
+        function finishGPS(saveResult) {
+            if (watchId) navigator.geolocation.clearWatch(watchId);
+            if (gpsTimeout) clearTimeout(gpsTimeout);
+            watchId = null;
+
+            document.getElementById('btn_track').classList.remove('hidden');
+            document.getElementById('btn_stop').classList.add('hidden');
+            const input = document.getElementById('gps_input');
+
+            if (saveResult && bestCoords) {
+                input.value = bestCoords;
+                document.getElementById('gps_status').innerHTML = `<span class="text-emerald-700 font-bold"><i class="fas fa-check-circle"></i> Locked (${bestAccuracy.toFixed(1)}m)</span>`;
+            } else if (!bestCoords) {
+                input.value = "";
+            }
+        }
+
+        // --- Form Handling ---
+        document.getElementById('techForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const oldHtml = btn.innerHTML;
+            btn.disabled = true; btn.innerHTML = 'Saving...';
+
+            try {
+                const formData = new FormData(e.target);
+                const getMulti = (name) => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value).join(', ');
+                
+                const data = {
+                    id: Date.now(),
+                    date: new Date().toISOString(),
+                    hh_name: formData.get('hh_name'),
+                    house_no: formData.get('house_no'),
+                    gps: formData.get('gps_coords'),
+                    
+                    space_avail: formData.get('space_avail'),
+                    length: formData.get('land_length'),
+                    width: formData.get('land_width'),
+                    dist_house: formData.get('dist_house'),
+                    dist_water: formData.get('dist_water'),
+                    
+                    slope: formData.get('slope'),
+                    soil: formData.get('soil_type'),
+                    excavation: formData.get('excavation'),
+                    
+                    materials: getMulti('materials'),
+                    access: formData.get('access_type'),
+                    walk_time: formData.get('walking_time'),
+                    
+                    remarks: formData.get('tech_remarks'),
+                    surveyor: formData.get('surveyor_name'),
+                    sketch_saved: formData.get('sketch_data') ? 'Yes' : 'No'
+                };
+
+                const existing = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+                existing.unshift(data);
+                localStorage.setItem(DB_KEY, JSON.stringify(existing));
+                
+                document.getElementById('successModal').classList.remove('hidden');
+                
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                btn.disabled = false; btn.innerHTML = oldHtml;
+            }
+        });
+
+        // --- Navigation & Dashboard ---
+        function toggleView() {
+            const form = document.getElementById('survey-view');
+            const dash = document.getElementById('dashboard-view');
+            const btn = document.getElementById('navBtn');
+            
+            if (form.classList.contains('active')) {
+                form.classList.remove('active');
+                dash.classList.add('active');
+                btn.innerHTML = '<i class="fas fa-pen"></i> Form';
+                loadDashboard();
+            } else {
+                dash.classList.remove('active');
+                form.classList.add('active');
+                btn.innerHTML = '<i class="fas fa-th-large"></i> Data';
+            }
+            window.scrollTo(0,0);
+        }
+
+        function loadDashboard() {
+            const data = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+            document.getElementById('totalCount').innerText = data.length;
+            const list = document.getElementById('dashboardList');
+            
+            if(data.length === 0) {
+                list.innerHTML = '<div class="text-center py-10 text-slate-400 border border-dashed rounded-lg">No technical logs yet</div>';
+                return;
+            }
+
+            list.innerHTML = data.map(d => `
+                <div class="bg-white p-4 rounded-xl border-l-4 border-emerald-500 shadow-sm relative">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-bold text-slate-800">${d.hh_name || 'House #' + d.house_no}</h4>
+                            <div class="text-xs text-slate-500 mt-1">
+                                <span class="bg-slate-100 px-2 py-0.5 rounded">Slope: ${d.slope || '?'}</span>
+                                <span class="bg-slate-100 px-2 py-0.5 rounded ml-1">Soil: ${d.soil || '?'}</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                             <span class="text-[10px] text-slate-400 block">${new Date(d.date).toLocaleTimeString()}</span>
+                        </div>
+                    </div>
+                    ${d.remarks ? `<p class="text-xs text-slate-600 mt-2 italic border-t pt-2 border-slate-100">"${d.remarks}"</p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function exportLocal() {
+            const data = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+            if(!data.length) { alert("No data"); return; }
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "TechData");
+            XLSX.writeFile(wb, "Engineering_Recce_Data.xlsx");
+        }
+
+        function clearAllData() {
+            if(confirm("Delete ALL technical logs?")) {
+                localStorage.removeItem(DB_KEY);
+                loadDashboard();
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.getElementById('techForm').reset();
+            clearSketch();
+            window.scrollTo(0,0);
+        }
+        
+        function updateProgress() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        }
+    </script>
+</body>
+</html>
