@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Integrated Community Survey App</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- SheetJS for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        nepali: ['"Noto Sans Devanagari"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .option-card {
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+        .option-card:active { transform: scale(0.97); background-color: #f8fafc; }
+        
+        .option-card:has(input:checked) {
+            border-color: #0284c7;
+            background-color: #f0f9ff;
+            box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.1);
+        }
+        .option-card:has(input:checked)::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 4px; right: 4px;
+            color: #0284c7;
+            font-size: 12px;
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .section-badge {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: white;
+            box-shadow: 0 2px 4px rgba(14, 165, 233, 0.3);
+        }
+        
+        .perception-badge {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            color: white;
+            box-shadow: 0 2px 4px rgba(124, 58, 237, 0.3);
+        }
+
+        canvas { touch-action: none; background: #fff; background-image: radial-gradient(#e2e8f0 1px, transparent 1px); background-size: 20px 20px; }
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
+        #progress-bar { transition: width 0.3s ease; }
+    </style>
+</head>
+<body class="pb-32 text-slate-800 antialiased" onscroll="updateProgress()">
+
+    <!-- Header -->
+    <header class="glass-header fixed top-0 left-0 right-0 z-50">
+        <div class="h-1 bg-slate-200 w-full">
+            <div id="progress-bar" class="h-full bg-blue-600 w-0"></div>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between items-center max-w-4xl mx-auto p-3 px-4 gap-3">
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg shadow-sm">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="leading-tight flex-1">
+                    <select id="surveySelector" onchange="switchSurveyType(this.value)" class="bg-transparent font-bold text-slate-900 uppercase tracking-wide outline-none cursor-pointer border-b border-dashed border-slate-400 focus:border-blue-600 w-full">
+                        <option value="household">Household Sanitation Survey</option>
+                        <option value="perception">Community Perception Survey</option>
+                    </select>
+                    <p class="text-[10px] text-slate-500 font-nepali" id="surveySubtitle">घरधुरी सरसफाइ तथा जीवनस्तर सर्वेक्षण</p>
+                </div>
+            </div>
+            
+            <button onclick="toggleView()" id="navBtn" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold transition active:scale-95 shadow-lg flex items-center gap-2 whitespace-nowrap">
+                <i class="fas fa-th-large"></i> Dashboard
+            </button>
+        </div>
+    </header>
+
+    <div class="h-24 md:h-20"></div>
+
+    <!-- MAIN FORM CONTAINER -->
+    <div id="survey-view" class="view-section active">
+        <form id="mainForm" class="max-w-4xl mx-auto p-4 space-y-6">
+            
+            <!-- ====== HOUSEHOLD SURVEY CONTENT (Default) ====== -->
+            <div id="form-household" class="space-y-6">
+                <!-- SECTION 1 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">1</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Basic Information</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड १: आधारभूत जानकारी</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <!-- Q1 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">1. Respondent Name / उत्तरदाताको नाम (Optional)</label>
+                            <input type="text" name="respondent_name" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 focus:border-blue-500 outline-none">
+                        </div>
+                        <!-- Q2 & Q3 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">2. Settlement / Tole / बस्ती / टोल</label>
+                                <input type="text" name="settlement" required class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 focus:border-blue-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">3. House Number / घर नं</label>
+                                <input type="text" name="house_number" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 focus:border-blue-500 outline-none">
+                            </div>
+                        </div>
+                        <!-- Q4 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">4. Gender / लिङ्ग</label>
+                            <div class="flex gap-2">
+                                <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1 text-center"><input type="radio" name="gender" value="Male" class="hidden"><span class="text-sm font-bold">Male (पुरुष)</span></label>
+                                <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1 text-center"><input type="radio" name="gender" value="Female" class="hidden"><span class="text-sm font-bold">Female (महिला)</span></label>
+                                <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1 text-center"><input type="radio" name="gender" value="Other" class="hidden"><span class="text-sm font-bold">Other (अन्य)</span></label>
+                            </div>
+                        </div>
+                        <!-- Q5, Q6 -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">5. Age / उमेर</label>
+                                <input type="number" name="age" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">6. Religion / धर्म</label>
+                                <input type="text" name="religion" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            </div>
+                        </div>
+                        <!-- Q7 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">7. Marital Status / वैवाहिक अवस्था</label>
+                            <select name="marital_status" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="">Select...</option>
+                                <option value="Single">Single (अविवाहित)</option>
+                                <option value="Married">Married (विवाहित)</option>
+                                <option value="Divorced">Divorced (सम्बन्ध विच्छेद)</option>
+                                <option value="Widowed">Widowed (विधवा/विधुर)</option>
+                                <option value="Separated">Separated (अलग बसेको)</option>
+                            </select>
+                        </div>
+                        <!-- Q8 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">8. Caste/Ethnic Group / जाति/समुदाय</label>
+                            <input type="text" name="caste" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                        </div>
+                        <!-- Q9 GPS (Updated with High Accuracy Logic) -->
+                        <div class="bg-blue-50 p-3 rounded-lg border border-blue-100">
+                            <label class="text-xs font-bold text-blue-800 uppercase mb-1 block">9. GPS Coordinates</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="gps_input" name="gps_coords" readonly class="flex-1 bg-white border border-blue-200 rounded px-2 py-1 text-xs font-mono" placeholder="Lat, Long">
+                                
+                                <!-- Standard Track Button -->
+                                <button type="button" id="btn_track" onclick="getGPS()" class="bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold shadow-sm hover:bg-blue-700">
+                                    <i class="fas fa-satellite-dish mr-1"></i> Start GPS
+                                </button>
+                                
+                                <!-- Stop/Lock Button (Hidden by default) -->
+                                <button type="button" id="btn_stop" onclick="finishGPS(true)" class="hidden bg-red-500 text-white px-3 py-1 rounded text-xs font-bold shadow-sm hover:bg-red-600 animate-pulse">
+                                    <i class="fas fa-stop-circle mr-1"></i> Lock Position
+                                </button>
+                            </div>
+                            <div id="gps_status" class="text-[10px] mt-1 text-slate-500 min-h-[1.5em]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">2</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Household Composition</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड २: परिवारको विवरण</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <!-- Q10 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">10. Total Members / कुल सदस्य</label>
+                            <input type="number" name="total_members" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 font-bold text-lg" placeholder="0">
+                        </div>
+                        <!-- Q11 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">11. Age Distribution / उमेर विवरण</label>
+                            <div class="bg-slate-50 rounded-lg border border-slate-200 p-2 space-y-2">
+                                <div class="flex justify-between items-center bg-white p-2 rounded shadow-sm">
+                                    <span class="text-sm font-semibold">Children (<15) / बालबालिका</span>
+                                    <input type="number" name="count_children" class="w-20 border border-slate-200 rounded p-1 text-center" placeholder="0">
+                                </div>
+                                <div class="flex justify-between items-center bg-white p-2 rounded shadow-sm">
+                                    <span class="text-sm font-semibold">Adults (15-59) / वयस्क</span>
+                                    <input type="number" name="count_adults" class="w-20 border border-slate-200 rounded p-1 text-center" placeholder="0">
+                                </div>
+                                <div class="flex justify-between items-center bg-white p-2 rounded shadow-sm">
+                                    <span class="text-sm font-semibold">Elderly (60+) / जेष्ठ</span>
+                                    <input type="number" name="count_elderly" class="w-20 border border-slate-200 rounded p-1 text-center" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Q12 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">12. Family Type / प्रकार</label>
+                            <div class="flex gap-2">
+                                <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1 text-center"><input type="radio" name="family_type" value="Nuclear" class="hidden"><span class="text-sm font-bold">Nuclear (एकल)</span></label>
+                                <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1 text-center"><input type="radio" name="family_type" value="Joint" class="hidden"><span class="text-sm font-bold">Joint (संयुक्त)</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">3</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Socio-Economic</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड ३: सामाजिक–आर्थिक</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <!-- Q13 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">13. Income Sources (Multiple) / आम्दानी</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="income_source" value="Gov Employed" class="mr-2">Gov Employed</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="income_source" value="Private Employed" class="mr-2">Private Job</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="income_source" value="Business" class="mr-2">Business</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="income_source" value="Farming" class="mr-2">Farming</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="income_source" value="Daily Wage" class="mr-2">Daily Wage</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="income_source" value="Remittance" class="mr-2">Remittance</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="income_source" value="Allowance" class="mr-2">Allowance</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="income_source" value="Informal" class="mr-2">Informal</label>
+                            </div>
+                            <input type="text" name="income_other" class="mt-2 w-full border border-slate-300 rounded p-2 text-sm" placeholder="Other income...">
+                        </div>
+                        <!-- Q14 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">14. Monthly Income / मासिक आम्दानी</label>
+                            <select name="monthly_income" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="<5000">Below 5,000</option>
+                                <option value="5000-10000">5,000 - 10,000</option>
+                                <option value="11000-15000">11,000 - 15,000</option>
+                                <option value="16000-20000">16,000 - 20,000</option>
+                                <option value="21000-30000">21,000 - 30,000</option>
+                                <option value=">30000">Above 30,000</option>
+                            </select>
+                        </div>
+                        <!-- Q15 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">15. Education Level / शिक्षा</label>
+                            <select name="education" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="None">No formal education</option>
+                                <option value="Primary">Primary</option>
+                                <option value="Lower Sec">Lower Secondary</option>
+                                <option value="Secondary">Secondary</option>
+                                <option value="Higher Sec">Higher Secondary</option>
+                                <option value="Bachelor+">Bachelor and above</option>
+                                <option value="Mixed">Mixed levels</option>
+                            </select>
+                            <textarea name="edu_remarks" class="mt-2 w-full border border-slate-300 rounded p-2 text-sm" placeholder="Remarks..."></textarea>
+                        </div>
+                        <!-- Q16 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">16. Migration / बसाइँसराइ</label>
+                            <div class="space-y-1">
+                                <label class="option-card p-2 rounded bg-white cursor-pointer flex items-center"><input type="radio" name="migration" value="Native" class="mr-2"> Native (स्थानीय)</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer flex items-center"><input type="radio" name="migration" value="From District" class="mr-2"> From another district</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer flex items-center"><input type="radio" name="migration" value="From Abroad" class="mr-2"> From another country</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">4</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Food Security</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड ४: खाद्य सुरक्षा</p>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <!-- Q17 -->
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">17. Food Availability (Last Year)</label>
+                        <select name="food_security" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            <option value="12m">Enough for 12 months</option>
+                            <option value="9-12m">9–12 months</option>
+                            <option value="6-9m">6–9 months</option>
+                            <option value="3-6m">3–6 months</option>
+                            <option value="<3m">Less than 3 months</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- SECTION 5 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">5</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Housing Condition</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड ५: आवास अवस्था</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <!-- Q18 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">18. Construction Material / सामग्री</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="house_material" value="Mud" class="mr-2">Mud/माटो</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="house_material" value="Bamboo" class="mr-2">Bamboo/बाँस</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="house_material" value="Wood" class="mr-2">Wood/काठ</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="house_material" value="CGI" class="mr-2">CGI/टिन</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="house_material" value="Stone" class="mr-2">Stone/ढुंगा</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="house_material" value="Brick" class="mr-2">Brick/इँटा</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="house_material" value="Mixed" class="mr-2">Mixed</label>
+                            </div>
+                            <input type="text" name="material_other" class="mt-2 w-full border border-slate-300 rounded p-2 text-sm" placeholder="Other...">
+                        </div>
+                        <!-- Q19 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">19. Land Ownership / जग्गा</label>
+                            <select name="land_ownership" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="Own">Own land (आफ्नो)</option>
+                                <option value="Rented">Rented (भाडामा)</option>
+                                <option value="Others">Living on others' land (अरूको)</option>
+                                <option value="No Legal">No legal ownership</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 6 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">6</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Water Access</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड ६: पानीको पहुँच</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <!-- Q20 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">20. Main Water Source / स्रोत</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="water_source" value="Tap" class="mr-2">Tap/धारा</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="water_source" value="Handpump" class="mr-2">Handpump</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="water_source" value="Well" class="mr-2">Well/इनार</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="water_source" value="Spring" class="mr-2">Spring/मुहान</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="water_source" value="River" class="mr-2">River/नदी</label>
+                            </div>
+                            <input type="text" name="water_source_other" class="mt-2 w-full border border-slate-300 rounded p-2 text-sm" placeholder="Other...">
+                        </div>
+                        <!-- Q21 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">21. Availability / उपलब्धता</label>
+                            <div class="flex gap-2">
+                                <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1"><input type="radio" name="water_avail" value="Year-round" class="mr-2">Year-round</label>
+                                <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1"><input type="radio" name="water_avail" value="Seasonal" class="mr-2">Seasonal</label>
+                            </div>
+                        </div>
+                        <!-- Q22 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">22. Distance / दूरी</label>
+                            <select name="water_dist" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="Compound">Within compound (घरभित्र)</option>
+                                <option value="<5min">< 5 minutes</option>
+                                <option value=">5min">> 5 minutes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 7 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">7</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Sanitation Practices</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड ७: शौचालय प्रयोग</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <!-- Q23 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">23. Current Practice / हालको बानी</label>
+                            <div class="grid grid-cols-1 gap-2">
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="toilet_practice" value="Open Field" class="mr-2"> Open field (खुला ठाउँ)</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="toilet_practice" value="Jungle" class="mr-2"> Jungle (जंगल)</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="toilet_practice" value="Shared Toilet" class="mr-2"> Shared toilet (साझा शौचालय)</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="radio" name="toilet_practice" value="Own Toilet" class="mr-2"> Own toilet (आफ्नै शौचालय)</label>
+                            </div>
+                            <input type="text" name="practice_other" class="mt-2 w-full border border-slate-300 rounded p-2 text-sm" placeholder="Other...">
+                        </div>
+                        <!-- Q24 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">24. Women/Girls Challenges?</label>
+                            <div class="flex gap-4 mb-2">
+                                <label class="cursor-pointer"><input type="radio" name="women_challenges" value="Yes" class="mr-1"> Yes</label>
+                                <label class="cursor-pointer"><input type="radio" name="women_challenges" value="No" class="mr-1"> No</label>
+                            </div>
+                            <input type="text" name="women_challenges_detail" class="w-full border border-slate-300 rounded p-2 text-sm" placeholder="If Yes, details...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 8 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">8</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Living Challenges</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड ८: मुख्य समस्याहरू</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <!-- Q25 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">25. Select Top 3 Challenges (Max 3)</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="challenges" value="Toilet" class="mr-2">Lack of Toilet</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="challenges" value="Water" class="mr-2">Water Shortage</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="challenges" value="Poverty" class="mr-2">Poverty</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="challenges" value="Health" class="mr-2">Health Problems</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="challenges" value="Education" class="mr-2">Education Access</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="challenges" value="Unemployment" class="mr-2">Unemployment</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="challenges" value="Disaster" class="mr-2">Landslide/DRR</label>
+                            </div>
+                            <input type="text" name="challenge_other" class="mt-2 w-full border border-slate-300 rounded p-2 text-sm" placeholder="Other...">
+                        </div>
+                        <!-- Q26 -->
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">26. Rank Priorities (1st = Most Serious)</label>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-bold w-8">1st</span>
+                                    <input type="text" name="rank_1" class="flex-1 border border-slate-300 rounded p-1" placeholder="Problem 1">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-bold w-8">2nd</span>
+                                    <input type="text" name="rank_2" class="flex-1 border border-slate-300 rounded p-1" placeholder="Problem 2">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-bold w-8">3rd</span>
+                                    <input type="text" name="rank_3" class="flex-1 border border-slate-300 rounded p-1" placeholder="Problem 3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 9 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">9</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Toilet Acceptance</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड ९: शौचालय स्वीकृति</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <!-- Q27 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">27. Biggest Benefit</label>
+                            <select name="toilet_benefit" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="">Select...</option>
+                                <option value="Safety">Safety</option>
+                                <option value="Privacy">Privacy</option>
+                                <option value="Health">Better health</option>
+                                <option value="Convenience">Convenience</option>
+                                <option value="Vulnerable">Safety for children/elderly</option>
+                                <option value="Modern">Modern feeling</option>
+                                <option value="None">No benefit</option>
+                            </select>
+                            <input type="text" name="benefit_other" class="mt-2 w-full border border-slate-300 rounded p-2 text-sm" placeholder="Other...">
+                        </div>
+                        <!-- Q28 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">28. Main Concern</label>
+                            <select name="toilet_concern" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="">Select...</option>
+                                <option value="No space">No space</option>
+                                <option value="Cost">High Cost</option>
+                                <option value="No water">No water</option>
+                                <option value="Emptying">Emptying issue</option>
+                                <option value="Knowledge">Lack of knowledge</option>
+                                <option value="Not used">Not used to it</option>
+                            </select>
+                            <input type="text" name="concern_other" class="mt-2 w-full border border-slate-300 rounded p-2 text-sm" placeholder="Other...">
+                        </div>
+                        <!-- Q29 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">29. Willingness to Use</label>
+                            <select name="willingness" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="Yes">Yes, definitely</option>
+                                <option value="Probably Yes">Probably yes</option>
+                                <option value="Not sure">Not sure</option>
+                                <option value="Probably No">Probably no</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 10 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">10</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Agriculture & Community</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड १०: कृषि तथा सामुदायिक</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <!-- Q30 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">30. Fertilizer Use</label>
+                            <select name="fertilizer" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="Chemical">Chemical only</option>
+                                <option value="Dung">Cow/Buffalo dung</option>
+                                <option value="Both">Both</option>
+                                <option value="None">Do not use</option>
+                            </select>
+                        </div>
+                        <!-- Q31 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">31. Use Treated Human Waste?</label>
+                            <select name="human_waste_use" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="Yes">Yes</option>
+                                <option value="Maybe">Maybe</option>
+                                <option value="No-Religious">No (Religious reason)</option>
+                                <option value="No-Disgust">No (Disgusting)</option>
+                            </select>
+                        </div>
+                        <!-- Q32 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">32. Community Toilet Cleaning</label>
+                            <select name="cleaning_mgmt" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="Women only">Women only</option>
+                                <option value="Men only">Men only</option>
+                                <option value="Both">Both Women and Men</option>
+                                <option value="Rotation">Household rotation</option>
+                                <option value="Committee">Committee</option>
+                            </select>
+                        </div>
+                        <!-- Q33 -->
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">33. Contribution Willingness</label>
+                            <select name="contribution" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="Labor">Labor only</option>
+                                <option value="Materials">Materials only</option>
+                                <option value="Both">Both</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 11 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">11</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Transportation Access</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड ११: यातायात पहुँच</p>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <!-- Q34 -->
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">34. Nearest Road Access</label>
+                        <select name="road_access" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            <option value="<5min">Within 5 minutes</option>
+                            <option value="5-15min">5–15 minutes</option>
+                            <option value=">15min">More than 15 minutes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- SECTION 12 OBSERVATION -->
+                <div class="bg-yellow-50 rounded-2xl shadow-sm border border-yellow-200 overflow-hidden relative">
+                    <div class="absolute top-0 right-0 bg-yellow-200 text-yellow-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">STAFF ONLY</div>
+                    <div class="bg-yellow-100/80 p-4 border-b border-yellow-200 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-yellow-300 text-yellow-900 flex items-center justify-center font-bold text-sm">12</div>
+                        <div>
+                            <h2 class="font-bold text-yellow-900 text-sm uppercase">Enumerator Observation</h2>
+                            <p class="font-nepali text-xs text-yellow-700">खण्ड १२: गणकको अवलोकन</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <!-- Checklist -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_internet" class="accent-yellow-600"> Internet Available</label>
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_electricity" class="accent-yellow-600"> Electricity Available</label>
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_road_palika" class="accent-yellow-600"> Road to Palika</label>
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_road_ward" class="accent-yellow-600"> Road to Ward</label>
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_drr" class="accent-yellow-600"> DRR Issues (Landslide/Flood)</label>
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_women_grp" class="accent-yellow-600"> In Women's Group</label>
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_youth_club" class="accent-yellow-600"> In Youth Club</label>
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_child_club" class="accent-yellow-600"> In Child Club</label>
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_finance" class="accent-yellow-600"> Financial Inst. Nearby</label>
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_gov_school" class="accent-yellow-600"> Gov School Nearby</label>
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_pvt_school" class="accent-yellow-600"> Pvt School Nearby</label>
+                            <label class="flex items-center gap-2 text-sm text-yellow-900"><input type="checkbox" name="obs_health" class="accent-yellow-600"> Health Post Nearby</label>
+                        </div>
+                        
+                        <hr class="border-yellow-200">
+
+                        <!-- House Condition -->
+                        <div>
+                            <label class="text-xs font-bold text-yellow-900 uppercase mb-2 block">House Condition</label>
+                            <div class="flex gap-1">
+                                <label class="flex-1 cursor-pointer"><input type="radio" name="house_condition" value="Very Poor" class="peer hidden"><div class="text-center py-2 bg-white border border-yellow-300 rounded text-xs peer-checked:bg-yellow-500 peer-checked:text-white">Very Poor</div></label>
+                                <label class="flex-1 cursor-pointer"><input type="radio" name="house_condition" value="Poor" class="peer hidden"><div class="text-center py-2 bg-white border border-yellow-300 rounded text-xs peer-checked:bg-yellow-500 peer-checked:text-white">Poor</div></label>
+                                <label class="flex-1 cursor-pointer"><input type="radio" name="house_condition" value="Average" class="peer hidden"><div class="text-center py-2 bg-white border border-yellow-300 rounded text-xs peer-checked:bg-yellow-500 peer-checked:text-white">Average</div></label>
+                                <label class="flex-1 cursor-pointer"><input type="radio" name="house_condition" value="Good" class="peer hidden"><div class="text-center py-2 bg-white border border-yellow-300 rounded text-xs peer-checked:bg-yellow-500 peer-checked:text-white">Good</div></label>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <label class="block p-2 bg-white rounded border border-yellow-200 text-xs text-yellow-900"><input type="checkbox" name="obs_toilet_visible" class="block mx-auto mb-1">Toilet Visible?</label>
+                            <label class="block p-2 bg-white rounded border border-yellow-200 text-xs text-yellow-900"><input type="checkbox" name="obs_water_visible" class="block mx-auto mb-1">Water Visible?</label>
+                            <label class="block p-2 bg-white rounded border border-yellow-200 text-xs text-yellow-900"><input type="checkbox" name="obs_photo" class="block mx-auto mb-1">Photo Taken?</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== PERCEPTION SURVEY CONTENT (Hidden by default) ====== -->
+            <div id="form-perception" class="space-y-6 hidden">
+                
+                <div class="bg-purple-50 border border-purple-200 p-4 rounded-xl text-sm text-purple-900 mb-6">
+                    <i class="fas fa-info-circle mr-1"></i> This survey is for observers/neighbors outside the specific target community.
+                </div>
+
+                <!-- SECTION 1 PS -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="perception-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">1</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Basic Information</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड १: आधारभूत जानकारी</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">1. Settlement/Tole Name / बस्ती/टोलको नाम</label>
+                            <input type="text" name="ps_settlement" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">2. Ward No / वडानम्बर</label>
+                                <input type="number" name="ps_ward" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">3. Respondent (Opt)</label>
+                                <input type="text" name="ps_respondent" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">4. Gender / लिङ्ग</label>
+                                <select name="ps_gender" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                    <option value="Male">Male (पुरुष)</option>
+                                    <option value="Female">Female (महिला)</option>
+                                    <option value="Other">Other (अन्य)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">5. Age / उमेर</label>
+                                <input type="number" name="ps_age" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">6. Occupation / पेशा</label>
+                                <input type="text" name="ps_occupation" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">7. Years in community</label>
+                                <input type="number" name="ps_years_lived" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2 PS -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="perception-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">2</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Community Relations</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड २: समुदायबीचको सम्बन्ध</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">1. Relationship with nearby settlements?</label>
+                            <select name="ps_relationship" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="Very Good">Very good (धेरै राम्रो)</option>
+                                <option value="Good">Good (राम्रो)</option>
+                                <option value="Neutral">Neutral (सामान्य)</option>
+                                <option value="Weak">Weak (कमजोर)</option>
+                                <option value="Poor">Poor (खराब)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">2. Social/Economic Interaction?</label>
+                            <div class="flex gap-2 flex-wrap">
+                                <label class="option-card px-3 py-2 rounded bg-white cursor-pointer flex-1 text-center"><input type="radio" name="ps_interaction" value="Frequently" class="hidden"><span class="text-xs font-bold">Frequently</span></label>
+                                <label class="option-card px-3 py-2 rounded bg-white cursor-pointer flex-1 text-center"><input type="radio" name="ps_interaction" value="Sometimes" class="hidden"><span class="text-xs font-bold">Sometimes</span></label>
+                                <label class="option-card px-3 py-2 rounded bg-white cursor-pointer flex-1 text-center"><input type="radio" name="ps_interaction" value="Rarely" class="hidden"><span class="text-xs font-bold">Rarely</span></label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">3. Shared Facilities?</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="ps_shared_facilities" value="Water" class="mr-2"> Water</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="ps_shared_facilities" value="School" class="mr-2"> School</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="ps_shared_facilities" value="Health Post" class="mr-2"> Health Post</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="ps_shared_facilities" value="Market" class="mr-2"> Market</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="ps_shared_facilities" value="None" class="mr-2"> None</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3 PS -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="perception-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">3</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Development Impact</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड ३: विकास तथा प्रभाव</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">1. Priority Needs in Nearby Settlements?</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="ps_needs" value="Sanitation" class="mr-2"> Sanitation</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="ps_needs" value="Water" class="mr-2"> Drinking Water</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="ps_needs" value="Road" class="mr-2"> Road</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="ps_needs" value="Health" class="mr-2"> Health</label>
+                                <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="ps_needs" value="Livelihood" class="mr-2"> Livelihood</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">2. Effect of new sanitation facilities?</label>
+                            <select name="ps_impact" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="Positive">Positive (सकारात्मक)</option>
+                                <option value="No Effect">No Effect (कुनै प्रभाव छैन)</option>
+                                <option value="Neutral">Neutral (सामान्य)</option>
+                                <option value="Env Concern">Environmental Concern</option>
+                                <option value="Social Concern">Social Concern</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">3. Specific Concerns (if any)</label>
+                            <textarea name="ps_concerns" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none h-20" placeholder="Type here..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4 PS -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="perception-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">4</div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-sm uppercase">Resource & Cooperation</h2>
+                            <p class="font-nepali text-xs text-slate-500">खण्ड ४: स्रोत र सहकार्य</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">1. Water sources shared?</label>
+                                <div class="flex gap-4">
+                                    <label><input type="radio" name="ps_water_shared" value="Yes" class="mr-1"> Yes</label>
+                                    <label><input type="radio" name="ps_water_shared" value="No" class="mr-1"> No</label>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">2. Understanding on usage?</label>
+                                <div class="flex gap-4">
+                                    <label><input type="radio" name="ps_understanding" value="Yes" class="mr-1"> Yes</label>
+                                    <label><input type="radio" name="ps_understanding" value="No" class="mr-1"> No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">3. Past disagreements on resources?</label>
+                            <select name="ps_disagreements" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="No">No (छैन)</option>
+                                <option value="Minor">Minor (सानातिना)</option>
+                                <option value="Serious">Serious (गम्भीर)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">4. Willing to cooperate in future?</label>
+                            <select name="ps_cooperation" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="Yes">Yes (हो)</option>
+                                <option value="Maybe">Maybe (सायद)</option>
+                                <option value="No">No (होइन)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">5. Suggestions for harmony</label>
+                            <textarea name="ps_suggestions" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none h-20" placeholder="Type here..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 5 PS (Added Value) -->
+                <div class="bg-yellow-50 rounded-2xl shadow-sm border border-yellow-200 overflow-hidden">
+                    <div class="bg-yellow-100/80 p-4 border-b border-yellow-200 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-yellow-300 text-yellow-900 flex items-center justify-center font-bold text-sm">5</div>
+                        <div>
+                            <h2 class="font-bold text-yellow-900 text-sm uppercase">Enumerator Assessment</h2>
+                            <p class="font-nepali text-xs text-yellow-700">खण्ड ५: गणकको मूल्याङ्कन (कार्यालय प्रयोग)</p>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4">
+                         <div>
+                            <label class="text-xs font-bold text-yellow-900 uppercase mb-2 block">Observed Bias Level</label>
+                            <div class="flex gap-2">
+                                <label class="option-card px-3 py-2 rounded bg-white cursor-pointer flex-1 text-center"><input type="radio" name="ps_bias" value="None" class="hidden"><span class="text-xs font-bold">None</span></label>
+                                <label class="option-card px-3 py-2 rounded bg-white cursor-pointer flex-1 text-center"><input type="radio" name="ps_bias" value="Moderate" class="hidden"><span class="text-xs font-bold">Moderate</span></label>
+                                <label class="option-card px-3 py-2 rounded bg-white cursor-pointer flex-1 text-center"><input type="radio" name="ps_bias" value="High" class="hidden"><span class="text-xs font-bold">High</span></label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-yellow-900 uppercase mb-2 block">Conflict Potential (If project starts)</label>
+                            <select name="ps_conflict_potential" class="w-full bg-white border border-yellow-300 rounded-lg px-3 py-2 outline-none">
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Shared Meta -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mt-6">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-900 uppercase mb-1 block">Enumerator Name</label>
+                        <input type="text" name="enumerator_name" required class="w-full p-2 rounded text-sm border border-slate-300 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-900 uppercase mb-1 block">Date</label>
+                        <input type="date" name="survey_date" required class="w-full p-2 rounded text-sm border border-slate-300 bg-white outline-none">
+                    </div>
+                </div>
+                <!-- Signature -->
+                <div class="mt-4">
+                    <label class="text-xs font-bold text-slate-900 uppercase mb-1 block">Enumerator Signature</label>
+                    <div class="border-2 border-dashed border-slate-300 bg-white rounded-xl overflow-hidden relative">
+                        <canvas id="signature-pad" width="300" height="120" class="w-full h-32 cursor-crosshair"></canvas>
+                        <button type="button" onclick="clearSignature()" class="absolute top-2 right-2 text-[10px] bg-slate-200 px-2 py-1 rounded hover:bg-slate-300">Clear</button>
+                    </div>
+                    <input type="hidden" name="signature_data" id="signature_data">
+                </div>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-lg border-t border-slate-200 flex gap-3 max-w-4xl mx-auto z-40 shadow-2xl">
+                <button type="button" onclick="if(confirm('Reset form?')) { document.getElementById('mainForm').reset(); clearSignature(); }" class="px-4 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button type="submit" id="submitBtn" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg rounded-xl shadow-lg shadow-blue-200 hover:shadow-blue-300 transition-all flex items-center justify-center gap-2 py-3">
+                    <span id="saveBtnText">Save Household Data</span>
+                    <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboard-view" class="view-section max-w-4xl mx-auto p-4 space-y-6">
+        
+        <!-- Dashboard Tabs -->
+        <div class="flex gap-2 mb-4 bg-white p-1 rounded-xl shadow-sm border border-slate-100">
+            <button onclick="switchDashboardTab('household')" id="tab-household" class="flex-1 py-2 rounded-lg text-sm font-bold bg-blue-100 text-blue-700 transition">Household Data</button>
+            <button onclick="switchDashboardTab('perception')" id="tab-perception" class="flex-1 py-2 rounded-lg text-sm font-bold text-slate-500 hover:bg-slate-50 transition">Perception Data</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-5 rounded-2xl shadow-lg relative overflow-hidden">
+                <i class="fas fa-database absolute -bottom-4 -right-4 text-7xl text-white/20"></i>
+                <p class="text-blue-100 text-xs font-bold uppercase tracking-wider">Records Count</p>
+                <p id="totalCount" class="text-4xl font-bold mt-1">0</p>
+            </div>
+            <button onclick="exportLocal()" class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md transition active:scale-95 flex flex-col items-center justify-center gap-2 text-slate-700 group">
+                <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition">
+                    <i class="fas fa-file-excel text-2xl"></i>
+                </div>
+                <span class="font-bold text-sm">Export Current Tab</span>
+            </button>
+        </div>
+
+        <div>
+            <div class="flex justify-between items-end mb-3 px-1">
+                <h3 class="font-bold text-slate-800 text-lg">Saved Entries</h3>
+                <button onclick="clearAllData()" class="text-[10px] text-red-500 font-bold hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-full uppercase tracking-wide">Clear Tab Data</button>
+            </div>
+            <div id="dashboardList" class="space-y-3 pb-20">
+                <!-- Items injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 fade-in">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-sm text-center shadow-2xl scale-100">
+            <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-1">Saved Successfully</h3>
+            <p class="text-slate-500 text-sm mb-6" id="successMsg">Data stored on device.</p>
+            <div class="space-y-3">
+                <button onclick="closeModal()" class="w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl hover:bg-slate-800 transition active:scale-95">Continue Survey</button>
+                <button onclick="toggleView(); closeModal();" class="w-full text-slate-600 font-semibold py-2 text-sm hover:text-slate-900">Go to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DB_HOUSEHOLD = 'sanitation_db_full_v1';
+        const DB_PERCEPTION = 'perception_db_v1';
+        let currentSurvey = 'household'; // 'household' or 'perception'
+        let currentDashTab = 'household';
+
+        // --- View Switching Logic ---
+        function switchSurveyType(type) {
+            currentSurvey = type;
+            const hsForm = document.getElementById('form-household');
+            const psForm = document.getElementById('form-perception');
+            const saveBtnText = document.getElementById('saveBtnText');
+            const subtitle = document.getElementById('surveySubtitle');
+            
+            if (type === 'household') {
+                hsForm.classList.remove('hidden');
+                psForm.classList.add('hidden');
+                saveBtnText.innerText = 'Save Household Data';
+                subtitle.innerText = 'घरधुरी सरसफाइ तथा जीवनस्तर सर्वेक्षण';
+            } else {
+                hsForm.classList.add('hidden');
+                psForm.classList.remove('hidden');
+                saveBtnText.innerText = 'Save Perception Data';
+                subtitle.innerText = 'छिमेकी समुदाय धारणा तथा सामाजिक सन्दर्भ सर्वेक्षण';
+            }
+            window.scrollTo(0,0);
+        }
+
+        function switchDashboardTab(tab) {
+            currentDashTab = tab;
+            const btnH = document.getElementById('tab-household');
+            const btnP = document.getElementById('tab-perception');
+            
+            if (tab === 'household') {
+                btnH.classList.add('bg-blue-100', 'text-blue-700');
+                btnH.classList.remove('text-slate-500', 'hover:bg-slate-50');
+                btnP.classList.remove('bg-blue-100', 'text-blue-700');
+                btnP.classList.add('text-slate-500', 'hover:bg-slate-50');
+            } else {
+                btnP.classList.add('bg-blue-100', 'text-blue-700');
+                btnP.classList.remove('text-slate-500', 'hover:bg-slate-50');
+                btnH.classList.remove('bg-blue-100', 'text-blue-700');
+                btnH.classList.add('text-slate-500', 'hover:bg-slate-50');
+            }
+            loadDashboard();
+        }
+
+        // --- Signature Pad ---
+        const canvas = document.getElementById('signature-pad');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+
+        function getPos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            const x = (evt.clientX || evt.touches[0].clientX) - rect.left;
+            const y = (evt.clientY || evt.touches[0].clientY) - rect.top;
+            return { x, y };
+        }
+
+        function startDraw(e) { e.preventDefault(); isDrawing = true; const pos = getPos(canvas, e); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
+        function draw(e) { if (!isDrawing) return; e.preventDefault(); const pos = getPos(canvas, e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); }
+        function endDraw() { if(isDrawing) { isDrawing = false; document.getElementById('signature_data').value = "Signed"; } }
+
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', endDraw);
+        canvas.addEventListener('touchstart', startDraw);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', endDraw);
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('signature_data').value = "";
+        }
+
+        // --- GPS Logic ---
+        let watchId = null;
+        let bestAccuracy = Infinity;
+        let bestCoords = null;
+        let gpsTimeout = null;
+        let updateCount = 0;
+
+        function getGPS() {
+            const status = document.getElementById('gps_status');
+            const input = document.getElementById('gps_input');
+            const btnTrack = document.getElementById('btn_track');
+            const btnStop = document.getElementById('btn_stop');
+            
+            if (watchId) navigator.geolocation.clearWatch(watchId);
+            if (gpsTimeout) clearTimeout(gpsTimeout);
+            bestAccuracy = Infinity;
+            bestCoords = null;
+            updateCount = 0;
+            
+            btnTrack.classList.add('hidden');
+            btnStop.classList.remove('hidden');
+            input.value = "Acquiring...";
+            status.innerHTML = '<span class="text-blue-600"><i class="fas fa-spinner fa-spin"></i> Warming up...</span>';
+
+            if (!navigator.geolocation) { finishGPS(false); status.innerText = "GPS not supported."; return; }
+
+            watchId = navigator.geolocation.watchPosition(
+                (pos) => {
+                    updateCount++;
+                    const acc = pos.coords.accuracy;
+                    const lat = pos.coords.latitude.toFixed(7);
+                    const lng = pos.coords.longitude.toFixed(7);
+                    
+                    if (acc < bestAccuracy) {
+                        bestAccuracy = acc;
+                        bestCoords = `${lat}, ${lng}`;
+                        input.value = bestCoords; 
+                    }
+                    let color = bestAccuracy < 10 ? 'text-blue-500' : 'text-orange-500';
+                    if (bestAccuracy <= 5) color = 'text-green-600';
+                    status.innerHTML = `<span class="${color} font-mono"><i class="fas fa-crosshairs"></i> Best: <b>${bestAccuracy.toFixed(1)}m</b></span>`;
+                    if (bestAccuracy <= 3) finishGPS(true);
+                },
+                (err) => { if (bestAccuracy === Infinity) { status.innerText = "Error: " + err.message; finishGPS(false); } },
+                { enableHighAccuracy: true, timeout: 45000, maximumAge: 0 }
+            );
+
+            gpsTimeout = setTimeout(() => { finishGPS(true); }, 45000);
+        }
+
+        function finishGPS(saveResult) {
+            if (watchId) navigator.geolocation.clearWatch(watchId);
+            if (gpsTimeout) clearTimeout(gpsTimeout);
+            watchId = null;
+
+            document.getElementById('btn_track').classList.remove('hidden');
+            document.getElementById('btn_stop').classList.add('hidden');
+            document.getElementById('btn_track').innerHTML = '<i class="fas fa-redo mr-1"></i> Retrack';
+
+            if (saveResult && bestCoords) {
+                document.getElementById('gps_input').value = bestCoords;
+                document.getElementById('gps_status').innerHTML = `<span class="text-green-700 font-bold">Locked (${bestAccuracy.toFixed(1)}m)</span>`;
+            } else if (!bestCoords) {
+                document.getElementById('gps_input').value = "";
+                document.getElementById('gps_status').innerText = "Failed/Cancelled";
+            }
+        }
+
+        // --- Form Submission ---
+        document.getElementById('mainForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const oldHtml = btn.innerHTML;
+            btn.disabled = true; btn.innerHTML = 'Saving...';
+
+            try {
+                const formData = new FormData(e.target);
+                const getMulti = (name) => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value).join(', ');
+
+                let data = {};
+                
+                // Shared Meta Data
+                const meta = {
+                    id: Date.now(),
+                    date: new Date().toISOString(),
+                    enumerator: formData.get('enumerator_name'),
+                    surveyDate: formData.get('survey_date'),
+                    signed: formData.get('signature_data') ? 'Yes' : 'No',
+                    gps: formData.get('gps_coords')
+                };
+
+                if (currentSurvey === 'household') {
+                    // Collect FULL Household Data
+                    data = {
+                        ...meta,
+                        type: 'Household',
+                        respondent: formData.get('respondent_name'),
+                        settlement: formData.get('settlement'),
+                        houseNo: formData.get('house_number'),
+                        gender: formData.get('gender'),
+                        age: formData.get('age'),
+                        religion: formData.get('religion'),
+                        marital: formData.get('marital_status'),
+                        caste: formData.get('caste'),
+                        
+                        totalMembers: formData.get('total_members'),
+                        children: formData.get('count_children'),
+                        adults: formData.get('count_adults'),
+                        elderly: formData.get('count_elderly'),
+                        familyType: formData.get('family_type'),
+                        
+                        incomeSources: getMulti('income_source'),
+                        incomeOther: formData.get('income_other'),
+                        monthlyIncome: formData.get('monthly_income'),
+                        education: formData.get('education'),
+                        eduRemarks: formData.get('edu_remarks'),
+                        migration: formData.get('migration'),
+                        
+                        foodSecurity: formData.get('food_security'),
+                        
+                        houseMaterial: formData.get('house_material'),
+                        matOther: formData.get('material_other'),
+                        landOwn: formData.get('land_ownership'),
+                        
+                        waterSource: formData.get('water_source'),
+                        waterOther: formData.get('water_source_other'),
+                        waterAvail: formData.get('water_avail'),
+                        waterDist: formData.get('water_dist'),
+                        
+                        toiletPrac: formData.get('toilet_practice'),
+                        pracOther: formData.get('practice_other'),
+                        womenChal: formData.get('women_challenges'),
+                        womenChalDetail: formData.get('women_challenges_detail'),
+                        
+                        challenges: getMulti('challenges'),
+                        chalOther: formData.get('challenge_other'),
+                        rank1: formData.get('rank_1'),
+                        rank2: formData.get('rank_2'),
+                        rank3: formData.get('rank_3'),
+                        
+                        benefit: formData.get('toilet_benefit'),
+                        benOther: formData.get('benefit_other'),
+                        concern: formData.get('toilet_concern'),
+                        conOther: formData.get('concern_other'),
+                        willingness: formData.get('willingness'),
+                        
+                        fertilizer: formData.get('fertilizer'),
+                        humanWaste: formData.get('human_waste_use'),
+                        cleaning: formData.get('cleaning_mgmt'),
+                        contrib: formData.get('contribution'),
+                        
+                        road: formData.get('road_access'),
+                        
+                        // Observations
+                        obs_internet: formData.get('obs_internet') ? 'Yes' : 'No',
+                        obs_elec: formData.get('obs_electricity') ? 'Yes' : 'No',
+                        obs_roadP: formData.get('obs_road_palika') ? 'Yes' : 'No',
+                        obs_roadW: formData.get('obs_road_ward') ? 'Yes' : 'No',
+                        obs_drr: formData.get('obs_drr') ? 'Yes' : 'No',
+                        obs_wgrp: formData.get('obs_women_grp') ? 'Yes' : 'No',
+                        obs_yclub: formData.get('obs_youth_club') ? 'Yes' : 'No',
+                        obs_cclub: formData.get('obs_child_club') ? 'Yes' : 'No',
+                        obs_fin: formData.get('obs_finance') ? 'Yes' : 'No',
+                        obs_gsch: formData.get('obs_gov_school') ? 'Yes' : 'No',
+                        obs_psch: formData.get('obs_pvt_school') ? 'Yes' : 'No',
+                        obs_hp: formData.get('obs_health') ? 'Yes' : 'No',
+                        
+                        houseCond: formData.get('house_condition'),
+                        obs_toilet: formData.get('obs_toilet_visible') ? 'Yes' : 'No',
+                        obs_water: formData.get('obs_water_visible') ? 'Yes' : 'No',
+                        obs_photo: formData.get('obs_photo') ? 'Yes' : 'No'
+                    };
+                    saveToDB(DB_HOUSEHOLD, data);
+                } else {
+                    // Collect Perception Data
+                    data = {
+                        ...meta,
+                        type: 'Perception',
+                        settlement: formData.get('ps_settlement'),
+                        ward: formData.get('ps_ward'),
+                        respondent: formData.get('ps_respondent'),
+                        gender: formData.get('ps_gender'),
+                        age: formData.get('ps_age'),
+                        occupation: formData.get('ps_occupation'),
+                        yearsLived: formData.get('ps_years_lived'),
+                        
+                        relationship: formData.get('ps_relationship'),
+                        interaction: formData.get('ps_interaction'),
+                        sharedFac: getMulti('ps_shared_facilities'),
+                        
+                        priorityNeeds: getMulti('ps_needs'),
+                        impact: formData.get('ps_impact'),
+                        concerns: formData.get('ps_concerns'),
+                        
+                        waterShared: formData.get('ps_water_shared'),
+                        understanding: formData.get('ps_understanding'),
+                        disagreements: formData.get('ps_disagreements'),
+                        cooperation: formData.get('ps_cooperation'),
+                        suggestions: formData.get('ps_suggestions'),
+                        
+                        bias: formData.get('ps_bias'),
+                        conflictPot: formData.get('ps_conflict_potential')
+                    };
+                    saveToDB(DB_PERCEPTION, data);
+                }
+
+                document.getElementById('successMsg').innerText = currentSurvey === 'household' ? 'Household survey saved.' : 'Perception survey saved.';
+                document.getElementById('successModal').classList.remove('hidden');
+                
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                btn.disabled = false; btn.innerHTML = oldHtml;
+            }
+        });
+
+        function saveToDB(key, data) {
+            const existing = JSON.parse(localStorage.getItem(key) || '[]');
+            existing.unshift(data);
+            localStorage.setItem(key, JSON.stringify(existing));
+        }
+
+        // --- Navigation ---
+        function toggleView() {
+            const form = document.getElementById('survey-view');
+            const dash = document.getElementById('dashboard-view');
+            const btn = document.getElementById('navBtn');
+            const selector = document.getElementById('surveySelector');
+            
+            if (form.classList.contains('active')) {
+                form.classList.remove('active');
+                dash.classList.add('active');
+                btn.innerHTML = '<i class="fas fa-pen"></i> Form';
+                selector.disabled = true; // Lock selector in dashboard
+                loadDashboard();
+            } else {
+                dash.classList.remove('active');
+                form.classList.add('active');
+                btn.innerHTML = '<i class="fas fa-th-large"></i> Dashboard';
+                selector.disabled = false;
+            }
+            window.scrollTo(0,0);
+        }
+
+        function loadDashboard() {
+            const dbKey = currentDashTab === 'household' ? DB_HOUSEHOLD : DB_PERCEPTION;
+            const data = JSON.parse(localStorage.getItem(dbKey) || '[]');
+            document.getElementById('totalCount').innerText = data.length;
+            const list = document.getElementById('dashboardList');
+            
+            if(data.length === 0) {
+                list.innerHTML = '<div class="text-center py-10 text-slate-400 border border-dashed rounded-lg">No data yet</div>';
+                return;
+            }
+
+            list.innerHTML = data.map(d => `
+                <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 ${currentDashTab === 'household' ? 'bg-blue-500' : 'bg-purple-500'}"></div>
+                    <div class="flex justify-between pl-3">
+                        <div>
+                            <h4 class="font-bold text-slate-800">${d.respondent || d.settlement || 'Unknown'}</h4>
+                            <p class="text-xs text-slate-500">${new Date(d.date).toLocaleString()}</p>
+                        </div>
+                        <span class="text-xs font-bold ${currentDashTab === 'household' ? 'text-blue-600 bg-blue-50' : 'text-purple-600 bg-purple-50'} px-2 py-1 rounded h-fit">
+                            ${currentDashTab === 'household' ? 'House: '+ (d.houseNo||'-') : 'Ward: '+ (d.ward||'-')}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function exportLocal() {
+            const dbKey = currentDashTab === 'household' ? DB_HOUSEHOLD : DB_PERCEPTION;
+            const rawData = JSON.parse(localStorage.getItem(dbKey) || '[]');
+            if(!rawData.length) { alert("No data to export"); return; }
+            
+            // Re-Map data for Human Readable Export
+            let formattedData = rawData;
+            
+            if (currentDashTab === 'household') {
+                formattedData = rawData.map(item => ({
+                    "Survey ID": item.id,
+                    "Date Time": item.date,
+                    "Enumerator": item.enumerator,
+                    "Settlement": item.settlement,
+                    "House No": item.houseNo,
+                    "Respondent": item.respondent,
+                    "GPS Coordinates": item.gps,
+                    "Gender": item.gender,
+                    "Age": item.age,
+                    "Religion": item.religion,
+                    "Marital Status": item.marital,
+                    "Caste/Ethnicity": item.caste,
+                    "Total Members": item.totalMembers,
+                    "Children (<15)": item.children,
+                    "Adults (15-59)": item.adults,
+                    "Elderly (60+)": item.elderly,
+                    "Family Type": item.familyType,
+                    "Income Sources": item.incomeSources,
+                    "Monthly Income": item.monthlyIncome,
+                    "Education": item.education,
+                    "Migration": item.migration,
+                    "Food Security": item.foodSecurity,
+                    "House Material": item.houseMaterial,
+                    "Land Ownership": item.landOwn,
+                    "Water Source": item.waterSource,
+                    "Water Availability": item.waterAvail,
+                    "Toilet Practice": item.toiletPrac,
+                    "Women Challenges": item.womenChal,
+                    "Major Challenges": item.challenges,
+                    "Toilet Benefit": item.benefit,
+                    "Toilet Concern": item.concern,
+                    "Willingness": item.willingness,
+                    "Road Access": item.road,
+                    "House Condition": item.houseCond,
+                    "Signed": item.signed
+                }));
+            }
+
+            const ws = XLSX.utils.json_to_sheet(formattedData);
+            
+            // Auto-adjust column widths
+            const wscols = Object.keys(formattedData[0]).map(k => ({ wch: k.length + 10 }));
+            ws['!cols'] = wscols;
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Data");
+            
+            const type = currentDashTab === 'household' ? 'Household' : 'Perception';
+            const dateStr = new Date().toISOString().split('T')[0];
+            XLSX.writeFile(wb, `Survey_${type}_${dateStr}.xlsx`);
+        }
+
+        function clearAllData() {
+            const dbKey = currentDashTab === 'household' ? DB_HOUSEHOLD : DB_PERCEPTION;
+            if(confirm(`Delete ALL data for ${currentDashTab.toUpperCase()}?`)) {
+                localStorage.removeItem(dbKey);
+                loadDashboard();
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.getElementById('mainForm').reset();
+            clearSignature();
+            document.querySelector('input[name="survey_date"]').valueAsDate = new Date();
+            window.scrollTo(0,0);
+        }
+        
+        function updateProgress() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('input[name="survey_date"]').valueAsDate = new Date();
+            // Ensure default state matches logic
+            switchSurveyType('household');
+        });
+    </script>
+</body>
+</html>
