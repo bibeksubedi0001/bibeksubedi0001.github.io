@@ -34,11 +34,8 @@
     </script>
 
     <style>
-        body { background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #f0fdf4; -webkit-tap-highlight-color: transparent; }
         html { scroll-behavior: smooth; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
         .fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -66,6 +63,10 @@
             font-size: 12px;
         }
 
+        /* Engineering Warning Style */
+        .warning-text { display: none; color: #dc2626; font-size: 0.7rem; font-weight: 600; margin-top: 4px; animation: fadeIn 0.3s; }
+        .input-warning input:not(:placeholder-shown) { border-color: #fca5a5; background-color: #fef2f2; }
+
         .glass-header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
@@ -78,7 +79,7 @@
             color: white;
             box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
         }
-
+        
         canvas { touch-action: none; background: #fff; background-image: radial-gradient(#e2e8f0 1px, transparent 1px); background-size: 20px 20px; }
         .view-section { display: none; }
         .view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
@@ -92,271 +93,545 @@
         <div class="h-1 bg-slate-200 w-full">
             <div id="progress-bar" class="h-full bg-emerald-600 w-0"></div>
         </div>
-        <div class="flex justify-between items-center max-w-4xl mx-auto p-3 px-4">
-            <div class="flex items-center gap-3">
+        <div class="flex flex-col md:flex-row justify-between items-center max-w-4xl mx-auto p-3 px-4 gap-3">
+            <div class="flex items-center gap-3 w-full md:w-auto">
                 <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg shadow-sm border border-emerald-100">
                     <i class="fas fa-drafting-compass"></i>
                 </div>
-                <div class="leading-tight">
-                    <h1 class="text-xs font-bold text-slate-900 uppercase tracking-wide">Technical Recce</h1>
-                    <p class="text-[10px] text-slate-500 font-nepali">प्राविधिक सर्वेक्षण (Phase I)</p>
+                <div class="leading-tight flex-1">
+                    <h1 class="font-bold text-slate-900 text-sm md:text-base uppercase tracking-wide">Technical Recce</h1>
+                    <p class="text-[10px] text-slate-500 font-nepali">प्रारम्भिक प्राविधिक स्थल अवलोकन (Phase I)</p>
                 </div>
             </div>
             
-            <button onclick="toggleView()" id="navBtn" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold transition active:scale-95 shadow-lg flex items-center gap-2">
-                <i class="fas fa-th-large"></i> Data
-            </button>
+            <div class="flex items-center gap-2">
+                <!-- Risk Counter (New) -->
+                <div id="riskCounterBadge" class="hidden items-center gap-1 bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200">
+                    <i class="fas fa-exclamation-triangle"></i> <span id="riskCount">0</span> Risks
+                </div>
+
+                <button onclick="toggleView()" id="navBtn" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold transition active:scale-95 shadow-lg flex items-center gap-2 whitespace-nowrap">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </button>
+            </div>
         </div>
     </header>
 
-    <div class="h-20"></div>
+    <div class="h-24 md:h-20"></div>
 
-    <!-- SURVEY FORM -->
+    <!-- MAIN FORM CONTAINER -->
     <div id="survey-view" class="view-section active">
-        <form id="techForm" class="max-w-4xl mx-auto p-4 space-y-6">
+        
+        <!-- Restore Draft Alert -->
+        <div id="restoreDraftAlert" class="hidden max-w-4xl mx-auto px-4 mb-4">
+            <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-center justify-between shadow-sm">
+                <div>
+                    <p class="text-sm font-bold text-emerald-800">Unsaved draft found!</p>
+                    <p class="text-xs text-emerald-600">Restore previous session?</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="clearDraft()" class="text-xs text-slate-500 hover:text-slate-800 px-3 py-2">Discard</button>
+                    <button onclick="restoreDraft()" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-xs font-bold shadow hover:bg-emerald-700">Restore</button>
+                </div>
+            </div>
+        </div>
+
+        <form id="techForm" class="max-w-4xl mx-auto p-4 space-y-6" oninput="saveDraftDebounced()">
             
-            <!-- SECTION 1: ID & LOCATION -->
+            <!-- CONSENT SECTION -->
+            <div class="bg-emerald-50 rounded-2xl shadow-sm border border-emerald-100 overflow-hidden">
+                <div class="p-5">
+                    <h2 class="font-bold text-emerald-900 text-sm uppercase mb-1"><i class="fas fa-handshake mr-2"></i>Site Permission / मञ्जुरीनामा</h2>
+                    <div class="text-xs text-slate-600 space-y-2 mb-4 leading-relaxed bg-white p-3 rounded border border-emerald-100">
+                        <p><strong>Project: Rural Toilet Construction – Phase I</strong></p>
+                        <p>This is a technical assessment to determine feasibility. Permission is required to inspect the land and dig a small trial pit.</p>
+                        <p class="font-nepali text-slate-500">यो शौचालय निर्माणको सम्भाव्यता अध्ययन हो। जग्गा निरीक्षण र सानो खाल्डो खन्न अनुमति आवश्यक छ।</p>
+                    </div>
+
+                    <label class="text-xs font-bold text-emerald-800 uppercase mb-2 block">Owner Consent / जग्गाधनीको सहमति</label>
+                    <div class="flex flex-col gap-2">
+                        <label class="option-card px-4 py-3 rounded-lg bg-white cursor-pointer flex items-center gap-3">
+                            <input type="radio" name="consent" value="Yes" required class="accent-emerald-600">
+                            <div>
+                                <span class="text-sm font-bold block">Permission Granted</span>
+                                <span class="text-[10px] text-slate-500 font-nepali">अनुमति प्राप्त भयो</span>
+                            </div>
+                        </label>
+                        <label class="option-card px-4 py-3 rounded-lg bg-white cursor-pointer flex items-center gap-3">
+                            <input type="radio" name="consent" value="No" class="accent-red-600">
+                            <div>
+                                <span class="text-sm font-bold block text-red-600">Permission Denied</span>
+                                <span class="text-[10px] text-slate-500 font-nepali">अनुमति अस्वीकृत</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GPS Block -->
+            <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                <label class="text-xs font-bold text-slate-500 uppercase mb-1 block">GPS Location</label>
+                <div class="flex gap-2">
+                    <input type="text" id="gps_input" name="gps_coords" readonly class="flex-1 bg-slate-50 border border-slate-200 rounded px-2 py-2 text-xs font-mono" placeholder="Waiting for GPS...">
+                    <button type="button" id="btn_track" onclick="getGPS()" class="bg-emerald-600 text-white px-4 py-1 rounded text-xs font-bold shadow-sm hover:bg-emerald-700">
+                        <i class="fas fa-location-crosshairs mr-1"></i> GPS
+                    </button>
+                    <button type="button" id="btn_stop" onclick="finishGPS(true)" class="hidden bg-red-500 text-white px-3 py-1 rounded text-xs font-bold shadow-sm hover:bg-red-600 animate-pulse">
+                        <i class="fas fa-stop mr-1"></i>
+                    </button>
+                </div>
+                <div id="gps_status" class="text-[10px] mt-1 text-slate-500 min-h-[1.5em]"></div>
+            </div>
+
+            <!-- SECTION 1: SITE IDENTIFICATION -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="bg-emerald-50/50 p-4 border-b border-emerald-100 flex items-center gap-3">
-                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">A</div>
+                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">1</div>
                     <div>
                         <h2 class="font-bold text-slate-800 text-sm uppercase">Site Identification</h2>
-                        <p class="font-nepali text-xs text-slate-500">स्थान पहिचान</p>
+                        <p class="font-nepali text-xs text-slate-500">स्थल पहिचान</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Household Head Name</label>
-                            <input type="text" name="hh_name" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-emerald-500">
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Settlement/Tole</label>
+                            <input type="text" name="settlement" required class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-emerald-500">
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">House No. (Refer Social Survey)</label>
-                            <input type="text" name="house_no" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-emerald-500">
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Ward No</label>
+                            <input type="number" name="ward" required class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-emerald-500">
                         </div>
                     </div>
-
-                    <!-- GPS -->
-                    <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-100">
-                        <label class="text-xs font-bold text-emerald-800 uppercase mb-1 block">Site GPS Coordinates</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="gps_input" name="gps_coords" readonly class="flex-1 bg-white border border-emerald-200 rounded px-2 py-1 text-xs font-mono" placeholder="Lat, Long">
-                            <button type="button" id="btn_track" onclick="getGPS()" class="bg-emerald-600 text-white px-3 py-1 rounded text-xs font-bold shadow-sm hover:bg-emerald-700">
-                                <i class="fas fa-satellite-dish mr-1"></i> GPS
-                            </button>
-                            <button type="button" id="btn_stop" onclick="finishGPS(true)" class="hidden bg-red-500 text-white px-3 py-1 rounded text-xs font-bold shadow-sm hover:bg-red-600 animate-pulse">
-                                <i class="fas fa-stop-circle mr-1"></i> Stop
-                            </button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Municipality/RM</label>
+                            <input type="text" name="municipality" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-emerald-500">
                         </div>
-                        <div id="gps_status" class="text-[10px] mt-1 text-slate-500 min-h-[1.5em]"></div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Survey Team Name</label>
+                            <input type="text" name="survey_team" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-emerald-500">
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 2: SPACE & LAYOUT -->
+            <!-- SECTION 2: SAFETY PARAMETERS (With Smart Validation) -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="bg-emerald-50/50 p-4 border-b border-emerald-100 flex items-center gap-3">
-                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">B</div>
+                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">2</div>
                     <div>
-                        <h2 class="font-bold text-slate-800 text-sm uppercase">Space Availability</h2>
-                        <p class="font-nepali text-xs text-slate-500">जग्गाको उपलब्धता (Use Tape/Pacing)</p>
+                        <h2 class="font-bold text-slate-800 text-sm uppercase">Distance & Safety</h2>
+                        <p class="font-nepali text-xs text-slate-500">दूरी तथा स्थान सुरक्षा (Smart Check)</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
-                    <div>
-                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">1. Is there sufficient space for a new toilet?</label>
-                        <div class="flex gap-2">
-                            <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1 text-center"><input type="radio" name="space_avail" value="Yes" class="hidden"><span class="text-sm font-bold">Yes (> 3m x 3m)</span></label>
-                            <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1 text-center"><input type="radio" name="space_avail" value="Limited" class="hidden"><span class="text-sm font-bold">Limited (< 2m x 2m)</span></label>
-                            <label class="option-card px-4 py-2 rounded-lg bg-white cursor-pointer flex-1 text-center"><input type="radio" name="space_avail" value="No" class="hidden"><span class="text-sm font-bold">No Space</span></label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div id="check_dist_house">
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Dist. from House (m)</label>
+                            <input type="number" step="0.1" name="dist_house" placeholder="Min 1.5m" class="w-full bg-white border border-slate-300 rounded px-3 py-2" oninput="checkSafety(this, 1.5, 'min')">
+                            <p class="warning-text"><i class="fas fa-exclamation-circle"></i> Too close (Min 1.5m)</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Toilet Position</label>
+                            <select name="toilet_position" class="w-full bg-white border border-slate-300 rounded px-3 py-2 outline-none">
+                                <option value="Same Level">Same Level</option>
+                                <option value="Uphill">Uphill (Higher)</option>
+                                <option value="Downhill">Downhill (Lower)</option>
+                            </select>
                         </div>
                     </div>
+                    
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">House Foundation Type</label>
+                        <div class="flex gap-2 text-xs">
+                            <label class="flex items-center gap-1"><input type="radio" name="foundation" value="Stone"> Stone</label>
+                            <label class="flex items-center gap-1"><input type="radio" name="foundation" value="Mud"> Mud</label>
+                            <label class="flex items-center gap-1"><input type="radio" name="foundation" value="RCC"> RCC</label>
+                            <label class="flex items-center gap-1"><input type="radio" name="foundation" value="Other"> Other</label>
+                        </div>
+                    </div>
+
+                    <div class="h-px bg-slate-100"></div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">2. Approx Length (m)</label>
-                            <input type="number" step="0.1" name="land_length" placeholder="meters" class="w-full bg-white border border-slate-300 rounded px-3 py-2">
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Nearest Water Source</label>
+                            <select name="water_source_type" class="w-full bg-white border border-slate-300 rounded px-3 py-2 outline-none text-sm">
+                                <option value="Tap">Tap (Piped)</option>
+                                <option value="Dug Well">Dug Well</option>
+                                <option value="Tube Well">Tube Well</option>
+                                <option value="Spring">Spring</option>
+                                <option value="River">River</option>
+                            </select>
+                        </div>
+                        <div id="check_dist_water">
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Dist. to Water (m)</label>
+                            <input type="number" step="0.1" name="dist_water" placeholder="≥30m preferred" class="w-full bg-white border border-slate-300 rounded px-3 py-2" oninput="checkSafety(this, 30, 'min')">
+                            <p class="warning-text"><i class="fas fa-exclamation-triangle"></i> High Contamination Risk (<30m)</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Is the toilet site DOWNHILL of the water source?</label>
+                        <div class="flex gap-4">
+                            <label class="flex items-center gap-2"><input type="radio" name="toilet_downhill" value="Yes" class="w-4 h-4 accent-emerald-600"> Yes (Safe)</label>
+                            <label class="flex items-center gap-2"><input type="radio" name="toilet_downhill" value="No" class="w-4 h-4 accent-red-600"> No (Risk)</label>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Distance to Nearest Neighbor (m)</label>
+                        <input type="number" step="0.1" name="dist_neighbor" class="w-full bg-white border border-slate-300 rounded px-3 py-2">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: GROUNDWATER (With Auto-Calc) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-emerald-50/50 p-4 border-b border-emerald-100 flex items-center gap-3">
+                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">3</div>
+                    <div>
+                        <h2 class="font-bold text-slate-800 text-sm uppercase">Groundwater Assessment</h2>
+                        <p class="font-nepali text-xs text-slate-500">भू-जल मूल्याङ्कन (Auto-Calc)</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Current Water Depth (m)</label>
+                            <input type="number" step="0.1" name="gw_current" class="w-full bg-white border border-slate-300 rounded px-3 py-2" oninput="calcSeparation()">
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">3. Approx Width (m)</label>
-                            <input type="number" step="0.1" name="land_width" placeholder="meters" class="w-full bg-white border border-slate-300 rounded px-3 py-2">
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Monsoon Level (m)</label>
+                            <input type="number" step="0.1" name="gw_monsoon" class="w-full bg-white border border-slate-300 rounded px-3 py-2" oninput="calcSeparation()">
                         </div>
                     </div>
-
+                    <!-- NEW FIELD: Observation Well Distance -->
                     <div>
-                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">4. Distance from Kitchen/Main House</label>
-                        <select name="dist_house" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
-                            <option value="<5m">Too Close (< 5m)</option>
-                            <option value="5-10m">Ideal (5m - 10m)</option>
-                            <option value="10-20m">Far (10m - 20m)</option>
-                            <option value=">20m">Very Far (> 20m)</option>
-                        </select>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Distance to Observation Well (m)</label>
+                        <input type="number" step="0.1" name="dist_well_obs" class="w-full bg-white border border-slate-300 rounded px-3 py-2">
                     </div>
-
-                    <div>
-                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">5. Distance from Water Source (Pollution Risk)</label>
-                        <select name="dist_water" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
-                            <option value="<10m">High Risk (< 10m)</option>
-                            <option value="10-20m">Moderate Risk (10-20m)</option>
-                            <option value=">20m">Safe (> 20m)</option>
-                            <option value="No Source">No Water Source Nearby</option>
-                        </select>
-                        <p class="text-[10px] text-slate-400 mt-1 italic">*WHO recommends min 10m horizontal distance from leach pit to water source.</p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Proposed Pit Depth</label>
+                            <input type="number" step="0.1" name="pit_depth" class="w-full bg-white border border-slate-300 rounded px-3 py-2" oninput="calcSeparation()">
+                        </div>
+                        <div id="check_gw_sep">
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Vertical Separation (Calc)</label>
+                            <input type="number" step="0.1" name="gw_separation" placeholder="≥1.5m" readonly class="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 font-bold text-emerald-700">
+                            <p class="warning-text"><i class="fas fa-water"></i> Risk of flooding (<1.5m)</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 3: TOPOGRAPHY & SOIL (Crucial for Design) -->
+            <!-- SECTION 4: TOPOGRAPHY -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="bg-emerald-50/50 p-4 border-b border-emerald-100 flex items-center gap-3">
-                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">C</div>
+                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">4</div>
                     <div>
-                        <h2 class="font-bold text-slate-800 text-sm uppercase">Topography & Soil</h2>
-                        <p class="font-nepali text-xs text-slate-500">जमिनको बनावट र माटो (Visual Estimate)</p>
+                        <h2 class="font-bold text-slate-800 text-sm uppercase">Topography & Drainage</h2>
+                        <p class="font-nepali text-xs text-slate-500">स्थल ढलान तथा निकास</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
-                    <!-- Slope -->
                     <div>
-                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">6. Land Slope (Gradient)</label>
-                        <div class="space-y-2">
-                            <label class="option-card p-3 rounded-lg bg-white cursor-pointer flex items-center gap-3">
-                                <input type="radio" name="slope" value="Flat" class="accent-emerald-600">
-                                <div>
-                                    <span class="font-bold text-sm block">Flat / Level Ground (< 5°)</span>
-                                    <span class="text-xs text-slate-500">No retaining wall needed. Easy construction.</span>
-                                </div>
-                            </label>
-                            <label class="option-card p-3 rounded-lg bg-white cursor-pointer flex items-center gap-3">
-                                <input type="radio" name="slope" value="Gentle" class="accent-emerald-600">
-                                <div>
-                                    <span class="font-bold text-sm block">Gentle Slope (5° - 15°)</span>
-                                    <span class="text-xs text-slate-500">Minor leveling required.</span>
-                                </div>
-                            </label>
-                            <label class="option-card p-3 rounded-lg bg-white cursor-pointer flex items-center gap-3">
-                                <input type="radio" name="slope" value="Steep" class="accent-emerald-600">
-                                <div>
-                                    <span class="font-bold text-sm block">Steep Slope (> 15°)</span>
-                                    <span class="text-xs text-slate-500 text-red-500 font-medium">Requires Retaining Wall / Bio-engineering.</span>
-                                </div>
-                            </label>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">General Terrain</label>
+                        <div class="flex gap-2 flex-wrap">
+                            <label class="option-card px-3 py-2 rounded flex-1 text-center text-xs"><input type="radio" name="terrain" value="Flat" class="hidden">Flat</label>
+                            <label class="option-card px-3 py-2 rounded flex-1 text-center text-xs"><input type="radio" name="terrain" value="Gentle" class="hidden">Gentle</label>
+                            <label class="option-card px-3 py-2 rounded flex-1 text-center text-xs"><input type="radio" name="terrain" value="Moderate" class="hidden">Moderate</label>
+                            <label class="option-card px-3 py-2 rounded flex-1 text-center text-xs"><input type="radio" name="terrain" value="Steep" class="hidden">Steep</label>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div id="check_slope">
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Approx Slope (%)</label>
+                            <input type="number" name="slope_percent" class="w-full bg-white border border-slate-300 rounded px-3 py-2" oninput="checkSafety(this, 30, 'max')">
+                            <p class="warning-text"><i class="fas fa-exclamation"></i> Slope >30% needs retention.</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Drainage Direction</label>
+                            <input type="text" name="drainage_dir" class="w-full bg-white border border-slate-300 rounded px-3 py-2">
                         </div>
                     </div>
 
-                    <!-- Soil Type -->
-                    <div>
-                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">7. Visual Soil Classification</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <label class="option-card p-2 rounded bg-white cursor-pointer text-center">
-                                <input type="radio" name="soil_type" value="Clay" class="hidden">
-                                <div class="text-sm font-bold mb-1">Red/Black Clay</div>
-                                <div class="text-[10px] text-slate-500">Sticky when wet. Low infiltration.</div>
-                            </label>
-                            <label class="option-card p-2 rounded bg-white cursor-pointer text-center">
-                                <input type="radio" name="soil_type" value="Sandy" class="hidden">
-                                <div class="text-sm font-bold mb-1">Sandy/Loam</div>
-                                <div class="text-[10px] text-slate-500">Gritty. Good infiltration.</div>
-                            </label>
-                            <label class="option-card p-2 rounded bg-white cursor-pointer text-center">
-                                <input type="radio" name="soil_type" value="Rocky" class="hidden">
-                                <div class="text-sm font-bold mb-1">Rocky/Gravel</div>
-                                <div class="text-[10px] text-slate-500">Hard to dig pits.</div>
-                            </label>
-                            <label class="option-card p-2 rounded bg-white cursor-pointer text-center">
-                                <input type="radio" name="soil_type" value="Marshy" class="hidden">
-                                <div class="text-sm font-bold mb-1">Marshy/Wet</div>
-                                <div class="text-[10px] text-slate-500 text-red-500">High water table risk.</div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Diggability -->
-                    <div>
-                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">8. Ease of Excavation (Ask local)</label>
-                        <select name="excavation" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
-                            <option value="Easy">Easy (Soft soil)</option>
-                            <option value="Moderate">Moderate (Some stones)</option>
-                            <option value="Hard">Hard (Requires breaker/heavy labor)</option>
-                        </select>
+                    <div class="space-y-2 text-sm">
+                        <label class="flex justify-between border-b border-slate-100 pb-1">
+                            <span>Does rainwater flow toward site?</span>
+                            <div class="flex gap-2">
+                                <label><input type="radio" name="rain_flow" value="Yes" class="accent-red-500"> Yes</label>
+                                <label><input type="radio" name="rain_flow" value="No" class="accent-emerald-500"> No</label>
+                            </div>
+                        </label>
+                        <label class="flex justify-between border-b border-slate-100 pb-1">
+                            <span>Flood signs observed?</span>
+                            <div class="flex gap-2">
+                                <label><input type="radio" name="flood_signs" value="Yes" class="accent-red-500"> Yes</label>
+                                <label><input type="radio" name="flood_signs" value="No" class="accent-emerald-500"> No</label>
+                            </div>
+                        </label>
+                        <label class="flex justify-between">
+                            <span>Landslide/cracks observed?</span>
+                            <div class="flex gap-2">
+                                <label><input type="radio" name="landslide" value="Yes" class="accent-red-500"> Yes</label>
+                                <label><input type="radio" name="landslide" value="No" class="accent-emerald-500"> No</label>
+                            </div>
+                        </label>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 4: MATERIALS & LOGISTICS -->
+            <!-- SECTION 5: SOIL -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="bg-emerald-50/50 p-4 border-b border-emerald-100 flex items-center gap-3">
-                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">D</div>
+                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">5</div>
                     <div>
-                        <h2 class="font-bold text-slate-800 text-sm uppercase">Local Resources</h2>
-                        <p class="font-nepali text-xs text-slate-500">निर्माण सामग्री र पहुँच</p>
+                        <h2 class="font-bold text-slate-800 text-sm uppercase">Soil Reconnaissance</h2>
+                        <p class="font-nepali text-xs text-slate-500">माटो प्रारम्भिक परीक्षण</p>
                     </div>
                 </div>
                 <div class="p-5 space-y-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Trial Pit Depth (m)</label>
+                        <input type="number" step="0.1" name="trial_pit_depth" class="w-full bg-white border border-slate-300 rounded px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Layer 1 Description</label>
+                        <input type="text" name="layer1_desc" placeholder="e.g., 0-0.5m Topsoil" class="w-full bg-white border border-slate-300 rounded px-3 py-2 mb-2 text-sm">
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Layer 2 Description</label>
+                        <input type="text" name="layer2_desc" placeholder="e.g., 0.5m+ Red Clay" class="w-full bg-white border border-slate-300 rounded px-3 py-2 text-sm">
+                    </div>
+                    
+                    <div class="bg-slate-50 p-3 rounded">
+                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">Field Tests</label>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between items-center">
+                                <span>Groundwater in pit?</span>
+                                <div class="flex gap-2">
+                                    <label><input type="radio" name="pit_water" value="Yes"> Yes</label>
+                                    <label><input type="radio" name="pit_water" value="No"> No</label>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Hand Squeeze</span>
+                                <div class="flex gap-2">
+                                    <label><input type="radio" name="squeeze_test" value="Cohesive"> Cohesive</label>
+                                    <label><input type="radio" name="squeeze_test" value="Non-cohesive"> Non-cohesive</label>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Ribbon Test (>5cm)</span>
+                                <div class="flex gap-2">
+                                    <label><input type="radio" name="ribbon_test" value="Yes"> Yes</label>
+                                    <label><input type="radio" name="ribbon_test" value="No"> No</label>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Infiltration</span>
+                                <div class="flex gap-2">
+                                    <label><input type="radio" name="infiltration" value="Fast"> Fast</label>
+                                    <label><input type="radio" name="infiltration" value="Moderate"> Mod</label>
+                                    <label><input type="radio" name="infiltration" value="Slow"> Slow</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center gap-2 mt-4">
+                            <input type="checkbox" name="soil_sample_collected" class="w-4 h-4 accent-emerald-600">
+                            <span class="text-sm font-bold">Sample Collected?</span>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Sample Depth (m)</label>
+                            <input type="number" step="0.1" name="sample_depth" class="w-full bg-white border border-slate-300 rounded px-3 py-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 6, 7, 8: LOGISTICS -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-emerald-50/50 p-4 border-b border-emerald-100 flex items-center gap-3">
+                    <div class="section-badge w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">6-8</div>
+                    <div>
+                        <h2 class="font-bold text-slate-800 text-sm uppercase">Logistics & Feasibility</h2>
+                        <p class="font-nepali text-xs text-slate-500">पानी, फोहोर व्यवस्थापन र सामग्री</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-5">
+                    <!-- Water -->
+                    <div>
+                        <h3 class="text-xs font-bold text-emerald-700 uppercase mb-2 border-b pb-1">6. Water Availability</h3>
+                        <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                            <label class="flex items-center gap-2"><input type="checkbox" name="flush_planned" value="Yes"> Flush Planned</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" name="water_year_round" value="Yes"> Year-round</label>
+                        </div>
+                        <label class="text-xs font-bold text-slate-600 block mb-1">Conveyance Method</label>
+                        <select name="water_conveyance" class="w-full bg-slate-50 border border-slate-300 rounded p-2 text-sm">
+                            <option value="Gravity">Gravity</option>
+                            <option value="Pipe">Pipe</option>
+                            <option value="Manual">Manual Carry</option>
+                            <option value="Storage">Storage Tank</option>
+                        </select>
+                    </div>
+
+                    <!-- Soak Pit -->
+                    <div>
+                        <h3 class="text-xs font-bold text-emerald-700 uppercase mb-2 border-b pb-1">7. Soak Pit Feasibility</h3>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex justify-between">
+                                <span>Soak pit feasible (soil)?</span>
+                                <div class="flex gap-2">
+                                    <label><input type="radio" name="soak_feasibility" value="Yes"> Yes</label>
+                                    <label><input type="radio" name="soak_feasibility" value="No"> No</label>
+                                    <label><input type="radio" name="soak_feasibility" value="Doubtful"> Doubt</label>
+                                </div>
+                            </label>
+                            <label class="flex justify-between">
+                                <span>Space for twin pit?</span>
+                                <div class="flex gap-2">
+                                    <label><input type="radio" name="twin_space" value="Yes"> Yes</label>
+                                    <label><input type="radio" name="twin_space" value="No"> No</label>
+                                </div>
+                            </label>
+                            <label class="flex justify-between">
+                                <span>Emptying Access (≥0.75m)?</span>
+                                <div class="flex gap-2">
+                                    <label><input type="radio" name="empty_access" value="Yes"> Yes</label>
+                                    <label><input type="radio" name="empty_access" value="No"> No</label>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- Materials -->
                     <div>
-                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">9. Materials Available within 1km?</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Stone" class="mr-2">Stone (Wall)</label>
-                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Sand" class="mr-2">Sand (River)</label>
-                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Bamboo" class="mr-2">Bamboo</label>
-                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Wood" class="mr-2">Timber/Wood</label>
-                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Water" class="mr-2">Construction Water</label>
-                            <label class="option-card p-2 rounded bg-white cursor-pointer"><input type="checkbox" name="materials" value="Gravel" class="mr-2">Aggregates</label>
+                        <h3 class="text-xs font-bold text-emerald-700 uppercase mb-2 border-b pb-1">8. Access & Materials</h3>
+                        <div class="grid grid-cols-2 gap-4 mb-2">
+                            <div>
+                                <label class="text-xs block mb-1">Road Access</label>
+                                <select name="road_access" class="w-full border border-slate-300 rounded p-1 text-sm">
+                                    <option value="Vehicle">Vehicle</option>
+                                    <option value="Trail">Walking Only</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs block mb-1">Dist to Road (min)</label>
+                                <input type="number" name="dist_road" class="w-full border border-slate-300 rounded p-1 text-sm">
+                            </div>
+                        </div>
+                        <label class="text-xs block mb-1">Materials Available:</label>
+                        <div class="flex flex-wrap gap-3 text-sm">
+                            <label><input type="checkbox" name="materials" value="Sand"> Sand</label>
+                            <label><input type="checkbox" name="materials" value="Aggregate"> Aggregate</label>
+                            <label><input type="checkbox" name="materials" value="Stone"> Stone</label>
+                            <label><input type="checkbox" name="materials" value="Brick"> Brick</label>
+                            <label><input type="checkbox" name="materials" value="Mason"> Mason</label>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <!-- Access -->
+            <!-- SECTION 9: RISK SCREENING -->
+            <div class="bg-red-50 rounded-2xl shadow-sm border border-red-200 overflow-hidden">
+                <div class="p-4 border-b border-red-200">
+                    <h2 class="font-bold text-red-900 text-sm uppercase"><i class="fas fa-exclamation-triangle mr-2"></i>9. Rapid Risk Screening</h2>
+                </div>
+                <div class="p-5 space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-red-900">
+                        <label class="flex items-center gap-2"><input type="checkbox" name="risks" value="High Groundwater" class="accent-red-600" onchange="updateRiskCounter()"> High Groundwater</label>
+                        <label class="flex items-center gap-2"><input type="checkbox" name="risks" value="Steep Slope" class="accent-red-600" onchange="updateRiskCounter()"> Steep Slope (>30%)</label>
+                        <label class="flex items-center gap-2"><input type="checkbox" name="risks" value="Weak Soil" class="accent-red-600" onchange="updateRiskCounter()"> Weak/Organic Soil</label>
+                        <label class="flex items-center gap-2"><input type="checkbox" name="risks" value="Flood Risk" class="accent-red-600" onchange="updateRiskCounter()"> Flood Risk Area</label>
+                        <label class="flex items-center gap-2"><input type="checkbox" name="risks" value="Contamination" class="accent-red-600" onchange="updateRiskCounter()"> Water Contamination Risk</label>
+                    </div>
                     <div>
-                        <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">10. Material Transport Access</label>
-                        <select name="access_type" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
-                            <option value="Truck">Road Access (Truck/Tractor)</option>
-                            <option value="Narrow">Narrow Path (Mini-tiller/Bike)</option>
-                            <option value="Foot">Foot Trail Only (Head loading required)</option>
-                        </select>
-                        <div class="mt-2 text-xs text-slate-500">
-                            If Foot Trail, approx walking distance (min): <input type="number" name="walking_time" class="border border-slate-300 rounded w-16 p-1 text-center"> min
-                        </div>
+                        <label class="text-xs font-bold text-red-800 uppercase mb-1 block">Mitigation Suggested</label>
+                        <textarea name="mitigation" class="w-full bg-white border border-red-200 rounded p-2 text-sm outline-none" rows="2"></textarea>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 5: SKETCH PAD (Crucial for Engineers) -->
+            <!-- SECTION 10: RECOMMENDATION & SKETCH -->
             <div class="bg-slate-800 rounded-2xl shadow-lg border border-slate-700 overflow-hidden">
-                <div class="bg-slate-900 p-4 border-b border-slate-700 flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center font-bold text-sm">E</div>
-                        <div>
-                            <h2 class="font-bold text-white text-sm uppercase">Site Layout Sketch</h2>
-                            <p class="font-nepali text-xs text-slate-400">साइटको नक्सा कोर्नुहोस्</p>
+                <div class="bg-slate-900 p-4 border-b border-slate-700 flex flex-col md:flex-row justify-between items-center gap-3">
+                    <div>
+                        <h2 class="font-bold text-white text-sm uppercase">10. Recommendation & Sketch</h2>
+                        <p class="font-nepali text-xs text-slate-400">अन्तिम प्राविधिक सिफारिस</p>
+                    </div>
+                    <!-- Tools -->
+                    <div class="flex gap-2 items-center">
+                        <button type="button" onclick="setPenColor('#ef4444')" class="w-6 h-6 rounded-full bg-red-500 border-2 border-white focus:ring-2 focus:ring-red-300"></button>
+                        <button type="button" onclick="setPenColor('#3b82f6')" class="w-6 h-6 rounded-full bg-blue-500 border-2 border-white focus:ring-2 focus:ring-blue-300"></button>
+                        <button type="button" onclick="setPenColor('#000000')" class="w-6 h-6 rounded-full bg-black border-2 border-white focus:ring-2 focus:ring-gray-300"></button>
+                        <div class="h-6 w-px bg-slate-600 mx-1"></div>
+                        <button type="button" onclick="undoSketch()" class="text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-600"><i class="fas fa-undo"></i> Undo</button>
+                        <button type="button" onclick="clearSketch()" class="text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-600">Clear</button>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div class="grid grid-cols-2 gap-3 text-white text-sm">
+                        <label class="flex items-center gap-2"><input type="radio" name="recommendation" value="Single Pit" class="accent-emerald-500"> Single Pit</label>
+                        <label class="flex items-center gap-2"><input type="radio" name="recommendation" value="Twin Pit" class="accent-emerald-500"> Twin Pit</label>
+                        <label class="flex items-center gap-2"><input type="radio" name="recommendation" value="Lined Pit" class="accent-emerald-500"> Lined Pit Required</label>
+                        <label class="flex items-center gap-2"><input type="radio" name="recommendation" value="Septic Tank" class="accent-emerald-500"> Septic Tank</label>
+                        <label class="flex items-center gap-2"><input type="radio" name="recommendation" value="Raised Platform" class="accent-emerald-500"> Raised Platform</label>
+                        <label class="flex items-center gap-2"><input type="radio" name="recommendation" value="Alternate Loc" class="accent-red-500"> Alternate Loc</label>
+                    </div>
+                    
+                    <textarea name="engineer_notes" class="w-full bg-slate-700 border border-slate-600 text-white rounded p-2 text-sm outline-none" placeholder="Engineer's Notes..."></textarea>
+
+                    <div class="p-2 bg-slate-200 rounded">
+                        <p class="text-[10px] text-slate-600 mb-1 text-center font-mono">Site Layout Sketch (House, Water, Slope)</p>
+                        <div class="bg-white rounded shadow-inner overflow-hidden cursor-crosshair relative">
+                            <canvas id="sketch-pad" width="350" height="250" class="w-full h-56 touch-none"></canvas>
                         </div>
+                        <input type="hidden" name="sketch_data" id="sketch_data">
                     </div>
-                    <button type="button" onclick="clearSketch()" class="text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-600">Clear</button>
-                </div>
-                <div class="p-2 bg-slate-200">
-                    <p class="text-[10px] text-slate-600 mb-1 text-center font-mono">Draw: House, Slope Direction (Arrow), Proposed Toilet Location</p>
-                    <div class="bg-white rounded-lg shadow-inner overflow-hidden cursor-crosshair">
-                        <canvas id="sketch-pad" width="350" height="300" class="w-full h-64 touch-none"></canvas>
-                    </div>
-                    <input type="hidden" name="sketch_data" id="sketch_data">
                 </div>
             </div>
 
-            <!-- SECTION 6: SURVEYOR COMMENTS -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
-                <label class="text-xs font-bold text-slate-600 uppercase mb-2 block">11. Surveyor's Technical Recommendation</label>
-                <textarea name="tech_remarks" rows="3" class="w-full border border-slate-300 rounded-lg p-2 text-sm" placeholder="E.g., Need 1.5m retaining wall, Soil looks good for soak pit..."></textarea>
+            <!-- Signature & Photo -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mt-6">
                 
+                <!-- Photo UI -->
+                <div class="mb-6 p-4 bg-slate-50 rounded-xl border border-slate-200 text-center">
+                    <button type="button" onclick="document.getElementById('cameraInput').click()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-indigo-700 transition flex items-center justify-center gap-2 mx-auto">
+                        <i class="fas fa-camera"></i> Take Site Photo
+                    </button>
+                    <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handlePhoto(this)">
+                    <div id="photoStatus" class="mt-2 text-xs text-slate-500 italic">No photo taken</div>
+                    <input type="hidden" name="photo_captured" id="photo_captured" value="No">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-900 uppercase mb-1 block">Surveyor Name</label>
+                        <input type="text" name="surveyor_name" required class="w-full p-2 rounded text-sm border border-slate-300 outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-900 uppercase mb-1 block">Date</label>
+                        <input type="date" name="survey_date" required class="w-full p-2 rounded text-sm border border-slate-300 bg-white outline-none focus:border-emerald-500">
+                    </div>
+                </div>
                 <div class="mt-4">
-                    <label class="text-xs font-bold text-slate-600 uppercase mb-1 block">Surveyor Name</label>
-                    <input type="text" name="surveyor_name" required class="w-full p-2 rounded text-sm border border-slate-300">
+                    <label class="text-xs font-bold text-slate-900 uppercase mb-1 block">Signature</label>
+                    <div class="border-2 border-dashed border-slate-300 bg-white rounded-xl overflow-hidden relative touch-none">
+                        <canvas id="signature-pad" width="300" height="120" class="w-full h-32 cursor-crosshair"></canvas>
+                        <button type="button" onclick="clearSignature()" class="absolute top-2 right-2 text-[10px] bg-slate-200 px-2 py-1 rounded hover:bg-slate-300 z-10">Clear</button>
+                    </div>
+                    <input type="hidden" name="signature_data" id="signature_data">
                 </div>
             </div>
 
-            <!-- Footer -->
-            <div class="h-20"></div>
-            <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-lg border-t border-slate-200 flex gap-3 max-w-4xl mx-auto z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-                <button type="button" onclick="if(confirm('Reset form?')) { document.getElementById('techForm').reset(); clearSketch(); window.scrollTo(0,0); }" class="px-4 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition">
+            <!-- Footer Buttons -->
+            <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-lg border-t border-slate-200 flex gap-3 max-w-4xl mx-auto z-40 shadow-2xl">
+                <button type="button" onclick="if(confirm('Reset form?')) { document.getElementById('techForm').reset(); clearSketch(); clearSignature(); clearDraft(); updateRiskCounter(); window.scrollTo(0,0); }" class="px-4 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition">
                     <i class="fas fa-undo"></i>
                 </button>
                 <button type="submit" id="submitBtn" class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-lg rounded-xl shadow-lg shadow-emerald-200 hover:shadow-emerald-300 transition-all flex items-center justify-center gap-2 py-3">
@@ -369,29 +644,47 @@
 
     <!-- DASHBOARD VIEW -->
     <div id="dashboard-view" class="view-section max-w-4xl mx-auto p-4 space-y-6">
+        
+        <!-- Stats -->
         <div class="grid grid-cols-2 gap-4">
             <div class="bg-gradient-to-br from-emerald-500 to-emerald-700 text-white p-5 rounded-2xl shadow-lg relative overflow-hidden">
                 <i class="fas fa-hard-hat absolute -bottom-4 -right-4 text-7xl text-white/20"></i>
                 <p class="text-emerald-100 text-xs font-bold uppercase tracking-wider">Sites Surveyed</p>
                 <p id="totalCount" class="text-4xl font-bold mt-1">0</p>
             </div>
-            <button onclick="exportLocal()" class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md transition active:scale-95 flex flex-col items-center justify-center gap-2 text-slate-700 group">
-                <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition">
-                    <i class="fas fa-file-excel text-2xl"></i>
-                </div>
-                <span class="font-bold text-sm">Export Data</span>
-            </button>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
+                 <p class="text-xs text-slate-500 font-bold uppercase mb-2">Feasibility</p>
+                 <div class="flex justify-between items-center mb-2">
+                     <span class="text-sm">Feasible</span>
+                     <span id="statFeasible" class="font-bold text-emerald-600">0%</span>
+                 </div>
+                 <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                     <div id="progFeasible" class="bg-emerald-500 h-2 rounded-full" style="width: 0%"></div>
+                 </div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="relative">
+            <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
+            <input type="text" id="searchInput" onkeyup="searchRecords()" placeholder="Search Settlement, Ward or Surveyor..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 shadow-sm focus:border-emerald-500 outline-none">
         </div>
 
         <div>
             <div class="flex justify-between items-end mb-3 px-1">
                 <h3 class="font-bold text-slate-800 text-lg">Engineering Logs</h3>
-                <button onclick="clearAllData()" class="text-[10px] text-red-500 font-bold hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-full uppercase tracking-wide">Clear All</button>
+                <button onclick="clearAllData()" class="text-[10px] text-red-500 font-bold hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-full uppercase tracking-wide">Delete All</button>
             </div>
             <div id="dashboardList" class="space-y-3 pb-20">
                 <!-- Items injected here -->
             </div>
         </div>
+
+        <!-- Float Export Button -->
+        <button onclick="exportLocal()" class="fixed bottom-24 right-4 bg-green-600 text-white p-4 rounded-full shadow-xl hover:bg-green-700 active:scale-95 transition z-40 group">
+            <i class="fas fa-file-excel text-xl"></i>
+            <span class="absolute right-full mr-2 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">Export Excel</span>
+        </button>
     </div>
 
     <!-- Success Modal -->
@@ -409,70 +702,210 @@
         </div>
     </div>
 
+    <!-- Detail View Modal -->
+    <div id="detailModal" class="hidden fixed inset-0 bg-white z-[70] overflow-y-auto fade-in">
+        <div class="sticky top-0 bg-white border-b border-slate-200 p-4 flex justify-between items-center z-10 shadow-sm">
+            <h2 class="font-bold text-lg">Site Details</h2>
+            <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="detailContent" class="p-5 space-y-4 pb-20 text-sm">
+            <!-- Content Injected via JS -->
+        </div>
+    </div>
+
     <script>
-        const DB_KEY = 'engineering_db_v1';
+        const DB_KEY = 'engineering_db_best_v3';
+        const DRAFT_KEY = 'engineering_draft_best_v3';
         
-        // --- Sketch Pad Logic (Canvas) ---
-        const canvas = document.getElementById('sketch-pad');
-        const ctx = canvas.getContext('2d');
-        // Set white background immediately
-        ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        let isDrawing = false;
-        
-        // Setup line style
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 2;
-        ctx.lineCap = "round";
+        // --- Auto Calc Logic (New) ---
+        function calcSeparation() {
+            const gwCurrent = parseFloat(document.querySelector('[name="gw_current"]').value);
+            const gwMonsoon = parseFloat(document.querySelector('[name="gw_monsoon"]').value);
+            const pit = parseFloat(document.querySelector('[name="pit_depth"]').value);
+            const sepField = document.querySelector('[name="gw_separation"]');
+            
+            // Use Monsoon level if available (safer), else current
+            const gw = !isNaN(gwMonsoon) ? gwMonsoon : gwCurrent;
 
-        function getPos(canvas, evt) {
-            const rect = canvas.getBoundingClientRect();
-            // Scale for different screen densities
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            
-            let clientX = evt.clientX;
-            let clientY = evt.clientY;
-            
-            if(evt.touches && evt.touches.length > 0) {
-                clientX = evt.touches[0].clientX;
-                clientY = evt.touches[0].clientY;
+            if (!isNaN(gw) && !isNaN(pit)) {
+                // Assuming depth is measured from surface down. 
+                // Separation = GW Depth - Pit Depth.
+                const sep = gw - pit;
+                sepField.value = sep.toFixed(2);
+                checkSafety(sepField, 1.5, 'min'); // Trigger validation
             }
-
-            return {
-                x: (clientX - rect.left) * scaleX,
-                y: (clientY - rect.top) * scaleY
-            };
         }
 
-        function startDraw(e) { e.preventDefault(); isDrawing = true; const pos = getPos(canvas, e); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
-        function draw(e) { if (!isDrawing) return; e.preventDefault(); const pos = getPos(canvas, e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); }
-        function endDraw() { if(isDrawing) { isDrawing = false; saveSketch(); } }
+        // --- Risk Counter (New) ---
+        function updateRiskCounter() {
+            // Count checked boxes in risk section
+            const risks = document.querySelectorAll('input[name="risks"]:checked');
+            const count = risks.length;
+            const badge = document.getElementById('riskCounterBadge');
+            const countSpan = document.getElementById('riskCount');
+            
+            countSpan.innerText = count;
+            if(count > 0) {
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+            } else {
+                badge.classList.add('hidden');
+                badge.classList.remove('flex');
+            }
+        }
 
-        canvas.addEventListener('mousedown', startDraw);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', endDraw);
-        canvas.addEventListener('touchstart', startDraw, {passive: false});
-        canvas.addEventListener('touchmove', draw, {passive: false});
-        canvas.addEventListener('touchend', endDraw);
+        // --- Photo Logic (UI Only) ---
+        function handlePhoto(input) {
+            const status = document.getElementById('photoStatus');
+            const hidden = document.getElementById('photo_captured');
+            if(input.files && input.files[0]) {
+                status.innerHTML = '<span class="text-green-600 font-bold"><i class="fas fa-check"></i> Photo captured!</span>';
+                hidden.value = "Yes";
+            }
+        }
+
+        // --- Smart Validation Logic ---
+        function checkSafety(input, threshold, type) {
+            const val = parseFloat(input.value);
+            const parent = input.parentElement;
+            const warning = parent.querySelector('.warning-text');
+            
+            if (isNaN(val) || input.value === "") {
+                warning.style.display = 'none';
+                parent.classList.remove('input-warning');
+                return;
+            }
+
+            let isUnsafe = false;
+            if (type === 'min' && val < threshold) isUnsafe = true;
+            if (type === 'max' && val > threshold) isUnsafe = true;
+
+            if (isUnsafe) {
+                warning.style.display = 'block';
+                parent.classList.add('input-warning');
+            } else {
+                warning.style.display = 'none';
+                parent.classList.remove('input-warning');
+            }
+        }
+
+        // --- Canvas Helper with Undo ---
+        let currentPenColor = '#000000';
+        let sketchHistory = []; // Stack for undo
+
+        function setPenColor(color) {
+            currentPenColor = color;
+        }
+
+        function setupCanvas(canvasId, inputId, isSketch) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Set Initial Background
+            if(isSketch) {
+                ctx.fillStyle = "white";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Save blank state
+                if(isSketch) saveState(canvas); 
+            }
+            
+            ctx.lineWidth = 2;
+            ctx.lineCap = "round";
+
+            let isDrawing = false;
+
+            function getPos(evt) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+                const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+            }
+
+            function start(e) { 
+                e.preventDefault(); 
+                isDrawing = true; 
+                ctx.strokeStyle = isSketch ? currentPenColor : '#000'; 
+                const pos = getPos(e); 
+                ctx.beginPath(); 
+                ctx.moveTo(pos.x, pos.y); 
+            }
+            function move(e) { if (!isDrawing) return; e.preventDefault(); const pos = getPos(e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); }
+            function end() { 
+                if(isDrawing) { 
+                    isDrawing = false; 
+                    save(); 
+                    if(isSketch) saveState(canvas); 
+                } 
+            }
+            
+            function save() {
+                if(inputId) {
+                    if(isSketch) document.getElementById(inputId).value = canvas.toDataURL('image/png');
+                    else document.getElementById(inputId).value = "Signed"; 
+                    saveDraftDebounced();
+                }
+            }
+
+            canvas.addEventListener('mousedown', start);
+            canvas.addEventListener('mousemove', move);
+            canvas.addEventListener('mouseup', end);
+            canvas.addEventListener('touchstart', start, {passive: false});
+            canvas.addEventListener('touchmove', move, {passive: false});
+            canvas.addEventListener('touchend', end);
+            
+            return ctx;
+        }
+
+        function saveState(canvas) {
+            if(sketchHistory.length > 5) sketchHistory.shift();
+            sketchHistory.push(canvas.toDataURL());
+        }
+
+        const sketchCtx = setupCanvas('sketch-pad', 'sketch_data', true);
+        const sigCtx = setupCanvas('signature-pad', 'signature_data', false);
+
+        function undoSketch() {
+            if(sketchHistory.length > 1) {
+                sketchHistory.pop(); // Remove current state
+                const prevData = sketchHistory[sketchHistory.length - 1]; // Get prev
+                const img = new Image();
+                img.src = prevData;
+                img.onload = () => {
+                    const canvas = document.getElementById('sketch-pad');
+                    const ctx = canvas.getContext('2d');
+                    ctx.clearRect(0,0, canvas.width, canvas.height);
+                    ctx.drawImage(img,0,0);
+                    document.getElementById('sketch_data').value = prevData;
+                };
+            } else {
+                clearSketch();
+            }
+        }
 
         function clearSketch() {
+            const canvas = document.getElementById('sketch-pad');
+            const ctx = canvas.getContext('2d');
             ctx.fillStyle = "white";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.getElementById('sketch_data').value = "";
+            sketchHistory = [];
+            saveState(canvas); // Reset history with blank
+        }
+        
+        function clearSignature() {
+            sigCtx.clearRect(0, 0, document.getElementById('signature-pad').width, document.getElementById('signature-pad').height);
+            document.getElementById('signature_data').value = "";
         }
 
-        function saveSketch() {
-            document.getElementById('sketch_data').value = canvas.toDataURL('image/png');
-        }
-
-        // --- GPS Logic (Same as Social Survey for robustness) ---
+        // --- GPS Logic ---
         let watchId = null;
         let bestAccuracy = Infinity;
         let bestCoords = null;
         let gpsTimeout = null;
-        let updateCount = 0;
 
         function getGPS() {
             const status = document.getElementById('gps_status');
@@ -482,7 +915,7 @@
             
             if (watchId) navigator.geolocation.clearWatch(watchId);
             if (gpsTimeout) clearTimeout(gpsTimeout);
-            bestAccuracy = Infinity; bestCoords = null; updateCount = 0;
+            bestAccuracy = Infinity; bestCoords = null;
             
             btnTrack.classList.add('hidden');
             btnStop.classList.remove('hidden');
@@ -493,27 +926,25 @@
 
             watchId = navigator.geolocation.watchPosition(
                 (pos) => {
-                    updateCount++;
-                    const currentAcc = pos.coords.accuracy;
+                    const acc = pos.coords.accuracy;
                     const lat = pos.coords.latitude.toFixed(7);
                     const lng = pos.coords.longitude.toFixed(7);
                     
-                    if (currentAcc < bestAccuracy) {
-                        bestAccuracy = currentAcc;
+                    if (acc < bestAccuracy) {
+                        bestAccuracy = acc;
                         bestCoords = `${lat}, ${lng}`;
                         input.value = bestCoords; 
+                        saveDraftDebounced();
                     }
-
                     let color = bestAccuracy < 10 ? 'text-emerald-600' : 'text-orange-500';
                     status.innerHTML = `<span class="${color} font-mono">Best: <b>${bestAccuracy.toFixed(1)}m</b></span>`;
-                    
                     if (bestAccuracy <= 3) finishGPS(true);
                 },
                 (err) => { if (bestAccuracy === Infinity) { status.innerText = "Error: " + err.message; finishGPS(false); } },
                 { enableHighAccuracy: true, timeout: 45000, maximumAge: 0 }
             );
 
-            gpsTimeout = setTimeout(() => { finishGPS(true); if(bestAccuracy === Infinity) status.innerText = "Timeout."; }, 45000);
+            gpsTimeout = setTimeout(() => { finishGPS(true); }, 45000);
         }
 
         function finishGPS(saveResult) {
@@ -523,57 +954,166 @@
 
             document.getElementById('btn_track').classList.remove('hidden');
             document.getElementById('btn_stop').classList.add('hidden');
-            const input = document.getElementById('gps_input');
-
+            
             if (saveResult && bestCoords) {
-                input.value = bestCoords;
+                document.getElementById('gps_input').value = bestCoords;
                 document.getElementById('gps_status').innerHTML = `<span class="text-emerald-700 font-bold"><i class="fas fa-check-circle"></i> Locked (${bestAccuracy.toFixed(1)}m)</span>`;
             } else if (!bestCoords) {
-                input.value = "";
+                document.getElementById('gps_input').value = "";
+                document.getElementById('gps_status').innerText = "Location not found";
             }
+            saveDraftDebounced();
         }
 
-        // --- Form Handling ---
+        // --- Draft Logic ---
+        let saveTimeout;
+        function saveDraftDebounced() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(saveDraft, 1000);
+        }
+
+        function saveDraft() {
+            const formData = new FormData(document.getElementById('techForm'));
+            const data = {};
+            formData.forEach((value, key) => {
+                if(!data[key]) { data[key] = value; }
+                else { if(!Array.isArray(data[key])){ data[key] = [data[key]]; } data[key].push(value); }
+            });
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+            const indicator = document.getElementById('draftStatus');
+            indicator.classList.remove('hidden');
+            setTimeout(() => indicator.classList.add('hidden'), 2000);
+        }
+
+        function checkDraft() {
+            const draft = localStorage.getItem(DRAFT_KEY);
+            if(draft) document.getElementById('restoreDraftAlert').classList.remove('hidden');
+        }
+
+        function restoreDraft() {
+            const draft = JSON.parse(localStorage.getItem(DRAFT_KEY));
+            if(!draft) return;
+            const form = document.getElementById('techForm');
+            for (const key in draft) {
+                const value = draft[key];
+                const inputs = form.querySelectorAll(`[name="${key}"]`);
+                if(inputs.length > 0) {
+                    if(inputs[0].type === 'radio') {
+                        inputs.forEach(input => { if(input.value === value) input.checked = true; });
+                    } else if(inputs[0].type === 'checkbox') {
+                         const arr = Array.isArray(value) ? value : [value];
+                         inputs.forEach(input => { if(arr.includes(input.value)) input.checked = true; });
+                    } else {
+                        inputs[0].value = value;
+                    }
+                }
+            }
+            // Re-trigger validations on restore
+            form.querySelectorAll('input').forEach(input => {
+                if (input.oninput) input.oninput(); 
+            });
+            updateRiskCounter(); // Restore badge
+            document.getElementById('restoreDraftAlert').classList.add('hidden');
+        }
+
+        function clearDraft() {
+            localStorage.removeItem(DRAFT_KEY);
+            document.getElementById('restoreDraftAlert').classList.add('hidden');
+        }
+
+        // --- Form Submission ---
         document.getElementById('techForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const oldHtml = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = 'Saving...';
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
             try {
                 const formData = new FormData(e.target);
                 const getMulti = (name) => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value).join(', ');
-                
+
                 const data = {
                     id: Date.now(),
-                    date: new Date().toISOString(),
-                    hh_name: formData.get('hh_name'),
-                    house_no: formData.get('house_no'),
+                    timestamp: new Date().toISOString(),
+                    consent: formData.get('consent'),
                     gps: formData.get('gps_coords'),
+                    photo: formData.get('photo_captured'),
                     
-                    space_avail: formData.get('space_avail'),
-                    length: formData.get('land_length'),
-                    width: formData.get('land_width'),
-                    dist_house: formData.get('dist_house'),
-                    dist_water: formData.get('dist_water'),
+                    // S1
+                    settlement: formData.get('settlement'),
+                    ward: formData.get('ward'),
+                    municipality: formData.get('municipality'),
+                    surveyTeam: formData.get('survey_team'),
                     
-                    slope: formData.get('slope'),
-                    soil: formData.get('soil_type'),
-                    excavation: formData.get('excavation'),
+                    // S2
+                    distHouse: formData.get('dist_house'),
+                    toiletPos: formData.get('toilet_position'),
+                    foundation: formData.get('foundation'),
+                    waterType: formData.get('water_source_type'),
+                    distWater: formData.get('dist_water'),
+                    isDownhill: formData.get('toilet_downhill'),
+                    distNeighbor: formData.get('dist_neighbor'),
                     
+                    // S3
+                    gwCurrent: formData.get('gw_current'),
+                    gwMonsoon: formData.get('gw_monsoon'),
+                    distWellObs: formData.get('dist_well_obs'), 
+                    pitDepth: formData.get('pit_depth'),
+                    gwSeparation: formData.get('gw_separation'),
+                    
+                    // S4
+                    terrain: formData.get('terrain'),
+                    slope: formData.get('slope_percent'),
+                    drainage: formData.get('drainage_dir'),
+                    rainFlow: formData.get('rain_flow'),
+                    flood: formData.get('flood_signs'),
+                    landslide: formData.get('landslide'),
+                    
+                    // S5
+                    trialPit: formData.get('trial_pit_depth'),
+                    layer1: formData.get('layer1_desc'),
+                    layer2: formData.get('layer2_desc'),
+                    pitWater: formData.get('pit_water'),
+                    squeeze: formData.get('squeeze_test'),
+                    ribbon: formData.get('ribbon_test'),
+                    infiltration: formData.get('infiltration'),
+                    soilSample: formData.get('soil_sample_collected') ? 'Yes' : 'No',
+                    sampleDepth: formData.get('sample_depth'), 
+                    
+                    // S6
+                    flush: formData.get('flush_planned') ? 'Yes' : 'No',
+                    waterYear: formData.get('water_year_round') ? 'Yes' : 'No',
+                    waterConveyance: formData.get('water_conveyance'),
+                    
+                    // S7
+                    soakFeasible: formData.get('soak_feasibility'),
+                    twinSpace: formData.get('twin_space'),
+                    emptyAccess: formData.get('empty_access'),
+                    
+                    // S8
+                    roadAccess: formData.get('road_access'),
+                    distRoad: formData.get('dist_road'),
                     materials: getMulti('materials'),
-                    access: formData.get('access_type'),
-                    walk_time: formData.get('walking_time'),
                     
-                    remarks: formData.get('tech_remarks'),
+                    // S9
+                    risks: getMulti('risks'),
+                    mitigation: formData.get('mitigation'),
+                    
+                    // S10
+                    recommendation: formData.get('recommendation'),
+                    notes: formData.get('engineer_notes'),
+                    sketch: formData.get('sketch_data') ? 'Yes' : 'No',
+                    
                     surveyor: formData.get('surveyor_name'),
-                    sketch_saved: formData.get('sketch_data') ? 'Yes' : 'No'
+                    date: formData.get('survey_date'),
+                    signed: formData.get('signature_data') ? 'Yes' : 'No'
                 };
 
                 const existing = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
                 existing.unshift(data);
                 localStorage.setItem(DB_KEY, JSON.stringify(existing));
                 
+                clearDraft();
                 document.getElementById('successModal').classList.remove('hidden');
                 
             } catch (err) {
@@ -583,7 +1123,7 @@
             }
         });
 
-        // --- Navigation & Dashboard ---
+        // --- Navigation ---
         function toggleView() {
             const form = document.getElementById('survey-view');
             const dash = document.getElementById('dashboard-view');
@@ -597,105 +1137,163 @@
             } else {
                 dash.classList.remove('active');
                 form.classList.add('active');
-                btn.innerHTML = '<i class="fas fa-th-large"></i> Data';
+                btn.innerHTML = '<i class="fas fa-th-large"></i> Dashboard';
             }
             window.scrollTo(0,0);
         }
 
+        let allData = [];
         function loadDashboard() {
-            const data = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
-            document.getElementById('totalCount').innerText = data.length;
-            const list = document.getElementById('dashboardList');
+            allData = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+            document.getElementById('totalCount').innerText = allData.length;
             
+            // Stats
+            const total = allData.length || 1;
+            const feasible = allData.filter(d => 
+                d.recommendation === 'Single Pit' || 
+                d.recommendation === 'Twin Pit' || 
+                d.recommendation === 'Septic Tank'
+            ).length;
+            const feasPerc = Math.round((feasible / total) * 100);
+            document.getElementById('statFeasible').innerText = feasPerc + "%";
+            document.getElementById('progFeasible').style.width = feasPerc + "%";
+
+            renderList(allData);
+        }
+
+        function searchRecords() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allData.filter(d => 
+                (d.settlement || '').toLowerCase().includes(term) ||
+                (d.ward || '').toString().includes(term) ||
+                (d.surveyor || '').toLowerCase().includes(term)
+            );
+            renderList(filtered);
+        }
+
+        function renderList(data) {
+            const list = document.getElementById('dashboardList');
             if(data.length === 0) {
-                list.innerHTML = '<div class="text-center py-10 text-slate-400 border border-dashed rounded-lg">No technical logs yet</div>';
+                list.innerHTML = '<div class="text-center py-10 text-slate-400 border border-dashed rounded-lg">No records found</div>';
                 return;
             }
 
-            list.innerHTML = data.map(d => `
-                <div class="bg-white p-4 rounded-xl border-l-4 border-emerald-500 shadow-sm relative">
+            list.innerHTML = data.map(d => {
+                // Determine Risk Level for UI
+                const hasRisk = d.risks && d.risks.length > 0;
+                const riskBadge = hasRisk 
+                    ? `<span class="bg-red-50 text-red-600 px-2 py-0.5 rounded text-[10px] font-bold border border-red-100">RISK</span>` 
+                    : `<span class="bg-green-50 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold border border-green-100">SAFE</span>`;
+
+                return `
+                <div class="bg-white p-4 rounded-xl border-l-4 ${hasRisk ? 'border-red-500' : 'border-emerald-500'} shadow-sm relative transition hover:shadow-md">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h4 class="font-bold text-slate-800">${d.hh_name || 'House #' + d.house_no}</h4>
-                            <div class="text-xs text-slate-500 mt-1">
-                                <span class="bg-slate-100 px-2 py-0.5 rounded">Slope: ${d.slope || '?'}</span>
-                                <span class="bg-slate-100 px-2 py-0.5 rounded ml-1">Soil: ${d.soil || '?'}</span>
+                            <h4 class="font-bold text-slate-800">${d.settlement || 'Unknown'}, Ward ${d.ward || '-'}</h4>
+                            <div class="text-xs text-slate-500 mt-1 space-x-2 flex items-center">
+                                ${riskBadge}
+                                <span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold">${d.recommendation || 'Pending'}</span>
                             </div>
                         </div>
-                        <div class="text-right">
-                             <span class="text-[10px] text-slate-400 block">${new Date(d.date).toLocaleTimeString()}</span>
-                        </div>
+                        <button onclick="viewDetail(${d.id})" class="text-xs bg-slate-100 text-slate-600 px-3 py-1.5 rounded-lg font-bold hover:bg-slate-200">View</button>
                     </div>
-                    ${d.remarks ? `<p class="text-xs text-slate-600 mt-2 italic border-t pt-2 border-slate-100">"${d.remarks}"</p>` : ''}
+                    <div class="text-[10px] text-slate-400 mt-2 pt-2 border-t border-slate-50 flex justify-between">
+                        <span><i class="far fa-user"></i> ${d.surveyor || '-'}</span>
+                        <span>${new Date(d.timestamp).toLocaleDateString()}</span>
+                    </div>
                 </div>
-            `).join('');
+            `}).join('');
+        }
+
+        function viewDetail(id) {
+            const record = allData.find(d => d.id === id);
+            if(!record) return;
+            const content = document.getElementById('detailContent');
+            let html = '';
+            for (const [key, value] of Object.entries(record)) {
+                if(value && key !== 'id') {
+                     html += `
+                        <div class="border-b border-slate-100 pb-2 last:border-0">
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">${key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                            <span class="block text-slate-800 font-medium break-words">${value}</span>
+                        </div>
+                     `;
+                }
+            }
+            content.innerHTML = html;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
         }
 
         function exportLocal() {
-            const data = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
-            if(!data.length) { alert("No data available to export."); return; }
+            const rawData = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+            if(!rawData.length) { alert("No data to export"); return; }
             
-            // Map data to a well-formatted structure with Header names
-            const formattedData = data.map(item => ({
-                "Date": new Date(item.date).toLocaleDateString(),
-                "Time": new Date(item.date).toLocaleTimeString(),
-                "Household Head Name": item.hh_name,
-                "House No.": item.house_no,
-                "GPS Coordinates": item.gps,
-                "Space Available": item.space_avail,
-                "Land Length (m)": item.length,
-                "Land Width (m)": item.width,
-                "Dist. from House": item.dist_house,
-                "Dist. from Water Source": item.dist_water,
-                "Land Slope": item.slope,
-                "Soil Type": item.soil,
-                "Excavation Difficulty": item.excavation,
-                "Local Materials": item.materials,
-                "Access Type": item.access,
-                "Walk Time (min)": item.walk_time,
-                "Surveyor Remarks": item.remarks,
-                "Surveyor Name": item.surveyor,
-                "Sketch Saved": item.sketch_saved
+            // Map Data
+            const exportData = rawData.map(d => ({
+                "ID": d.id,
+                "Date": new Date(d.timestamp).toLocaleString(),
+                "Consent": d.consent,
+                "Settlement": d.settlement,
+                "Ward": d.ward,
+                "Municipality": d.municipality,
+                "Surveyor": d.surveyor,
+                "GPS": d.gps,
+                "Photo Taken": d.photo || 'No',
+                "Toilet Pos": d.toiletPos,
+                "Dist House (m)": d.distHouse,
+                "Foundation": d.foundation,
+                "Water Type": d.waterType,
+                "Dist Water (m)": d.distWater,
+                "Downhill?": d.isDownhill,
+                "GW Current (m)": d.gwCurrent,
+                "GW Monsoon (m)": d.gwMonsoon,
+                "Obs Well Dist (m)": d.distWellObs, 
+                "Vertical Sep (m)": d.gwSeparation,
+                "Terrain": d.terrain,
+                "Slope %": d.slope,
+                "Drainage": d.drainage,
+                "Trial Pit (m)": d.trialPit,
+                "Layer 1": d.layer1,
+                "Infiltration": d.infiltration,
+                "Sample Depth (m)": d.sampleDepth, 
+                "Flush?": d.flush,
+                "Soak Feasible?": d.soakFeasible,
+                "Materials": d.materials,
+                "Risks": d.risks,
+                "Mitigation": d.mitigation,
+                "Recommendation": d.recommendation,
+                "Notes": d.notes,
+                "Sketch": d.sketch,
+                "Signed": d.signed
             }));
 
-            // Create Worksheet
-            const ws = XLSX.utils.json_to_sheet(formattedData);
-
-            // Set Column Widths for better readability
-            const wscols = [
-                {wch: 12}, // Date
-                {wch: 10}, // Time
-                {wch: 25}, // Household Head
-                {wch: 12}, // House No
-                {wch: 25}, // GPS
-                {wch: 15}, // Space
-                {wch: 15}, // Length
-                {wch: 15}, // Width
-                {wch: 20}, // Dist House
-                {wch: 25}, // Dist Water
-                {wch: 15}, // Slope
-                {wch: 15}, // Soil
-                {wch: 20}, // Excavation
-                {wch: 30}, // Materials
-                {wch: 15}, // Access
-                {wch: 15}, // Walk Time
-                {wch: 40}, // Remarks
-                {wch: 20}, // Surveyor
-                {wch: 15}  // Sketch
-            ];
-            ws['!cols'] = wscols;
-
-            // Create Workbook and Append Sheet
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Technical_Data");
-            
-            // Generate filename with current date
+            const ws = XLSX.utils.json_to_sheet(exportData);
+            const wscols = Object.keys(exportData[0]).map(() => ({wch: 20}));
+            ws['!cols'] = wscols;
+            XLSX.utils.book_append_sheet(wb, ws, "Technical Data");
+
+            // Summary
+            const summaryData = [
+                ["SUMMARY REPORT", ""],
+                ["Generated On", new Date().toLocaleString()],
+                ["Total Sites", rawData.length],
+                ["Feasible Sites", rawData.filter(d => d.recommendation !== 'Alternate Loc').length],
+                ["High Risk Sites", rawData.filter(d => (d.risks && d.risks.length > 0)).length]
+            ];
+            const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+            XLSX.utils.book_append_sheet(wb, wsSummary, "Summary");
+
             const dateStr = new Date().toISOString().split('T')[0];
-            XLSX.writeFile(wb, `Engineering_Survey_${dateStr}.xlsx`);
+            XLSX.writeFile(wb, `Engineering_Recce_${dateStr}.xlsx`);
         }
 
         function clearAllData() {
-            if(confirm("Delete ALL technical logs?")) {
+            if(confirm("Are you sure you want to delete ALL records? This cannot be undone.")) {
                 localStorage.removeItem(DB_KEY);
                 loadDashboard();
             }
@@ -705,6 +1303,10 @@
             document.getElementById('successModal').classList.add('hidden');
             document.getElementById('techForm').reset();
             clearSketch();
+            clearSignature();
+            clearDraft();
+            updateRiskCounter();
+            document.querySelector('input[name="survey_date"]').valueAsDate = new Date();
             window.scrollTo(0,0);
         }
         
@@ -714,6 +1316,11 @@
             const scrolled = (winScroll / height) * 100;
             document.getElementById("progress-bar").style.width = scrolled + "%";
         }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('input[name="survey_date"]').valueAsDate = new Date();
+            checkDraft();
+        });
     </script>
 </body>
 </html>
