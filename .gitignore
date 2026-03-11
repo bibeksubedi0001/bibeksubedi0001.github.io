@@ -33,5 +33,3 @@ prepros.config
 # ---- Logs ----
 *.log
 
-# ---- ioe-prep (managed by GitHub Actions from ioe-prep repo) ----
-ioe-prep/
