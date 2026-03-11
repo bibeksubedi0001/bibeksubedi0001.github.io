@@ -1,0 +1,37 @@
+# ---- macOS ----
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ---- Windows ----
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# ---- Editor / IDE ----
+.idea/
+.vscode/settings.json
+.vscode/launch.json
+*.suo
+*.sw?
+
+# ---- Prepros ----
+prepros-6.config
+prepros.config
+
+# ---- LaTeX build artifacts ----
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.blg
+*.bbl
+
+# ---- Logs ----
+*.log
+
+# ---- ioe-prep (managed by GitHub Actions from ioe-prep repo) ----
+ioe-prep/
