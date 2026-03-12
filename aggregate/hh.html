@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aggregate Marks Calculator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 36px 40px;
+      width: 100%;
+      max-width: 900px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+      text-align: center;
+      color: #e2e8f0;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    thead tr {
+      background: rgba(99, 179, 237, 0.15);
+    }
+
+    thead th {
+      padding: 12px 14px;
+      text-align: center;
+      color: #63b3ed;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      border-bottom: 1px solid rgba(99,179,237,0.25);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover {
+      background: rgba(255,255,255,0.04);
+    }
+
+    tbody td {
+      padding: 10px 14px;
+      text-align: center;
+      color: #cbd5e1;
+    }
+
+    tbody td:first-child {
+      font-weight: 600;
+      color: #63b3ed;
+    }
+
+    input[type="number"] {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      color: #f1f5f9;
+      padding: 7px 10px;
+      width: 110px;
+      text-align: center;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    input[type="number"]:focus {
+      border-color: #63b3ed;
+      background: rgba(99,179,237,0.1);
+    }
+
+    input[type="number"].error {
+      border-color: #fc8181;
+      background: rgba(252,129,129,0.1);
+    }
+
+    .agg-cell {
+      font-weight: 600;
+      color: #68d391;
+      min-width: 90px;
+    }
+
+    tfoot tr {
+      border-top: 2px solid rgba(99,179,237,0.3);
+    }
+
+    tfoot td {
+      padding: 12px 14px;
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    .results {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .result-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .result-box .label {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 8px;
+    }
+
+    .result-box .value {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    .result-box.blue .value  { color: #63b3ed; }
+    .result-box.green .value { color: #68d391; }
+    .result-box.gold .value  { color: #f6e05e; }
+    .result-box.purple .value { color: #b794f4; }
+
+    .grade-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 2px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 28px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+
+    button:hover { opacity: 0.88; transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+
+    .btn-calc {
+      background: linear-gradient(135deg, #3182ce, #63b3ed);
+      color: #fff;
+    }
+
+    .btn-reset {
+      background: rgba(255,255,255,0.1);
+      color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .note {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>📊 Aggregate Marks Calculator</h1>
+  <p class="subtitle">Enter your obtained marks for each semester to compute your aggregate.</p>
+
+  <table id="marksTable">
+    <thead>
+      <tr>
+        <th>Semester</th>
+        <th>Full Marks</th>
+        <th>Weight</th>
+        <th>Marks Obtained</th>
+        <th>Aggregate (Obt × Wt)</th>
+        <th>Max Aggregate (Full × Wt)</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" style="text-align:right; color:#94a3b8; font-size:0.85rem; padding-right:18px;">Totals →</td>
+        <td id="totalObtained" style="color:#63b3ed;">—</td>
+        <td id="totalAggregate" style="color:#68d391;">—</td>
+        <td id="totalMaxAggregate" style="color:#f6e05e;">—</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="results">
+    <div class="result-box blue">
+      <div class="label">Total Obtained</div>
+      <div class="value" id="resObtained">—</div>
+    </div>
+    <div class="result-box gold">
+      <div class="label">Max Weighted Marks</div>
+      <div class="value" id="resMaxAgg">—</div>
+    </div>
+    <div class="result-box green">
+      <div class="label">Your Aggregate</div>
+      <div class="value" id="resAgg">—</div>
+    </div>
+    <div class="result-box purple">
+      <div class="label">Percentage</div>
+      <div class="value" id="resPercent">—</div>
+      <div id="gradeBadge"></div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-calc" onclick="calculate()">Calculate</button>
+    <button class="btn-reset" onclick="resetAll()">Reset</button>
+  </div>
+
+  <p class="note">
+    Formula: Aggregate = Σ (Marks Obtained × Weight) &nbsp;|&nbsp;
+    Percentage = (Aggregate ÷ Max Weighted Marks) × 100
+  </p>
+</div>
+
+<script>
+  const semesters = [
+    { sem: 1, full: 675,  weight: 0.10 },
+    { sem: 2, full: 700,  weight: 0.10 },
+    { sem: 3, full: 700,  weight: 0.10 },
+    { sem: 4, full: 750,  weight: 0.10 },
+    { sem: 5, full: 875,  weight: 0.15 },
+    { sem: 6, full: 750,  weight: 0.15 },
+    { sem: 7, full: 750,  weight: 0.15 },
+    { sem: 8, full: 650,  weight: 0.15 },
+  ];
+
+  const tbody = document.getElementById('tableBody');
+
+  // Build table rows
+  semesters.forEach((s, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>Semester ${s.sem}</td>
+      <td>${s.full}</td>
+      <td>${s.weight.toFixed(2)}</td>
+      <td>
+        <input type="number" id="obtained_${i}" min="0" max="${s.full}"
+               placeholder="0 – ${s.full}" oninput="liveUpdate(${i})" />
+      </td>
+      <td class="agg-cell" id="agg_${i}">—</td>
+      <td style="color:#f6e05e;" id="maxagg_${i}">${(s.full * s.weight).toFixed(2)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  function liveUpdate(i) {
+    const s = semesters[i];
+    const inp = document.getElementById(`obtained_${i}`);
+    const val = parseFloat(inp.value);
+    const cell = document.getElementById(`agg_${i}`);
+
+    inp.classList.remove('error');
+    if (isNaN(val) || inp.value === '') { cell.textContent = '—'; return; }
+
+    if (val < 0 || val > s.full) {
+      inp.classList.add('error');
+      cell.textContent = '✗';
+      return;
+    }
+    cell.textContent = (val * s.weight).toFixed(4);
+  }
+
+  function calculate() {
+    let totalObt = 0, totalAgg = 0, totalMax = 0, valid = true;
+
+    semesters.forEach((s, i) => {
+      const inp = document.getElementById(`obtained_${i}`);
+      const val = parseFloat(inp.value);
+
+      inp.classList.remove('error');
+
+      if (isNaN(val) || inp.value.trim() === '') {
+        inp.classList.add('error');
+        valid = false;
+        return;
+      }
+      if (val < 0 || val > s.full) {
+        inp.classList.add('error');
+        valid = false;
+        return;
+      }
+
+      totalObt += val;
+      totalAgg += val * s.weight;
+      totalMax += s.full * s.weight;
+    });
+
+    if (!valid) {
+      alert('Please fill in all fields with valid marks (within the full marks for each semester).');
+      return;
+    }
+
+    const percentage = (totalAgg / totalMax) * 100;
+
+    document.getElementById('totalObtained').textContent   = totalObt.toFixed(0);
+    document.getElementById('totalAggregate').textContent  = totalAgg.toFixed(4);
+    document.getElementById('totalMaxAggregate').textContent = totalMax.toFixed(2);
+
+    document.getElementById('resObtained').textContent = totalObt.toFixed(0);
+    document.getElementById('resMaxAgg').textContent   = totalMax.toFixed(2);
+    document.getElementById('resAgg').textContent      = totalAgg.toFixed(4);
+    document.getElementById('resPercent').textContent  = percentage.toFixed(2) + '%';
+
+    const badge = document.getElementById('gradeBadge');
+    let grade, color;
+    if (percentage >= 90)      { grade = 'Outstanding'; color = '#68d391'; }
+    else if (percentage >= 80) { grade = 'Excellent';   color = '#63b3ed'; }
+    else if (percentage >= 70) { grade = 'Very Good';   color = '#b794f4'; }
+    else if (percentage >= 60) { grade = 'Good';        color = '#f6e05e'; }
+    else if (percentage >= 50) { grade = 'Average';     color = '#fbd38d'; }
+    else if (percentage >= 40) { grade = 'Pass';        color = '#fc8181'; }
+    else                       { grade = 'Fail';        color = '#fc4444'; }
+
+    badge.innerHTML = `<span class="grade-badge" style="background:${color}22; color:${color}; border:1px solid ${color}55;">${grade}</span>`;
+  }
+
+  function resetAll() {
+    semesters.forEach((s, i) => {
+      const inp = document.getElementById(`obtained_${i}`);
+      inp.value = '';
+      inp.classList.remove('error');
+      document.getElementById(`agg_${i}`).textContent = '—';
+    });
+    ['totalObtained','totalAggregate','totalMaxAggregate',
+     'resObtained','resMaxAgg','resAgg','resPercent'].forEach(id => {
+      document.getElementById(id).textContent = '—';
+    });
+    document.getElementById('gradeBadge').innerHTML = '';
+  }
+</script>
+</body>
+</html>
