@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>TU Aggregate Marks Calculator – Civil Engineering</title>
+    <title>TU Aggregate Marks Calculator – IOE</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,6 +19,15 @@
                         'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
                         'float': '0 10px 30px -5px rgba(0, 0, 0, 0.1)',
                         'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
                     }
                 }
             }
@@ -38,12 +47,33 @@
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: #f8fafc; 
-            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-            background-size: 24px 24px;
             color: #0f172a; 
             -webkit-tap-highlight-color: transparent;
+            position: relative;
         }
         
+        /* Subtle Engineering Blueprint Grid */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(to right, rgba(203, 213, 225, 0.4) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(203, 213, 225, 0.4) 1px, transparent 1px);
+            background-size: 32px 32px;
+            z-index: -2;
+        }
+
+        /* Radial fade to soften the grid at edges */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 20%, #f8fafc 120%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -56,24 +86,28 @@
         input[type=number] { -moz-appearance: textfield; }
 
         .card {
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
             border: 1px solid #e2e8f0;
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
-            border-radius: 1rem;
-            transition: box-shadow 0.3s ease;
+            border-radius: 1.25rem;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 15px 35px -10px rgba(79, 70, 229, 0.08);
         }
 
         /* Gradient for TU Branding */
         .bg-tu-gradient {
             background: linear-gradient(135deg, #2563eb, #4f46e5);
         }
-        .text-tu-gradient {
-            background: linear-gradient(135deg, #2563eb, #4f46e5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        
+        /* Staggered Animations */
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
 
-        /* Padding bottom on mobile to account for fixed action bar */
         @media (max-width: 1024px) {
             body { padding-bottom: 90px; }
         }
@@ -82,22 +116,22 @@
 <body class="min-h-screen p-4 sm:p-6 lg:p-8 flex flex-col items-center">
 
     <!-- Sticky Floating Header -->
-    <header class="w-full max-w-7xl mb-6 md:mb-8 flex flex-col md:flex-row items-center justify-between gap-4 sticky top-4 z-40 bg-white/80 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-slate-200/50 shadow-sm">
-        <div class="flex items-center gap-4 w-full md:w-auto">
-            <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-tu-gradient flex items-center justify-center shadow-lg shadow-indigo-500/30 flex-shrink-0 transition-transform hover:scale-105 duration-300">
+    <header class="w-full max-w-7xl mb-6 md:mb-8 flex flex-col md:flex-row items-center justify-between gap-4 sticky top-4 z-40 bg-white/85 backdrop-blur-xl rounded-2xl p-3 sm:p-4 border border-slate-200/60 shadow-sm animate-fade-in-up">
+        <div class="flex items-center gap-4 w-full md:w-auto px-1">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-tu-gradient flex items-center justify-center shadow-lg shadow-indigo-500/30 flex-shrink-0 transition-transform hover:scale-105 duration-300 cursor-pointer">
                 <i data-lucide="graduation-cap" class="text-white w-6 h-6 md:w-8 md:h-8"></i>
             </div>
             <div>
-                <h1 class="text-xl md:text-3xl font-extrabold tracking-tight text-slate-900">Tribhuvan University</h1>
-                <p id="headerProgramName" class="text-indigo-600 text-xs md:text-sm font-semibold tracking-wide uppercase">IOE • Civil Engineering Aggregate</p>
+                <h1 class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900">Tribhuvan University</h1>
+                <p id="headerProgramName" class="text-indigo-600 text-xs md:text-sm font-bold tracking-wide uppercase opacity-90">IOE • Civil Engineering Aggregate</p>
             </div>
         </div>
-        <div class="hidden md:flex gap-3">
-            <button onclick="resetAll()" class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-all text-sm font-semibold text-slate-700 shadow-sm hover:shadow active:scale-95">
-                <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset
+        <div class="hidden md:flex gap-3 pr-1">
+            <button onclick="resetAll()" class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-all text-sm font-semibold text-slate-700 shadow-sm hover:shadow active:scale-95 group">
+                <i data-lucide="rotate-ccw" class="w-4 h-4 group-hover:-rotate-180 transition-transform duration-500"></i> Reset
             </button>
-            <button id="btnPdfDesk" onclick="downloadPDF()" disabled class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-tu-gradient hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 active:scale-95">
-                <i data-lucide="file-down" class="w-4 h-4"></i> Export Report
+            <button id="btnPdfDesk" onclick="downloadPDF()" disabled class="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-tu-gradient hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 active:scale-95 group">
+                <i data-lucide="file-down" class="w-4 h-4 group-hover:translate-y-0.5 transition-transform"></i> Export Report
             </button>
         </div>
     </header>
@@ -108,39 +142,42 @@
         <div class="lg:col-span-7 space-y-6 md:space-y-8">
             
             <!-- Student Info -->
-            <section class="card p-5 md:p-6">
+            <section class="card p-5 md:p-6 animate-fade-in-up delay-100">
                 <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <i data-lucide="user" class="w-4 h-4 text-indigo-500"></i> Student Profile
+                    <i data-lucide="user-circle" class="w-4 h-4 text-indigo-500"></i> Student Profile
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="group">
                         <label class="block text-xs font-semibold text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Full Name</label>
-                        <input type="text" id="sName" placeholder="Enter Full Name" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium placeholder:text-slate-400 shadow-inner-soft">
+                        <input type="text" id="sName" placeholder="Enter Full Name" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium placeholder:text-slate-400 shadow-inner-soft hover:border-slate-300">
                     </div>
                     <div class="group">
                         <label class="block text-xs font-semibold text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Faculty / Program</label>
                         <div class="relative">
-                            <select id="sProg" onchange="changeProgram(this.value)" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl pl-4 pr-10 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium shadow-inner-soft appearance-none cursor-pointer">
+                            <select id="sProg" onchange="changeProgram(this.value)" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl pl-4 pr-10 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium shadow-inner-soft appearance-none cursor-pointer hover:border-slate-300">
                                 <option value="civil">B.E. Civil Engineering</option>
                                 <option value="electronics">B.E. Electronics Engineering</option>
+                                <option value="computer">B.E. Computer Engineering</option>
                             </select>
                             <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                         </div>
                     </div>
                     <div class="group">
                         <label class="block text-xs font-semibold text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Roll / Reg No.</label>
-                        <input type="text" id="sRoll" placeholder="Enter Roll No." class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium placeholder:text-slate-400 shadow-inner-soft">
+                        <input type="text" id="sRoll" placeholder="Enter Roll No." class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium placeholder:text-slate-400 shadow-inner-soft hover:border-slate-300">
                     </div>
                 </div>
             </section>
 
             <!-- Marks Entry Section -->
-            <section class="card overflow-hidden flex flex-col">
-                <div class="p-5 md:p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
+            <section class="card overflow-hidden flex flex-col animate-fade-in-up delay-200">
+                <div class="p-5 md:p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/40">
                     <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                        <i data-lucide="table-2" class="w-4 h-4 text-indigo-500"></i> Semester Marks
+                        <i data-lucide="layout-list" class="w-4 h-4 text-indigo-500"></i> Semester Marks
                     </h2>
-                    <span id="filledBadge" class="px-3 py-1 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-full text-xs font-bold shadow-sm transition-all duration-300">0 / 8 Done</span>
+                    <span id="filledBadge" class="px-3 py-1 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-lg text-xs font-bold shadow-sm transition-all duration-300 flex items-center gap-1.5">
+                        <div class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></div> 0 / 8 Done
+                    </span>
                 </div>
 
                 <!-- Desktop Table View -->
@@ -174,6 +211,11 @@
                 <div class="md:hidden flex flex-col divide-y divide-slate-100" id="mobList">
                     <!-- Populated via JS -->
                 </div>
+                
+                <!-- Quick Tip -->
+                <div class="bg-slate-50 p-3 text-center border-t border-slate-100 text-xs font-medium text-slate-500 flex justify-center items-center gap-2">
+                    <i data-lucide="keyboard" class="w-3.5 h-3.5"></i> Tip: Press <kbd class="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-slate-700 mx-0.5">Enter</kbd> to jump to the next semester.
+                </div>
             </section>
         </div>
 
@@ -181,17 +223,17 @@
         <div class="lg:col-span-5 space-y-6 flex flex-col">
             
             <!-- Quick Summary Stats -->
-            <div class="grid grid-cols-2 gap-4 md:gap-6">
-                <div class="card p-5 border-t-4 border-t-blue-500 relative overflow-hidden group hover:shadow-lg transition-shadow">
-                    <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 group-hover:scale-110 transition-all duration-500">
+            <div class="grid grid-cols-2 gap-4 md:gap-5 animate-fade-in-up delay-100">
+                <div class="card p-5 border-t-4 border-t-blue-500 relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
                         <i data-lucide="calculator" class="w-24 h-24 text-blue-600"></i>
                     </div>
                     <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Aggregate Marks</div>
                     <div class="text-3xl font-extrabold text-slate-800 mb-1 tracking-tight" id="rAgg">0.00</div>
                     <div class="text-xs font-medium text-slate-500" id="rMax">out of 0.00 max</div>
                 </div>
-                <div class="card p-5 border-t-4 border-t-indigo-500 relative overflow-hidden group hover:shadow-lg transition-shadow">
-                    <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 group-hover:scale-110 transition-all duration-500">
+                <div class="card p-5 border-t-4 border-t-indigo-500 relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 group-hover:scale-110 group-hover:-rotate-12 transition-all duration-500">
                         <i data-lucide="award" class="w-24 h-24 text-indigo-600"></i>
                     </div>
                     <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Percentage</div>
@@ -201,30 +243,30 @@
             </div>
 
             <!-- Visual Charts Grid (Trend & Variance) -->
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 animate-fade-in-up delay-200">
                 <!-- Trend Chart -->
-                <section class="card p-4 md:p-5 flex flex-col">
+                <section class="card p-4 flex flex-col">
                     <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
                         <i data-lucide="trending-up" class="w-3.5 h-3.5 text-indigo-500"></i> Performance Trend
                     </h2>
-                    <div class="relative w-full h-[220px]">
+                    <div class="relative w-full h-[200px]">
                         <canvas id="trendChart"></canvas>
                     </div>
                 </section>
                 
                 <!-- Inconsistency/Variance Chart -->
-                <section class="card p-4 md:p-5 flex flex-col">
+                <section class="card p-4 flex flex-col">
                     <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
                         <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-indigo-500"></i> Variance from Avg
                     </h2>
-                    <div class="relative w-full h-[220px]">
+                    <div class="relative w-full h-[200px]">
                         <canvas id="varianceChart"></canvas>
                     </div>
                 </section>
             </div>
 
             <!-- Advanced Analytics Tools -->
-            <section class="card p-5 md:p-6">
+            <section class="card p-5 md:p-6 animate-fade-in-up delay-300 flex-1">
                 <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5 flex items-center gap-2">
                     <i data-lucide="microscope" class="w-4 h-4 text-indigo-500"></i> Advanced Analytics
                 </h2>
@@ -236,16 +278,18 @@
                             <span class="font-semibold text-slate-600">Degree Completion (Weight)</span>
                             <span class="text-indigo-600 font-bold" id="degProgTxt">0%</span>
                         </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden mb-4 shadow-inner">
-                            <div class="bg-tu-gradient h-full rounded-full transition-all duration-700 w-0" id="degProgFill"></div>
-                        </div>
-                        <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-3 flex items-start gap-3 shadow-sm hover:shadow transition-shadow">
-                            <div class="p-1.5 bg-white rounded-lg shadow-sm shrink-0">
-                                <i data-lucide="crosshair" class="w-4 h-4 text-indigo-500"></i>
+                        <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden mb-4 shadow-inner">
+                            <div class="bg-tu-gradient h-full rounded-full transition-all duration-700 ease-out w-0 relative overflow-hidden" id="degProgFill">
+                                <div class="absolute inset-0 bg-white/20 w-full h-full transform -skew-x-12 animate-[pulse_2s_infinite]"></div>
                             </div>
-                            <div class="mt-0.5">
+                        </div>
+                        <div class="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100/60 rounded-xl p-3.5 flex items-start gap-3 shadow-sm">
+                            <div class="p-1.5 bg-white rounded-lg shadow-sm shrink-0 text-indigo-500">
+                                <i data-lucide="crosshair" class="w-4 h-4"></i>
+                            </div>
+                            <div class="mt-0.5 w-full">
                                 <div class="text-[10px] uppercase font-bold text-indigo-500 tracking-wider mb-0.5">Next Goal Predictor</div>
-                                <div class="text-sm font-bold text-slate-700 leading-snug" id="inTarget">Fill semesters to see target insights.</div>
+                                <div class="text-sm font-bold text-slate-700 leading-snug" id="inTarget">Start entering your marks to unlock projection algorithms.</div>
                             </div>
                         </div>
                     </div>
@@ -254,40 +298,40 @@
 
                     <!-- Insight Grid (6 Blocks) -->
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-3">
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 cursor-default group">
                             <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">Est. CGPA (4.0)</div>
                             <div class="text-sm font-bold text-amber-500 flex items-center gap-2" id="inCgpa">
-                                <i data-lucide="graduation-cap" class="w-4 h-4"></i> 0.00
+                                <i data-lucide="graduation-cap" class="w-4 h-4 opacity-70"></i> 0.00
                             </div>
                         </div>
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 cursor-default group">
                             <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">Projected Final %</div>
                             <div class="text-sm font-bold text-blue-600 flex items-center gap-2" id="inProj">
-                                <i data-lucide="target" class="w-4 h-4"></i> 0.00%
+                                <i data-lucide="target" class="w-4 h-4 opacity-70"></i> 0.00%
                             </div>
                         </div>
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 cursor-default group">
                             <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">Best Semester</div>
                             <div class="text-sm font-bold text-emerald-600 flex items-center gap-2" id="inBest">
-                                <i data-lucide="arrow-up-circle" class="w-4 h-4"></i> N/A
+                                <i data-lucide="arrow-up-circle" class="w-4 h-4 opacity-70"></i> N/A
                             </div>
                         </div>
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
-                            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">Marks Lost</div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 cursor-default group">
+                            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">Marks Dropped</div>
                             <div class="text-sm font-bold text-rose-500 flex items-center gap-2" id="inLost">
-                                <i data-lucide="trending-down" class="w-4 h-4"></i> 0
+                                <i data-lucide="trending-down" class="w-4 h-4 opacity-70"></i> 0
                             </div>
                         </div>
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 cursor-default group">
                             <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">Volatility (Spread)</div>
                             <div class="text-sm font-bold text-purple-600 flex items-center gap-2" id="inVol">
-                                <i data-lucide="move-vertical" class="w-4 h-4"></i> N/A
+                                <i data-lucide="move-vertical" class="w-4 h-4 opacity-70"></i> N/A
                             </div>
                         </div>
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 cursor-default group">
                             <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">Trajectory</div>
                             <div class="text-sm font-bold text-slate-700 flex items-center gap-2" id="inTrend">
-                                <i data-lucide="minus" class="w-4 h-4 text-slate-400"></i> N/A
+                                <i data-lucide="minus" class="w-4 h-4 opacity-70"></i> N/A
                             </div>
                         </div>
                     </div>
@@ -297,13 +341,13 @@
     </main>
 
     <!-- Mobile Sticky Action Bar -->
-    <div class="md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] z-50 flex items-center justify-between gap-4 pb-6">
+    <div class="md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-slate-200/60 p-4 shadow-[0_-10px_30px_-10px_rgba(0,0,0,0.1)] z-50 flex items-center justify-between gap-4 pb-6">
         <div class="flex flex-col">
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aggregate</span>
-            <span class="text-lg font-extrabold text-indigo-600" id="mobStickyPct">0.00%</span>
+            <span class="text-xl font-extrabold text-indigo-600" id="mobStickyPct">0.00%</span>
         </div>
         <div class="flex gap-2">
-            <button onclick="resetAll()" class="p-3 rounded-xl bg-slate-100 text-slate-600 active:bg-slate-200 active:scale-95 transition-all shadow-sm">
+            <button onclick="resetAll()" class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 active:bg-slate-100 active:scale-95 transition-all shadow-sm">
                 <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
             </button>
             <button id="btnPdfMob" onclick="downloadPDF()" disabled class="flex items-center gap-2 px-6 py-3 rounded-xl bg-tu-gradient text-white font-bold text-sm shadow-lg shadow-indigo-500/30 disabled:opacity-50 active:scale-95 transition-all">
@@ -317,7 +361,7 @@
         // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Core Data Definition (TU IOE weightage logic)
+        // Core Data Definition (TU IOE weightage logic for multiple programs)
         const PROGRAM_DATA = {
             civil: [
                 { n: 1, full: 675, w: 0.10 },
@@ -338,24 +382,54 @@
                 { n: 6, full: 825, w: 0.15 },
                 { n: 7, full: 750, w: 0.15 },
                 { n: 8, full: 675, w: 0.15 },
+            ],
+            computer: [
+                { n: 1, full: 725, w: 0.10 },
+                { n: 2, full: 650, w: 0.10 },
+                { n: 3, full: 875, w: 0.10 },
+                { n: 4, full: 900, w: 0.10 },
+                { n: 5, full: 875, w: 0.15 },
+                { n: 6, full: 825, w: 0.15 },
+                { n: 7, full: 825, w: 0.15 },
+                { n: 8, full: 750, w: 0.15 },
             ]
         };
 
-        let SEMS = PROGRAM_DATA['civil'];
+        let SEMS = PROGRAM_DATA['civil']; // Default on load
 
         let chartInstance = null;
         let varianceInstance = null;
         let currentState = null;
 
+        // Enter Key Navigation
+        function handleEnter(event, index, type) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const nextIndex = index + 1;
+                if (nextIndex < 8) {
+                    const nextInput = document.getElementById(`inp${type}${nextIndex}`);
+                    if (nextInput) {
+                        nextInput.focus();
+                        nextInput.select();
+                    }
+                } else {
+                    document.getElementById(`inp${type}${index}`).blur();
+                }
+            }
+        }
+
         // Initialize UI Elements
         function initUI() {
             const deskTbody = document.getElementById('deskTbody');
             const mobList = document.getElementById('mobList');
+            
+            deskTbody.innerHTML = '';
+            mobList.innerHTML = '';
 
             SEMS.forEach((s, i) => {
                 // Desktop Row
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-indigo-50/50 transition-colors group";
+                tr.className = "hover:bg-indigo-50/40 transition-colors group";
                 tr.innerHTML = `
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
@@ -365,12 +439,12 @@
                     </td>
                     <td class="px-4 py-4 text-center font-medium text-slate-500" id="fullD${i}">${s.full}</td>
                     <td class="px-4 py-4 text-center">
-                        <span class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs font-bold text-slate-600 border border-slate-200 group-hover:bg-white transition-colors">${(s.w*100).toFixed(0)}%</span>
+                        <span class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs font-bold text-slate-600 border border-slate-200 group-hover:bg-white group-hover:border-indigo-100 transition-colors">${(s.w*100).toFixed(0)}%</span>
                     </td>
                     <td class="px-4 py-4">
                         <input type="number" inputmode="numeric" id="inpD${i}" min="0" max="${s.full}" placeholder="0" 
-                            class="w-full max-w-[110px] mx-auto block bg-white border border-slate-200 rounded-xl px-3 py-2 text-center text-sm font-bold text-slate-800 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all shadow-sm placeholder:font-normal placeholder:text-slate-300"
-                            oninput="syncInputs(${i}, this.value)">
+                            class="w-full max-w-[110px] mx-auto block bg-white border border-slate-200 rounded-xl px-3 py-2 text-center text-sm font-bold text-slate-800 focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500 outline-none transition-all shadow-sm hover:border-indigo-300 placeholder:font-normal placeholder:text-slate-300"
+                            oninput="syncInputs(${i}, this.value)" onkeydown="handleEnter(event, ${i}, 'D')">
                     </td>
                     <td class="px-4 py-4 text-center">
                         <span class="text-sm font-bold text-slate-400" id="pctD${i}">—</span>
@@ -388,7 +462,7 @@
 
                 // Mobile Card View
                 const mDiv = document.createElement('div');
-                mDiv.className = "p-4 sm:p-5 flex flex-col gap-3.5 bg-white hover:bg-slate-50 transition-colors";
+                mDiv.className = "p-4 sm:p-5 flex flex-col gap-3.5 bg-white hover:bg-slate-50 transition-colors focus-within:bg-indigo-50/20";
                 mDiv.innerHTML = `
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-2.5">
@@ -399,9 +473,9 @@
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="flex-1 relative">
-                            <input type="number" inputmode="numeric" id="inpM${i}" min="0" max="${s.full}" placeholder="Enter Marks" 
-                                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-12 py-3.5 text-base font-bold text-slate-800 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all shadow-sm placeholder:font-normal placeholder:text-slate-400"
-                                oninput="syncInputs(${i}, this.value)">
+                            <input type="number" inputmode="numeric" id="inpM${i}" min="0" max="${s.full}" placeholder="Marks" 
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-12 py-3.5 text-base font-bold text-slate-800 focus:bg-white focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500 outline-none transition-all shadow-inner-soft hover:border-indigo-300 placeholder:font-normal placeholder:text-slate-400"
+                                oninput="syncInputs(${i}, this.value)" onkeydown="handleEnter(event, ${i}, 'M')">
                             <div class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 pointer-events-none" id="maxM${i}">/${s.full}</div>
                         </div>
                         <div class="flex flex-col gap-1 min-w-[75px]">
@@ -422,7 +496,7 @@
                 mobList.appendChild(mDiv);
             });
 
-            initChart();
+            if (!chartInstance) initChart();
         }
 
         // Handle Program Change
@@ -431,7 +505,8 @@
             
             const progNames = {
                 civil: "Civil Engineering",
-                electronics: "Electronics Engineering"
+                electronics: "Electronics Engineering",
+                computer: "Computer Engineering"
             };
             document.getElementById('headerProgramName').textContent = `IOE • ${progNames[progKey]} Aggregate`;
 
@@ -444,15 +519,15 @@
                 document.getElementById(`inpM${i}`).max = s.full;
             });
 
-            calculate();
+            calculate(); // Recalculate everything with new limits
         }
 
         // Initialize Chart.js (Light Theme)
         function initChart() {
             // Trend Chart (Line)
             const ctxTrend = document.getElementById('trendChart').getContext('2d');
-            const gradient = ctxTrend.createLinearGradient(0, 0, 0, 300);
-            gradient.addColorStop(0, 'rgba(79, 70, 229, 0.25)'); // indigo-600 with opacity
+            const gradient = ctxTrend.createLinearGradient(0, 0, 0, 200);
+            gradient.addColorStop(0, 'rgba(79, 70, 229, 0.3)'); 
             gradient.addColorStop(1, 'rgba(79, 70, 229, 0.0)');
 
             chartInstance = new Chart(ctxTrend, {
@@ -462,7 +537,7 @@
                     datasets: [{
                         label: 'Semester %',
                         data: Array(8).fill(null),
-                        borderColor: '#4f46e5', // indigo-600
+                        borderColor: '#4f46e5', 
                         backgroundColor: gradient,
                         borderWidth: 3,
                         pointBackgroundColor: '#ffffff',
@@ -483,7 +558,7 @@
                             backgroundColor: '#1e293b',
                             titleColor: '#f8fafc',
                             bodyColor: '#cbd5e1',
-                            borderColor: '#334155',
+                            borderColor: 'rgba(255,255,255,0.1)',
                             borderWidth: 1,
                             padding: 10,
                             displayColors: false,
@@ -515,8 +590,9 @@
                     datasets: [{
                         label: 'Deviation from Avg',
                         data: Array(8).fill(null),
-                        backgroundColor: '#94a3b8',
+                        backgroundColor: '#cbd5e1',
                         borderRadius: 4,
+                        borderSkipped: false
                     }]
                 },
                 options: {
@@ -528,7 +604,7 @@
                             backgroundColor: '#1e293b',
                             titleColor: '#f8fafc',
                             bodyColor: '#cbd5e1',
-                            borderColor: '#334155',
+                            borderColor: 'rgba(255,255,255,0.1)',
                             borderWidth: 1,
                             padding: 10,
                             displayColors: false,
@@ -542,7 +618,11 @@
                     },
                     scales: {
                         y: {
-                            grid: { color: '#f1f5f9', drawBorder: false },
+                            grid: { 
+                                color: (ctx) => ctx.tick.value === 0 ? '#94a3b8' : '#f1f5f9', 
+                                lineWidth: (ctx) => ctx.tick.value === 0 ? 2 : 1,
+                                drawBorder: false 
+                            },
                             ticks: { color: '#64748b', font: { family: 'Inter', weight: '500' } }
                         },
                         x: {
@@ -575,11 +655,11 @@
 
         // TU Division Rules
         function getGrade(pct) {
-            if (pct >= 80) return { label: 'Distinction', color: 'text-blue-600', bg: 'bg-blue-100' };
-            if (pct >= 65) return { label: 'First Division', color: 'text-emerald-600', bg: 'bg-emerald-100' };
-            if (pct >= 50) return { label: 'Second Division', color: 'text-amber-600', bg: 'bg-amber-100' };
-            if (pct >= 40) return { label: 'Pass Division', color: 'text-orange-600', bg: 'bg-orange-100' };
-            return { label: 'Fail', color: 'text-rose-600', bg: 'bg-rose-100' };
+            if (pct >= 80) return { label: 'Distinction', color: 'text-blue-700', bg: 'bg-blue-100', border: 'border-blue-200' };
+            if (pct >= 65) return { label: 'First Division', color: 'text-emerald-700', bg: 'bg-emerald-100', border: 'border-emerald-200' };
+            if (pct >= 50) return { label: 'Second Division', color: 'text-amber-700', bg: 'bg-amber-100', border: 'border-amber-200' };
+            if (pct >= 40) return { label: 'Pass Division', color: 'text-orange-700', bg: 'bg-orange-100', border: 'border-orange-200' };
+            return { label: 'Fail', color: 'text-rose-700', bg: 'bg-rose-100', border: 'border-rose-200' };
         }
 
         // Main Calculation Engine
@@ -618,7 +698,7 @@
                     }
                     pctD.innerHTML = pctM.innerHTML = '—';
                     barD.style.width = barM.style.width = '0%';
-                    dotD.className = dotM.className = 'w-2 h-2 rounded-full bg-slate-300 transition-colors';
+                    dotD.className = dotM.className = 'w-2 h-2 rounded-full bg-slate-200 transition-colors';
                     chartData.push(null);
                     return;
                 }
@@ -657,12 +737,13 @@
                 barM.className = `h-full rounded-full transition-all duration-500 ${colorBase}`;
                 barD.style.width = barM.style.width = `${pct}%`;
 
-                dotD.className = dotM.className = `w-2.5 h-2.5 rounded-full shadow-[0_0_8px_rgba(79,70,229,0.3)] ${colorBase} transition-colors`;
+                dotD.className = dotM.className = `w-2.5 h-2.5 rounded-full shadow-[0_0_10px_rgba(79,70,229,0.4)] ${colorBase} transition-colors`;
             });
 
             // Update Badge & Enable/Disable PDF
             const badgeEl = document.getElementById('filledBadge');
-            badgeEl.textContent = `${cnt} / 8 Done`;
+            badgeEl.innerHTML = `<div class="w-1.5 h-1.5 rounded-full ${cnt > 0 ? 'bg-white animate-pulse' : 'bg-indigo-400'}"></div> ${cnt} / 8 Done`;
+            
             if (cnt > 0) {
                 badgeEl.classList.remove('bg-indigo-50', 'text-indigo-700', 'border-indigo-100');
                 badgeEl.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-md');
@@ -691,7 +772,7 @@
             const gradeInfo = getGrade(aggPct);
 
             // Dynamically scale chart Y-axis base
-            let chartMinY = Math.floor(minPctTrack / 10) * 10;
+            let chartMinY = Math.max(0, Math.floor(minPctTrack / 5) * 5 - 5); 
             
             // Calculate Variance data (Deviation from Aggregate Average)
             let varianceData = [];
@@ -717,7 +798,7 @@
             document.getElementById('rPct').textContent = aggPct.toFixed(2) + '%';
             
             const rGradeEl = document.getElementById('rGrade');
-            rGradeEl.innerHTML = `<span class="px-3 py-1 rounded-md text-xs font-extrabold ${gradeInfo.bg} ${gradeInfo.color} shadow-sm border border-black/5">${gradeInfo.label}</span>`;
+            rGradeEl.innerHTML = `<span class="px-3.5 py-1.5 rounded-lg text-xs font-extrabold ${gradeInfo.bg} ${gradeInfo.color} ${gradeInfo.border} border shadow-sm">${gradeInfo.label}</span>`;
 
             document.getElementById('degProgTxt').textContent = `${(totalWtFilled * 100).toFixed(0)}%`;
             document.getElementById('degProgFill').style.width = `${totalWtFilled * 100}%`;
@@ -725,25 +806,25 @@
             // --- Advanced Analytical Insights ---
             
             // 1. CGPA & Projection
-            let cgpaHtml = `<i data-lucide="graduation-cap" class="w-4 h-4"></i> ~${estimateCGPA(aggPct).toFixed(2)}`;
+            let cgpaHtml = `<i data-lucide="graduation-cap" class="w-4 h-4 text-amber-500"></i> ~${estimateCGPA(aggPct).toFixed(2)}`;
             document.getElementById('inCgpa').innerHTML = cgpaHtml;
             
-            let projHtml = `<i data-lucide="target" class="w-4 h-4"></i> ${aggPct.toFixed(2)}%`;
+            let projHtml = `<i data-lucide="target" class="w-4 h-4 text-blue-500"></i> ${aggPct.toFixed(2)}%`;
             document.getElementById('inProj').innerHTML = projHtml;
 
             // 2. Best Semester
             let best = semsData.reduce((prev, current) => (prev.pct > current.pct) ? prev : current);
-            document.getElementById('inBest').innerHTML = `<i data-lucide="arrow-up-circle" class="w-4 h-4"></i> Sem ${best.n} (${best.pct.toFixed(1)}%)`;
+            document.getElementById('inBest').innerHTML = `<i data-lucide="arrow-up-circle" class="w-4 h-4 text-emerald-500"></i> Sem ${best.n} (${best.pct.toFixed(1)}%)`;
 
             // 3. Marks Lost (Total Max Filled - Total Obtained)
             let marksLost = tMaxRawFilled - tObt;
-            document.getElementById('inLost').innerHTML = `<i data-lucide="trending-down" class="w-4 h-4"></i> ${marksLost.toLocaleString()} marks`;
+            document.getElementById('inLost').innerHTML = `<i data-lucide="trending-down" class="w-4 h-4 text-rose-500"></i> ${marksLost.toLocaleString()} marks`;
 
             // 4. Volatility (Spread between Best and Worst semester)
             let worst = semsData.reduce((prev, current) => (prev.pct < current.pct) ? prev : current);
             let spread = best.pct - worst.pct;
-            let spreadHtml = `<i data-lucide="move-vertical" class="w-4 h-4"></i> ${spread.toFixed(1)}% gap`;
-            if (cnt === 1) spreadHtml = `<i data-lucide="move-vertical" class="w-4 h-4 text-slate-400"></i> N/A`;
+            let spreadHtml = `<i data-lucide="move-vertical" class="w-4 h-4 text-purple-500"></i> ${spread.toFixed(1)}% gap`;
+            if (cnt === 1) spreadHtml = `<i data-lucide="move-vertical" class="w-4 h-4 text-slate-300"></i> N/A`;
             document.getElementById('inVol').innerHTML = spreadHtml;
 
             // 5. Trajectory (Linear Regression Slope)
@@ -788,11 +869,11 @@
 
                     let reqPctInRemaining = (deficitWt / remainingMaxWt) * 100;
                     if (reqPctInRemaining > 100) {
-                        targetHtml = `Reaching <strong>${nextDivName}</strong> is mathematically unlikely based on remaining weight.`;
+                        targetHtml = `Reaching <strong class="text-indigo-600">${nextDivName}</strong> is mathematically unlikely based on remaining weight.`;
                     } else if (reqPctInRemaining <= 0) {
-                        targetHtml = `You have already secured enough marks for <strong>${nextDivName}</strong>!`;
+                        targetHtml = `You have already secured enough marks for <strong class="text-indigo-600">${nextDivName}</strong>!`;
                     } else {
-                        targetHtml = `You need to average <strong class="text-indigo-600">${reqPctInRemaining.toFixed(1)}%</strong> in the remaining semesters to hit <strong>${nextDivName}</strong>.`;
+                        targetHtml = `You need to average <strong class="text-indigo-600 bg-indigo-50 px-1 rounded">${reqPctInRemaining.toFixed(1)}%</strong> in the remaining semesters to hit <strong class="text-indigo-600">${nextDivName}</strong>.`;
                     }
                 }
             }
@@ -815,10 +896,10 @@
             if (varianceInstance) {
                 varianceInstance.data.datasets[0].data = varianceData;
                 
-                // Color conditionally based on deviation
+                // Color conditionally based on deviation with modern gradients effect conceptually
                 let colors = varianceData.map(val => {
-                    if (val === null) return '#94a3b8';
-                    return val >= 0 ? '#10b981' : '#f43f5e'; // Emerald for positive, Rose for negative
+                    if (val === null) return '#e2e8f0';
+                    return val >= 0 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(244, 63, 94, 0.8)'; // Emerald / Rose
                 });
                 varianceInstance.data.datasets[0].backgroundColor = colors;
                 varianceInstance.update();
@@ -833,22 +914,22 @@
             document.getElementById('rAgg').textContent = '0.00';
             document.getElementById('rMax').textContent = 'out of 0.00 max';
             document.getElementById('rPct').textContent = '0.00%';
-            document.getElementById('rGrade').textContent = 'Division Status';
+            document.getElementById('rGrade').innerHTML = 'Division Status';
             
             document.getElementById('degProgTxt').textContent = '0%';
             document.getElementById('degProgFill').style.width = '0%';
 
-            document.getElementById('inCgpa').innerHTML = `<i data-lucide="graduation-cap" class="w-4 h-4"></i> 0.00`;
-            document.getElementById('inProj').innerHTML = `<i data-lucide="target" class="w-4 h-4"></i> 0.00%`;
-            document.getElementById('inBest').innerHTML = `<i data-lucide="arrow-up-circle" class="w-4 h-4 text-slate-400"></i> N/A`;
-            document.getElementById('inLost').innerHTML = `<i data-lucide="trending-down" class="w-4 h-4 text-slate-400"></i> 0`;
-            document.getElementById('inVol').innerHTML = `<i data-lucide="move-vertical" class="w-4 h-4 text-slate-400"></i> N/A`;
-            document.getElementById('inTrend').innerHTML = `<i data-lucide="minus" class="w-4 h-4 text-slate-400"></i> N/A`;
+            document.getElementById('inCgpa').innerHTML = `<i data-lucide="graduation-cap" class="w-4 h-4 opacity-40"></i> 0.00`;
+            document.getElementById('inProj').innerHTML = `<i data-lucide="target" class="w-4 h-4 opacity-40"></i> 0.00%`;
+            document.getElementById('inBest').innerHTML = `<i data-lucide="arrow-up-circle" class="w-4 h-4 opacity-40"></i> N/A`;
+            document.getElementById('inLost').innerHTML = `<i data-lucide="trending-down" class="w-4 h-4 opacity-40"></i> 0`;
+            document.getElementById('inVol').innerHTML = `<i data-lucide="move-vertical" class="w-4 h-4 opacity-40"></i> N/A`;
+            document.getElementById('inTrend').innerHTML = `<i data-lucide="minus" class="w-4 h-4 opacity-40"></i> N/A`;
             
-            document.getElementById('inTarget').innerHTML = 'Fill semesters to see target insights.';
+            document.getElementById('inTarget').innerHTML = 'Start entering your marks to unlock projection algorithms.';
             
             const badgeEl = document.getElementById('filledBadge');
-            badgeEl.textContent = '0 / 8 Done';
+            badgeEl.innerHTML = `<div class="w-1.5 h-1.5 rounded-full bg-indigo-400"></div> 0 / 8 Done`;
             badgeEl.classList.add('bg-indigo-50', 'text-indigo-700', 'border-indigo-100');
             badgeEl.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-md');
 
@@ -870,7 +951,7 @@
                 
                 document.getElementById(`barD${i}`).style.width = '0%';
                 document.getElementById(`barM${i}`).style.width = '0%';
-                document.getElementById(`dotD${i}`).className = 'w-2 h-2 rounded-full bg-slate-300 transition-colors group-hover:bg-indigo-300';
+                document.getElementById(`dotD${i}`).className = 'w-2 h-2 rounded-full bg-slate-200 transition-colors group-hover:bg-indigo-300';
                 document.getElementById(`dotM${i}`).className = 'w-2.5 h-2.5 rounded-full bg-slate-200 transition-colors';
             });
             
@@ -899,6 +980,7 @@
             const progSelect = document.getElementById('sProg');
             const prog = progSelect.options[progSelect.selectedIndex].text;
             const roll = document.getElementById('sRoll').value.trim() || 'Not Specified';
+            const date = new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
             
             const W = 210, H = 297, M = 15, CW = W - M * 2;
 
@@ -1099,7 +1181,7 @@
                 doc.text(targetPlain, W/2, y + 17, { maxWidth: CW/2 - 6 });
             }
 
-            // PDF clean ending (no footer as requested)
+            // PDF clean ending
             const dStr = new Date().toISOString().slice(0,10);
             doc.save(`TU_Marks_Report_${name.replace(/\s+/g,'_')}_${dStr}.pdf`);
         }
