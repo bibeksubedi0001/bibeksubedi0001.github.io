@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>TU Aggregate Marks Calculator – Civil Engineering</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -17,52 +18,76 @@
                     },
                     boxShadow: {
                         'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
-                        'float': '0 10px 30px -5px rgba(0, 0, 0, 0.1)'
+                        'float': '0 10px 30px -5px rgba(0, 0, 0, 0.1)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)'
                     }
                 }
             }
         }
     </script>
-    
+
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    
+
     <!-- Chart.js & jsPDF -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f8fafc; 
-            color: #0f172a; 
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: #0f172a;
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
 
         /* Input Number Hide Arrows & Mobile Fixes */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
 
         .card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
             border-radius: 1rem;
+            transition: box-shadow 0.3s ease;
         }
 
         /* Gradient for TU Branding */
         .bg-tu-gradient {
             background: linear-gradient(135deg, #2563eb, #4f46e5);
         }
+
         .text-tu-gradient {
             background: linear-gradient(135deg, #2563eb, #4f46e5);
             -webkit-background-clip: text;
@@ -71,88 +96,112 @@
 
         /* Padding bottom on mobile to account for fixed action bar */
         @media (max-width: 1024px) {
-            body { padding-bottom: 90px; }
+            body {
+                padding-bottom: 90px;
+            }
         }
     </style>
 </head>
+
 <body class="min-h-screen p-4 sm:p-6 lg:p-8 flex flex-col items-center">
 
-    <!-- Header -->
-    <header class="w-full max-w-7xl mb-6 md:mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+    <!-- Sticky Floating Header -->
+    <header
+        class="w-full max-w-7xl mb-6 md:mb-8 flex flex-col md:flex-row items-center justify-between gap-4 sticky top-4 z-40 bg-white/80 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-slate-200/50 shadow-sm">
         <div class="flex items-center gap-4 w-full md:w-auto">
-            <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-tu-gradient flex items-center justify-center shadow-lg shadow-indigo-500/30 flex-shrink-0">
+            <div
+                class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-tu-gradient flex items-center justify-center shadow-lg shadow-indigo-500/30 flex-shrink-0 transition-transform hover:scale-105 duration-300">
                 <i data-lucide="graduation-cap" class="text-white w-6 h-6 md:w-8 md:h-8"></i>
             </div>
             <div>
                 <h1 class="text-xl md:text-3xl font-extrabold tracking-tight text-slate-900">Tribhuvan University</h1>
-                <p class="text-indigo-600 text-xs md:text-sm font-semibold tracking-wide uppercase">IOE • Civil Engineering Aggregate</p>
+                <p class="text-indigo-600 text-xs md:text-sm font-semibold tracking-wide uppercase">IOE • Civil
+                    Engineering Aggregate</p>
             </div>
         </div>
         <div class="hidden md:flex gap-3">
-            <button onclick="resetAll()" class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 transition-all text-sm font-semibold text-slate-700 shadow-sm hover:shadow">
+            <button onclick="resetAll()"
+                class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-all text-sm font-semibold text-slate-700 shadow-sm hover:shadow active:scale-95">
                 <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset
             </button>
-            <button id="btnPdfDesk" onclick="downloadPDF()" disabled class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-tu-gradient hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-semibold text-white shadow-lg shadow-indigo-500/20">
+            <button id="btnPdfDesk" onclick="downloadPDF()" disabled
+                class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-tu-gradient hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 active:scale-95">
                 <i data-lucide="file-down" class="w-4 h-4"></i> Export Report
             </button>
         </div>
     </header>
 
     <main class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
-        
+
         <!-- Left Column: Inputs & Table -->
         <div class="lg:col-span-7 space-y-6 md:space-y-8">
-            
+
             <!-- Student Info -->
             <section class="card p-5 md:p-6">
                 <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                     <i data-lucide="user" class="w-4 h-4 text-indigo-500"></i> Student Profile
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Full Name</label>
-                        <input type="text" id="sName" placeholder="e.g. Bibek Sharma" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium">
+                    <div class="group">
+                        <label
+                            class="block text-xs font-semibold text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Full
+                            Name</label>
+                        <input type="text" id="sName" placeholder="Enter Full Name"
+                            class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium placeholder:text-slate-400 shadow-inner-soft">
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Faculty / Program</label>
-                        <input type="text" id="sProg" value="B.E. Civil Engineering" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 font-medium">
+                    <div class="group">
+                        <label
+                            class="block text-xs font-semibold text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Faculty
+                            / Program</label>
+                        <input type="text" id="sProg" value="B.E. Civil Engineering"
+                            class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium shadow-inner-soft">
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Roll / Reg No.</label>
-                        <input type="text" id="sRoll" placeholder="e.g. 075BCE001" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 font-medium">
+                    <div class="group">
+                        <label
+                            class="block text-xs font-semibold text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Roll
+                            / Reg No.</label>
+                        <input type="text" id="sRoll" placeholder="Enter Roll No."
+                            class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium placeholder:text-slate-400 shadow-inner-soft">
                     </div>
                 </div>
             </section>
 
             <!-- Marks Entry Section -->
             <section class="card overflow-hidden flex flex-col">
-                <div class="p-5 md:p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div class="p-5 md:p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
                     <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                         <i data-lucide="table-2" class="w-4 h-4 text-indigo-500"></i> Semester Marks
                     </h2>
-                    <span id="filledBadge" class="px-3 py-1 bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-full text-xs font-bold shadow-sm">0 / 8 Done</span>
+                    <span id="filledBadge"
+                        class="px-3 py-1 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-full text-xs font-bold shadow-sm transition-all duration-300">0
+                        / 8 Done</span>
                 </div>
 
                 <!-- Desktop Table View -->
                 <div class="hidden md:block overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-50 text-xs uppercase text-slate-500 tracking-wider border-b border-slate-200">
+                            <tr
+                                class="bg-slate-50 text-xs uppercase text-slate-500 tracking-wider border-b border-slate-200">
                                 <th class="px-6 py-4 font-bold">Semester</th>
                                 <th class="px-4 py-4 font-bold text-center">Full Marks</th>
                                 <th class="px-4 py-4 font-bold text-center">Weight</th>
                                 <th class="px-4 py-4 font-bold text-center w-36">Obtained</th>
+                                <th class="px-4 py-4 font-bold text-center">Percentage</th>
                                 <th class="px-6 py-4 font-bold text-right">Weighted Score</th>
                             </tr>
                         </thead>
-                        <tbody id="deskTbody" class="divide-y divide-slate-100 text-sm">
+                        <tbody id="deskTbody" class="divide-y divide-slate-50 text-sm">
                             <!-- Populated via JS -->
                         </tbody>
-                        <tfoot class="bg-indigo-50/50 font-bold border-t-2 border-indigo-100">
+                        <tfoot class="bg-indigo-50/30 font-bold border-t border-indigo-100">
                             <tr>
-                                <td colspan="3" class="px-6 py-4 text-right text-indigo-800 text-xs uppercase tracking-wider">Current Totals</td>
+                                <td colspan="3"
+                                    class="px-6 py-4 text-right text-indigo-800 text-xs uppercase tracking-wider">
+                                    Current Totals</td>
                                 <td class="px-4 py-4 text-center text-indigo-600 text-base" id="fObtDesk">—</td>
-                                <td class="px-6 py-4 text-right text-indigo-700 text-base" id="fPctDesk">—</td>
+                                <td class="px-4 py-4 text-center text-indigo-700 text-base" id="fPctDesk">—</td>
+                                <td class="px-6 py-4 text-right text-indigo-700 text-base" id="fWtDesk">—</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -167,19 +216,24 @@
 
         <!-- Right Column: Analysis & Results -->
         <div class="lg:col-span-5 space-y-6 flex flex-col">
-            
+
             <!-- Quick Summary Stats -->
             <div class="grid grid-cols-2 gap-4 md:gap-6">
-                <div class="card p-5 border-t-4 border-t-blue-500 relative overflow-hidden group">
-                    <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                <div
+                    class="card p-5 border-t-4 border-t-blue-500 relative overflow-hidden group hover:shadow-lg transition-shadow">
+                    <div
+                        class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 group-hover:scale-110 transition-all duration-500">
                         <i data-lucide="calculator" class="w-24 h-24 text-blue-600"></i>
                     </div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Aggregate Marks</div>
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Aggregate Marks
+                    </div>
                     <div class="text-3xl font-extrabold text-slate-800 mb-1 tracking-tight" id="rAgg">0.00</div>
                     <div class="text-xs font-medium text-slate-500" id="rMax">out of 0.00 max</div>
                 </div>
-                <div class="card p-5 border-t-4 border-t-indigo-500 relative overflow-hidden group">
-                    <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                <div
+                    class="card p-5 border-t-4 border-t-indigo-500 relative overflow-hidden group hover:shadow-lg transition-shadow">
+                    <div
+                        class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 group-hover:scale-110 transition-all duration-500">
                         <i data-lucide="award" class="w-24 h-24 text-indigo-600"></i>
                     </div>
                     <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Percentage</div>
@@ -188,60 +242,118 @@
                 </div>
             </div>
 
-            <!-- Trend Chart -->
-            <section class="card p-5 md:p-6 flex-1 min-h-[280px] flex flex-col">
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <i data-lucide="trending-up" class="w-4 h-4 text-indigo-500"></i> Performance Trend
-                </h2>
-                <div class="relative flex-1 w-full">
-                    <canvas id="trendChart"></canvas>
-                </div>
-            </section>
+            <!-- Visual Charts Grid (Trend & Variance) -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <!-- Trend Chart -->
+                <section class="card p-4 md:p-5 flex flex-col">
+                    <h2
+                        class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5 text-indigo-500"></i> Performance Trend
+                    </h2>
+                    <div class="relative w-full h-[220px]">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- Inconsistency/Variance Chart -->
+                <section class="card p-4 md:p-5 flex flex-col">
+                    <h2
+                        class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                        <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-indigo-500"></i> Variance from Avg
+                    </h2>
+                    <div class="relative w-full h-[220px]">
+                        <canvas id="varianceChart"></canvas>
+                    </div>
+                </section>
+            </div>
 
             <!-- Advanced Analytics Tools -->
             <section class="card p-5 md:p-6">
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <i data-lucide="microscope" class="w-4 h-4 text-indigo-500"></i> TU Analytics
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5 flex items-center gap-2">
+                    <i data-lucide="microscope" class="w-4 h-4 text-indigo-500"></i> Advanced Analytics
                 </h2>
-                
-                <div class="space-y-5">
-                    <!-- Progress -->
+
+                <div class="space-y-6">
+                    <!-- Progress & Target -->
                     <div>
                         <div class="flex justify-between text-xs mb-2">
                             <span class="font-semibold text-slate-600">Degree Completion (Weight)</span>
                             <span class="text-indigo-600 font-bold" id="degProgTxt">0%</span>
                         </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                            <div class="bg-tu-gradient h-full rounded-full transition-all duration-700 w-0" id="degProgFill"></div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden mb-4 shadow-inner">
+                            <div class="bg-tu-gradient h-full rounded-full transition-all duration-700 w-0"
+                                id="degProgFill"></div>
+                        </div>
+                        <div
+                            class="bg-indigo-50 border border-indigo-100 rounded-xl p-3 flex items-start gap-3 shadow-sm hover:shadow transition-shadow">
+                            <div class="p-1.5 bg-white rounded-lg shadow-sm shrink-0">
+                                <i data-lucide="crosshair" class="w-4 h-4 text-indigo-500"></i>
+                            </div>
+                            <div class="mt-0.5">
+                                <div class="text-[10px] uppercase font-bold text-indigo-500 tracking-wider mb-0.5">Next
+                                    Goal Predictor</div>
+                                <div class="text-sm font-bold text-slate-700 leading-snug" id="inTarget">Fill semesters
+                                    to see target insights.</div>
+                            </div>
                         </div>
                     </div>
 
                     <hr class="border-slate-100">
 
-                    <!-- Insight Grid -->
-                    <div class="grid grid-cols-2 gap-y-5 gap-x-4">
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">Best Semester</div>
-                            <div class="text-sm font-bold text-emerald-600 flex items-center gap-1.5" id="inBest">
-                                <i data-lucide="arrow-up-circle" class="w-4 h-4"></i> N/A
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">Needs Focus</div>
-                            <div class="text-sm font-bold text-rose-500 flex items-center gap-1.5" id="inWorst">
-                                <i data-lucide="arrow-down-circle" class="w-4 h-4"></i> N/A
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">Est. CGPA (4.0)</div>
-                            <div class="text-sm font-bold text-amber-500 flex items-center gap-1.5" id="inCgpa">
+                    <!-- Insight Grid (6 Blocks) -->
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-3">
+                        <div
+                            class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
+                            <div
+                                class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">
+                                Est. CGPA (4.0)</div>
+                            <div class="text-sm font-bold text-amber-500 flex items-center gap-2" id="inCgpa">
                                 <i data-lucide="graduation-cap" class="w-4 h-4"></i> 0.00
                             </div>
                         </div>
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">Projected %</div>
-                            <div class="text-sm font-bold text-blue-600 flex items-center gap-1.5" id="inProj">
+                        <div
+                            class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
+                            <div
+                                class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">
+                                Projected Final %</div>
+                            <div class="text-sm font-bold text-blue-600 flex items-center gap-2" id="inProj">
                                 <i data-lucide="target" class="w-4 h-4"></i> 0.00%
+                            </div>
+                        </div>
+                        <div
+                            class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
+                            <div
+                                class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">
+                                Best Semester</div>
+                            <div class="text-sm font-bold text-emerald-600 flex items-center gap-2" id="inBest">
+                                <i data-lucide="arrow-up-circle" class="w-4 h-4"></i> N/A
+                            </div>
+                        </div>
+                        <div
+                            class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
+                            <div
+                                class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">
+                                Marks Lost</div>
+                            <div class="text-sm font-bold text-rose-500 flex items-center gap-2" id="inLost">
+                                <i data-lucide="trending-down" class="w-4 h-4"></i> 0
+                            </div>
+                        </div>
+                        <div
+                            class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
+                            <div
+                                class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">
+                                Volatility (Spread)</div>
+                            <div class="text-sm font-bold text-purple-600 flex items-center gap-2" id="inVol">
+                                <i data-lucide="move-vertical" class="w-4 h-4"></i> N/A
+                            </div>
+                        </div>
+                        <div
+                            class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 cursor-default group">
+                            <div
+                                class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 group-hover:text-indigo-400 transition-colors">
+                                Trajectory</div>
+                            <div class="text-sm font-bold text-slate-700 flex items-center gap-2" id="inTrend">
+                                <i data-lucide="minus" class="w-4 h-4 text-slate-400"></i> N/A
                             </div>
                         </div>
                     </div>
@@ -251,16 +363,19 @@
     </main>
 
     <!-- Mobile Sticky Action Bar -->
-    <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 p-4 shadow-float z-50 flex items-center justify-between gap-4">
+    <div
+        class="md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] z-50 flex items-center justify-between gap-4 pb-6">
         <div class="flex flex-col">
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aggregate</span>
             <span class="text-lg font-extrabold text-indigo-600" id="mobStickyPct">0.00%</span>
         </div>
         <div class="flex gap-2">
-            <button onclick="resetAll()" class="p-3 rounded-xl bg-slate-100 text-slate-600 active:bg-slate-200">
+            <button onclick="resetAll()"
+                class="p-3 rounded-xl bg-slate-100 text-slate-600 active:bg-slate-200 active:scale-95 transition-all shadow-sm">
                 <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
             </button>
-            <button id="btnPdfMob" onclick="downloadPDF()" disabled class="flex items-center gap-2 px-6 py-3 rounded-xl bg-tu-gradient text-white font-bold text-sm shadow-lg shadow-indigo-500/30 disabled:opacity-50 active:scale-95 transition-transform">
+            <button id="btnPdfMob" onclick="downloadPDF()" disabled
+                class="flex items-center gap-2 px-6 py-3 rounded-xl bg-tu-gradient text-white font-bold text-sm shadow-lg shadow-indigo-500/30 disabled:opacity-50 active:scale-95 transition-all">
                 <i data-lucide="file-down" class="w-4 h-4"></i> Report
             </button>
         </div>
@@ -284,6 +399,7 @@
         ];
 
         let chartInstance = null;
+        let varianceInstance = null;
         let currentState = null;
 
         // Initialize UI Elements
@@ -294,27 +410,30 @@
             SEMS.forEach((s, i) => {
                 // Desktop Row
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition-colors group";
+                tr.className = "hover:bg-indigo-50/50 transition-colors group";
                 tr.innerHTML = `
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <div id="dotD${i}" class="w-2 h-2 rounded-full bg-slate-300 transition-colors"></div>
+                            <div id="dotD${i}" class="w-2 h-2 rounded-full bg-slate-300 transition-colors group-hover:bg-indigo-300"></div>
                             <span class="font-bold text-slate-700">Semester ${s.n}</span>
                         </div>
                     </td>
                     <td class="px-4 py-4 text-center font-medium text-slate-500">${s.full}</td>
                     <td class="px-4 py-4 text-center">
-                        <span class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs font-bold text-slate-600 border border-slate-200">${(s.w*100).toFixed(0)}%</span>
+                        <span class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs font-bold text-slate-600 border border-slate-200 group-hover:bg-white transition-colors">${(s.w * 100).toFixed(0)}%</span>
                     </td>
                     <td class="px-4 py-4">
                         <input type="number" inputmode="numeric" id="inpD${i}" min="0" max="${s.full}" placeholder="0" 
-                            class="w-full max-w-[110px] mx-auto block bg-white border border-slate-300 rounded-xl px-3 py-2 text-center text-sm font-bold text-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all shadow-sm placeholder:font-normal placeholder:text-slate-300"
+                            class="w-full max-w-[110px] mx-auto block bg-white border border-slate-200 rounded-xl px-3 py-2 text-center text-sm font-bold text-slate-800 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all shadow-sm placeholder:font-normal placeholder:text-slate-300"
                             oninput="syncInputs(${i}, this.value)">
+                    </td>
+                    <td class="px-4 py-4 text-center">
+                        <span class="text-sm font-bold text-slate-400" id="pctD${i}">—</span>
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex flex-col items-end gap-1.5">
-                            <div class="text-sm font-extrabold text-slate-400" id="wtdD${i}">—</div>
-                            <div class="w-24 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="text-sm font-extrabold text-slate-400 transition-colors" id="wtdD${i}">—</div>
+                            <div class="w-24 bg-slate-100 rounded-full h-1.5 overflow-hidden shadow-inner">
                                 <div id="barD${i}" class="bg-indigo-500 h-full rounded-full w-0 transition-all duration-500"></div>
                             </div>
                         </div>
@@ -324,28 +443,34 @@
 
                 // Mobile Card View
                 const mDiv = document.createElement('div');
-                mDiv.className = "p-4 sm:p-5 flex flex-col gap-3.5 bg-white";
+                mDiv.className = "p-4 sm:p-5 flex flex-col gap-3.5 bg-white hover:bg-slate-50 transition-colors";
                 mDiv.innerHTML = `
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-2.5">
-                            <div id="dotM${i}" class="w-2.5 h-2.5 rounded-full bg-slate-200"></div>
+                            <div id="dotM${i}" class="w-2.5 h-2.5 rounded-full bg-slate-200 transition-colors"></div>
                             <span class="font-extrabold text-slate-800 text-base">Semester ${s.n}</span>
                         </div>
-                        <span class="text-[11px] font-bold px-2 py-1 bg-slate-100 text-slate-500 rounded-md">Max: ${s.full} | Wt: ${(s.w*100).toFixed(0)}%</span>
+                        <span class="text-[11px] font-bold px-2 py-1 bg-slate-100 text-slate-500 rounded-md border border-slate-200">Max: ${s.full} | Wt: ${(s.w * 100).toFixed(0)}%</span>
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="flex-1 relative">
                             <input type="number" inputmode="numeric" id="inpM${i}" min="0" max="${s.full}" placeholder="Enter Marks" 
-                                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-12 py-3.5 text-base font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all shadow-inner placeholder:font-normal placeholder:text-slate-400"
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-12 py-3.5 text-base font-bold text-slate-800 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all shadow-sm placeholder:font-normal placeholder:text-slate-400"
                                 oninput="syncInputs(${i}, this.value)">
                             <div class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 pointer-events-none">/${s.full}</div>
                         </div>
-                        <div class="flex flex-col items-end min-w-[70px] bg-indigo-50 rounded-xl p-2.5 border border-indigo-100">
-                            <span class="text-[10px] text-indigo-500 font-bold uppercase tracking-wide">Score</span>
-                            <span class="text-base font-extrabold text-indigo-700" id="wtdM${i}">—</span>
+                        <div class="flex flex-col gap-1 min-w-[75px]">
+                            <div class="bg-indigo-50/50 rounded-lg px-2.5 py-1 border border-indigo-100/50 flex justify-between items-center w-full transition-colors">
+                                <span class="text-[9px] text-indigo-500 font-bold uppercase">Wt</span>
+                                <span class="text-xs font-extrabold text-indigo-700" id="wtdM${i}">—</span>
+                            </div>
+                            <div class="bg-slate-50/80 rounded-lg px-2.5 py-1 border border-slate-100 flex justify-between items-center w-full transition-colors">
+                                <span class="text-[9px] text-slate-500 font-bold uppercase">%</span>
+                                <span class="text-xs font-extrabold text-slate-700" id="pctM${i}">—</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="w-full bg-slate-100 rounded-full h-1.5 mt-1 overflow-hidden">
+                    <div class="w-full bg-slate-100 rounded-full h-1.5 mt-1 overflow-hidden shadow-inner">
                         <div id="barM${i}" class="bg-indigo-500 h-full rounded-full w-0 transition-all duration-500"></div>
                     </div>
                 `;
@@ -357,14 +482,13 @@
 
         // Initialize Chart.js (Light Theme)
         function initChart() {
-            const ctx = document.getElementById('trendChart').getContext('2d');
-            
-            // Bright gradient for line
-            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            // Trend Chart (Line)
+            const ctxTrend = document.getElementById('trendChart').getContext('2d');
+            const gradient = ctxTrend.createLinearGradient(0, 0, 0, 300);
             gradient.addColorStop(0, 'rgba(79, 70, 229, 0.25)'); // indigo-600 with opacity
             gradient.addColorStop(1, 'rgba(79, 70, 229, 0.0)');
 
-            chartInstance = new Chart(ctx, {
+            chartInstance = new Chart(ctxTrend, {
                 type: 'line',
                 data: {
                     labels: SEMS.map(s => `Sem ${s.n}`),
@@ -389,7 +513,52 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: '#1e293b', // slate-800
+                            backgroundColor: '#1e293b',
+                            titleColor: '#f8fafc',
+                            bodyColor: '#cbd5e1',
+                            borderColor: '#334155',
+                            borderWidth: 1,
+                            padding: 10,
+                            displayColors: false,
+                            callbacks: { label: function (context) { return context.parsed.y.toFixed(2) + '%'; } }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                            grid: { color: '#f1f5f9', drawBorder: false },
+                            ticks: { color: '#64748b', font: { family: 'Inter', weight: '500' } }
+                        },
+                        x: {
+                            grid: { display: false, drawBorder: false },
+                            ticks: { color: '#64748b', font: { family: 'Inter', weight: '500' } }
+                        }
+                    },
+                    interaction: { intersect: false, mode: 'index' },
+                }
+            });
+
+            // Variance Chart (Bar)
+            const ctxVar = document.getElementById('varianceChart').getContext('2d');
+            varianceInstance = new Chart(ctxVar, {
+                type: 'bar',
+                data: {
+                    labels: SEMS.map(s => `S${s.n}`),
+                    datasets: [{
+                        label: 'Deviation from Avg',
+                        data: Array(8).fill(null),
+                        backgroundColor: '#94a3b8',
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
                             titleColor: '#f8fafc',
                             bodyColor: '#cbd5e1',
                             borderColor: '#334155',
@@ -397,15 +566,16 @@
                             padding: 10,
                             displayColors: false,
                             callbacks: {
-                                label: function(context) { return context.parsed.y.toFixed(2) + '%'; }
+                                label: function (context) {
+                                    const val = context.parsed.y;
+                                    return (val > 0 ? '+' : '') + val.toFixed(2) + '%';
+                                }
                             }
                         }
                     },
                     scales: {
                         y: {
-                            beginAtZero: true,
-                            max: 100,
-                            grid: { color: '#f1f5f9', drawBorder: false }, // slate-100
+                            grid: { color: '#f1f5f9', drawBorder: false },
                             ticks: { color: '#64748b', font: { family: 'Inter', weight: '500' } }
                         },
                         x: {
@@ -428,11 +598,11 @@
         // Utility: Estimate CGPA (US 4.0 Scale)
         function estimateCGPA(pct) {
             if (pct >= 80) return 4.0;
-            if (pct >= 75) return 3.7 + ((pct-75)/5)*0.3;
-            if (pct >= 70) return 3.3 + ((pct-70)/5)*0.4;
-            if (pct >= 65) return 3.0 + ((pct-65)/5)*0.3;
-            if (pct >= 60) return 2.7 + ((pct-60)/5)*0.3;
-            if (pct >= 50) return 2.0 + ((pct-50)/10)*0.7;
+            if (pct >= 75) return 3.7 + ((pct - 75) / 5) * 0.3;
+            if (pct >= 70) return 3.3 + ((pct - 70) / 5) * 0.4;
+            if (pct >= 65) return 3.0 + ((pct - 65) / 5) * 0.3;
+            if (pct >= 60) return 2.7 + ((pct - 60) / 5) * 0.3;
+            if (pct >= 50) return 2.0 + ((pct - 50) / 10) * 0.7;
             return 0.0;
         }
 
@@ -448,33 +618,38 @@
         // Main Calculation Engine
         function calculate() {
             let tObt = 0, tWt = 0, tMax = 0, cnt = 0, totalWtFilled = 0;
+            let tMaxRawFilled = 0;
             let chartData = [];
             let semsData = [];
+            let minPctTrack = 100; // For dynamic Y-axis
 
             SEMS.forEach((s, i) => {
                 const valRaw = document.getElementById(`inpD${i}`).value;
                 const v = parseFloat(valRaw);
                 const isValid = valRaw.trim() !== '' && !isNaN(v) && v >= 0 && v <= s.full;
-                
+
                 const dotD = document.getElementById(`dotD${i}`);
                 const dotM = document.getElementById(`dotM${i}`);
                 const barD = document.getElementById(`barD${i}`);
                 const barM = document.getElementById(`barM${i}`);
                 const wtdD = document.getElementById(`wtdD${i}`);
                 const wtdM = document.getElementById(`wtdM${i}`);
+                const pctD = document.getElementById(`pctD${i}`);
+                const pctM = document.getElementById(`pctM${i}`);
                 const inpD = document.getElementById(`inpD${i}`);
                 const inpM = document.getElementById(`inpM${i}`);
 
                 // Reset Error states
-                [inpD, inpM].forEach(el => el.classList.remove('border-rose-500', 'focus:ring-rose-500', 'bg-rose-50'));
+                [inpD, inpM].forEach(el => el.classList.remove('border-rose-500', 'focus:ring-rose-500', 'bg-rose-50', 'shadow-[0_0_0_4px_rgba(244,63,94,0.1)]'));
 
                 if (!isValid) {
                     if (valRaw.trim() !== '' && (v < 0 || v > s.full)) {
-                        [inpD, inpM].forEach(el => el.classList.add('border-rose-500', 'focus:ring-rose-500', 'bg-rose-50'));
+                        [inpD, inpM].forEach(el => el.classList.add('border-rose-500', 'focus:ring-rose-500', 'bg-rose-50', 'shadow-[0_0_0_4px_rgba(244,63,94,0.1)]'));
                         wtdD.innerHTML = wtdM.innerHTML = '<span class="text-rose-500 text-xs">Invalid</span>';
                     } else {
                         wtdD.textContent = wtdM.textContent = '—';
                     }
+                    pctD.innerHTML = pctM.innerHTML = '—';
                     barD.style.width = barM.style.width = '0%';
                     dotD.className = dotM.className = 'w-2 h-2 rounded-full bg-slate-300 transition-colors';
                     chartData.push(null);
@@ -483,47 +658,64 @@
 
                 cnt++;
                 tObt += v;
+                tMaxRawFilled += s.full;
                 const score = v * s.w;
                 tWt += score;
                 tMax += s.full * s.w;
                 totalWtFilled += s.w;
 
                 const pct = (v / s.full) * 100;
+                if (pct < minPctTrack) minPctTrack = pct;
+
                 chartData.push(pct);
                 semsData.push({ n: s.n, pct: pct, score: score, v: v, full: s.full });
 
                 // Update row visuals
                 wtdD.innerHTML = `<span class="text-indigo-600">${score.toFixed(2)}</span>`;
                 wtdM.innerHTML = `<span class="text-indigo-600">${score.toFixed(2)}</span>`;
-                
+
                 // Colors based on performance
                 let colorBase = 'bg-rose-500';
-                if(pct >= 80) colorBase = 'bg-blue-500';
+                if (pct >= 80) colorBase = 'bg-blue-500';
                 else if (pct >= 65) colorBase = 'bg-emerald-500';
                 else if (pct >= 50) colorBase = 'bg-amber-500';
                 else if (pct >= 40) colorBase = 'bg-orange-500';
+
+                // Display individual percentage in table
+                const textColorClass = colorBase.replace('bg-', 'text-');
+                pctD.innerHTML = `<span class="${textColorClass}">${pct.toFixed(2)}%</span>`;
+                pctM.innerHTML = `<span class="${textColorClass}">${pct.toFixed(1)}%</span>`;
 
                 barD.className = `h-full rounded-full transition-all duration-500 ${colorBase}`;
                 barM.className = `h-full rounded-full transition-all duration-500 ${colorBase}`;
                 barD.style.width = barM.style.width = `${pct}%`;
 
-                dotD.className = dotM.className = `w-2.5 h-2.5 rounded-full shadow-[0_0_8px_rgba(79,70,229,0.3)] ${colorBase}`;
+                dotD.className = dotM.className = `w-2.5 h-2.5 rounded-full shadow-[0_0_8px_rgba(79,70,229,0.3)] ${colorBase} transition-colors`;
             });
 
             // Update Badge & Enable/Disable PDF
-            document.getElementById('filledBadge').textContent = `${cnt} / 8 Done`;
+            const badgeEl = document.getElementById('filledBadge');
+            badgeEl.textContent = `${cnt} / 8 Done`;
+            if (cnt > 0) {
+                badgeEl.classList.remove('bg-indigo-50', 'text-indigo-700', 'border-indigo-100');
+                badgeEl.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-md');
+            } else {
+                badgeEl.classList.add('bg-indigo-50', 'text-indigo-700', 'border-indigo-100');
+                badgeEl.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-md');
+            }
+
             const btnPdfDesk = document.getElementById('btnPdfDesk');
             const btnPdfMob = document.getElementById('btnPdfMob');
-            
+
             if (cnt === 0) {
                 resetOutputs();
                 btnPdfDesk.disabled = true;
                 btnPdfMob.disabled = true;
                 currentState = null;
-                updateChart(chartData);
+                updateChart(chartData, 0, Array(8).fill(null));
                 return;
             }
-            
+
             btnPdfDesk.disabled = false;
             btnPdfMob.disabled = false;
 
@@ -531,62 +723,168 @@
             const aggPct = (tWt / tMax) * 100;
             const gradeInfo = getGrade(aggPct);
 
+            // Dynamically scale chart Y-axis base
+            let chartMinY = Math.floor(minPctTrack / 10) * 10;
+
+            // Calculate Variance data (Deviation from Aggregate Average)
+            let varianceData = [];
+            SEMS.forEach((s, i) => {
+                const valRaw = document.getElementById(`inpD${i}`).value;
+                const v = parseFloat(valRaw);
+                if (valRaw.trim() !== '' && !isNaN(v) && v >= 0 && v <= s.full) {
+                    let semPct = (v / s.full) * 100;
+                    varianceData.push(semPct - aggPct);
+                } else {
+                    varianceData.push(null);
+                }
+            });
+
             // Update DOM Outputs
             document.getElementById('fObtDesk').textContent = tObt.toLocaleString();
             document.getElementById('fPctDesk').textContent = aggPct.toFixed(2) + '%';
+            document.getElementById('fWtDesk').textContent = tWt.toFixed(2);
             document.getElementById('mobStickyPct').textContent = aggPct.toFixed(2) + '%';
 
             document.getElementById('rAgg').textContent = tWt.toFixed(2);
             document.getElementById('rMax').textContent = `out of ${tMax.toFixed(2)} max`;
             document.getElementById('rPct').textContent = aggPct.toFixed(2) + '%';
-            
+
             const rGradeEl = document.getElementById('rGrade');
-            rGradeEl.innerHTML = `<span class="px-3 py-1 rounded-md text-xs font-extrabold ${gradeInfo.bg} ${gradeInfo.color}">${gradeInfo.label}</span>`;
+            rGradeEl.innerHTML = `<span class="px-3 py-1 rounded-md text-xs font-extrabold ${gradeInfo.bg} ${gradeInfo.color} shadow-sm border border-black/5">${gradeInfo.label}</span>`;
 
             document.getElementById('degProgTxt').textContent = `${(totalWtFilled * 100).toFixed(0)}%`;
             document.getElementById('degProgFill').style.width = `${totalWtFilled * 100}%`;
 
-            // Analytical Insights
+            // --- Advanced Analytical Insights ---
+
+            // 1. CGPA & Projection
+            let cgpaHtml = `<i data-lucide="graduation-cap" class="w-4 h-4"></i> ~${estimateCGPA(aggPct).toFixed(2)}`;
+            document.getElementById('inCgpa').innerHTML = cgpaHtml;
+
+            let projHtml = `<i data-lucide="target" class="w-4 h-4"></i> ${aggPct.toFixed(2)}%`;
+            document.getElementById('inProj').innerHTML = projHtml;
+
+            // 2. Best Semester
             let best = semsData.reduce((prev, current) => (prev.pct > current.pct) ? prev : current);
-            let worst = semsData.reduce((prev, current) => (prev.pct < current.pct) ? prev : current);
-
             document.getElementById('inBest').innerHTML = `<i data-lucide="arrow-up-circle" class="w-4 h-4"></i> Sem ${best.n} (${best.pct.toFixed(1)}%)`;
-            document.getElementById('inWorst').innerHTML = `<i data-lucide="arrow-down-circle" class="w-4 h-4"></i> Sem ${worst.n} (${worst.pct.toFixed(1)}%)`;
-            
-            document.getElementById('inCgpa').innerHTML = `<i data-lucide="graduation-cap" class="w-4 h-4"></i> ~${estimateCGPA(aggPct).toFixed(2)}`;
 
-            // Projection (Assume current average for remaining weight)
-            let projectedPct = aggPct; 
-            document.getElementById('inProj').innerHTML = `<i data-lucide="target" class="w-4 h-4"></i> ${projectedPct.toFixed(2)}%`;
+            // 3. Marks Lost (Total Max Filled - Total Obtained)
+            let marksLost = tMaxRawFilled - tObt;
+            document.getElementById('inLost').innerHTML = `<i data-lucide="trending-down" class="w-4 h-4"></i> ${marksLost.toLocaleString()} marks`;
 
-            updateChart(chartData);
+            // 4. Volatility (Spread between Best and Worst semester)
+            let worst = semsData.reduce((prev, current) => (prev.pct < current.pct) ? prev : current);
+            let spread = best.pct - worst.pct;
+            let spreadHtml = `<i data-lucide="move-vertical" class="w-4 h-4"></i> ${spread.toFixed(1)}% gap`;
+            if (cnt === 1) spreadHtml = `<i data-lucide="move-vertical" class="w-4 h-4 text-slate-400"></i> N/A`;
+            document.getElementById('inVol').innerHTML = spreadHtml;
+
+            // 5. Trajectory (Linear Regression Slope)
+            let trendText = 'N/A';
+            let trendIcon = 'minus';
+            let trendColor = 'text-slate-400';
+            if (cnt > 1) {
+                let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+                semsData.forEach((s, idx) => {
+                    let x = idx + 1;
+                    sumX += x; sumY += s.pct; sumXY += x * s.pct; sumX2 += x * x;
+                });
+                let slope = (cnt * sumXY - sumX * sumY) / (cnt * sumX2 - sumX * sumX);
+
+                if (slope > 0.8) { trendText = 'Upward Trend'; trendIcon = 'trending-up'; trendColor = 'text-emerald-500'; }
+                else if (slope < -0.8) { trendText = 'Declining'; trendIcon = 'trending-down'; trendColor = 'text-rose-500'; }
+                else { trendText = 'Stable'; trendIcon = 'minus'; trendColor = 'text-blue-500'; }
+            } else if (cnt === 1) {
+                trendText = 'Need more data';
+            }
+            document.getElementById('inTrend').innerHTML = `<i data-lucide="${trendIcon}" class="w-4 h-4 ${trendColor}"></i> <span class="${trendColor}">${trendText}</span>`;
+
+            // 6. Next Goal Predictor
+            let targetHtml = '';
+            if (cnt === 8) {
+                targetHtml = `Course completed with <strong>${gradeInfo.label}</strong>!`;
+            } else {
+                let nextTargetPct = null;
+                let nextDivName = '';
+                if (aggPct < 40) { nextTargetPct = 40; nextDivName = 'Pass'; }
+                else if (aggPct < 50) { nextTargetPct = 50; nextDivName = 'Second Division'; }
+                else if (aggPct < 65) { nextTargetPct = 65; nextDivName = 'First Division'; }
+                else if (aggPct < 80) { nextTargetPct = 80; nextDivName = 'Distinction'; }
+
+                if (!nextTargetPct) {
+                    targetHtml = `You are maintaining <strong>Distinction</strong> pace. Keep averaging above 80%!`;
+                } else {
+                    let TOTAL_MAX_WT = SEMS.reduce((acc, s) => acc + (s.full * s.w), 0);
+                    let reqTotalWt = (nextTargetPct / 100) * TOTAL_MAX_WT;
+                    let deficitWt = reqTotalWt - tWt;
+                    let remainingMaxWt = TOTAL_MAX_WT - tMax;
+
+                    let reqPctInRemaining = (deficitWt / remainingMaxWt) * 100;
+                    if (reqPctInRemaining > 100) {
+                        targetHtml = `Reaching <strong>${nextDivName}</strong> is mathematically unlikely based on remaining weight.`;
+                    } else if (reqPctInRemaining <= 0) {
+                        targetHtml = `You have already secured enough marks for <strong>${nextDivName}</strong>!`;
+                    } else {
+                        targetHtml = `You need to average <strong class="text-indigo-600">${reqPctInRemaining.toFixed(1)}%</strong> in the remaining semesters to hit <strong>${nextDivName}</strong>.`;
+                    }
+                }
+            }
+            document.getElementById('inTarget').innerHTML = targetHtml;
+
+            updateChart(chartData, chartMinY, varianceData);
             lucide.createIcons();
 
             // Save state for PDF
-            currentState = { tObt, tWt, tMax, aggPct, cnt, grade: gradeInfo.label, best, worst, semsData };
+            currentState = { tObt, tWt, tMax, aggPct, cnt, grade: gradeInfo.label, best, marksLost, spread, semsData, trendText, targetHtml };
         }
 
-        function updateChart(data) {
+        function updateChart(data, minY, varianceData) {
+            // Update Trend Line scaling dynamically
             chartInstance.data.datasets[0].data = data;
+            chartInstance.options.scales.y.min = Math.max(0, minY);
             chartInstance.update();
+
+            // Update Variance Bars
+            if (varianceInstance) {
+                varianceInstance.data.datasets[0].data = varianceData;
+
+                // Color conditionally based on deviation
+                let colors = varianceData.map(val => {
+                    if (val === null) return '#94a3b8';
+                    return val >= 0 ? '#10b981' : '#f43f5e'; // Emerald for positive, Rose for negative
+                });
+                varianceInstance.data.datasets[0].backgroundColor = colors;
+                varianceInstance.update();
+            }
         }
 
         function resetOutputs() {
             document.getElementById('fObtDesk').textContent = '—';
             document.getElementById('fPctDesk').textContent = '—';
+            document.getElementById('fWtDesk').textContent = '—';
             document.getElementById('mobStickyPct').textContent = '0.00%';
             document.getElementById('rAgg').textContent = '0.00';
             document.getElementById('rMax').textContent = 'out of 0.00 max';
             document.getElementById('rPct').textContent = '0.00%';
             document.getElementById('rGrade').textContent = 'Division Status';
-            
+
             document.getElementById('degProgTxt').textContent = '0%';
             document.getElementById('degProgFill').style.width = '0%';
 
-            document.getElementById('inBest').innerHTML = `<i data-lucide="arrow-up-circle" class="w-4 h-4"></i> N/A`;
-            document.getElementById('inWorst').innerHTML = `<i data-lucide="arrow-down-circle" class="w-4 h-4"></i> N/A`;
             document.getElementById('inCgpa').innerHTML = `<i data-lucide="graduation-cap" class="w-4 h-4"></i> 0.00`;
             document.getElementById('inProj').innerHTML = `<i data-lucide="target" class="w-4 h-4"></i> 0.00%`;
+            document.getElementById('inBest').innerHTML = `<i data-lucide="arrow-up-circle" class="w-4 h-4 text-slate-400"></i> N/A`;
+            document.getElementById('inLost').innerHTML = `<i data-lucide="trending-down" class="w-4 h-4 text-slate-400"></i> 0`;
+            document.getElementById('inVol').innerHTML = `<i data-lucide="move-vertical" class="w-4 h-4 text-slate-400"></i> N/A`;
+            document.getElementById('inTrend').innerHTML = `<i data-lucide="minus" class="w-4 h-4 text-slate-400"></i> N/A`;
+
+            document.getElementById('inTarget').innerHTML = 'Fill semesters to see target insights.';
+
+            const badgeEl = document.getElementById('filledBadge');
+            badgeEl.textContent = '0 / 8 Done';
+            badgeEl.classList.add('bg-indigo-50', 'text-indigo-700', 'border-indigo-100');
+            badgeEl.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-md');
+
             lucide.createIcons();
         }
 
@@ -595,27 +893,29 @@
                 const inpD = document.getElementById(`inpD${i}`);
                 const inpM = document.getElementById(`inpM${i}`);
                 inpD.value = ''; inpM.value = '';
-                inpD.classList.remove('border-rose-500', 'focus:ring-rose-500', 'bg-rose-50');
-                inpM.classList.remove('border-rose-500', 'focus:ring-rose-500', 'bg-rose-50');
-                
+                inpD.classList.remove('border-rose-500', 'focus:ring-rose-500', 'bg-rose-50', 'shadow-[0_0_0_4px_rgba(244,63,94,0.1)]');
+                inpM.classList.remove('border-rose-500', 'focus:ring-rose-500', 'bg-rose-50', 'shadow-[0_0_0_4px_rgba(244,63,94,0.1)]');
+
                 document.getElementById(`wtdD${i}`).textContent = '—';
                 document.getElementById(`wtdM${i}`).textContent = '—';
+                document.getElementById(`pctD${i}`).textContent = '—';
+                document.getElementById(`pctM${i}`).textContent = '—';
+
                 document.getElementById(`barD${i}`).style.width = '0%';
                 document.getElementById(`barM${i}`).style.width = '0%';
-                document.getElementById(`dotD${i}`).className = 'w-2 h-2 rounded-full bg-slate-300';
-                document.getElementById(`dotM${i}`).className = 'w-2.5 h-2.5 rounded-full bg-slate-200';
+                document.getElementById(`dotD${i}`).className = 'w-2 h-2 rounded-full bg-slate-300 transition-colors group-hover:bg-indigo-300';
+                document.getElementById(`dotM${i}`).className = 'w-2.5 h-2.5 rounded-full bg-slate-200 transition-colors';
             });
-            
+
             document.getElementById('sName').value = '';
             document.getElementById('sRoll').value = '';
-            document.getElementById('filledBadge').textContent = '0 / 8 Done';
-            
+
             resetOutputs();
-            updateChart(Array(8).fill(null));
+            updateChart(Array(8).fill(null), 0, Array(8).fill(null));
             document.getElementById('btnPdfDesk').disabled = true;
             document.getElementById('btnPdfMob').disabled = true;
             currentState = null;
-            
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -624,55 +924,56 @@
         // ==========================================
         async function downloadPDF() {
             if (!currentState) return;
-            
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-            
+
             const name = document.getElementById('sName').value.trim() || 'Not Specified';
             const prog = document.getElementById('sProg').value.trim() || 'B.E. Civil Engineering';
             const roll = document.getElementById('sRoll').value.trim() || 'Not Specified';
-            const date = new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-            
+
             const W = 210, H = 297, M = 15, CW = W - M * 2;
 
-            // 1. Header & Banner (TU Colors)
-            doc.setFillColor(37, 99, 235); // blue-600
-            doc.rect(0, 0, W, 38, 'F');
-            doc.setFillColor(220, 38, 38); // red-600 (TU accent)
-            doc.rect(0, 38, W, 2, 'F');
-
-            doc.setTextColor(255, 255, 255);
+            // 1. Header & Banner (Official Black & White Grayscale)
+            doc.setTextColor(0, 0, 0);
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(22);
-            doc.text('TRIBHUVAN UNIVERSITY', W/2, 18, { align: 'center' });
-            
+            doc.text('TRIBHUVAN UNIVERSITY', W / 2, 22, { align: 'center' });
+
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(11);
-            doc.setTextColor(219, 234, 254);
-            doc.text('Institute of Engineering (IOE)', W/2, 25, { align: 'center' });
-            
+            doc.setTextColor(60, 60, 60);
+            doc.text('Institute of Engineering (IOE)', W / 2, 28, { align: 'center' });
+
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(10);
-            doc.setTextColor(255, 255, 255);
-            doc.text('AGGREGATE MARKS REPORT', W/2, 33, { align: 'center' });
+            doc.setTextColor(0, 0, 0);
+            doc.text('AGGREGATE MARKS REPORT', W / 2, 35, { align: 'center' });
+
+            // Official Double Underline
+            doc.setDrawColor(0, 0, 0);
+            doc.setLineWidth(0.6);
+            doc.line(M, 40, W - M, 40);
+            doc.setLineWidth(0.2);
+            doc.line(M, 41.5, W - M, 41.5);
 
             // 2. Student Details Block
             let y = 48;
-            doc.setFillColor(248, 250, 252);
-            doc.setDrawColor(203, 213, 225);
-            doc.roundedRect(M, y, CW, 22, 2, 2, 'FD');
-            
-            doc.setTextColor(100, 116, 139);
+            doc.setFillColor(252, 252, 252); // Soft transparent-like gray
+            doc.setDrawColor(180, 180, 180);
+            doc.roundedRect(M, y, CW, 22, 1.5, 1.5, 'FD');
+
+            doc.setTextColor(100, 100, 100);
             doc.setFontSize(8);
             doc.setFont('helvetica', 'bold');
             doc.text('STUDENT NAME', M + 5, y + 7);
-            doc.text('FACULTY / PROGRAM', W/2 - 10, y + 7);
+            doc.text('FACULTY / PROGRAM', W / 2 - 10, y + 7);
             doc.text('ROLL / REG NO.', W - M - 40, y + 7);
 
-            doc.setTextColor(15, 23, 42);
+            doc.setTextColor(0, 0, 0);
             doc.setFontSize(11);
             doc.text(name, M + 5, y + 14);
-            doc.text(prog, W/2 - 10, y + 14);
+            doc.text(prog, W / 2 - 10, y + 14);
             doc.text(roll, W - M - 40, y + 14);
 
             y += 32;
@@ -687,70 +988,87 @@
 
             stats.forEach((st, idx) => {
                 const x = M + idx * (cW + 5);
-                doc.setFillColor(255, 255, 255);
-                doc.setDrawColor(226, 232, 240);
-                doc.roundedRect(x, y, cW, 20, 2, 2, 'FD');
-                
-                // Top border accent (Blue)
-                doc.setFillColor(37, 99, 235);
-                doc.roundedRect(x, y, cW, 2, 2, 2, 'F');
+                doc.setFillColor(252, 252, 252);
+                doc.setDrawColor(180, 180, 180);
+                doc.roundedRect(x, y, cW, 20, 1.5, 1.5, 'FD');
 
-                doc.setTextColor(100, 116, 139);
+                // Top border accent (Black)
+                doc.setFillColor(0, 0, 0);
+                doc.roundedRect(x, y, cW, 1.5, 1.5, 1.5, 'F');
+
+                doc.setTextColor(80, 80, 80);
                 doc.setFontSize(7);
                 doc.setFont('helvetica', 'bold');
-                doc.text(st.title, x + cW/2, y + 7, { align: 'center' });
-                
-                doc.setTextColor(15, 23, 42);
+                doc.text(st.title, x + cW / 2, y + 7, { align: 'center' });
+
+                doc.setTextColor(0, 0, 0);
                 doc.setFontSize(14);
-                doc.text(st.val, x + cW/2, y + 13, { align: 'center' });
-                
-                doc.setTextColor(37, 99, 235);
+                doc.text(st.val, x + cW / 2, y + 13, { align: 'center' });
+
+                doc.setTextColor(100, 100, 100);
                 doc.setFontSize(7);
                 doc.setFont('helvetica', 'bold');
-                doc.text(st.sub, x + cW/2, y + 17.5, { align: 'center' });
+                doc.text(st.sub, x + cW / 2, y + 17.5, { align: 'center' });
             });
 
             y += 30;
 
-            // 4. Chart Integration
+            // 4. Graphical Integration (Trend + Variance Side-by-Side)
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(10);
-            doc.setTextColor(15, 23, 42);
-            doc.text('PERFORMANCE TREND ANALYSIS', M, y);
-            doc.setDrawColor(226, 232, 240);
-            doc.line(M, y+2, W-M, y+2);
+            doc.setTextColor(0, 0, 0);
+            doc.text('VISUAL PERFORMANCE & VARIANCE ANALYSIS', M, y);
+            doc.setDrawColor(180, 180, 180);
+            doc.line(M, y + 2, W - M, y + 2);
             y += 8;
 
             try {
-                const canvas = document.getElementById('trendChart');
-                const tempCanvas = document.createElement('canvas');
-                tempCanvas.width = canvas.width;
-                tempCanvas.height = canvas.height;
-                const tCtx = tempCanvas.getContext('2d');
-                tCtx.fillStyle = '#ffffff';
-                tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-                tCtx.drawImage(canvas, 0, 0);
-                
-                const imgData = tempCanvas.toDataURL('image/png', 1.0);
-                const imgH = 45; 
-                const imgW = (canvas.width / canvas.height) * imgH;
-                const finalW = Math.min(imgW, CW);
-                
-                doc.setDrawColor(226, 232, 240);
-                doc.rect(M, y, CW, imgH + 4);
-                doc.addImage(imgData, 'PNG', M + (CW-finalW)/2, y + 2, finalW, imgH);
+                // Render Trend Chart
+                const trendCanvas = document.getElementById('trendChart');
+                const tTemp = document.createElement('canvas');
+                tTemp.width = trendCanvas.width; tTemp.height = trendCanvas.height;
+                const tCtx = tTemp.getContext('2d');
+                tCtx.fillStyle = '#ffffff'; tCtx.fillRect(0, 0, tTemp.width, tTemp.height);
+                tCtx.drawImage(trendCanvas, 0, 0);
+                const tImg = tTemp.toDataURL('image/png', 1.0);
+
+                // Render Variance Chart
+                const varCanvas = document.getElementById('varianceChart');
+                const vTemp = document.createElement('canvas');
+                vTemp.width = varCanvas.width; vTemp.height = varCanvas.height;
+                const vCtx = vTemp.getContext('2d');
+                vCtx.fillStyle = '#ffffff'; vCtx.fillRect(0, 0, vTemp.width, vTemp.height);
+                vCtx.drawImage(varCanvas, 0, 0);
+                const vImg = vTemp.toDataURL('image/png', 1.0);
+
+                const imgH = 40;
+                const cellW = (CW - 4) / 2; // Two charts side by side with 4mm gap
+                const tFinalW = Math.min((trendCanvas.width / trendCanvas.height) * imgH, cellW);
+                const vFinalW = Math.min((varCanvas.width / varCanvas.height) * imgH, cellW);
+
+                doc.setFillColor(252, 252, 252);
+                doc.setDrawColor(180, 180, 180);
+
+                // Box 1 (Trend)
+                doc.rect(M, y, cellW, imgH + 4, 'FD');
+                doc.addImage(tImg, 'PNG', M + (cellW - tFinalW) / 2, y + 2, tFinalW, imgH);
+
+                // Box 2 (Variance)
+                doc.rect(M + cellW + 4, y, cellW, imgH + 4, 'FD');
+                doc.addImage(vImg, 'PNG', M + cellW + 4 + (cellW - vFinalW) / 2, y + 2, vFinalW, imgH);
+
                 y += imgH + 12;
-            } catch(e) {
-                console.error("Could not render chart to PDF", e);
+            } catch (e) {
+                console.error("Could not render charts to PDF", e);
                 y += 5;
             }
 
             // 5. Detailed Data Table
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(10);
-            doc.setTextColor(15, 23, 42);
+            doc.setTextColor(0, 0, 0);
             doc.text('SEMESTER BREAKDOWN', M, y);
-            
+
             const rows = [];
             SEMS.forEach(s => {
                 const data = currentState.semsData.find(d => d.n === s.n);
@@ -758,50 +1076,69 @@
                     rows.push([
                         `Semester ${s.n}`,
                         s.full.toString(),
-                        `${(s.w*100).toFixed(0)}%`,
+                        `${(s.w * 100).toFixed(0)}%`,
                         data.v.toString(),
-                        data.score.toFixed(2),
-                        data.pct.toFixed(2) + '%'
+                        data.pct.toFixed(2) + '%',
+                        data.score.toFixed(2)
                     ]);
                 } else {
-                    rows.push([`Semester ${s.n}`, s.full.toString(), `${(s.w*100).toFixed(0)}%`, '-', '-', '-']);
+                    rows.push([`Semester ${s.n}`, s.full.toString(), `${(s.w * 100).toFixed(0)}%`, '-', '-', '-']);
                 }
             });
 
             doc.autoTable({
                 startY: y + 4,
-                head: [['Semester', 'Full Marks', 'Weight', 'Obtained', 'Weighted Score', 'Percentage']],
+                head: [['Semester', 'Full Marks', 'Weight', 'Obtained', 'Percentage', 'Weighted Score']],
                 body: rows,
                 theme: 'grid',
-                headStyles: { fillColor: [248, 250, 252], textColor: [15, 23, 42], fontStyle: 'bold', fontSize: 9, halign: 'center', lineColor: [226, 232, 240], lineWidth: 0.1 },
-                bodyStyles: { textColor: [51, 65, 85], fontSize: 9, halign: 'center', lineColor: [226, 232, 240] },
-                alternateRowStyles: { fillColor: [255, 255, 255] },
+                headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', fontSize: 9, halign: 'center', lineColor: [180, 180, 180], lineWidth: 0.1 },
+                bodyStyles: { textColor: [30, 30, 30], fontSize: 9, halign: 'center', lineColor: [180, 180, 180] },
+                alternateRowStyles: { fillColor: [252, 252, 252] },
                 columnStyles: { 0: { halign: 'left', fontStyle: 'bold' } },
                 margin: { left: M, right: M }
             });
 
             y = doc.lastAutoTable.finalY + 12;
 
-            // 6. Footer & Signatures
-            const footerY = H - 25;
-            doc.setDrawColor(203, 213, 225);
-            doc.line(M, footerY, M + 50, footerY);
-            doc.line(W - M - 50, footerY, W - M, footerY);
-            
-            doc.setFontSize(8);
-            doc.setTextColor(100, 116, 139);
-            doc.text('Student Signature', M + 25, footerY + 4, { align: 'center' });
-            doc.text('Verified By / Date', W - M - 25, footerY + 4, { align: 'center' });
-            
-            doc.setFontSize(7);
-            doc.setTextColor(148, 163, 184);
-            doc.text(`Generated on ${date} • For estimation purposes only.`, W/2, H - 10, { align: 'center' });
+            // 6. Advanced Insights Module
+            if (currentState.semsData.length > 0) {
+                doc.setFillColor(252, 252, 252);
+                doc.setDrawColor(180, 180, 180);
+                doc.roundedRect(M, y, CW, 29, 1.5, 1.5, 'FD');
 
-            doc.save(`TU_Marks_Report_${name.replace(/\s+/g,'_')}_${date.replace(/[, ]+/g, '_')}.pdf`);
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(9);
+                doc.setFont('helvetica', 'bold');
+                doc.text('ADVANCED ANALYTICS', M + 4, y + 6);
+
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(60, 60, 60);
+
+                let bestStr = `• Highest Performance: Sem ${currentState.best.n} (${currentState.best.pct.toFixed(2)}%)`;
+                let trendStr = `• Performance Trajectory: ${currentState.trendText}`;
+                let lostStr = `• Total Marks Dropped: ${currentState.marksLost.toLocaleString()} marks`;
+                let volStr = `• Volatility Spread: ${currentState.spread.toFixed(2)}% (Max vs Min)`;
+
+                doc.text(bestStr, M + 4, y + 12);
+                doc.text(trendStr, M + 4, y + 17);
+                doc.text(lostStr, M + 4, y + 22);
+                doc.text(volStr, M + 4, y + 27);
+
+                let targetPlain = currentState.targetHtml.replace(/<[^>]+>/g, ''); // Strip HTML tags
+                doc.text(`• Next Goal Predictor:`, W / 2, y + 12);
+                doc.setFont('helvetica', 'italic');
+                doc.text(targetPlain, W / 2, y + 17, { maxWidth: CW / 2 - 6 });
+            }
+
+            // PDF clean ending (no footer as requested)
+            const dStr = new Date().toISOString().slice(0, 10);
+            doc.save(`TU_Marks_Report_${name.replace(/\s+/g, '_')}_${dStr}.pdf`);
         }
 
         // Boot
         window.addEventListener('DOMContentLoaded', initUI);
     </script>
 </body>
+
 </html>
