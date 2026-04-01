@@ -456,10 +456,19 @@ button{border:none;background:none;cursor:pointer;font-family:inherit;}
 }
 .timeline-card{
   background:var(--bg-card);border:1.5px solid var(--border);
-  border-radius:var(--radius);padding:26px;
+  border-radius:var(--radius);padding:26px 26px 26px 76px;
   transition:all var(--transition);
   border-left:4px solid transparent;
+  position:relative;
 }
+.timeline-logo{
+  position:absolute;top:50%;left:18px;transform:translateY(-50%);
+  width:40px;height:40px;object-fit:cover;
+  border-radius:50%;background:var(--bg-primary);
+  border:1.5px solid var(--border);padding:0;
+  opacity:.85;transition:opacity var(--transition);
+}
+.timeline-card:hover .timeline-logo{opacity:1;}
 .timeline-card:hover{
   border-left-color:var(--accent);
   box-shadow:var(--shadow-md);transform:translateX(6px);
