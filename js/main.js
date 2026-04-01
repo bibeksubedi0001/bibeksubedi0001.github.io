@@ -275,3 +275,157 @@
 
 })(jQuery);
 
+
+// ============================================
+// Typing Animation (no jQuery dependency)
+// ============================================
+(function () {
+  var typingEl = document.getElementById('typing-animation');
+  if (!typingEl) return;
+
+  var texts = ['YouTuber', 'Mentor', 'Script Writer', 'GIS Specialist'];
+  var textIndex = 0;
+  var charIndex = 0;
+  var isDeleting = false;
+  var typeSpeed = 150;
+
+  function type() {
+    var current = texts[textIndex];
+
+    if (isDeleting) {
+      typingEl.textContent = current.substring(0, charIndex - 1);
+      charIndex--;
+    } else {
+      typingEl.textContent = current.substring(0, charIndex + 1);
+      charIndex++;
+    }
+
+    var nextSpeed = typeSpeed;
+
+    if (!isDeleting && charIndex === current.length) {
+      nextSpeed = 1500; // pause at end
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      textIndex = (textIndex + 1) % texts.length;
+      nextSpeed = 400; // pause before next word
+    } else if (isDeleting) {
+      nextSpeed = 75;
+    }
+
+    setTimeout(type, nextSpeed);
+  }
+
+  type();
+})();
+
+
+// ============================================
+// Photo Gallery Lightbox (no jQuery dependency)
+// ============================================
+(function () {
+  var cards = Array.from(document.querySelectorAll('.photo-card'));
+  var lightbox = document.getElementById('photo-lightbox');
+  if (!lightbox || cards.length === 0) return;
+
+  var imgEl = lightbox.querySelector('.lb-img');
+  var titleEl = lightbox.querySelector('.lb-title');
+  var descEl = lightbox.querySelector('.lb-desc');
+  var btnPrev = lightbox.querySelector('.lb-prev');
+  var btnNext = lightbox.querySelector('.lb-next');
+  var btnClose = lightbox.querySelector('.lb-close');
+
+  var photos = cards.map(function (card) {
+    var img = card.querySelector('img');
+    var title = card.querySelector('.photo-title').textContent.trim();
+    var desc = card.dataset.desc || '';
+    return { src: img.getAttribute('src'), alt: img.getAttribute('alt') || title, title: title, desc: desc };
+  });
+
+  var index = 0;
+  function clampIndex(i) { return (i + photos.length) % photos.length; }
+
+  function show(i) {
+    index = clampIndex(i);
+    var p = photos[index];
+    imgEl.src = p.src;
+    imgEl.alt = p.alt;
+    titleEl.textContent = p.title;
+    descEl.textContent = p.desc;
+  }
+
+  function open(i) {
+    show(i);
+    lightbox.hidden = false;
+    document.body.style.overflow = 'hidden';
+    btnClose.focus({ preventScroll: true });
+    window.addEventListener('keydown', onKey);
+    lightbox.addEventListener('click', onBackdrop);
+  }
+
+  function close() {
+    lightbox.hidden = true;
+    document.body.style.overflow = '';
+    window.removeEventListener('keydown', onKey);
+    lightbox.removeEventListener('click', onBackdrop);
+  }
+
+  function onKey(e) {
+    if (e.key === 'Escape') return close();
+    if (e.key === 'ArrowRight') return next();
+    if (e.key === 'ArrowLeft') return prev();
+  }
+
+  function onBackdrop(e) {
+    if (e.target === lightbox) close();
+  }
+
+  function prev() { show(index - 1); }
+  function next() { show(index + 1); }
+
+  btnPrev.addEventListener('click', prev);
+  btnNext.addEventListener('click', next);
+  btnClose.addEventListener('click', close);
+
+  document.querySelectorAll('.photo-open').forEach(function (btn, i) {
+    btn.addEventListener('click', function () { open(i); });
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        open(i);
+      }
+    });
+  });
+
+  // Entrance animation on scroll
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  cards.forEach(function (card) { io.observe(card); });
+})();
+
+
+// ============================================
+// Back to Top Button
+// ============================================
+(function () {
+  var btn = document.getElementById('back-to-top');
+  if (!btn) return;
+
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 500) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  });
+
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();

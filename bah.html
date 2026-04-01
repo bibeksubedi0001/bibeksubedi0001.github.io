@@ -1,0 +1,3692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibek's Master Protocol | God Mode v3.29 Optimized</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e293b;
+            --primary-light: #334155;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --special: #8b5cf6;
+            --bg: #f1f5f9;
+            --paper: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-light: #64748b;
+            --radius: 16px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --gold: #f59e0b;
+            --focus-bg: #0f0f12;
+            --focus-accent: #00f2ff;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --gold: #f59e0b;
+    
+    /* --- ADD THESE TWO LINES --- */
+    --chart-text: #64748b; 
+    --chart-grid: #e2e8f0;
+    /* --------------------------- */
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+            transition: var(--transition);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--paper);
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            margin: -40px -40px 30px -40px;
+            padding: 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.3;
+        }
+        
+        h1 { 
+            margin: 0; 
+            font-family: 'Poppins', sans-serif; 
+            font-size: clamp(20px, 5vw, 28px);
+            letter-spacing: -0.5px; 
+            font-weight: 800; 
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        h2 {
+            margin: 5px 0 0 0;
+            font-size: clamp(12px, 2.5vw, 14px);
+            font-weight: 500;
+            opacity: 0.8;
+        }
+        
+        .quote-box {
+            margin-top: 10px;
+            font-size: 13px;
+            font-style: italic;
+            opacity: 0.9;
+            max-width: 500px;
+            border-left: 3px solid var(--accent);
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .time-panel { 
+            text-align: right; 
+            position: relative; 
+            z-index: 2; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-end; 
+        }
+        
+        .theme-toggle {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+        .theme-toggle:hover { 
+            background: rgba(255,255,255,0.2); 
+            transform: translateY(-2px);
+        }
+
+        #currentActivityBadge {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: var(--transition);
+        }
+
+        /* TABS */
+        .tabs { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 30px; 
+            padding: 6px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            width: fit-content;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-light);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .tab-btn:hover { 
+            color: var(--text); 
+            background: rgba(255,255,255,0.5); 
+            transform: translateY(-1px);
+        }
+        .tab-btn.active { 
+            background-color: var(--paper); 
+            color: var(--accent); 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* SECTIONS */
+        .tracker-section {
+            border: 1px solid var(--border);
+            padding: 30px;
+            margin-bottom: 25px;
+            border-radius: var(--radius);
+            background: var(--paper);
+            transition: var(--transition);
+            position: relative;
+        }
+        .tracker-section:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(to right, var(--border), transparent);
+            margin-left: 15px;
+            border-radius: 2px;
+        }
+
+        /* FORMS */
+        .input-group {
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        label { 
+            font-weight: 600; 
+            font-size: 14px; 
+            min-width: 140px; 
+            color: var(--text); 
+        }
+        
+        input[type="text"], input[type="number"], input[type="time"], select, textarea {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-family: inherit;
+            background: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--paper);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        input[type="text"], textarea { flex-grow: 1; }
+        textarea { resize: vertical; height: 80px; }
+        input[type="checkbox"] { 
+            width: 20px; 
+            height: 20px; 
+            accent-color: var(--accent); 
+            cursor: pointer; 
+        }
+        .goal-checkbox { 
+            width: 24px !important; 
+            height: 24px !important; 
+            accent-color: var(--success) !important; 
+        }
+
+        .rating-display {
+            font-weight: 800;
+            color: var(--accent);
+            margin-left: auto;
+            background: var(--bg);
+            padding: 8px 14px;
+            border-radius: 8px;
+            min-width: 70px;
+            text-align: center;
+            font-size: 14px;
+            border: 1px solid var(--border);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* DASHBOARD */
+        .score-dashboard {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: white;
+    padding: 25px 20px; /* Reduced side padding slightly */
+    border-radius: 20px;
+    
+    /* THE FIX: Force 5 Equal Columns */
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 10px;
+    align-items: center; /* Vertically center everything */
+    
+    margin-top: 40px;
+    position: sticky;
+    bottom: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    z-index: 100;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Ensure every item inside is centered */
+.score-item { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    text-align: center;
+}
+        .score-val { 
+            font-size: clamp(24px, 5vw, 32px);
+            font-weight: 900; 
+            font-family: 'Poppins', sans-serif; 
+            line-height: 1.2; 
+        }
+        .score-label { 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            opacity: 0.7; 
+            letter-spacing: 1px; 
+            font-weight: 700; 
+        }
+        /* Add this anywhere inside your <style> tag */
+.mini-dot {
+    width: 12px;                /* Slightly smaller for better fit */
+    height: 12px;
+    border-radius: 50%;
+    /* TRICK: Use box-shadow instead of border so it doesn't mess up size/alignment */
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2); 
+    background-color: transparent;
+    transition: all 0.2s ease;
+    flex-shrink: 0;             /* Prevents squishing */
+}
+.mini-dot:hover {
+    transform: scale(1.3);
+    box-shadow: inset 0 0 0 1px white;
+    cursor: help;
+}
+        .xp-bar-container {
+            grid-column: 1 / -1;
+            background: rgba(255,255,255,0.1);
+            height: 6px;
+            border-radius: 3px;
+            margin-top: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        .xp-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            width: 0%;
+            transition: width 1s ease;
+        }
+        .level-badge {
+            font-size: 11px;
+            background: var(--gold);
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 800;
+            margin-left: 8px;
+            vertical-align: middle;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* ACTIONS */
+        .action-bar { 
+            display: flex; 
+            gap: 15px; 
+            margin-top: 30px; 
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            flex: 1;
+            min-width: 150px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-save { 
+            background: var(--success); 
+            color: white; 
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); 
+        }
+        .btn-clear { 
+            background: var(--paper); 
+            color: var(--danger); 
+            border: 2px solid var(--danger); 
+        }
+        .btn-save:hover { 
+            background: #059669; 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4); 
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse-border {
+            0%, 100% { 
+                border-color: var(--accent); 
+                box-shadow: 0 0 0 0 var(--accent-glow); 
+            }
+            50% { 
+                border-color: var(--accent); 
+                box-shadow: 0 0 20px 0 var(--accent-glow); 
+            }
+        }
+
+        /* ROUTINE */
+        .routine-container {
+            overflow-x: auto;
+            margin-top: 10px;
+            background: var(--bg);
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        .routine-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 8px; 
+            min-width: 1000px;
+            color: var(--text);
+        }
+        .routine-table th {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            padding: 15px;
+            color: var(--text-light);
+            text-align: center;
+            border-radius: 12px;
+            background: transparent;
+        }
+        .routine-table td:first-child {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-light);
+            background: transparent;
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            white-space: nowrap;
+            text-align: right;
+            padding-right: 15px;
+            vertical-align: middle;
+            border: none;
+            width: 120px;
+        }
+        .routine-table td:first-child::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 10%;
+            bottom: 10%;
+            width: 2px;
+            background: var(--border);
+            border-radius: 2px;
+        }
+        .routine-table td:not(:first-child) {
+            padding: 0;
+            vertical-align: top;
+            height: 100px;
+        }
+        .rt-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 12px 15px;
+            height: 100%;
+            width: 100%;
+            border-radius: 12px;
+            position: relative;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.03);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .rt-card:hover { 
+            transform: translateY(-3px) scale(1.02); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08); 
+            z-index: 20; 
+        }
+        .rt-empty { 
+            background: transparent; 
+            border: 1px dashed var(--border); 
+            opacity: 0.3; 
+        }
+        .rt-title { 
+            font-family: 'Poppins', sans-serif; 
+            font-weight: 700; 
+            font-size: 13px; 
+            line-height: 1.3; 
+            margin-bottom: 4px; 
+        }
+        .rt-sub { 
+            font-family: 'Inter', sans-serif; 
+            font-size: 10px; 
+            font-weight: 500; 
+            opacity: 0.85; 
+        }
+        .bg-morning { background: #e0f2f1; color: #004d40; border-left: 4px solid #009688; }
+        .bg-lecture { background: #e3f2fd; color: #0d47a1; border-left: 4px solid #2196f3; }
+        .bg-deep { background: #eef2ff; color: #312e81; border-left: 4px solid #6366f1; }
+        .bg-phys { background: #ecfdf5; color: #064e3b; border-left: 4px solid #10b981; }
+        .bg-code { background: #fffbeb; color: #78350f; border-left: 4px solid #f59e0b; }
+        .bg-break { background: #f1f5f9; color: #475569; border-left: 4px solid #94a3b8; }
+        .bg-special { background: #fff1f2; color: #881337; border-left: 4px solid #f43f5e; }
+        .bg-night { background: #1e293b; color: #f8fafc; border-left: 4px solid #475569; }
+        .active-day-header { 
+            color: var(--accent) !important; 
+            position: relative; 
+        }
+        .active-day-header::after { 
+            content: '●'; 
+            font-size: 8px; 
+            position: absolute; 
+            top: 0; 
+            right: 50%; 
+            transform: translateX(50%); 
+        }
+        .active-routine-cell { 
+            animation: pulse-border 2s infinite; 
+            z-index: 10; 
+            border: 2px solid var(--accent) !important; 
+        }
+        .active-routine-cell::before { 
+            content: 'ACTIVE'; 
+            position: absolute; 
+            top: 6px; 
+            right: 6px; 
+            background: var(--accent); 
+            color: white; 
+            font-size: 8px; 
+            font-weight: 800; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            font-family: 'Inter', sans-serif; 
+        }
+
+        /* FOCUS MODE - OPTIMIZED */
+        #focusView { display: none; animation: fadeIn 0.4s ease; }
+        .focus-container {
+            background: #0f0f12;
+            border-radius: 24px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .focus-bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 242, 255, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        .focus-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .timer-wrapper { 
+            margin: 40px 0; 
+            position: relative; 
+        }
+        #timerDisplay {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(60px, 15vw, 100px);
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 40px rgba(0, 242, 255, 0.6);
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+        .timer-status-text {
+            color: var(--focus-accent);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 12px;
+            margin-top: 10px;
+            opacity: 0.8;
+            font-weight: 600;
+        }
+        .focus-controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .btn-focus {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: var(--transition);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-focus:hover {
+            transform: scale(1.15);
+            background: rgba(255,255,255,0.2);
+        }
+        .btn-focus.start {
+            background: var(--focus-accent);
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
+        }
+        .btn-focus.stop { color: var(--danger); }
+        .focus-target-select {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(3, 180, 183, 0.832);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+            text-align: center;
+            margin-bottom: 20px;
+            appearance: none;
+            transition: var(--transition);
+        }
+        .focus-target-select:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .zen-toggle-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .zen-toggle-btn:hover {
+            color: white;
+            border-color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* ZEN MODE - PERFECTLY CENTERED */
+        .zen-mode-active {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+            background: radial-gradient(circle at center, #1a1a1d 0%, #000000 100%) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            overflow: hidden !important;
+        }
+        .zen-mode-active .focus-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 90vw;
+            padding: 40px;
+        }
+        .zen-mode-active #timerDisplay {
+            font-size: clamp(80px, 18vw, 250px);
+            text-shadow: 0 0 80px rgba(0,242,255,0.6), 0 0 120px rgba(0,242,255,0.3);
+            margin: 0;
+        }
+        .zen-mode-active .focus-bg-glow {
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, rgba(0, 242, 255, 0.2) 0%, rgba(0,0,0,0) 60%);
+        }
+        .zen-close-btn {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 10;
+            transition: var(--transition);
+        }
+        .zen-close-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        .zen-mode-active .zen-close-btn { display: block; }
+
+        /* HISTORY ANALYTICS */
+        #historyView { display: none; animation: fadeIn 0.4s ease; }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .history-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        .btn-icon:hover {
+            background: var(--paper);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: var(--paper);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        .stat-val {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .stat-lbl {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-icon {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 20px;
+            opacity: 0.1;
+        }
+        .stat-trend {
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 5px;
+            display: block;
+        }
+        .trend-up { color: var(--success); }
+        .trend-down { color: var(--danger); }
+        .trend-flat { color: var(--text-light); }
+
+        /* Analytics Grid Layout */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 800px) { .analytics-grid { grid-template-columns: 1fr; } }
+
+        .chart-box {
+            background: var(--paper);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+        }
+        .chart-box h3 { margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); font-weight: 800; display:flex; justify-content:space-between; align-items:center; }
+        
+        /* Main Trend Chart */
+        .chart-main { grid-column: 1 / -1; height: 320px; }
+        
+        /* Radar & Heatmap */
+        .chart-radar { height: 350px; position:relative; }
+        .chart-heatmap { height: 350px; }
+
+        canvas { width: 100%; height: 100%; }
+
+        /* Heatmap Grid */
+        .heatmap-container {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .hm-cell {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            position: relative;
+            transition: transform 0.2s;
+        }
+        .hm-cell:hover { transform: scale(1.1); z-index: 2; border-color: var(--text); }
+        .hm-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 4px 8px; font-size: 10px; border-radius: 4px; display: none; white-space: nowrap; pointer-events: none; }
+        .hm-cell:hover .hm-tooltip { display: block; }
+        
+        /* Heatmap Colors */
+        .hm-l0 { background-color: #f1f5f9; }
+        .hm-l1 { background-color: #bbf7d0; border-color: #86efac; }
+        .hm-l2 { background-color: #4ade80; border-color: #22c55e; }
+        .hm-l3 { background-color: #16a34a; border-color: #15803d; }
+        .hm-l4 { background-color: #14532d; border-color: #052e16; } /* Max Intensity */
+
+        /* Insight Box */
+        .insight-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--special);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            color: var(--text);
+            display: flex; align-items: center; gap: 15px;
+        }
+        .insight-icon { font-size: 24px; }
+
+        /* Data Table */
+        .table-container { border-radius: 16px; border: 1px solid var(--border); overflow: hidden; background: var(--paper); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+        .history-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .history-table th { background: var(--bg); color: var(--text-light); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 16px; text-align: left; font-size: 11px; border-bottom: 1px solid var(--border); }
+        .history-table td { padding: 16px; border-bottom: 1px solid var(--border); color: var(--text); }
+        .status-pill { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+        .action-cell { display: flex; gap: 8px; }
+        .table-btn { background: transparent; border: none; cursor: pointer; font-size: 14px; opacity: 0.6; transition: opacity 0.2s; padding: 4px; }
+        
+        #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+        @media (prefers-color-scheme: dark) { }
+        /* 1. Stat Card Watermark Icons */
+.stat-icon {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 32px;       /* Bigger than before */
+    height: 32px;
+    opacity: 0.15;     /* Subtle watermark effect */
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.stat-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+/* 2. Action Button Icons */
+.btn-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.btn-icon:hover svg { opacity: 1; }
+
+/* 3. Insight Icon */
+.insight-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: var(--special);
+}
+.insight-icon svg { width: 100%; height: 100%; fill: currentColor; }
+/* Correlation Matrix Styles */
+/* Correlation Matrix Styles - UPDATED */
+.corr-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    /* --- FIX 1: Equal Spacing --- */
+    table-layout: fixed; /* This forces all columns to be equal width */
+}
+
+.corr-table th, .corr-table td {
+    /* width: 20%; <-- REMOVED: table-layout handles widths now */
+    padding: 5px; /* Reduced padding slightly so text fits better */
+    text-align: center;
+    border: 1px solid var(--border);
+    vertical-align: middle; /* Ensures text is centered vertically */
+    
+    /* --- FIX 1: Equal Row Height (Makes cells square-ish) --- */
+    height: 60px; 
+    overflow: hidden; /* Prevents long text from breaking the square shape */
+    text-overflow: ellipsis; 
+}
+
+.corr-table th {
+    background: var(--bg);
+    color: var(--text-light);
+    font-weight: 700;
+    font-size: 10px; /* Slightly smaller headers to fit */
+}
+
+.corr-cell {
+    font-weight: 700;
+    transition: all 0.2s;
+    /* Ensure text is readable on colored backgrounds */
+    text-shadow: 0 1px 2px rgba(255,255,255,0.2); 
+}
+
+/* Dark mode adjustment for text readability */
+@media (prefers-color-scheme: dark) {
+    .corr-cell { text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+}
+
+.corr-cell:hover {
+    transform: scale(1.1); /* Slightly less scale to avoid overlapping too much */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 10;
+    position: relative;
+    border-radius: 4px;
+}
+
+/* --- OLD COLOR CLASSES DELETED HERE --- */
+/* .c-pos-high, .c-pos-mid, .c-neu, .c-neg-mid, .c-neg-high  <-- THESE ARE GONE */
+/* Heatmap Colors */
+.c-pos-high { background: rgba(16, 185, 129, 0.3); color: #064e3b; } /* +0.7 to 1.0 */
+.c-pos-mid  { background: rgba(16, 185, 129, 0.15); color: #064e3b; } /* +0.3 to 0.7 */
+.c-neu      { background: transparent; color: var(--text-light); opacity: 0.5; } /* -0.3 to +0.3 */
+.c-neg-mid  { background: rgba(239, 68, 68, 0.15); color: #7f1d1d; } /* -0.3 to -0.7 */
+.c-neg-high { background: rgba(239, 68, 68, 0.3); color: #7f1d1d; } /* -0.7 to -1.0 */
+/* --- NEW YOGA TAB STYLES --- */
+.audio-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.timeline-container {
+    position: relative;
+    padding-left: 20px;
+}
+
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background: #e2e8f0;
+}
+
+.flow-step {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+/* The Clickable Header */
+.flow-summary {
+    list-style: none; /* Hide default triangle */
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.flow-summary::-webkit-details-marker { display: none; } /* Chrome hide marker */
+
+.flow-summary:hover {
+    transform: translateX(5px);
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+/* The Hidden Details */
+.flow-details {
+    background: #f8fafc;
+    margin-top: 5px;
+    padding: 15px;
+    border-radius: 0 0 12px 12px;
+    border: 1px solid #f1f5f9;
+    border-top: none;
+    font-size: 13px;
+    color: #475569;
+    margin-left: 10px;
+    border-left: 3px solid #3b82f6;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Status Indicator Dot */
+.step-dot {
+    position: absolute;
+    left: -21px;
+    top: 20px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #e2e8f0;
+    z-index: 2;
+}
+
+details[open] .step-dot { background: #3b82f6; transform: scale(1.2); }
+details[open] .flow-summary { border-color: #3b82f6; background: #eff6ff; border-radius: 12px 12px 0 0; }
+/* --- NATIVE AUDIO PLAYER STYLES --- */
+.audio-controller {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.audio-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn-play-audio {
+    background: #3b82f6;
+    color: white;
+}
+.btn-play-audio:hover { transform: scale(1.1); background: #2563eb; }
+
+.btn-pause-audio {
+    background: #fff;
+    color: #ef4444;
+    border: 1px solid #fee2e2;
+    display: none; /* Hidden by default */
+}
+.btn-pause-audio:hover { background: #fef2f2; }
+
+.audio-status {
+    flex-grow: 1;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    display: flex;
+    flex-direction: column;
+}
+
+.audio-bar-bg {
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.audio-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: #3b82f6;
+    transition: width 0.5s linear;
+}
+
+/* EQ Animation for playing state */
+@keyframes eq-pulse {
+    0% { height: 3px; }
+    50% { height: 12px; }
+    100% { height: 3px; }
+}
+.eq-bars { display: flex; gap: 2px; align-items: flex-end; height: 15px; margin-left: 10px; opacity: 0; transition: opacity 0.3s; }
+.eq-bar { width: 3px; background: #3b82f6; border-radius: 2px; animation: eq-pulse 0.8s infinite ease-in-out; }
+.eq-bar:nth-child(2) { animation-delay: 0.1s; }
+.eq-bar:nth-child(3) { animation-delay: 0.2s; }
+.active-audio .eq-bars { opacity: 1; }
+    </style>
+</head>
+<body>
+
+<canvas id="confettiCanvas"></canvas>
+
+<div class="container">
+    <header>
+        <div>
+            <h1>Daily Tracker v3.29</h1>
+            <h2>Bibek Subedi | Final Year Civil Engineering Student </h2>
+            <div id="quoteDisplay" class="quote-box">Loading Wisdom...</div>
+        </div>
+        <div class="time-panel">
+            <div id="clockDisplay" style="font-size: 2.2em; font-weight: 700; font-family: 'Poppins'; margin-bottom: 5px; line-height: 1;">00:00:00</div>
+            <div id="currentDateDisplay" style="font-size: 0.9em; opacity: 0.8; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Date</div>
+            <div id="currentActivityBadge" class="now-badge">Syncing...</div>
+        </div>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('tracker')">Daily Tracker</button>
+        <button class="tab-btn" onclick="switchTab('focus')">Focus Mode</button>
+        <button class="tab-btn" onclick="switchTab('yoga')">Yoga & Sadhana</button>
+        <button class="tab-btn" onclick="switchTab('history')">History & Analytics</button>
+        <button class="tab-btn" onclick="switchTab('routine')">Master Routine</button>
+    </div>
+
+    <!-- TRACKER TAB -->
+    <div id="trackerView" style="animation: fadeIn 0.4s ease;">
+        <form id="trackerForm">
+            <div class="tracker-section" style="border-top: 4px solid #a55eea;">
+    <div class="section-title" style="color: #a55eea;"> Engineering Projects</div>
+    
+    <div style="margin-bottom: 15px; background: var(--bg); padding: 10px; border-radius: 10px;">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 5px;">
+            <span>HAND/PLAXIS Completion</span>
+            <span id="thesisPercent">0%</span>
+        </div>
+        <input type="range" id="thesisProgress" min="0" max="100" value="0" oninput="updateLongTerm('thesis', this.value)" style="width:100%; margin-bottom: 8px;">
+        <input type="text" id="thesisNextStep" placeholder="" onchange="saveLongTermText('thesisStep', this.value)" 
+        style="width: 100%; padding: 6px; font-size: 11px; border: 1px solid var(--border); border-radius: 6px;">
+    </div>
+
+    <div style="background: var(--bg); padding: 10px; border-radius: 10px;">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 5px;">
+            <span>HEC-RAS 100-Day</span>
+            <span id="hecPercent">Day 0</span>
+        </div>
+        <input type="range" id="hecProgress" min="0" max="100" value="0" oninput="updateLongTerm('hec', this.value)" style="width:100%; margin-bottom: 8px;">
+        <input type="text" id="hecTopic" placeholder="" onchange="saveLongTermText('hecTopic', this.value)" 
+        style="width: 100%; padding: 6px; font-size: 11px; border: 1px solid var(--border); border-radius: 6px;">
+    </div>
+</div>
+
+            <div class="tracker-section">
+                <div class="section-title"> Daily Missions</div>
+                <div class="input-group">
+                    <label>1. Top Priority:</label>
+                    <input type="text" id="goal1" placeholder="">
+                    <input type="checkbox" id="goal1_done" class="goal-checkbox" onchange="calculateAll()">
+                </div>
+                <div class="input-group">
+                    <label>2. Secondary:</label>
+                    <input type="text" id="goal2" placeholder="">
+                    <input type="checkbox" id="goal2_done" class="goal-checkbox" onchange="calculateAll()">
+                </div>
+                <div class="input-group">
+                    <label>3. Life/Admin:</label>
+                    <input type="text" id="goal3" placeholder="">
+                    <input type="checkbox" id="goal3_done" class="goal-checkbox" onchange="calculateAll()">
+                </div>
+                <div style="text-align: right; font-size: 13px; color: var(--success); font-weight: 800;">
+                    EXECUTION SCORE: +<span id="goalScore">0</span>
+                </div>
+            </div>
+
+            <div class="tracker-section">
+                <div class="section-title"> Morning Protocol</div>
+                <div class="input-group">
+                    <label>Wake Up Time:</label>
+                    <input type="time" id="wakeTime" onchange="calculateAll()">
+                    <span class="rating-display"><span id="wakeScore">0</span> pts</span>
+                </div>
+                <div class="input-group">
+                    <label>Meditation(Minutes):</label>
+                    <input type="number" id="meditationTime" placeholder="" oninput="calculateAll()">
+                    <span class="rating-display"><span id="meditationScore">0</span> / 15</span>
+                </div>
+                <div class="input-group">
+                    <label>Breakfast Quality:</label>
+                    <select id="breakfastRating" onchange="calculateAll()">
+                        <option value="5">Excellent (5)</option>
+                        <option value="4">Good (4)</option>
+                        <option value="3">Average (3)</option>
+                        <option value="2">Poor (2)</option>
+                        <option value="1">Skipped (1)</option>
+                        <option value="0">None (0)</option>
+                    </select>
+                    <span class="rating-display"><span id="breakfastScore">0</span> / 5</span>
+                </div>
+                <div class="input-group">
+                    <label>Morning Energy:</label>
+                    <div style="flex-grow: 1; padding: 0 10px;">
+                        <input type="range" id="energyLevel" min="1" max="10" value="7" oninput="document.getElementById('energyDisp').innerText = this.value;">
+                    </div>
+                    <span class="rating-display"> <span id="energyDisp">7</span></span>
+                </div>
+            </div>
+
+            <div class="tracker-section">
+    <div class="section-title"> Deep Work Sessions</div>
+
+    <div style="display: flex; gap: 15px; margin-bottom: 8px; align-items: center;">
+        <div style="min-width: 140px;"></div> 
+        
+        <div style="width: 100px; text-align: center; font-size: 10px; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;">
+            Time (Min)
+        </div>
+        
+        <div style="width: 100px; text-align: center; font-size: 10px; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;">
+            Done (%)
+        </div>
+    </div>
+    <div class="input-group">
+        <label style="color:var(--accent);">I. Skill/Literature:</label>
+        <input type="number" id="s1_time" oninput="calculateAll()" style="width: 100px;">
+        <input type="number" id="s1_acc" oninput="calculateAll()" style="width: 100px;">
+        <span class="rating-display"><span id="s1_score">0</span> / 30</span>
+    </div>
+    <div class="input-group">
+        <label>II. Skill Development:</label>
+        <input type="number" id="s2_time" oninput="calculateAll()" style="width: 100px;">
+        <input type="number" id="s2_acc" oninput="calculateAll()" style="width: 100px;">
+        <span class="rating-display"><span id="s2_score">0</span> / 30</span>
+    </div>
+    <div class="input-group">
+        <label>III. Python/ML:</label>
+        <input type="number" id="s3_time" oninput="calculateAll()" style="width: 100px;">
+        <input type="number" id="s3_acc" oninput="calculateAll()" style="width: 100px;">
+        <span class="rating-display"><span id="s3_score">0</span> / 30</span>
+    </div>
+</div>
+
+
+            <div class="tracker-section">
+                <div class="section-title"> Biology & Lifestyle</div>
+                <div class="input-group">
+                    <label>Fuel (Diet):</label>
+                    <div style="flex-grow: 1; padding: 0 10px;">
+                        <input type="range" id="dietScoreInput" min="0" max="10" value="5" oninput="document.getElementById('dietDisp').innerText = this.value; calculateAll();" style="width:25%">
+                    </div>
+                    <span class="rating-display"><span id="dietDisp">5</span> / 10</span>
+                </div>
+                <div class="input-group">
+                    <label>Hydration:</label>
+                    <div style="flex-grow: 1; padding: 0 10px;">
+                        <input type="range" id="waterIntake" min="0" max="5" step="0.5" value="2.5" oninput="document.getElementById('waterDisp').innerText = this.value; calculateAll();" style="width:28.6%">
+                    </div>
+                    <span class="rating-display"> <span id="waterDisp">2.5</span> L</span>
+                    <span class="rating-display" style="background:transparent; color: var(--success); border:none;">+<span id="waterScore">0</span></span>
+                </div>
+                <div class="input-group">
+                    <label>Meds Protocol:</label>
+                    <div style="flex-grow: 1; display: flex; gap: 20px; align-items: center;">
+                        <label style="min-width: auto; font-weight: 500; cursor: pointer; font-size: 13px;">
+                            <input type="checkbox" id="med_morning" onchange="calculateAll()"> Morning Only (Daily)
+                        </label>
+                    </div>
+                    <span class="rating-display" style="color: var(--success); border-color: var(--success);">+<span id="medScore">0</span></span>
+                </div>
+                <div class="input-group">
+                    <label>Screen Time (Hrs):</label>
+                    <input type="number" id="screenHours" step="0.1" placeholder="" oninput="calculateAll()">
+                    <span class="rating-display"><span id="screenScore">25</span> / 25</span>
+                </div>
+                <div class="input-group">
+                    <label>Research (Bonus):</label>
+                    <input type="number" id="researchN" placeholder="" oninput="calculateAll()">
+                    <span class="rating-display" style="color: var(--success); border-color: var(--success);">+<span id="researchScore">0</span></span>
+                </div>
+            </div>
+
+            <div class="tracker-section" style="border-left: 4px solid var(--danger);">
+                <div class="section-title" style="color: var(--danger);">Fresh Mode Protocal</div>
+                <div class="input-group">
+                    <label>Status:</label>
+                    <select id="maturitylevel" onchange="calculateAll()" style="color: var(--text); font-weight: 500;">
+                        <option value="10">Super Cool (+10)</option>
+                        <option value="0">Retained after Bad (+0)</option>
+                        <option value="-10">Bad (-10)</option>
+                        <option value="-20">Very Bad (-20)</option>
+                    </select>
+                    <span class="rating-display" style="color: var(--danger); background: var(--bg); border-color: var(--danger);"><span id="habitScore">0</span></span>
+                </div>
+                <div class="input-group">
+                    <label>Discipline Rules:</label>
+                    <div style="flex-grow: 1; display: flex; gap: 20px;">
+                        <label style="min-width: auto; font-weight: 500; font-size: 13px;"><input type="checkbox" id="rule_bed" onchange="calculateAll()"> No Bed (Day)</label>
+                        <label style="min-width: auto; font-weight: 500; font-size: 13px;"><input type="checkbox" id="rule_room" onchange="calculateAll()"> Out till 5PM</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tracker-section">
+                <div class="section-title"> Sleep Hygiene</div>
+                <div class="input-group">
+                    <label>In Bed By:</label>
+                    <input type="time" id="bedTime" onchange="calculateAll()">
+                    <span class="rating-display"><span id="sleepScore">0</span> / 15</span>
+                </div>
+            </div>
+
+            <div class="tracker-section">
+                <div class="section-title"> Protocol Observations</div>
+                <div class="input-group">
+                    <label>Day Tags:</label>
+                    <input type="text" id="dayTags" placeholder="">
+                </div>
+                <div class="input-group">
+                    <label>Flow State</label>
+                    <input type="range" id="flowState" min="1" max="10" value="5" oninput="document.getElementById('flowDisp').innerText = this.value;" style="width:17.8%">
+                    <span class="rating-display"><span id="flowDisp">5</span></span>
+                </div>
+                <div class="input-group">
+                    <label>Brain Clarity:</label>
+                    <select id="moodSelect">
+                        <option value="5"> Laser Sharp (Peak)</option>
+                        <option value="4"> Clear / Good</option>
+                        <option value="3"> Mild Fog / Slow</option>
+                        <option value="2"> Fried / Exhausted</option>
+                        <option value="1"> Sick / Migraine</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label style="color: var(--success);"> Top Win:</label>
+                    <input type="text" id="topWin" placeholder="">
+                </div>
+                <div class="input-group">
+                    <label style="color: var(--danger);"> Main Obstacle:</label>
+                    <input type="text" id="mainObstacle" placeholder="">
+                </div>
+            </div>
+
+            <div class="score-dashboard">
+    <div class="score-item">
+        <div class="score-label">Daily Score</div>
+        <div class="score-val" id="totalScore">0</div>
+    </div>
+
+    <div class="score-item">
+        <div class="score-label">Streak</div>
+        <div class="score-val" id="streakCount">0</div>
+    </div>
+
+    <div class="score-item">
+        <div class="score-label">Status</div>
+        <div class="score-val" id="statusText" style="font-size: 26px;">--</div>
+    </div>
+
+    <div class="score-item">
+        <div class="score-label" style="margin-bottom: 5px;">Last 7 Days</div>
+        <div id="miniHeatmapContainer" style="display: flex; gap: 4px; align-items: center; justify-content: center;">
+            </div>
+    </div>
+
+    <div class="score-item">
+        <div class="score-label">Deep Work</div>
+        <div class="score-val" style="color: #3b82f6;">
+            <span id="dashboardDeepWork">0.0</span><span style="font-size: 14px; margin-left: 2px; opacity: 0.7;">h</span>
+        </div>
+    </div>
+
+    <div class="xp-bar-container">
+        <div class="xp-bar-fill" id="xpBarFill"></div>
+    </div>
+    
+    <div style="grid-column: 1/-1; display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-top: 5px;">
+        <span id="currentLevelText">Lvl 1</span>
+        <span><span id="currentXP">0</span> / 500 XP to Next</span>
+    </div>
+</div>
+
+            <div class="action-bar">
+                <button type="button" class="btn btn-save" onclick="saveData()"> Save & Sync</button>
+                <button type="button" class="btn btn-clear" onclick="resetForm()"> Reset</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- FOCUS MODE TAB -->
+    <div id="focusView">
+        <div id="focusModeContainer" class="focus-container">
+            <button class="zen-close-btn" onclick="toggleZenMode()">EXIT ZEN (ESC)</button>
+            <div class="focus-bg-glow"></div>
+            <div class="focus-content">
+                <div class="section-title" style="color: var(--focus-accent); justify-content: center; border: none; font-size: 16px;">
+                     DEEP WORK PROTOCOL
+                </div>
+                <div class="timer-wrapper">
+                    <div id="timerDisplay">00:00</div>
+                    <div class="timer-status-text" id="timerStatus">Ready to Engage</div>
+                </div>
+                <select id="timerTarget" class="focus-target-select">
+                    <option value="s1_time"> Session I: Thesis/Plaxis</option>
+                    <option value="s2_time">🛠️ Session II: Skill Dev</option>
+                    <option value="s3_time"> Session III: Python/ML</option>
+                </select>
+                <div class="focus-controls">
+    <button type="button" class="btn-focus stop" onclick="stopTimer()" title="Log & Finish">◼</button>
+    
+    <button type="button" id="timerToggleBtn" class="btn-focus start" onclick="toggleTimer()" title="Start/Pause">▶</button>
+    
+    <button type="button" id="noiseBtn" class="btn-focus" onclick="toggleBrownNoise()" title="Toggle Focus Audio" style="width: auto; padding: 0 15px; border-radius: 30px; font-size: 12px; font-weight: 700;"> Audio</button>
+</div>
+                <button class="zen-toggle-btn" onclick="toggleZenMode()">⛶ Enter Zen Mode</button>
+            </div>
+        </div>
+    </div>
+<div id="yogaView" style="display:none; animation: fadeIn 0.4s ease;">
+    
+    <div class="audio-card">
+        <div style="width: 50px; height: 50px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #3b82f6;">
+            <svg style="width:24px;height:24px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        </div>
+        <div style="flex-grow: 1;">
+            <div style="font-size: 10px; font-weight: 700; color: #64748b; letter-spacing: 1px; text-transform: uppercase;">Background Frequency</div>
+            <div style="font-weight: 700; color: #1e293b; font-size: 14px;">Thyroid Healing (Vishuddha)</div>
+        </div>
+        <div style="width: 200px; height: 60px; overflow: hidden; border-radius: 30px;">
+            <iframe width="100%" height="60" 
+                src="https://www.youtube.com/embed/L_LSn_G6JUQ?controls=1&modestbranding=1&fs=0&color=white" 
+                title="Audio" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+        </div>
+    </div>
+
+    <div class="tracker-section" style="margin-top: 0;">
+        <div class="section-title" style="margin-bottom: 20px;">
+            <span> The Sequence (20 Min)</span>
+            <span style="font-size: 10px; opacity: 0.6; font-weight: 500;">Click steps to expand details</span>
+        </div>
+
+        <div class="timeline-container">
+
+            <div style="font-size: 11px; font-weight: 800; color: #94a3b8; margin: 15px 0 10px 0; letter-spacing: 1px;">PHASE I: PHYSICAL & EYES (4 MIN)</div>
+
+            <details class="flow-step">
+                <summary class="flow-summary">
+                    <div class="step-dot"></div>
+                    <span style="font-weight: 600;">1. Neck Rolls</span>
+                    <span style="font-size: 11px; font-weight: 700; background: #e2e8f0; padding: 4px 8px; border-radius: 6px; color: #475569;">1 Min</span>
+                </summary>
+                <div class="flow-details">
+                    <strong>How:</strong> Sit cross-legged. Slowly roll neck clockwise (30s) then counter-clockwise (30s).<br>
+                    <strong>Benefit:</strong> Releases cervical tension and stimulates blood flow to the thyroid.
+                </div>
+            </details>
+
+            <details class="flow-step">
+                <summary class="flow-summary">
+                    <div class="step-dot"></div>
+                    <span style="font-weight: 600;">2. Eye Yoga (Trataka)</span>
+                    <span style="font-size: 11px; font-weight: 700; background: #e2e8f0; padding: 4px 8px; border-radius: 6px; color: #475569;">3 Mins</span>
+                </summary>
+                <div class="flow-details">
+                    <strong>Technique 1:</strong> Focus on a distant object, then shift gaze to nose tip. Repeat.<br>
+                    <strong>Technique 2 (Palming):</strong> Rub palms together until warm, gently cover closed eyes.<br>
+                    <strong>Benefit:</strong> Relieves dryness and digital eye strain.
+                </div>
+            </details>
+
+            <div style="font-size: 11px; font-weight: 800; color: #94a3b8; margin: 25px 0 10px 0; letter-spacing: 1px;">PHASE II: PRANAYAMA (9 MIN)</div>
+
+            <details class="flow-step">
+                <summary class="flow-summary">
+                    <div class="step-dot"></div>
+                    <span style="font-weight: 600;">3. Kapalbhati</span>
+                    <span style="font-size: 11px; font-weight: 700; background: #dcfce7; padding: 4px 8px; border-radius: 6px; color: #166534;">2 Mins</span>
+                </summary>
+                <div class="flow-details">
+                    <strong>Skull Shining Breath:</strong> Sit straight. Take a deep inhale. Exhale forcefully through nose while pulling navel in. Inhalation happens passively.<br>
+                    <strong>Benefit:</strong> Detoxifies body, balances energy, stimulates metabolism.
+                </div>
+            </details>
+
+            <details class="flow-step">
+                <summary class="flow-summary">
+                    <div class="step-dot"></div>
+                    <span style="font-weight: 600;">4. Nadi Shodhana</span>
+                    <span style="font-size: 11px; font-weight: 700; background: #dcfce7; padding: 4px 8px; border-radius: 6px; color: #166534;">2 Mins</span>
+                </summary>
+                <div class="flow-details">
+                    <strong>Alternate Nostril:</strong> Close right nostril with thumb, inhale left. Close left, exhale right. Inhale right, exhale left.<br>
+                    <strong>Benefit:</strong> Balances left/right brain hemispheres, lowers cortisol.
+                </div>
+            </details>
+
+            <details class="flow-step">
+                <summary class="flow-summary">
+                    <div class="step-dot"></div>
+                    <span style="font-weight: 600;">5. Ujjayi Pranayama</span>
+                    <span style="font-size: 11px; font-weight: 700; background: #dcfce7; padding: 4px 8px; border-radius: 6px; color: #166534;">3 Mins</span>
+                </summary>
+                <div class="flow-details">
+                    <strong>Ocean Breath:</strong> Constrict the back of your throat slightly to create a whispering sound on inhale and exhale.<br>
+                    <strong>Benefit:</strong> The vibration directly massages the thyroid gland.
+                </div>
+            </details>
+
+            <details class="flow-step">
+                <summary class="flow-summary">
+                    <div class="step-dot"></div>
+                    <span style="font-weight: 600;">6. Bhramari (Bee Breath)</span>
+                    <span style="font-size: 11px; font-weight: 700; background: #dcfce7; padding: 4px 8px; border-radius: 6px; color: #166534;">2 Mins</span>
+                </summary>
+                <div class="flow-details">
+                    <strong>How:</strong> Close ears with thumbs, index fingers on forehead. Inhale deep, exhale while making a humming bee sound.<br>
+                    <strong>Benefit:</strong> Soothes nervous system via vibration.
+                </div>
+            </details>
+
+            <div style="font-size: 11px; font-weight: 800; color: #94a3b8; margin: 25px 0 10px 0; letter-spacing: 1px;">PHASE III: DHYANA & MANTRA (7 MIN)</div>
+
+            <details class="flow-step">
+                <summary class="flow-summary">
+                    <div class="step-dot"></div>
+                    <span style="font-weight: 600;">7. Mantra Chanting</span>
+                    <span style="font-size: 11px; font-weight: 700; background: #ede9fe; padding: 4px 8px; border-radius: 6px; color: #5b21b6;">2 Mins</span>
+                </summary>
+                <div class="flow-details">
+                    <strong>Mantras:</strong> "Om Namah Shivaya" or "Gayatri Mantra".<br>
+                    <strong>Focus:</strong> Feel the resonance of "Om" starting in the belly and moving up to the throat.
+                </div>
+            </details>
+
+            <details class="flow-step">
+                <summary class="flow-summary">
+                    <div class="step-dot"></div>
+                    <span style="font-weight: 600;">8. Guided Visualization</span>
+                    <span style="font-size: 11px; font-weight: 700; background: #ede9fe; padding: 4px 8px; border-radius: 6px; color: #5b21b6;">5 Mins</span>
+                </summary>
+                <div class="flow-details">
+                    <strong>Technique:</strong> Close eyes. Focus on breath. Visualize a bright <strong style="color:#3b82f6">BLUE LIGHT</strong> at the throat center, healing the gland.<br>
+                    <strong>Note:</strong> Let the audio guide you.
+                </div>
+            </details>
+
+        </div>
+    </div>
+</div>
+    <!-- UPDATED HISTORY TAB (v3.29) -->
+    <div id="historyView">
+        <div class="history-header">
+            <div class="section-title" style="margin: 0; border: none;"> Analytical Command Center</div>
+          <div class="history-actions">
+    <button class="btn-icon" title="Import JSON" onclick="importJSON()">
+        <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+    </button>
+    
+    <button class="btn-icon" title="Export Excel" onclick="exportToExcel()">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+    </button>
+    
+    <button class="btn-icon" title="Export JSON" onclick="exportJSON()">
+        <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" transform="rotate(180 12 12)"/></svg>
+    </button>
+    
+    <button class="btn-icon" title="Wipe Data" style="color:var(--danger); border-color:var(--danger);" onclick="clearHistory()">
+        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+    </button>
+</div>
+        </div>
+
+        <div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+        </div>
+        <div class="stat-val" id="wkAvgScore">0</div>
+        <div class="stat-lbl">7-Day Avg Score</div>
+        <span class="stat-trend" id="trendScore">--</span>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">
+            <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+        </div>
+        <div class="stat-val" id="wkTotalDeep">0</div>
+        <div class="stat-lbl">Deep Work Hours</div>
+        <span class="stat-trend" id="trendWork">--</span>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">
+            <svg viewBox="0 0 24 24"><path d="M9 2c-1.05 0-2.05.16-3 .46 2.71 1.63 4.5 4.6 4.5 7.96 0 3.36-1.79 6.33-4.5 7.96.95.3 1.95.46 3 .46 5.52 0 10-4.48 10-10S14.52 2 9 2z"/></svg>
+        </div>
+        <div class="stat-val" id="wkAvgSleep">0</div>
+        <div class="stat-lbl">Avg Sleep Score</div>
+        <span class="stat-trend" id="trendSleep">--</span>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">
+            <svg viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
+        </div>
+        <div class="stat-val" id="wkBestDay">--</div>
+        <div class="stat-lbl">Best Streak Day</div>
+    </div>
+</div>
+
+        <!-- Advanced Analytics Grid -->
+        <div class="analytics-grid">
+            <!-- 1. Main Trend Chart -->
+            <div class="chart-box chart-main">
+                <h3>Performance Trend <span style="font-size:10px; opacity:0.6;">(History)</span></h3>
+                <canvas id="trendCanvas"></canvas>
+            </div>
+
+            <!-- 2. Radar Chart -->
+            <div class="chart-box chart-radar">
+                <h3>Pentagon of Power <span style="font-size:10px; opacity:0.6;">(Life Balance)</span></h3>
+                <canvas id="radarCanvas"></canvas>
+            </div>
+
+            <!-- 3. Heatmap -->
+            <div class="chart-box chart-heatmap">
+                <h3>Consistency Heatmap <span style="font-size:10px; opacity:0.6;">(Last 30 Days)</span></h3>
+                <div id="heatmapContainer" class="heatmap-container">
+                    <!-- JS Injected -->
+                </div>
+            </div>
+            <div class="chart-box" style="grid-column: 1 / -1; height: 380px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3> Correlation Lab <span style="font-size:10px; opacity:0.6;">(Linear Regression)</span></h3>
+        <div style="display: flex; gap: 10px;">
+            <select id="corrX" onchange="drawCorrelationChart()" class="focus-target-select" style="padding: 4px 8px; font-size: 11px; margin: 0; background: var(--bg); color: var(--text);">
+                <option value="sleep">X: Sleep Score</option>
+                <option value="diet">X: Diet Score</option>
+                <option value="focus">X: Flow State</option>
+                <option value="work">X: Deep Work</option>
+            </select>
+            <select id="corrY" onchange="drawCorrelationChart()" class="focus-target-select" style="padding: 4px 8px; font-size: 11px; margin: 0; background: var(--bg); color: var(--text);">
+                <option value="work">Y: Deep Work</option>
+                <option value="total">Y: Daily Score</option>
+                <option value="focus">Y: Flow State</option>
+                <option value="sleep">Y: Sleep Score</option>
+            </select>
+        </div>
+    </div>
+    <canvas id="correlationCanvas"></canvas>
+    <div id="corrStats" style="text-align: center; font-size: 11px; color: var(--text-light); margin-top: 5px; font-family: 'JetBrains Mono';"></div>
+</div>
+        </div>
+<div class="tracker-section" style="margin-top: 30px;">
+    <div class="section-title"> The Correlation Engine (Pearson r)</div>
+    <div style="font-size: 11px; color: var(--text-light); margin-bottom: 15px; font-style: italic;">
+        Values range from <span style="color:#ef4444">-1.0 (Negative)</span> to <span style="color:#10b981">+1.0 (Positive)</span>. 
+        Shows how strongly inputs affect outputs.
+    </div>
+    <div id="correlationContainer" style="overflow-x: auto;">
+        </div>
+</div>
+        <!-- Automated Insight -->
+        <div class="insight-box">
+    <div class="insight-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6A4.997 4.997 0 0 1 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+    </div>
+    <div id="aiInsightText">Insufficient data to generate correlations. Log at least 2 days of data.</div>
+</div>
+
+        <div class="table-container">
+            <div style="overflow-x: auto;">
+                <table class="history-table" id="historyTable">
+                    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Wake</th>
+        <th>In Bed</th>  <th>Work</th>
+        <th>Score</th>
+        <th>Status</th>
+        <th>Obstacle</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ROUTINE TAB -->
+    <div id="routineView" style="display:none; animation: fadeIn 0.4s ease;">
+        <div class="tracker-section" style="padding: 20px; background: transparent; border: none; box-shadow: none;">
+            <div class="section-title">Master Routine (Effective 2081 Mangsir)</div>
+            <div class="routine-container">
+                <table class="routine-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">Time</th>
+                            <th style="width: 13%;">Sun</th>
+                            <th style="width: 13%;">Mon</th>
+                            <th style="width: 13%;">Tue</th>
+                            <th style="width: 13%;">Wed</th>
+                            <th style="width: 13%;">Thu</th>
+                            <th style="width: 13%;">Fri</th>
+                            <th style="width: 12%;">Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 06:00 -->
+                        <tr id="row-06">
+                            <td>06:00 - 07:00</td>
+                            <td colspan="6"><div class="rt-card bg-morning"><div class="rt-title">Morning Protocol</div><div class="rt-sub">Wake • Hydrate • Cold Shower</div></div></td>
+                            <td><div class="rt-card bg-special"><div class="rt-title">Hike Prep</div><div class="rt-sub">Pack & Ready</div></div></td>
+                        </tr>
+                        <!-- 07:00 -->
+                        <tr id="row-07-a">
+                            <td>07:00 - 07:15</td>
+                            <td colspan="6"><div class="rt-card bg-break"><div class="rt-title">Travel</div><div class="rt-sub">Morning</div></div></td>
+                            
+                            <td rowspan="4"><div class="rt-card bg-special" style="height:100%; justify-content:center;"><div class="rt-title">HIKING / SPORT</div><div class="rt-sub">07:00 - 11:00</div></div></td>
+                        </tr>
+
+                        <tr id="row-07-b">
+                            <td>07:15 - 08:45</td>
+                            <td><div class="rt-card bg-lecture"><div class="rt-title">GIS & Remote Sensing</div></div></td>
+                            <td><div class="rt-card bg-lecture"><div class="rt-title">GroundWater Engineering</div></div></td>
+                            <td><div class="rt-card bg-lecture"><div class="rt-title">GIS & Remote Sensing</div></div></td>
+                            <td><div class="rt-card bg-lecture"><div class="rt-title">GroundWater Engineering</div></div></td>
+                            <td><div class="rt-card bg-lecture"><div class="rt-title">GIS & Remote Sensing</div></div></td>
+                            <td><div class="rt-card bg-lecture"><div class="rt-title">GroundWater Engineering</div></div></td>
+                        </tr>
+                        <!-- 08:45 -->
+                        <tr id="row-08">
+    <td>08:45 - 10:15</td>
+    <td>
+        <div class="rt-card bg-lecture">
+            <div class="rt-title">Computational Technique (L+T)</div>
+            <div class="rt-sub">RKR (F-203)</div>
+        </div>
+    </td>
+    <td>
+        <div class="rt-card bg-lecture">
+            <div class="rt-title">Engg. Prof. Practice (L)</div>
+            <div class="rt-sub">RBJ (F-203)</div>
+        </div>
+    </td>
+    <td>
+        <div class="rt-card bg-lecture">
+            <div class="rt-title">Construction Mgmt</div>
+            <div class="rt-sub">MRD (F-203)</div>
+        </div>
+    </td>
+    <td>
+        <div class="rt-card bg-lecture">
+            <div class="rt-title">Technology Environment & Society (L)</div>
+            <div class="rt-sub">SRP (F-203)</div>
+        </div>
+    </td>
+    <td>
+        <div class="rt-card bg-lecture">
+            <div class="rt-title">Computational Technique (L)</div>
+            <div class="rt-sub">SKSah (F-203)</div>
+        </div>
+    </td>
+    <td>
+        <div class="rt-card bg-lecture">
+            <div class="rt-title">Computational Technique (L)</div>
+            <div class="rt-sub">SKSah (F-203)</div>
+        </div>
+    </td>
+</tr>
+                        <!-- 10:15 -->
+                        <tr id="row-10">
+                            <td>10:15 - 11:00</td>
+                            <td colspan="6"><div class="rt-card bg-break"><div class="rt-title">Break / Socialize</div></div></td>
+                        </tr>
+                        <!-- 11:00 -->
+                        <tr id="row-11">
+                            <td>11:00 - 12:30</td>
+                            <td><div class="rt-card bg-deep"><div class="rt-title">Literature Review</div><div class="rt-sub">Library</div></div></td>
+                            <td><div class="rt-card bg-deep"><div class="rt-title">Skills Dev.</div><div class="rt-sub">Library</div></div></td>
+                            <td><div class="rt-card bg-deep"><div class="rt-title">Literature Review</div><div class="rt-sub">Library</div></div></td>
+                            <td><div class="rt-card bg-deep"><div class="rt-title">Skills Dev.</div><div class="rt-sub">Library</div></div></td>
+                            <td><div class="rt-card bg-lecture"><div class="rt-title">Construction Management</div></div></td>
+                            <td><div class="rt-card bg-lecture"><div class="rt-title">Construction Management</div></div></td>
+                            <td><div class="rt-card rt-empty"></div></td>
+                        </tr>
+                        <!-- 12:30 -->
+                        <tr id="row-12">
+                            <td>12:30 - 01:30</td>
+                            <td colspan="7"><div class="rt-card" style="background:#e2e8f0; color:#475569; border:none;"><div class="rt-title" style="text-align:center;">LUNCH</div></div></td>
+                        </tr>
+                        <!-- 01:30 -->
+                        <tr id="row-13">
+                            <td>01:30 - 02:30</td>
+                            <td colspan="6"><div class="rt-card bg-lecture"><div class="rt-title">HEC-RAS HOUR</div><div class="rt-sub">Comp Lab</div></div></td>
+                            <td><div class="rt-card bg-special"><div class="rt-title">Social</div></div></td>
+                        </tr>
+                        <!-- 02:30 -->
+                        <tr id="row-14">
+                            <td>02:30 - 04:30</td>
+                            <td><div class="rt-card bg-deep"><div class="rt-title">GIS</div></div></td>
+                            <td><div class="rt-card bg-deep"><div class="rt-title">Assignments</div></div></td>
+                            <td><div class="rt-card bg-deep"><div class="rt-title">GIS</div></div></td>
+                            <td><div class="rt-card bg-deep"><div class="rt-title">Assignments</div></div></td>
+                            <td><div class="rt-card bg-deep"><div class="rt-title">MHM </div></div></td>
+                            <td><div class="rt-card bg-deep"><div class="rt-title">MHM </div></div></td>
+                            <td><div class="rt-card rt-empty"></div></td>
+                        </tr>
+                        <!-- 04:30 -->
+                        <tr id="row-16">
+                            <td>04:30 - 05:30</td>
+                            <td colspan="6"><div class="rt-card bg-break"><div class="rt-title">Commute</div><div class="rt-sub">Podcast / Read</div></div></td>
+                            <td><div class="rt-card rt-empty"></div></td>
+                        </tr>
+                        <!-- 05:30 -->
+                        <tr id="row-17">
+                            <td>05:30 - 07:00</td>
+                            <td colspan="7"><div class="rt-card bg-phys"><div class="rt-title">GYM / SPORT</div><div class="rt-sub">Physical Training</div></div></td>
+                        </tr>
+                        <!-- 07:00 -->
+                        <tr id="row-19">
+                            <td>07:00 - 08:00</td>
+                            <td colspan="7"><div class="rt-card bg-morning"><div class="rt-title">Dinner / Shower</div></div></td>
+                        </tr>
+                        <!-- 08:00 -->
+                        <tr id="row-20">
+                            <td>08:00 - 09:00</td>
+                            <td><div class="rt-card bg-code"><div class="rt-title">Pandas</div></div></td>
+                            <td><div class="rt-card bg-code"><div class="rt-title">ML</div></div></td>
+                            <td><div class="rt-card bg-code"><div class="rt-title">GeoPandas</div></div></td>
+                            <td><div class="rt-card bg-code"><div class="rt-title">ML</div></div></td>
+                            <td><div class="rt-card bg-code"><div class="rt-title">Geopandas</div></div></td>
+                            <td><div class="rt-card bg-code"><div class="rt-title">ML</div></div></td>
+                            <td><div class="rt-card bg-code"><div class="rt-title">Pandas</div></div></td>
+                        </tr>
+                        <!-- 09:00 -->
+                        <tr id="row-21">
+                            <td>09:00 - 09:30</td>
+                            <td colspan="7"><div class="rt-card bg-break"><div class="rt-title">RELAX</div><div class="rt-sub">Screen Feed</div></div></td>
+                        </tr>
+                        <!-- 09:30 -->
+                        <tr id="row-22">
+                            <td>09:30 - 10:00</td>
+                            <td colspan="7"><div class="rt-card bg-night"><div class="rt-title">Digital Sunset</div><div class="rt-sub">Sleep Protocol</div></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- 1. INITIALIZATION ---
+    const INDEX_KEY = 'tracker_registry_v2'; 
+    const OLD_INDEX_KEY = 'tracker_dates';
+    const todayKey = new Date().toISOString().split('T')[0]; 
+    document.getElementById('currentDateDisplay').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    // QUOTES
+    const quotes = [
+    // --- The Engineer's Mindset (Civil Engineering Core) ---
+    "Scientists study the world as it is; engineers create the world that has never been. – Theodore von Kármán",
+    "Structural engineering is the art of molding materials we do not wholly understand into shapes we cannot precisely analyze. – J.E. Gordon",
+    "The foundation determines the height of the skyscraper. – Civil Engineering Maxim",
+    "God made the world, but civil engineers made it livable. ",
+    "Measure twice, cut once, calculate infinitely. – Engineering Proverb",
+    "An engineer who doesn't respect the forces of nature will be destroyed by them.",
+    "Civil Engineering: Because even architects need heroes. ",
+    "A bridge is not just steel and concrete; it is a promise of safe passage.",
+    "Gravity is the only law that never sleeps. – Engineering Truth",
+    "In a world of chaos, the engineer brings order through design.",
+    "The road to success is under construction. – Civil Engineering Pun",
+    "Concrete is hard, but the will of the engineer must be harder. ",
+    "Design for the worst case, hope for the best case, live in the real case. – Engineering Philosophy",
+    "Simplicity is the ultimate sophistication in design. – Leonardo da Vinci",
+    "We shape our buildings; thereafter they shape us. – Winston Churchill",
+    "Engineering is not about being perfect; it's about being safe and efficient. ",
+    "To define it is to limit it, but to design it is to realize it. ",
+    "Load, Shear, Moment, Deflection: The four horsemen of the engineer's apocalypse. – IOE Student Life",
+    "Theory guides, but experiment decides.",
+    "The best way to predict the future is to design it. – Buckminster Fuller",
+
+    // --- The Hydrologist & Modeler (HEC-RAS, ArcGIS, Research) ---
+    "Be like water making its way through cracks. Adjust to the object, and you shall find a way around or through it. – Bruce Lee",
+    "100 days of HEC-RAS is not just a challenge; it is a transformation of discipline.",
+    "A DEM is just pixels until you give it hydrological purpose. – GIS Wisdom",
+    "To understand the river, you must become the flow. – Hydraulic Philosophy",
+    "Data without analysis is just noise; Data with ArcGIS is a map to the truth.",
+    "The map is not the territory, but it shows us where the water goes. – Alfred Korzybski (Adapted)",
+    "Modeling reality requires the humility to know you are always an approximation. – George Box",
+    "In God we trust; all others must bring data. – W. Edwards Deming",
+    "Consistency in the '100 Days Challenge' beats intensity in one day.",
+    "Your HAND model calculates the depth, but your mind must calculate the risk.",
+    "Every watershed tells a story; it is your job to read it. – Hydrology Truth",
+    "Machine Learning allows us to see patterns in the soil that the eye cannot. – Geotech AI",
+    "Prediction is the highest form of understanding. – Research Wing Maxim",
+    "Code is the new concrete; Python is the new steel. – Modern Engineering",
+    "Garbage in, garbage out. Clean your data like you clean your room. – Modeling Rule",
+
+    // --- The Geotech & Seismic Analyst (PLAXIS, Earthquakes) ---
+    "Solid ground is not found; it is verified by calculation. – Geotechnical Truth",
+    "The earth speaks in waves; site response analysis is how we listen.",
+    "We build on soil, but we rely on physics. – PLAXIS Wisdom",
+    "Shear wave velocity doesn't lie, even if the surface looks calm.",
+    "Kathmandu shakes, but our designs must stand. – Seismic Engineering",
+    "Understanding the ground below is more important than the structure above.",
+    "Stress and strain are not just physical terms; they are life lessons.",
+    "A structure is only as strong as the soil it sits on.",
+    "Earthquakes don't kill people; poorly built buildings do. – Seismic Reality",
+    "Finite element analysis: Breaking big problems into small, solvable victories.",
+
+    // --- The Trekker & Explorer (Nature, Tsho Rolpa, Mountains) ---
+    "The view is best after the hardest climb. – Trekking Wisdom",
+    "At 5000m, you don't conquer the mountain; you conquer yourself.",
+    "Tsho Rolpa didn't come to you; you had to go to it.",
+    "The trail teaches you that one step at a time is the only way forward.",
+    "High altitude clears the lungs and the mind.",
+    "Nature is the ultimate engineer; we are just students.",
+    "Leave nothing but footprints, take nothing but data. – Environmental Engineering",
+    "Endurance is not just for the body; it is for the spirit.",
+    "The mountains are calling, and I must go... to analyze their slope stability. – Geotech Trekker",
+    "There is no wifi in the mountains, but you will find a better connection.",
+    "Cold winds and steep paths forge the strongest wills.",
+    "A heavy pack on the trail makes the burden of life feel light.",
+    "Climb mountains not so the world can see you, but so you can see the world.",
+    "The summit is just the halfway point. – Mountaineering Rule",
+    "Every peak you climb teaches you something about the valley you left.",
+
+    // --- Leadership & Legacy (CESS, MAPS, Mentorship) ---
+    "To teach is to learn twice. – Mentorship Philosophy",
+    "A portfolio is not a CV; it is the evidence of your capability.",
+    "Research is seeing what everybody else has seen and thinking what nobody else has thought. – Albert Szent-Györgyi",
+    "As Research Wing Correspondent, you don't just report news; you make it.",
+    "Organizing a Hackathon is engineering human potential.",
+    "The true test of a leader is how they function under pressure.",
+    "Don't just be a student of IOE; be a pillar of it.",
+    "Collaboration divides the task and multiplies the success.",
+    "Your thesis is your signature on the world of academia.",
+    "Mentoring entrance students is planting trees under whose shade you may never sit.",
+    "Excellence is not a skill, it’s an attitude. – Ralph Marston",
+    "Be the senior you wish you had when you were a freshman.",
+    "Create value, and success will follow.",
+    "The best way to lead is to serve.",
+
+    // --- Nepali Wisdom (Life & Culture) ---
+    "हिमाल चढ्नेले खुट्टा कमाउनु हुँदैन। (One climbing a mountain shouldn't have trembling legs.)",
+    "इन्जिनियरको सही चिनारी उसको कामको गुणस्तर हो। (An engineer's true identity is the quality of their work.)",
+    "सपना देख्नेले मात्र शिखर चुम्छ। (Only those who dream kiss the summit.)",
+    "परिश्रम विनाको सफलता बालुवाको घर जस्तै हो। (Success without hard work is like a house of sand.)",
+    "विद्या ददाति विनयं। (Knowledge gives humility.)",
+    "समय बलवान छ, यसलाई खेर नफाल। (Time is powerful, do not waste it.)",
+    "काँडा बिनाको गुलाब र संघर्ष बिनाको जीवन हुँदैन। (No rose without thorns, no life without struggle.)",
+    "जहाँ इच्छा, त्यहाँ उपाय। (Where there is a will, there is a way.)",
+    "आफ्नो माटो र आफ्नो बाटो कहिल्यै नबिर्सनु। (Never forget your soil and your path.)",
+    "सिर्जना नै जीवनको धड्कन हो। (Creation is the heartbeat of life.)",
+    "ठूलो मान्छे बन्नु भन्दा असल मान्छे बन्नु ठूलो कुरा हो। (Being a good person is greater than being a big person.)",
+    "असफलता नै सफलताको पहिलो खुड्किलो हो। (Failure is the first step to success.)",
+    "धैर्यता र निरन्तरताले पहाड पनि फोड्न सकिन्छ। (Patience and persistence can break even mountains.)",
+    "ज्ञान बाड्दा बढ्छ। (Knowledge increases when shared.)",
+    "जीवन एक प्रयोगशाला हो। (Life is a laboratory.)",
+
+    // --- Stoicism & The Final Push (Fourth Year Grind) ---
+    "We suffer more often in imagination than in reality. – Seneca",
+    "It is not death that a man should fear, but he should fear never beginning to live. – Marcus Aurelius",
+    "No man is free who is not a master of himself. – Epictetus",
+    "Discipline is choosing between what you want now and what you want most. – Abraham Lincoln",
+    "The impediment to action advances action. What stands in the way becomes the way. – Marcus Aurelius",
+    "Waste no more time arguing about what a good man should be. Be one. – Marcus Aurelius",
+    "He who has a why to live can bear almost any how. – Friedrich Nietzsche",
+    "You have power over your mind - not outside events. Realize this, and you will find strength. – Marcus Aurelius",
+    "The only easy day was yesterday. – Navy SEAL Motto",
+    "Memento Mori. (Remember you will die, so live now.)",
+    "Amor Fati. (Love your fate.)",
+    "Iron sharpens iron, so one man sharpens another.",
+    "Do not pray for an easy life, pray for the strength to endure a difficult one. – Bruce Lee",
+    "Success is rented, and the rent is due every day.",
+    "Your LaTeX code should be as clean as your conscience.",
+    "A final year project is not just a grade; it is the culmination of four years of grind.",
+    "Sleep is for those who do not have a deadline. (Just kidding, sleep is recovery.)",
+    "Focus on the process, not the outcome. – Stoic Rule",
+    "Man conquers the world by conquering himself. – Zeno",
+    "I am the master of my fate, I am the captain of my soul. – Invictus"
+];
+
+    window.onload = function() {
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('quoteDisplay').innerText = randomQuote;
+        migrateData(); 
+        loadHistoryTable();
+        calculateStreak();
+        updateLevelXP(); 
+        updateCurrentActivity();
+        calculateWeeklyAverages();
+        loadLongTerm();
+        renderMiniHeatmap();
+        renderCorrelationMatrix();
+        setInterval(updateCurrentActivity, 1000); 
+        const registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+        const todayRecords = registry.filter(id => {
+            const data = JSON.parse(localStorage.getItem(id));
+            return data && data.date === todayKey;
+        });
+        if (todayRecords.length > 0) {
+            const lastId = todayRecords[todayRecords.length - 1];
+            populateForm(JSON.parse(localStorage.getItem(lastId)));
+        }
+    };
+
+    function updateLongTerm(type, value) {
+        if(type === 'thesis') document.getElementById('thesisPercent').innerText = value + '%';
+        if(type === 'hec') document.getElementById('hecPercent').innerText = 'Day ' + value;
+        const longTermData = JSON.parse(localStorage.getItem('tracker_longterm') || "{}");
+        longTermData[type] = value;
+        localStorage.setItem('tracker_longterm', JSON.stringify(longTermData));
+    }
+function saveLongTermText(key, val) {
+        const data = JSON.parse(localStorage.getItem('tracker_longterm') || "{}");
+        data[key] = val;
+        localStorage.setItem('tracker_longterm', JSON.stringify(data));
+    }
+    function loadLongTerm() {
+        const data = JSON.parse(localStorage.getItem('tracker_longterm') || "{}");
+        
+        // Load Sliders
+        if(data.thesis) {
+            document.getElementById('thesisProgress').value = data.thesis;
+            document.getElementById('thesisPercent').innerText = data.thesis + '%';
+        }
+        if(data.hec) {
+            document.getElementById('hecProgress').value = data.hec;
+            document.getElementById('hecPercent').innerText = 'Day ' + data.hec;
+        }
+
+        // NEW: Load Text Inputs
+        if(data.thesisStep) {
+            document.getElementById('thesisNextStep').value = data.thesisStep;
+        }
+        if(data.hecTopic) {
+            document.getElementById('hecTopic').value = data.hecTopic;
+        }
+    }
+
+    // --- ANALYTICS ENGINE (V3.29 ROBUST SINGLE-DATA LOGIC) ---
+    
+    function calculateWeeklyAverages() {
+        let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+        let last30 = registry.slice(-30); 
+        let last7 = registry.slice(-7);
+        
+        // --- FIX: Always render charts even if data is 1 item ---
+        // We only skip if TRUE empty
+        if(document.getElementById('historyView').style.display !== 'none') {
+            drawTrendChart(last30); 
+            drawRadarChart(last7);  
+            renderHeatmap(registry); 
+            generateInsight(last30);
+            drawCorrelationChart();
+        }
+
+        // Handle empty data case for stats only
+        if (last7.length === 0) {
+            updateStatDisplay(0, 0, 0, {score: 0, date: '--'});
+            return;
+        }
+
+        // 1. Calculate Stats
+        let stats = { score: 0, deep: 0, sleep: 0, bestDay: {score:0, date:''} };
+        last7.forEach(id => {
+            const d = JSON.parse(localStorage.getItem(id));
+            const sc = parseInt(d.totalScore || 0);
+            stats.score += sc;
+            if(sc > stats.bestDay.score) { stats.bestDay = {score: sc, date: d.date.slice(5)}; }
+            
+            const work = (parseFloat(d.inputs.s1_time||0) + parseFloat(d.inputs.s2_time||0) + parseFloat(d.inputs.s3_time||0));
+            stats.deep += work;
+            
+            // Sleep calc
+            let sleepS = 0;
+            const bedTime = d.inputs.bedTime;
+            if(bedTime) {
+                const [h, m] = bedTime.split(':').map(Number);
+                let timeVal = h + m/60;
+                if (h < 6) timeVal += 24;
+                if (timeVal < 22.08) sleepS = 15;
+                else if (timeVal < 23) sleepS = 9;
+                else if (timeVal < 24) sleepS = 0;
+            }
+            stats.sleep += sleepS;
+        });
+
+        // 2. Render Cards
+        updateStatDisplay(
+            Math.round(stats.score / last7.length),
+            (stats.deep / 60).toFixed(1),
+            Math.round(stats.sleep / last7.length),
+            stats.bestDay
+        );
+    }
+
+    function drawCorrelationChart() {
+    const canvas = document.getElementById('correlationCanvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.parentElement.clientWidth;
+    const H = canvas.parentElement.clientHeight - 60; 
+    canvas.width = W; canvas.height = H;
+
+    // --- NEW: Get Dynamic Colors from CSS ---
+    const rootStyle = getComputedStyle(document.documentElement);
+    const axisColor = rootStyle.getPropertyValue('--border').trim();
+    const textColor = rootStyle.getPropertyValue('--chart-text').trim();
+    // ----------------------------------------
+
+    // 1. Get Data
+    const xKey = document.getElementById('corrX').value;
+    const yKey = document.getElementById('corrY').value;
+    
+    let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+    let points = [];
+
+    registry.forEach(id => {
+        const d = JSON.parse(localStorage.getItem(id));
+        const val = (k) => {
+            if(k === 'total') return parseInt(d.totalScore);
+            if(k === 'work') return (parseFloat(d.inputs.s1_time||0) + parseFloat(d.inputs.s2_time||0) + parseFloat(d.inputs.s3_time||0))/60;
+            if(k === 'sleep') {
+               const bed = d.inputs.bedTime;
+               if(!bed) return 0;
+               let h = parseInt(bed.split(':')[0]);
+               if(h < 6) h += 24;
+               return (h < 22) ? 15 : (h < 23 ? 9 : 0);
+            }
+            if(k === 'diet') return parseInt(d.inputs.dietScoreInput||0);
+            if(k === 'focus') return parseInt(d.inputs.flowState||0);
+            return 0;
+        };
+        points.push({ x: val(xKey), y: val(yKey), date: d.date.slice(5) });
+    });
+
+    // Clear
+    ctx.clearRect(0, 0, W, H);
+    
+    // Empty Check
+    if(points.length < 2) {
+        ctx.fillStyle = textColor; // Dynamic Color
+        ctx.textAlign = "center"; 
+        ctx.fillText("Need 2+ days of data", W/2, H/2);
+        return;
+    }
+
+    // 2. Scale Logic
+    const pad = 40;
+    const maxX = Math.max(...points.map(p => p.x)) || 10;
+    const maxY = Math.max(...points.map(p => p.y)) || 10;
+    
+    const scaleX = (val) => pad + (val / maxX) * (W - pad*2);
+    const scaleY = (val) => (H - pad) - (val / maxY) * (H - pad*2);
+
+    // Draw Axes
+    ctx.strokeStyle = axisColor; // Dynamic Color
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad, pad); ctx.lineTo(pad, H - pad); ctx.lineTo(W - pad, H - pad);
+    ctx.stroke();
+
+    // 3. Draw Points
+    points.forEach(p => {
+        const px = scaleX(p.x);
+        const py = scaleY(p.y);
+        
+        ctx.beginPath();
+        ctx.arc(px, py, 5, 0, Math.PI*2);
+        ctx.fillStyle = "rgba(59, 130, 246, 0.6)"; 
+        ctx.fill();
+        ctx.strokeStyle = "#fff";
+        ctx.stroke();
+        
+        // Tooltip text
+        ctx.fillStyle = textColor; // Dynamic Color
+        ctx.font = "10px Inter"; 
+        ctx.textAlign = "center";
+        ctx.fillText(p.date, px, py - 8);
+    });
+
+    // 4. Linear Regression
+    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    const n = points.length;
+    points.forEach(p => {
+        sumX += p.x;
+        sumY += p.y;
+        sumXY += p.x * p.y;
+        sumXX += p.x * p.x;
+    });
+    
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+
+    // Draw Regression Line
+    ctx.beginPath();
+    ctx.strokeStyle = "#ef4444"; 
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+    
+    const startX = 0;
+    const endX = maxX;
+    const startY = slope * startX + intercept;
+    const endY = slope * endX + intercept;
+
+    ctx.moveTo(scaleX(startX), scaleY(startY));
+    ctx.lineTo(scaleX(endX), scaleY(endY));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 5. Update Stats Text
+    const correlation = slope > 0 ? "POSITIVE" : "NEGATIVE";
+    document.getElementById('corrStats').innerHTML = 
+        `Trend: <span style="color:${slope>0?'#10b981':'#ef4444'}">${correlation}</span> correlation. Slope: ${slope.toFixed(2)}`;
+}
+    function updateStatDisplay(score, deep, sleep, best) {
+        document.getElementById('wkAvgScore').innerText = score;
+        document.getElementById('wkTotalDeep').innerText = deep + "h";
+        document.getElementById('wkAvgSleep').innerText = sleep;
+        // Check if best exists to prevent error
+        if(best && best.score) {
+            document.getElementById('wkBestDay').innerText = `${best.score} (${best.date})`;
+        } else {
+            document.getElementById('wkBestDay').innerText = "--";
+        }
+        document.getElementById('trendScore').innerHTML = `<span class="trend-up">↑ Recent Activity</span>`;
+    }
+
+    function drawTrendChart(dataList) {
+    const canvas = document.getElementById('trendCanvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.parentElement.clientWidth;
+    const H = canvas.parentElement.clientHeight;
+    canvas.width = W; canvas.height = H;
+
+    // Save data for the click handler
+    canvas.lastData = dataList;
+
+    // --- NEW: Get Dynamic Colors from CSS ---
+    const gridColor = "#e2e8f0";
+    const textColor = "#64748b";
+    const lineColor = '#3b82f6'; // Keep blue for the main line
+    // ----------------------------------------
+
+    // Clear Canvas
+    ctx.clearRect(0, 0, W, H);
+
+    // Empty State
+    if (dataList.length === 0) {
+        ctx.fillStyle = textColor;
+        ctx.font = "14px Inter";
+        ctx.textAlign = "center";
+        ctx.fillText("No Data Yet", W/2, H/2);
+        return;
+    }
+
+    // Data Prep
+    const points = dataList.map(id => {
+        const d = JSON.parse(localStorage.getItem(id));
+        const score = parseInt(d.totalScore || 0);
+        const work = (parseFloat(d.inputs.s1_time||0) + parseFloat(d.inputs.s2_time||0) + parseFloat(d.inputs.s3_time||0)) / 60; 
+        return { date: d.date.slice(5), fullDate: d.date, score: score, work: work.toFixed(1) }; 
+    });
+
+    // Config
+    const pad = 40;
+    const chartW = W - pad*2;
+    const chartH = H - pad*2;
+    const stepX = points.length > 1 ? chartW / (points.length - 1) : 0;
+    const MAX_SCORE = 180; 
+
+    // 1. Draw Axes & Grid
+    ctx.beginPath();
+    ctx.strokeStyle = gridColor; // Dynamic Color
+    ctx.lineWidth = 1;
+    
+    [0, 0.5, 1].forEach(r => {
+        const y = pad + chartH - (r * chartH);
+        ctx.moveTo(pad, y);
+        ctx.lineTo(W - pad, y);
+        
+        ctx.fillStyle = textColor; // Dynamic Color
+        ctx.font = "10px Inter";
+        ctx.textAlign = "right";
+        ctx.fillText(Math.round(r * MAX_SCORE), pad - 10, y + 3);
+    });
+    ctx.stroke();
+
+    // 2. Plotting Logic
+    const plotPoints = points.map((p, i) => {
+        const x = points.length > 1 ? pad + (i * stepX) : W / 2;
+        const normalizedScore = Math.min(p.score, MAX_SCORE); 
+        const y = pad + chartH - ((normalizedScore / MAX_SCORE) * chartH);
+        return { x, y, data: p };
+    });
+
+    // 3. Draw Deep Work Bars (Background)
+    const maxWork = 6; 
+    const barW = points.length > 1 ? (chartW / points.length) * 0.4 : 50;
+    
+    plotPoints.forEach(p => {
+        const h = (Math.min(p.data.work, maxWork) / maxWork) * chartH;
+        const y = pad + chartH - h;
+        ctx.fillStyle = 'rgba(59, 130, 246, 0.1)'; 
+        ctx.fillRect(p.x - barW/2, y, barW, h);
+    });
+
+    // 4. Draw Score Line
+    if (points.length > 1) {
+        ctx.beginPath();
+        ctx.strokeStyle = lineColor;
+        ctx.lineWidth = 3;
+        ctx.lineJoin = "round";
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "rgba(59, 130, 246, 0.4)";
+        plotPoints.forEach((p, i) => {
+            if (i === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+        });
+        ctx.stroke();
+        ctx.shadowBlur = 0; 
+    }
+
+    // 5. Draw Points & Date Labels
+    plotPoints.forEach((p, i) => {
+        ctx.beginPath();
+        ctx.fillStyle = '#ffffff'; 
+        ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = lineColor;
+        ctx.stroke();
+        
+        // Date Labels on X-Axis
+        if(points.length < 12 || i % 2 === 0) {
+            ctx.fillStyle = textColor; // Dynamic Color
+            ctx.textAlign = "center";
+            ctx.font = "10px Inter";
+            ctx.fillText(p.data.date, p.x, H - 25); 
+        }
+    });
+
+    // --- INTERACTIVITY: CLICK HANDLER ---
+    canvas.onclick = function(e) {
+        // Get Click Coordinates
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        // Find nearest point
+        const hitRange = 20; // Distance in pixels
+        const clickedPoint = plotPoints.find(p => {
+            const dx = mouseX - p.x;
+            const dy = mouseY - p.y;
+            return Math.sqrt(dx*dx + dy*dy) < hitRange;
+        });
+
+        // Redraw chart clean (removes old tooltips)
+        // We use the saved data from the start of the function
+        drawTrendChart(canvas.lastData);
+
+        if(clickedPoint) {
+            // Draw Tooltip
+            const p = clickedPoint;
+            const tipW = 120;
+            const tipH = 60;
+            let tipX = p.x - tipW/2;
+            let tipY = p.y - tipH - 15;
+
+            // Prevent going off edges
+            if(tipX < 10) tipX = 10;
+            if(tipX + tipW > W) tipX = W - tipW - 10;
+            if(tipY < 10) tipY = p.y + 20; // Flip down if too high
+
+            // Bubble Background
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.beginPath();
+            ctx.roundRect(tipX, tipY, tipW, tipH, 8);
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Text
+            ctx.textAlign = "left";
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = "bold 11px Inter";
+            ctx.fillText(` ${p.data.fullDate}`, tipX + 10, tipY + 20);
+            
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillText(` Score: ${p.data.score}`, tipX + 10, tipY + 35);
+            
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = "10px Inter";
+            ctx.fillText(`⏱ Work: ${p.data.work}h`, tipX + 10, tipY + 50);
+        }
+    };
+}
+
+    function drawRadarChart(dataList) {
+    const canvas = document.getElementById('radarCanvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.parentElement.clientWidth;
+    const H = canvas.parentElement.clientHeight;
+    canvas.width = W; canvas.height = H;
+
+    // --- NEW: Get Dynamic Colors from CSS ---
+    const rootStyle = getComputedStyle(document.documentElement);
+    const gridColor = rootStyle.getPropertyValue('--chart-grid').trim();
+    const textColor = rootStyle.getPropertyValue('--chart-text').trim();
+    const mainTextColor = rootStyle.getPropertyValue('--text').trim();
+    // ----------------------------------------
+
+    // 1. Setup Geometry
+    const cx = W / 2;
+    const cy = H / 2;
+    const radius = Math.min(W, H) / 2 - 40;
+    const sides = 5;
+    const angleStep = (Math.PI * 2) / sides;
+    const baseLabels = ["Work", "Sleep", "Diet", "Flow", "Discpline"];
+
+    // 2. Calculate Stats
+    let stats = [0, 0, 0, 0, 0]; 
+    if (dataList.length > 0) {
+        let agg = { deep: 0, sleep: 0, diet: 0, focus: 0, disc: 0 };
+        dataList.forEach(id => {
+            const d = JSON.parse(localStorage.getItem(id));
+            
+            const totalMins = (parseFloat(d.inputs.s1_time)||0) + (parseFloat(d.inputs.s2_time)||0) + (parseFloat(d.inputs.s3_time)||0);
+            agg.deep += Math.min(totalMins / 360, 1); 
+            
+            let sScore = 0.5;
+            const bed = d.inputs.bedTime;
+            if(bed) {
+                const h = parseInt(bed.split(':')[0]);
+                if(h >= 20 && h < 22) sScore = 1.0; 
+            }
+            agg.sleep += sScore;
+            agg.diet += (parseInt(d.inputs.dietScoreInput||5) / 10);
+            agg.focus += (parseInt(d.inputs.flowState||5) / 10);
+            agg.disc += (parseInt(d.inputs.maturitylevel) >= 0 ? 1 : 0.4); 
+        });
+
+        const count = dataList.length;
+        stats = [
+            agg.deep / count,
+            agg.sleep / count,
+            agg.diet / count,
+            agg.focus / count,
+            agg.disc / count
+        ];
+    }
+
+    // 3. Clear Canvas
+    ctx.clearRect(0, 0, W, H);
+
+    // 4. Draw Background Web
+    ctx.strokeStyle = gridColor; // Dynamic Color
+    ctx.lineWidth = 1;
+    for (let level = 1; level <= 4; level++) {
+        ctx.beginPath();
+        const r = (radius / 4) * level;
+        for (let i = 0; i <= sides; i++) {
+            const angle = i * angleStep - Math.PI / 2;
+            const x = cx + Math.cos(angle) * r;
+            const y = cy + Math.sin(angle) * r;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    // 5. Draw Data Shape
+    if (dataList.length > 0) {
+        ctx.beginPath();
+        stats.forEach((val, i) => {
+            const angle = i * angleStep - Math.PI / 2;
+            const r = radius * val;
+            const x = cx + Math.cos(angle) * r;
+            const y = cy + Math.sin(angle) * r;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(59, 130, 246, 0.2)'; 
+        ctx.fill();
+        ctx.strokeStyle = '#3b82f6';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+
+    // 6. Draw Labels
+    ctx.font = "bold 11px Inter";
+    ctx.textAlign = "center";
+    
+    baseLabels.forEach((label, i) => {
+        const angle = i * angleStep - Math.PI / 2;
+        const x = cx + Math.cos(angle) * (radius + 25); 
+        const y = cy + Math.sin(angle) * (radius + 25);
+        
+        const pct = Math.round(stats[i] * 100);
+        let color = textColor; // Dynamic Default
+        if(pct >= 80) color = '#10b981';
+        else if(pct < 50) color = '#ef4444';
+
+        // Draw Label Name
+        ctx.fillStyle = mainTextColor; // Dynamic Color
+        ctx.fillText(label, x, y);
+        
+        // Draw Number
+        ctx.fillStyle = color;
+        ctx.fillText(`${pct}%`, x, y + 12);
+    });
+}
+    function renderHeatmap(registry) {
+        const container = document.getElementById('heatmapContainer');
+        container.innerHTML = "";
+        
+        // Generate last 30 days slots
+        const today = new Date();
+        const dates = [];
+        for(let i=29; i>=0; i--) {
+            const d = new Date();
+            d.setDate(today.getDate() - i);
+            dates.push(d.toISOString().split('T')[0]);
+        }
+
+        // Create Map of Score Data
+        const scoreMap = {};
+        registry.forEach(id => {
+            const d = JSON.parse(localStorage.getItem(id));
+            scoreMap[d.date] = parseInt(d.totalScore || 0);
+        });
+
+        dates.forEach(date => {
+            const div = document.createElement('div');
+            const score = scoreMap[date] || 0;
+            div.className = 'hm-cell';
+            
+            // Color Logic
+            if(score === 0) div.classList.add('hm-l0');
+            else if(score < 50) div.classList.add('hm-l1');
+            else if(score < 80) div.classList.add('hm-l2');
+            else if(score < 100) div.classList.add('hm-l3');
+            else div.classList.add('hm-l4');
+
+            // Tooltip
+            div.innerHTML = `<div class="hm-tooltip">${date}: ${score} pts</div>`;
+            container.appendChild(div);
+        });
+    }
+
+    function generateInsight(dataList) {
+        const box = document.getElementById('aiInsightText');
+        if(dataList.length === 0) {
+            box.innerHTML = "No data yet. Start tracking to see insights.";
+            return;
+        }
+
+        // Simplified insight for low data
+        if(dataList.length < 3) {
+             const latest = JSON.parse(localStorage.getItem(dataList[dataList.length-1]));
+             const score = parseInt(latest.totalScore || 0);
+             if(score > 80) box.innerHTML = `<strong>Insight:</strong> Excellent start! You scored <strong>${score}</strong> on your first logged day. Maintain this momentum!`;
+             else box.innerHTML = `<strong>Insight:</strong> You've started the journey. Small steps every day lead to mastery. Consistency is your next goal.`;
+             return;
+        }
+
+        // Simple Correlation Logic
+        let highSleepScores = 0, lowSleepScores = 0;
+        let highSleepCount = 0, lowSleepCount = 0;
+
+        dataList.forEach(id => {
+            const d = JSON.parse(localStorage.getItem(id));
+            const score = parseInt(d.totalScore);
+            // Check Bedtime
+            const bed = d.inputs.bedTime;
+            if(bed) {
+                const h = parseInt(bed.split(':')[0]);
+                if(h >= 20 && h <= 22) { // "Early" sleep
+                    highSleepScores += score;
+                    highSleepCount++;
+                } else {
+                    lowSleepScores += score;
+                    lowSleepCount++;
+                }
+            }
+        });
+
+        if(highSleepCount > 0 && lowSleepCount > 0) {
+            const avgHigh = highSleepScores / highSleepCount;
+            const avgLow = lowSleepScores / lowSleepCount;
+            const diff = Math.round(((avgHigh - avgLow) / avgLow) * 100);
+            
+            if(diff > 0) {
+                box.innerHTML = `<strong>Insight:</strong> Sleeping before 10 PM correlates with a <strong>${diff}% higher score</strong>.`;
+            } else {
+                box.innerHTML = `<strong>Insight:</strong> Your scores are consistent regardless of sleep time. Focus on Deep Work intensity.`;
+            }
+        } else {
+            box.innerHTML = `<strong>Insight:</strong> Data suggests consistent routines. Try increasing Deep Work intensity next.`;
+        }
+    }
+function renderMiniHeatmap() {
+    const container = document.getElementById('miniHeatmapContainer');
+    if(!container) return;
+    container.innerHTML = "";
+    
+    // 1. Get dates for the last 7 days (Right = Today, Left = 7 days ago)
+    const dates = [];
+    for(let i=6; i>=0; i--) {
+        const d = new Date();
+        d.setDate(new Date().getDate() - i);
+        dates.push(d.toISOString().split('T')[0]);
+    }
+
+    // 2. Load Data
+    const registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+    const scoreMap = {};
+    registry.forEach(id => {
+        const d = JSON.parse(localStorage.getItem(id));
+        scoreMap[d.date] = parseInt(d.totalScore || 0);
+    });
+
+// ... inside renderMiniHeatmap function ...
+
+    // 3. Create Dots
+    dates.forEach(date => {
+        const score = scoreMap[date]; 
+        const dot = document.createElement('div');
+        dot.className = "mini-dot";
+        dot.title = `${date}: ${score !== undefined ? score : 'No Data'}`;
+
+        if(score !== undefined) {
+            // Remove the "empty ring" shadow for filled dots
+            dot.style.boxShadow = "none"; 
+            
+            // Color Logic
+            if(score >= 100) {
+                dot.style.background = "#22c55e"; 
+                dot.style.boxShadow = "0 0 8px #22c55e"; // Glowing effect for God Mode
+            } else if(score >= 80) {
+                dot.style.background = "#4ade80"; // Legendary
+            } else if(score >= 50) {
+                dot.style.background = "#facc15"; // Surviving
+            } else {
+                dot.style.background = "#ef4444"; // Critical
+            }
+        }
+        
+        container.appendChild(dot);
+    });
+}
+    // --- EXISTING TIMER & UTILS ---
+    let timerInterval;
+    let timerSeconds = 0;
+    let isTimerRunning = false;
+
+    // --- UPDATED TIMER FUNCTIONS (v3.13) ---
+
+    // 1. START: Starts time & turns button to "Pause" icon
+    function startTimer() {
+        if(isTimerRunning) return;
+        isTimerRunning = true;
+        
+        // UI Updates: Status Text
+        document.getElementById('timerStatus').innerText = "FLOW STATE ENGAGED";
+        document.getElementById('timerStatus').style.color = "#00f2ff";
+        
+        // UI Updates: Button Icon -> Change to PAUSE symbol
+        const btn = document.getElementById('timerToggleBtn');
+        if(btn) btn.innerHTML = "❚❚"; 
+
+        // Start the Interval
+        const startTime = Date.now() - (timerSeconds * 1000);
+        timerInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            timerSeconds = Math.floor(elapsed / 1000);
+            updateTimerDisplay();
+        }, 1000);
+    }
+
+    // 2. PAUSE: Stops time & turns button to "Play" icon
+    function pauseTimer() {
+        if(!isTimerRunning) return;
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        
+        // UI Updates: Status Text
+        document.getElementById('timerStatus').innerText = "PAUSED";
+        document.getElementById('timerStatus').style.color = "#ffa502";
+
+        // UI Updates: Button Icon -> Change back to PLAY symbol
+        const btn = document.getElementById('timerToggleBtn');
+        if(btn) btn.innerHTML = "▶"; 
+    }
+
+    // 3. STOP: Resets everything & ensures button is "Play" icon
+    function stopTimer() {
+        if(isTimerRunning) {
+             clearInterval(timerInterval);
+             isTimerRunning = false;
+        }
+        
+        // Log Logic (Same as before)
+        const targetId = document.getElementById('timerTarget').value;
+        const currentVal = parseFloat(document.getElementById(targetId).value) || 0;
+        const minutesAdded = Math.floor(timerSeconds / 60);
+        
+        if(minutesAdded > 0) {
+            if(confirm(`Add ${minutesAdded} minutes to session log?`)) {
+                const inputEl = document.getElementById(targetId);
+                if(inputEl) {
+                    inputEl.value = currentVal + minutesAdded;
+                    calculateAll();
+                    alert("Logged successfully.");
+                }
+            }
+        }
+
+        // RESET TIMER & UI
+        timerSeconds = 0;
+        updateTimerDisplay();
+        document.getElementById('timerStatus').innerText = "READY";
+        document.getElementById('timerStatus').style.color = "rgba(255,255,255,0.8)";
+        
+        // UI Updates: Ensure button is reset to PLAY symbol
+        const btn = document.getElementById('timerToggleBtn');
+        if(btn) btn.innerHTML = "▶"; 
+    }
+    
+    // 4. TOGGLE: The smart switch logic
+    function toggleTimer() {
+        if (isTimerRunning) {
+            pauseTimer();
+        } else {
+            startTimer();
+        }
+    }
+
+    function updateTimerDisplay() {
+        const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+        const s = (timerSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    }
+
+    function toggleZenMode() {
+        const el = document.getElementById('focusModeContainer');
+        el.classList.toggle('zen-mode-active');
+        if(el.classList.contains('zen-mode-active')) {
+            document.addEventListener('keydown', handleEscKey);
+        } else {
+            document.removeEventListener('keydown', handleEscKey);
+        }
+    }
+
+    function handleEscKey(e) {
+        if(e.key === "Escape") {
+            const el = document.getElementById('focusModeContainer');
+            if(el.classList.contains('zen-mode-active')) toggleZenMode();
+        }
+    }
+
+    function migrateData() {
+        const oldDates = JSON.parse(localStorage.getItem(OLD_INDEX_KEY) || "[]");
+        let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+        let changed = false;
+        oldDates.forEach(date => {
+            const oldKey = 'tracker_' + date;
+            const data = localStorage.getItem(oldKey);
+            if(data) {
+                if(!registry.includes(oldKey)) {
+                    registry.push(oldKey);
+                    changed = true;
+                }
+            }
+        });
+        if(changed) localStorage.setItem(INDEX_KEY, JSON.stringify(registry));
+    }
+
+    function switchTab(tabName) {
+        document.getElementById('trackerView').style.display = 'none';
+        document.getElementById('historyView').style.display = 'none';
+        document.getElementById('routineView').style.display = 'none';
+        document.getElementById('focusView').style.display = 'none';
+        document.getElementById('yogaView').style.display = 'none';
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        const target = document.getElementById(tabName + 'View');
+        target.style.display = 'block';
+        target.style.animation = 'none';
+        target.offsetHeight; 
+        target.style.animation = 'fadeIn 0.4s ease';
+        event.target.classList.add('active');
+        if(tabName === 'history') {
+            calculateWeeklyAverages(); // Triggers charts
+        }
+    }
+
+    function calculateAll() {
+        let total = 0;
+        const wakeTime = document.getElementById('wakeTime').value;
+        let wakeScore = 0;
+        if(wakeTime) {
+            const [h, m] = wakeTime.split(':').map(Number);
+            const dec = h + m/60;
+            if(dec < 6) wakeScore = 15;
+            else if(dec < 7) wakeScore = 9; 
+            else if(dec < 8) wakeScore = 6;
+            else if(dec < 9) wakeScore = 0;
+            else wakeScore = -6;
+        }
+        document.getElementById('wakeScore').innerText = wakeScore;
+        total += wakeScore;
+        const medTime = parseFloat(document.getElementById('meditationTime').value) || 0;
+        let medScore = (medTime / 20) * 15;
+        if(medScore > 15) medScore = 15;
+        document.getElementById('meditationScore').innerText = Math.round(medScore);
+        total += medScore;
+        const bfScore = parseInt(document.getElementById('breakfastRating').value);
+        document.getElementById('breakfastScore').innerText = bfScore;
+        total += bfScore;
+        let goalPoints = 0;
+        if(document.getElementById('goal1_done').checked) goalPoints += 5;
+        if(document.getElementById('goal2_done').checked) goalPoints += 5;
+        if(document.getElementById('goal3_done').checked) goalPoints += 5;
+        document.getElementById('goalScore').innerText = goalPoints;
+        total += goalPoints;
+        function calcSession(timeId, accId, outputId) {
+            const T = parseFloat(document.getElementById(timeId).value) || 0;
+            const A = parseFloat(document.getElementById(accId).value) || 0;
+            let score = (0.48 * (T / 120) + 0.52 * (A / 100)) * 30;
+            if(score > 30) score = 30;
+            document.getElementById(outputId).innerText = Math.round(score);
+            return score;
+        }
+        total += calcSession('s1_time', 's1_acc', 's1_score');
+        total += calcSession('s2_time', 's2_acc', 's2_score');
+        total += calcSession('s3_time', 's3_acc', 's3_score');
+        const diet = parseInt(document.getElementById('dietScoreInput').value);
+        total += diet;
+        const water = parseFloat(document.getElementById('waterIntake').value);
+        let waterScore = 0;
+        if(water >= 3) waterScore = 5;
+        else if(water >= 2) waterScore = 3;
+        document.getElementById('waterScore').innerText = waterScore;
+        total += waterScore;
+        let medPoints = 0;
+        if(document.getElementById('med_morning').checked) medPoints += 5;
+        document.getElementById('medScore').innerText = medPoints;
+        total += medPoints;
+        const sHours = parseFloat(document.getElementById('screenHours').value) || 0;
+        let screenScore = 25 - (1.288 * Math.pow(sHours, 1.288));
+        if(screenScore < -20) screenScore = -20;
+        document.getElementById('screenScore').innerText = Math.round(screenScore);
+        total += screenScore;
+        const N = parseFloat(document.getElementById('researchN').value) || 0;
+        let rScore = 0.0833 * Math.pow(N,3) - 1.1429 * Math.pow(N,2) + 8.9881 * N;
+        document.getElementById('researchScore').innerText = Math.round(rScore);
+        total += rScore;
+        let habitScore = parseInt(document.getElementById('maturitylevel').value);
+        if(document.getElementById('rule_bed').checked) habitScore += 5;
+        if(document.getElementById('rule_room').checked) habitScore += 5;
+        document.getElementById('habitScore').innerText = habitScore;
+        total += habitScore;
+        const bedTime = document.getElementById('bedTime').value;
+        let sleepScore = 0;
+        if(bedTime) {
+            const [h, m] = bedTime.split(':').map(Number);
+            let timeVal = h + m/60;
+            if (h < 6) timeVal += 24;
+            if (timeVal < 22.08) sleepScore = 15;
+            else if (timeVal < 23) sleepScore = 9;
+            else if (timeVal < 24) sleepScore = 0;
+        }
+        document.getElementById('sleepScore').innerText = Math.round(sleepScore);
+        total += sleepScore;
+        // ... inside calculateAll() ...
+
+    // --- NEW: Update Dashboard Deep Work ---
+    const t1 = parseFloat(document.getElementById('s1_time').value) || 0;
+    const t2 = parseFloat(document.getElementById('s2_time').value) || 0;
+    const t3 = parseFloat(document.getElementById('s3_time').value) || 0;
+    const totalHours = ((t1 + t2 + t3) / 60).toFixed(1); // Convert mins to hours (1 decimal)
+    
+    const dwDisplay = document.getElementById('dashboardDeepWork');
+    if(dwDisplay) dwDisplay.innerText = totalHours;
+    
+        total = Math.round(total);
+        document.getElementById('totalScore').innerText = total;
+        const statusEl = document.getElementById('statusText');
+        if (total >= 100) { statusEl.innerText = "GOD MODE"; statusEl.style.color = "#a55eea"; }
+        else if (total >= 85) { statusEl.innerText = "LEGENDARY"; statusEl.style.color = "#00b894"; }
+        else if (total >= 70) { statusEl.innerText = "GOOD"; statusEl.style.color = "#0984e3"; }
+        else if (total >= 50) { statusEl.innerText = "SURVIVING"; statusEl.style.color = "#fdcb6e"; }
+        else { statusEl.innerText = "CRITICAL"; statusEl.style.color = "#d63031"; }
+    }
+
+    function saveData() {
+        // 1. Check if we already have an ID for today in the registry
+        let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+        let recordId = null;
+
+        // Try to find an existing ID that contains today's date
+        const existingId = registry.find(id => id.includes(todayKey));
+
+        if (existingId) {
+            recordId = existingId; // Update existing
+        } else {
+            const timestamp = new Date().getTime();
+            recordId = 'tracker_' + todayKey + '_' + timestamp; // Create new
+            registry.push(recordId);
+            localStorage.setItem(INDEX_KEY, JSON.stringify(registry));
+        }
+
+        // 2. Prepare Data
+        const total = parseInt(document.getElementById('totalScore').innerText);
+        const data = {
+            id: recordId,
+            date: todayKey,
+            timestamp: new Date().toLocaleTimeString(), // Just save readable time
+            goals: [
+                { text: document.getElementById('goal1').value, done: document.getElementById('goal1_done').checked },
+                { text: document.getElementById('goal2').value, done: document.getElementById('goal2_done').checked },
+                { text: document.getElementById('goal3').value, done: document.getElementById('goal3_done').checked }
+            ],
+            inputs: {
+                wakeTime: document.getElementById('wakeTime').value,
+                meditationTime: document.getElementById('meditationTime').value,
+                breakfastRating: document.getElementById('breakfastRating').value,
+                energyLevel: document.getElementById('energyLevel').value,
+                s1_time: document.getElementById('s1_time').value,
+                s1_acc: document.getElementById('s1_acc').value,
+                s2_time: document.getElementById('s2_time').value,
+                s2_acc: document.getElementById('s2_acc').value,
+                s3_time: document.getElementById('s3_time').value,
+                s3_acc: document.getElementById('s3_acc').value,
+                dietScoreInput: document.getElementById('dietScoreInput').value,
+                waterIntake: document.getElementById('waterIntake').value,
+                med_morning: document.getElementById('med_morning').checked,
+                screenHours: document.getElementById('screenHours').value,
+                researchN: document.getElementById('researchN').value,
+                maturitylevel: document.getElementById('maturitylevel').value,
+                bedTime: document.getElementById('bedTime').value,
+                rule_bed: document.getElementById('rule_bed').checked,
+                rule_room: document.getElementById('rule_room').checked,
+                dayTags: document.getElementById('dayTags').value,
+                flowState: document.getElementById('flowState').value,
+                moodSelect: document.getElementById('moodSelect').value,
+                topWin: document.getElementById('topWin').value,
+                mainObstacle: document.getElementById('mainObstacle').value
+            },
+            totalScore: total
+        };
+
+        // 3. Save to LocalStorage
+        localStorage.setItem(recordId, JSON.stringify(data));
+
+        // 4. Feedback
+        if(total >= 100) { triggerConfetti(); alert("GOD MODE ACHIEVED! "); } 
+        else { 
+            // Subtle notification instead of alert
+            const saveBtn = document.querySelector('.btn-save');
+            const originalText = saveBtn.innerText;
+            saveBtn.innerText = " Saved!";
+            setTimeout(() => saveBtn.innerText = originalText, 1000);
+        }
+
+        loadHistoryTable(); 
+        calculateStreak(); 
+        updateLevelXP(); 
+        calculateWeeklyAverages();
+        renderMiniHeatmap();
+        renderCorrelationMatrix();
+    }
+
+    function triggerConfetti() {
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const particles = [];
+        const particleCount = 150;
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                w: Math.random() * 10 + 5,
+                h: Math.random() * 10 + 5,
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                vx: Math.random() * 4 - 2,
+                vy: Math.random() * 4 + 2,
+                rotation: Math.random() * 360
+            });
+        }
+        let animationId;
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.rotation += 2;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+                ctx.restore();
+                if (p.y > canvas.height) particles.splice(i, 1);
+            });
+            if (particles.length > 0) { animationId = requestAnimationFrame(render); } 
+            else { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        }
+        render();
+    }
+
+    function updateLevelXP() {
+        let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+        let totalXP = 0;
+        registry.forEach(id => {
+            const d = JSON.parse(localStorage.getItem(id));
+            if(d) totalXP += parseInt(d.totalScore || 0);
+        });
+        const level = Math.floor(totalXP / 500) + 1;
+        const currentLevelXP = totalXP % 500;
+        const percentage = (currentLevelXP / 500) * 100;
+        document.getElementById('currentLevelText').innerHTML = `Lvl ${level} <span class="level-badge">Rank ${getRankName(level)}</span>`;
+        document.getElementById('currentXP').innerText = currentLevelXP;
+        document.getElementById('xpBarFill').style.width = percentage + "%";
+    }
+
+    function getRankName(lvl) {
+        if(lvl < 5) return "Novice";
+        if(lvl < 10) return "Apprentice";
+        if(lvl < 20) return "Adept";
+        if(lvl < 30) return "Expert";
+        if(lvl < 50) return "Master";
+        return "Grandmaster";
+    }
+
+    function resetForm() {
+        if(confirm("Reset Form?")) {
+            document.querySelectorAll('input').forEach(i => {
+                if(i.type === 'checkbox') i.checked = false;
+                else if(i.type === 'range') {
+                    if(i.id === 'waterIntake') i.value = 2.5;
+                    else if(i.id === 'energyLevel') i.value = 7;
+                    else if(i.id === 'flowState') i.value = 5;
+                    else i.value = 5;
+                }
+                else i.value = "";
+            });
+            document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+            document.querySelectorAll('textarea').forEach(t => t.value = "");
+            document.getElementById('energyDisp').innerText = "7";
+            document.getElementById('dietDisp').innerText = "5";
+            document.getElementById('waterDisp').innerText = "2.5";
+            document.getElementById('flowDisp').innerText = "5";
+            calculateAll();
+        }
+    }
+
+    function populateForm(data) {
+        if(!data) return;
+        if(data.goals) {
+            if(typeof data.goals[0] === 'string') {
+                document.getElementById('goal1').value = data.goals[0] || "";
+            } else {
+                document.getElementById('goal1').value = data.goals[0].text || "";
+                document.getElementById('goal1_done').checked = data.goals[0].done || false;
+                document.getElementById('goal2').value = data.goals[1].text || "";
+                document.getElementById('goal2_done').checked = data.goals[1].done || false;
+                document.getElementById('goal3').value = data.goals[2].text || "";
+                document.getElementById('goal3_done').checked = data.goals[2].done || false;
+            }
+        }
+        if(data.inputs) {
+            for(const key in data.inputs) {
+                const el = document.getElementById(key);
+                if(el) {
+                    if(el.type === 'checkbox') el.checked = data.inputs[key];
+                    else el.value = data.inputs[key];
+                }
+            }
+            if(data.inputs.energyLevel) document.getElementById('energyDisp').innerText = data.inputs.energyLevel;
+            if(data.inputs.dietScoreInput) document.getElementById('dietDisp').innerText = data.inputs.dietScoreInput;
+            if(data.inputs.waterIntake) document.getElementById('waterDisp').innerText = data.inputs.waterIntake;
+            if(data.inputs.flowState) document.getElementById('flowDisp').innerText = data.inputs.flowState;
+        }
+        calculateAll();
+    }
+
+function loadHistoryTable() {
+    const tbody = document.querySelector('#historyTable tbody');
+    tbody.innerHTML = "";
+    
+    let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+    const reversedRegistry = [...registry].reverse();
+    
+    reversedRegistry.forEach(id => {
+        const dataStr = localStorage.getItem(id);
+        if(!dataStr) return;
+        
+        const data = JSON.parse(dataStr);
+        const tr = document.createElement('tr');
+        
+        // Data Calculations
+        const d1 = parseFloat(data.inputs.s1_time || 0);
+        const d2 = parseFloat(data.inputs.s2_time || 0);
+        const d3 = parseFloat(data.inputs.s3_time || 0);
+        const totalWork = ((d1 + d2 + d3) / 60).toFixed(1);
+        const score = parseInt(data.totalScore);
+        
+        // Status Badge Logic
+        let statusBadge = `<span class="status-pill" style="background:#ef4444; color:white;">CRITICAL</span>`;
+        if (score >= 100) statusBadge = `<span class="status-pill" style="background:#8b5cf6; color:white;">GOD MODE</span>`;
+        else if (score >= 85) statusBadge = `<span class="status-pill" style="background:#10b981; color:white;">LEGENDARY</span>`;
+        else if (score >= 70) statusBadge = `<span class="status-pill" style="background:#3b82f6; color:white;">GOOD</span>`;
+        else if (score >= 50) statusBadge = `<span class="status-pill" style="background:#f59e0b; color:white;">SURVIVING</span>`;
+        
+        // Date & Formatting
+        const dateObj = new Date(data.date);
+        const dateStr = dateObj.toLocaleDateString(undefined, { month:'short', day:'numeric' });
+        const obstacle = data.inputs.mainObstacle ? `<span style="color:#ef4444; font-size:11px;"> ${data.inputs.mainObstacle}</span>` : `<span style="opacity:0.3">-</span>`;
+        const bedTime = data.inputs.bedTime || "-"; // Get Bed Time
+
+        // --- RENDER ROW ---
+        tr.innerHTML = `
+            <td style="font-weight:600;">${dateStr}</td>
+            <td style="opacity:0.8">${data.inputs.wakeTime || "-"}</td>
+            <td style="opacity:0.8; color:#3b82f6; font-weight:600;">${bedTime}</td> <td><strong>${totalWork}h</strong></td>
+            <td style="font-weight:800; font-family:'Poppins';">${data.totalScore}</td>
+            <td>${statusBadge}</td>
+            <td>${obstacle}</td>
+            <td class="action-cell">
+                <button class="table-btn" onclick="loadRecord('${id}')" title="Load">📂</button>
+                <button class="table-btn" onclick="deleteRecord('${id}')" title="Delete" style="color:var(--danger)">🗑️</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+    function calculateStreak() {
+        let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+        let dates = registry.map(id => {
+            const d = JSON.parse(localStorage.getItem(id));
+            return d.date;
+        });
+        let uniqueDates = [...new Set(dates)].sort();
+        if(uniqueDates.length === 0) { document.getElementById('streakCount').innerText = 0; return; }
+        let streak = 0;
+        let today = new Date().toISOString().split('T')[0];
+        let yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+        const lastEntry = uniqueDates[uniqueDates.length - 1];
+        if (lastEntry !== today && lastEntry !== yesterday) {
+            streak = 0;
+        } else {
+            streak = 1;
+            for(let i = uniqueDates.length - 1; i > 0; i--) {
+                const curr = new Date(uniqueDates[i]);
+                const prev = new Date(uniqueDates[i-1]);
+                const diffTime = Math.abs(curr - prev);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                if(diffDays === 1) streak++;
+                else break;
+            }
+        }
+        document.getElementById('streakCount').innerText = streak + " ";
+    }
+
+    function updateCurrentActivity() {
+        const now = new Date();
+        const day = now.getDay(); 
+        const hour = now.getHours();
+        const min = now.getMinutes();
+        const timeVal = hour + min/60;
+
+        document.getElementById('clockDisplay').innerText = now.toLocaleTimeString();
+
+        // 1. UPDATE BADGE & STATUS
+        let status = "FREE TIME / SLEEP";
+        let color = "#b2bec3"; 
+        if (timeVal >= 22 || timeVal < 6) { status = " SLEEP WARNING!"; color = "#ef4444"; }
+        else if (day === 6) { // SAT
+            if (timeVal >= 6 && timeVal < 7) { status = "HIKE PREP"; color = "#f59e0b"; }
+            else if (timeVal >= 7 && timeVal < 11) { status = "HIKING / SPORT"; color = "#ea580c"; }
+            else if (timeVal >= 11 && timeVal < 14) { status = "REVIEW / PLANNING"; color = "#f59e0b"; }
+            else if (timeVal >= 14 && timeVal < 19) { status = "SOCIAL / RELAX"; color = "#10b981"; }
+            else if (timeVal >= 19 && timeVal < 20) { status = "DINNER"; color = "#e67e22"; }
+            else if (timeVal >= 20 && timeVal < 21) { status = "PROJECT WORK"; color = "#8b5cf6"; } 
+            else if (timeVal >= 21) { status = "DIGITAL SUNSET"; color = "#334155"; }
+        } 
+        else { // SUN-FRI
+            if (timeVal >= 6 && timeVal < 7) { status = "MORNING PROTOCOL"; color = "#10b981"; }
+            else if (timeVal >= 7 && timeVal < 8.75) { status = "COMMUTE / COLLEGE"; color = "#64748b"; }
+            else if (timeVal >= 8.75 && timeVal < 10.25) { status = "LECTURES"; color = "#3b82f6"; }
+            else if (timeVal >= 10.25 && timeVal < 11) { status = "BREAK"; color = "#f59e0b"; }
+            else if (timeVal >= 11 && timeVal < 12.5) { status = "SKILL / LITERATURE"; color = "#f43f5e"; }
+            else if (timeVal >= 12.5 && timeVal < 13.5) { status = "LUNCH"; color = "#10b981"; }
+            else if (timeVal >= 13.5 && timeVal < 14.5) { status = "HEC-RAS HOUR"; color = "#3b82f6"; }
+            else if (timeVal >= 14.5 && timeVal < 16.5) { status = "SKILL DEVELOPMENT"; color = "#334155"; }
+            else if (timeVal >= 16.5 && timeVal < 17.5) { status = "COMMUTE"; color = "#64748b"; }
+            else if (timeVal >= 17.5 && timeVal < 19) { status = "GYM / SPORT"; color = "#10b981"; }
+            else if (timeVal >= 19 && timeVal < 20) { status = "DINNER"; color = "#e67e22"; }
+            else if (timeVal >= 20 && timeVal < 21) { status = "PYTHON / ML"; color = "#f59e0b"; }
+            else if (timeVal >= 21) { status = "DIGITAL SUNSET"; color = "#334155"; }
+        }
+        const badge = document.getElementById('currentActivityBadge');
+        badge.innerText = status;
+        badge.style.borderColor = color;
+        badge.style.boxShadow = `0 0 10px ${color}`;
+        badge.style.textShadow = `0 0 5px ${color}`;
+        badge.style.border = `1px solid ${color}`;
+
+        // 2. DYNAMIC TABLE HIGHLIGHTING (Fixed v3.13)
+        document.querySelectorAll('.active-routine-cell').forEach(el => {
+            el.classList.remove('active-routine-cell');
+        });
+        document.querySelectorAll('.active-day-header').forEach(el => el.classList.remove('active-day-header'));
+
+        // Define exact time ranges for every row
+        // Uses the 'timeVal' variable you already calculated above (e.g., 7:15 = 7.25)
+        const scheduleMap = [
+            { start: 0.0,  end: 6.0,  id: 'row-22' },    // Sleep (Early morning)
+            { start: 6.0,  end: 7.0,  id: 'row-06' },    // 06:00 - 07:00
+            { start: 7.0,  end: 7.25, id: 'row-07-a' },  // 07:00 - 07:15
+            { start: 7.25, end: 8.75, id: 'row-07-b' },  // 07:15 - 08:45
+            { start: 8.75, end: 10.25, id: 'row-08' },   // 08:45 - 10:15
+            { start: 10.25, end: 11.0, id: 'row-10' },   // 10:15 - 11:00
+            { start: 11.0, end: 12.5, id: 'row-11' },    // 11:00 - 12:30
+            { start: 12.5, end: 13.5, id: 'row-12' },    // 12:30 - 01:30
+            { start: 13.5, end: 14.5, id: 'row-13' },    // 01:30 - 02:30
+            { start: 14.5, end: 16.5, id: 'row-14' },    // 02:30 - 04:30
+            { start: 16.5, end: 17.5, id: 'row-16' },    // 04:30 - 05:30
+            { start: 17.5, end: 19.0, id: 'row-17' },    // 05:30 - 07:00
+            { start: 19.0, end: 20.0, id: 'row-19' },    // 07:00 - 08:00
+            { start: 20.0, end: 21.0, id: 'row-20' },    // 08:00 - 09:00
+            { start: 21.0, end: 21.5, id: 'row-21' },    // 09:00 - 09:30
+            { start: 21.5, end: 24.0, id: 'row-22' }     // 09:30 - Sleep
+        ];
+
+        // Find the correct row based on current decimal time
+        let rowId = null;
+        const activeSlot = scheduleMap.find(slot => timeVal >= slot.start && timeVal < slot.end);
+        if (activeSlot) rowId = activeSlot.id;
+
+        // Apply highlighting
+        const colIndex = day + 1;
+        const table = document.querySelector('.routine-table');
+        if(table) {
+            const headerRow = table.querySelector('thead tr');
+            if(headerRow && headerRow.children[colIndex]) {
+                headerRow.children[colIndex].classList.add('active-day-header');
+            }
+            
+            if(rowId) {
+                const tr = document.getElementById(rowId);
+                if(tr) {
+                    let visualCol = 0;
+                    let targetCell = null;
+
+                    for(let i=0; i < tr.children.length; i++) {
+                        const cell = tr.children[i];
+                        let colspan = parseInt(cell.getAttribute('colspan') || 1);
+                        // Check if current day column falls within this cell's span
+                        if(colIndex >= visualCol && colIndex < (visualCol + colspan)) {
+                            targetCell = cell.querySelector('.rt-card') || cell; 
+                            break;
+                        }
+                        visualCol += colspan;
+                    }
+
+                    if(targetCell) {
+                        targetCell.classList.add('active-routine-cell');
+                    }
+                }
+            }
+        }
+    }
+
+    function exportToCSV() {
+        let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+        if (registry.length === 0) { alert("No data to export."); return; }
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Date,Time,WakeTime,DeepWorkMinutes,ScreenTime,L_Penalty,WaterIntake,EnergyLevel,FlowState,Mood,TotalScore,TopWin,MainObstacle,Tags\n";
+        registry.forEach(id => {
+            const d = JSON.parse(localStorage.getItem(id));
+            if(d && d.inputs) {
+                let work = (parseFloat(d.inputs.s1_time)||0) + (parseFloat(d.inputs.s2_time)||0) + (parseFloat(d.inputs.s3_time)||0);
+                let time = d.timestamp ? d.timestamp.replace(',', '') : '00:00:00';
+                let tags = (d.inputs.dayTags || "").replace(/,/g, " ");
+                let obstacle = (d.inputs.mainObstacle || "").replace(/,/g, " ");
+                let row = `${d.date},${time},${d.inputs.wakeTime},${work},${d.inputs.screenHours},${d.inputs.maturitylevel},${d.inputs.waterIntake || 0},${d.inputs.energyLevel || 0},${d.inputs.flowState || 0},${d.inputs.moodSelect || '-'},${d.totalScore},"${d.inputs.topWin || ''}","${obstacle}","${tags}"`;
+                csvContent += row + "\r\n";
+            }
+        });
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "bibek_master_protocol.csv");
+        document.body.appendChild(link);
+        link.click();
+    }
+
+    function exportJSON() {
+        let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+        if (registry.length === 0) { alert("No data to export."); return; }
+        let allData = { registry: registry, entries: {} };
+        registry.forEach(id => {
+            allData.entries[id] = JSON.parse(localStorage.getItem(id));
+        });
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allData));
+        const link = document.createElement("a");
+        link.setAttribute("href", dataStr);
+        link.setAttribute("download", "bibek_tracker_backup.json");
+        document.body.appendChild(link);
+        link.click();
+    }
+
+    function exportToExcel() {
+        let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+        if (registry.length === 0) { alert("No data to export."); return; }
+        let table = `
+            <table border="1">
+                <thead>
+                    <tr style="background-color: #1e293b; color: white;">
+                        <th>Date</th><th>Time</th><th>Wake Time</th><th>Deep Work (min)</th>
+                        <th>Screen Time</th><th>L Score</th><th>Water (L)</th>
+                        <th>Energy (1-10)</th><th>Flow (1-10)</th><th>Mood</th>
+                        <th>Total Score</th><th>Top Win</th><th>Main Obstacle</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+        registry.forEach(id => {
+            const d = JSON.parse(localStorage.getItem(id));
+            if(d && d.inputs) {
+                let work = (parseFloat(d.inputs.s1_time)||0) + (parseFloat(d.inputs.s2_time)||0) + (parseFloat(d.inputs.s3_time)||0);
+                let time = d.timestamp ? d.timestamp.replace(',', '') : '00:00:00';
+                table += `<tr>
+                    <td>${d.date}</td>
+                    <td>${time}</td>
+                    <td>${d.inputs.wakeTime || '-'}</td>
+                    <td>${work}</td>
+                    <td>${d.inputs.screenHours}</td>
+                    <td>${d.inputs.maturitylevel}</td>
+                    <td>${d.inputs.waterIntake || 0}</td>
+                    <td>${d.inputs.energyLevel || 0}</td>
+                    <td>${d.inputs.flowState || 0}</td>
+                    <td>${d.inputs.moodSelect || '-'}</td>
+                    <td><b>${d.totalScore}</b></td>
+                    <td>${d.inputs.topWin || ''}</td>
+                    <td>${d.inputs.mainObstacle || ''}</td>
+                </tr>`;
+            }
+        });
+        table += `</tbody></table>`;
+        const blob = new Blob([table], { type: 'application/vnd.ms-excel' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Bibek_Tracker_Excel.xls";
+        document.body.appendChild(link);
+        link.click();
+    }
+
+    function importJSON() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+        input.onchange = e => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.readAsText(file, 'UTF-8');
+            reader.onload = readerEvent => {
+                const content = readerEvent.target.result;
+                try {
+                    const parsed = JSON.parse(content);
+                    if(parsed.registry && parsed.entries) {
+                        if(confirm("Merge imported data?")) {
+                            let currentRegistry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+                            parsed.registry.forEach(id => {
+                                if(!currentRegistry.includes(id)) currentRegistry.push(id);
+                                localStorage.setItem(id, JSON.stringify(parsed.entries[id]));
+                            });
+                            localStorage.setItem(INDEX_KEY, JSON.stringify(currentRegistry));
+                            alert("Import Successful! Reloading...");
+                            location.reload();
+                        }
+                    } else {
+                        alert("Invalid JSON format");
+                    }
+                } catch(err) {
+                    alert("Error parsing JSON");
+                }
+            }
+        }
+        input.click();
+    }
+
+    window.loadRecord = function(id) {
+        if(confirm("Load log?")) {
+            const data = JSON.parse(localStorage.getItem(id));
+            populateForm(data);
+            switchTab('tracker');
+        }
+    }
+    
+    window.deleteRecord = function(id) {
+        if(confirm("Delete log?")) {
+            localStorage.removeItem(id);
+            let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+            registry = registry.filter(item => item !== id);
+            localStorage.setItem(INDEX_KEY, JSON.stringify(registry));
+            loadHistoryTable();
+            calculateStreak();
+            updateLevelXP();
+            calculateWeeklyAverages();
+            renderCorrelationMatrix();
+        }
+    }
+
+    window.clearHistory = function() {
+        if(confirm(" RESET EVERYTHING?")) {
+            localStorage.clear();
+            location.reload();
+        }
+    }
+    // 2. Brown Noise
+    let audioCtx, gainNode;
+    let isNoisePlaying = false;
+    function toggleBrownNoise() {
+        const btn = document.getElementById('noiseBtn');
+        if (isNoisePlaying) {
+            if (audioCtx) audioCtx.close();
+            isNoisePlaying = false;
+            btn.innerHTML = " Audio";
+            btn.style.background = "rgba(255,255,255,0.1)";
+            btn.style.color = "white";
+        } else {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+            const bufferSize = 4096;
+            const brownNoise = (function() {
+                let lastOut = 0;
+                const node = audioCtx.createScriptProcessor(bufferSize, 1, 1);
+                node.onaudioprocess = function(e) {
+                    const output = e.outputBuffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        const white = Math.random() * 2 - 1;
+                        output[i] = (lastOut + (0.02 * white)) / 1.02;
+                        lastOut = output[i];
+                        output[i] *= 3.5; 
+                    }
+                };
+                return node;
+            })();
+            gainNode = audioCtx.createGain();
+            gainNode.gain.value = 0.15; 
+            brownNoise.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            isNoisePlaying = true;
+            btn.innerHTML = " ON";
+            btn.style.background = "#10b981";
+        }
+    }
+    // --- NEW FUNCTION: Render Pearson Correlation Matrix ---
+function renderCorrelationMatrix() {
+    const container = document.getElementById('correlationContainer');
+    if(!container) return;
+
+    // 1. Fetch Data
+    let registry = JSON.parse(localStorage.getItem(INDEX_KEY) || "[]");
+    
+    // Safety Check: Need at least 3 days to make a correlation meaningful
+    if(registry.length < 3) {
+        container.innerHTML = "<div style='padding:20px; text-align:center; opacity:0.6; font-size:12px;'>Need at least 3 days of data to calculate correlations.</div>";
+        return;
+    }
+
+    // 2. Prepare Vectors (The Lists of Numbers)
+    let vectors = {
+        "Sleep": [],
+        "Diet": [],
+        "Flow": [],
+        "Deep Work": [],
+        "Total Score": []
+    };
+
+    registry.forEach(id => {
+        const d = JSON.parse(localStorage.getItem(id));
+        
+        // A. Sleep Score Logic (re-calculating for accuracy)
+        let sleepScore = 0;
+        const bed = d.inputs.bedTime;
+        if(bed) {
+             const [h, m] = bed.split(':').map(Number);
+             let t = h + m/60;
+             if (h < 6) t += 24; 
+             // Same logic as your main calculator
+             if (t < 22.08) sleepScore = 15; else if (t < 23) sleepScore = 9; else sleepScore = 0;
+        }
+        
+        // B. Deep Work Logic (Summing minutes)
+        const dw = (parseFloat(d.inputs.s1_time)||0) + (parseFloat(d.inputs.s2_time)||0) + (parseFloat(d.inputs.s3_time)||0);
+
+        // C. Push to lists
+        vectors["Sleep"].push(sleepScore);
+        vectors["Diet"].push(parseInt(d.inputs.dietScoreInput || 5));
+        vectors["Flow"].push(parseInt(d.inputs.flowState || 5));
+        vectors["Deep Work"].push(dw);
+        vectors["Total Score"].push(parseInt(d.totalScore || 0));
+    });
+
+    // 3. The Math Helper (Pearson Formula)
+    function getPearson(x, y) {
+        let n = x.length;
+        if (n === 0) return 0;
+        let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+        for (let i = 0; i < n; i++) {
+            sumX += x[i];
+            sumY += y[i];
+            sumXY += x[i] * y[i];
+            sumX2 += x[i] * x[i];
+            sumY2 += y[i] * y[i];
+        }
+        let numerator = (n * sumXY) - (sumX * sumY);
+        let denominator = Math.sqrt(((n * sumX2) - (sumX * sumX)) * ((n * sumY2) - (sumY * sumY)));
+        if (denominator === 0) return 0;
+        return numerator / denominator;
+    }
+
+    // 4. Build the HTML Table
+    const keys = Object.keys(vectors);
+    let html = '<table class="corr-table"><thead><tr><th>Metric</th>';
+    
+    keys.forEach(k => html += `<th>${k}</th>`);
+    html += '</tr></thead><tbody>';
+
+    keys.forEach(rowKey => {
+        html += `<tr><td><strong>${rowKey}</strong></td>`;
+        keys.forEach(colKey => {
+            if(rowKey === colKey) {
+                // Identity (Comparing Sleep to Sleep is always 1, so we gray it out)
+                html += `<td style="background:var(--bg); opacity:0.3;">-</td>`;
+            // ... inside the loop ...
+} else {
+    const r = getPearson(vectors[rowKey], vectors[colKey]);
+    // Ensure r is never NaN (can happen if data has zero variance)
+    const safeR = isNaN(r) ? 0 : r;
+    const rDisplay = safeR.toFixed(2);
+    const absR = Math.abs(safeR);
+
+    // --- FIX 2: Dynamic Color Intensity Calculation ---
+    
+    // 1. Calculate Opacity based on intensity (absolute value of r).
+    // We cap max opacity at 0.7 so the text remains readable.
+    // We add a base of 0.05 so very weak correlations have a tiny tint.
+    let opacity = (absR * 0.7) + 0.05;
+    if(absR < 0.1) opacity = 0; // Leave near-zero values transparent
+
+    let bgColorStyle = "";
+    let textColorStyle = "var(--text)"; // Default text color
+
+    if (safeR > 0.01) {
+        // POSITIVE = GREEN (using rgb: 16, 185, 129)
+        bgColorStyle = `background: rgba(16, 185, 129, ${opacity});`;
+        // If intensity is high, make text darker green for contrast
+        if(absR > 0.5) textColorStyle = "color: #064e3b;"; 
+        
+    } else if (safeR < -0.01) {
+        // NEGATIVE = RED (using rgb: 239, 68, 68)
+        bgColorStyle = `background: rgba(239, 68, 68, ${opacity});`;
+        // If intensity is high, make text darker red for contrast
+        if(absR > 0.5) textColorStyle = "color: #7f1d1d;";
+
+    } else {
+        // NEUTRAL (Zero or near zero)
+        bgColorStyle = `background: transparent; opacity: 0.5;`;
+    }
+
+    // Visual Arrow Indicator
+    let arrow = "";
+    if(safeR > 0.2) arrow = "▲";
+    if(safeR < -0.2) arrow = "▼";
+
+    // Inject the dynamic styles directly into the TD cell
+    html += `<td class="corr-cell" style="${bgColorStyle} ${textColorStyle}">${rDisplay} <span style="font-size:9px">${arrow}</span></td>`;
+}
+// ...
+        });
+        html += '</tr>';
+    });
+    
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+</script>
+</body>
+</html>
