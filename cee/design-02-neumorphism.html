@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>02 · Soft UI</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#e4e9f0;--lt:#ffffff;--dk:#c3ccda;--ink:#3b4a59;--mut:#8593a3}
+  body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--ink);padding:40px 30px;min-height:100vh}
+  .wrap{max-width:1060px;margin:0 auto}
+  .hi{margin-bottom:26px}
+  .hi .eb{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#5a86c9}
+  .hi h1{font-size:28px;font-weight:700;margin-top:4px}
+  .soft{background:var(--bg);border-radius:24px;box-shadow:9px 9px 20px var(--dk),-9px -9px 20px var(--lt)}
+  .inset{background:var(--bg);border-radius:18px;box-shadow:inset 6px 6px 12px var(--dk),inset -6px -6px 12px var(--lt)}
+  .row{display:grid;grid-template-columns:1.6fr 1fr;gap:24px;margin-bottom:24px}
+  .pad{padding:24px 26px}
+  .ttl{font-size:16px;font-weight:700;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .ttl .s{font-size:12px;font-weight:500;color:var(--mut)}
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .tile{border-radius:18px;padding:20px 12px;text-align:center}
+  .tile .v{font-size:30px;font-weight:700;line-height:1}
+  .tile .k{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin-top:8px}
+  .tile.a .v{color:#6a5cf0}.tile.b .v{color:#e07b2a}.tile.c .v{color:#1f9bb8}
+  .latest{display:flex;align-items:center;gap:20px}
+  .donut{width:128px;height:128px;flex:none}
+  .donut .bg{fill:none;stroke:var(--dk);stroke-width:13}
+  .donut .fg{fill:none;stroke:#5a86c9;stroke-width:13;stroke-linecap:round}
+  .donut .t{fill:var(--ink);font-weight:700;font-size:24px;text-anchor:middle;dominant-baseline:central}
+  .lset{font-weight:700;font-size:20px}.lsub{color:var(--mut);font-size:13px;margin-top:2px}
+  .subj{display:flex;flex-direction:column;gap:16px}
+  .srow{display:grid;grid-template-columns:46px 1fr 56px;align-items:center;gap:16px}
+  .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;color:#5a86c9;box-shadow:inset 4px 4px 8px var(--dk),inset -4px -4px 8px var(--lt)}
+  .ic svg{width:22px;height:22px}
+  .nm{font-weight:600;font-size:15px}.ct{font-size:12px;color:var(--mut)}
+  .bar{height:14px;border-radius:10px;margin-top:8px;box-shadow:inset 3px 3px 6px var(--dk),inset -3px -3px 6px var(--lt);padding:3px}
+  .bar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#7aa0e0,#5a86c9)}
+  .pc{font-weight:700;font-size:17px;color:#5a86c9;text-align:right}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hi"><div class="eb">IOE B.E. / B.Arch · Practice Portal</div><h1>Welcome back, Bibek</h1></div>
+    <div class="row">
+      <div class="soft pad">
+        <div class="ttl">Overall Score<span class="s">All attempts</span></div>
+        <div class="tiles">
+          <div class="tile inset a"><div class="v">248</div><div class="k">Attempts</div></div>
+          <div class="tile inset b"><div class="v">186</div><div class="k">Correct</div></div>
+          <div class="tile inset c"><div class="v">75%</div><div class="k">Percentage</div></div>
+        </div>
+      </div>
+      <div class="soft pad">
+        <div class="ttl">Latest Test Score</div>
+        <div class="latest">
+          <svg class="donut" viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" cx="60" cy="60" r="52" stroke-dasharray="222 327" transform="rotate(-90 60 60)"/><text class="t" x="60" y="61">68%</text></svg>
+          <div><div class="lset">Set 06</div><div class="lsub">Practice Set</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="soft pad">
+      <div class="ttl">Subject performance<span class="s">All attempts</span></div>
+      <div class="subj">
+        <div class="srow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8"/><path d="M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/></svg></span><div><div class="nm">Mathematics</div><div class="ct">39 / 50 correct</div><div class="bar"><i style="width:78%"></i></div></div><div class="pc">78%</div></div>
+        <div class="srow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.6"/><ellipse cx="12" cy="12" rx="10" ry="4.4"/><ellipse cx="12" cy="12" rx="10" ry="4.4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" transform="rotate(120 12 12)"/></svg></span><div><div class="nm">Physics</div><div class="ct">33 / 50 correct</div><div class="bar"><i style="width:65%"></i></div></div><div class="pc">65%</div></div>
+        <div class="srow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6l-5 8.5A2 2 0 0 0 6.8 21h10.4a2 2 0 0 0 1.8-3.5L14 9V3"/><path d="M7.5 14h9"/></svg></span><div><div class="nm">Chemistry</div><div class="ct">41 / 50 correct</div><div class="bar"><i style="width:82%"></i></div></div><div class="pc">82%</div></div>
+        <div class="srow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><div><div class="nm">English</div><div class="ct">28 / 40 correct</div><div class="bar"><i style="width:70%"></i></div></div><div class="pc">70%</div></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
