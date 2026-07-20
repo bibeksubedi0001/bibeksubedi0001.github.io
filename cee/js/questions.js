@@ -10012,9 +10012,1243 @@ const DAY14_SYLLABUS = [
 ];
 DAY14.syllabus = DAY14_SYLLABUS;
 
+/* ============================================================
+   DAY 15 — Chemistry Marathon + Verbal Reasoning
+   50 Chemistry MCQs following the official CEE weightage
+   (Physical 17 · Inorganic 10 · Organic 17 · Applied 3 ·
+   Analytical 3) + 50 tough Verbal Reasoning MCQs.
+   ============================================================ */
+const DAY15 = {
+    day: 15,
+    title: "Day 15",
+    subtitle: "Chemistry Marathon + Verbal Reasoning · 100 Q",
+    durationMinutes: 90,
+    negativeMarking: 0.25,
+    chapters: [
+        {
+            id: "chem15",
+            name: "Chemistry (Full Syllabus)",
+            subject: "Chemistry",
+            accent: "amber",
+            blurb: "50 questions on CEE weightage — physical 17 · inorganic 10 · organic 17 · applied 3 · analytical 3.",
+            questions: [
+                {
+                    id: "ch1",
+                    text: "10 g of pure $\\mathrm{CaCO_3}$ is strongly heated and the liberated $\\mathrm{CO_2}$ is completely absorbed in 400 mL of 0.5 M NaOH. The principal salt formed and its amount are:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{NaHCO_3}$, 8.4 g" },
+                        { key: "b", text: "$\\mathrm{Na_2CO_3}$, 10.6 g" },
+                        { key: "c", text: "$\\mathrm{Na_2CO_3}$, 5.3 g" },
+                        { key: "d", text: "$\\mathrm{NaHCO_3}$, 16.8 g" }
+                    ],
+                    answer: "b",
+                    explanation: "$\\mathrm{CaCO_3\\to CO_2}$: $\\frac{10}{100}=0.1$ mol $\\mathrm{CO_2}$. NaOH $=0.4\\times0.5=0.2$ mol. Ratio NaOH : CO$_2$ = 2 : 1, so the carbonate forms: $\\mathrm{2NaOH+CO_2\\to Na_2CO_3+H_2O}$, giving 0.1 mol $=0.1\\times106=10.6$ g."
+                },
+                {
+                    id: "ch2",
+                    text: "Which of the following samples contains the greatest total number of atoms?",
+                    options: [
+                        { key: "a", text: "4 g of He" },
+                        { key: "b", text: "46 g of Na" },
+                        { key: "c", text: "36 g of $\\mathrm{H_2O}$" },
+                        { key: "d", text: "28 g of $\\mathrm{N_2}$" }
+                    ],
+                    answer: "c",
+                    explanation: "He: 1 mol = 1 mol atoms. Na: 2 mol atoms. H$_2$O: 2 mol molecules × 3 = 6 mol atoms. N$_2$: 1 mol × 2 = 2 mol atoms. Water wins with $6N_A$ atoms."
+                },
+                {
+                    id: "ch3",
+                    text: "The ratio of the longest wavelength of the Lyman series to the longest wavelength of the Balmer series in the hydrogen spectrum is:",
+                    options: [
+                        { key: "a", text: "$5/27$" },
+                        { key: "b", text: "$27/5$" },
+                        { key: "c", text: "$3/4$" },
+                        { key: "d", text: "$4/9$" }
+                    ],
+                    answer: "a",
+                    explanation: "Lyman $\\alpha$ (2→1): $\\frac{1}{\\lambda_L}=R\\left(1-\\frac14\\right)=\\frac{3R}{4}$. Balmer $\\alpha$ (3→2): $\\frac{1}{\\lambda_B}=R\\left(\\frac14-\\frac19\\right)=\\frac{5R}{36}$. So $\\frac{\\lambda_L}{\\lambda_B}=\\frac{4}{3}\\times\\frac{5}{36}=\\frac{5}{27}$."
+                },
+                {
+                    id: "ch4",
+                    text: "Which of the following sets of quantum numbers is NOT permissible?",
+                    options: [
+                        { key: "a", text: "$n=3,\\ l=2,\\ m=-2,\\ s=+\\tfrac12$" },
+                        { key: "b", text: "$n=4,\\ l=0,\\ m=0,\\ s=-\\tfrac12$" },
+                        { key: "c", text: "$n=3,\\ l=3,\\ m=-3,\\ s=+\\tfrac12$" },
+                        { key: "d", text: "$n=2,\\ l=1,\\ m=0,\\ s=-\\tfrac12$" }
+                    ],
+                    answer: "c",
+                    explanation: "$l$ can take values $0$ to $n-1$ only; for $n=3$ the maximum $l$ is 2, so $l=3$ is forbidden. All other sets obey the rules."
+                },
+                {
+                    id: "ch5",
+                    text: "The correct order of first ionisation energies of Be, B, C, N and O is:",
+                    options: [
+                        { key: "a", text: "B < Be < C < O < N" },
+                        { key: "b", text: "Be < B < C < N < O" },
+                        { key: "c", text: "B < Be < C < N < O" },
+                        { key: "d", text: "Be < B < C < O < N" }
+                    ],
+                    answer: "a",
+                    explanation: "Two anomalies: Be ($2s^2$, full subshell) exceeds B ($2p^1$), and N ($2p^3$, half-filled) exceeds O ($2p^4$, e–e repulsion in a doubly occupied p orbital). Hence B < Be < C < O < N."
+                },
+                {
+                    id: "ch6",
+                    text: "A wooden artifact shows carbon-14 activity that is 12.5% of the activity in fresh wood ($t_{1/2}$ of $^{14}\\mathrm{C}$ = 5730 yr). The age of the artifact is about:",
+                    options: [
+                        { key: "a", text: "11460 yr" },
+                        { key: "b", text: "17190 yr" },
+                        { key: "c", text: "22920 yr" },
+                        { key: "d", text: "5730 yr" }
+                    ],
+                    answer: "b",
+                    explanation: "$12.5\\%=\\left(\\tfrac12\\right)^3$ of the original activity, i.e. three half-lives have elapsed: $3\\times5730=17190$ yr."
+                },
+                {
+                    id: "ch7",
+                    text: "The shapes of $\\mathrm{XeF_4}$, $\\mathrm{ClF_3}$ and $\\mathrm{I_3^-}$ are respectively:",
+                    options: [
+                        { key: "a", text: "Tetrahedral, trigonal planar, bent" },
+                        { key: "b", text: "Square planar, T-shaped, linear" },
+                        { key: "c", text: "Square pyramidal, T-shaped, bent" },
+                        { key: "d", text: "Square planar, trigonal planar, linear" }
+                    ],
+                    answer: "b",
+                    explanation: "XeF$_4$: $sp^3d^2$ with 2 lone pairs → square planar. ClF$_3$: $sp^3d$ with 2 lone pairs → T-shaped. I$_3^-$: $sp^3d$ with 3 equatorial lone pairs → linear."
+                },
+                {
+                    id: "ch8",
+                    text: "The equivalent weight of $\\mathrm{KMnO_4}$ (molar mass $M$) when it acts as an oxidant in a neutral medium is:",
+                    options: [
+                        { key: "a", text: "$M/5$" },
+                        { key: "b", text: "$M/2$" },
+                        { key: "c", text: "$M/3$" },
+                        { key: "d", text: "$M/1$" }
+                    ],
+                    answer: "c",
+                    explanation: "In neutral/faintly alkaline medium $\\mathrm{MnO_4^-}+2H_2O+3e^-\\to MnO_2+4OH^-$ (Mn: +7 → +4, 3 electrons), so eq. wt. $=M/3$. In acid it is $M/5$ and in strong alkali $M/1$."
+                },
+                {
+                    id: "ch9",
+                    text: "At what temperature will methane ($M=16$) have the same rms speed as oxygen ($M=32$) has at 600 K?",
+                    options: [
+                        { key: "a", text: "1200 K" },
+                        { key: "b", text: "425 K" },
+                        { key: "c", text: "300 K" },
+                        { key: "d", text: "150 K" }
+                    ],
+                    answer: "c",
+                    explanation: "$v_{rms}\\propto\\sqrt{T/M}$. Equal speeds need $\\frac{T_{CH_4}}{16}=\\frac{600}{32}$, so $T_{CH_4}=16\\times18.75=300$ K."
+                },
+                {
+                    id: "ch10",
+                    text: "In a crystalline solid, anions B form a ccp lattice while cations A occupy half of the octahedral voids. The empirical formula of the compound is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{A_2B}$" },
+                        { key: "b", text: "$\\mathrm{AB}$" },
+                        { key: "c", text: "$\\mathrm{AB_2}$" },
+                        { key: "d", text: "$\\mathrm{A_2B_3}$" }
+                    ],
+                    answer: "c",
+                    explanation: "ccp gives 4 B per unit cell and 4 octahedral voids; half-filled voids give 2 A. Ratio A : B = 2 : 4 = 1 : 2 → AB$_2$."
+                },
+                {
+                    id: "ch11",
+                    text: "For which reaction is $K_p$ smaller than $K_c$ at the same temperature?",
+                    options: [
+                        { key: "a", text: "$\\mathrm{N_2(g)+3H_2(g)\\rightleftharpoons 2NH_3(g)}$" },
+                        { key: "b", text: "$\\mathrm{PCl_5(g)\\rightleftharpoons PCl_3(g)+Cl_2(g)}$" },
+                        { key: "c", text: "$\\mathrm{H_2(g)+I_2(g)\\rightleftharpoons 2HI(g)}$" },
+                        { key: "d", text: "$\\mathrm{N_2O_4(g)\\rightleftharpoons 2NO_2(g)}$" }
+                    ],
+                    answer: "a",
+                    explanation: "$K_p=K_c(RT)^{\\Delta n}$. $K_p<K_c$ requires $\\Delta n<0$; only ammonia synthesis has $\\Delta n=2-4=-2$. Options b and d have $\\Delta n=+1$; c has $\\Delta n=0$."
+                },
+                {
+                    id: "ch12",
+                    text: "100 mL of 0.2 N HCl is mixed with 100 mL of 0.3 N $\\mathrm{H_2SO_4}$. The normality of the resulting acidic solution is:",
+                    options: [
+                        { key: "a", text: "0.50 N" },
+                        { key: "b", text: "0.25 N" },
+                        { key: "c", text: "0.30 N" },
+                        { key: "d", text: "0.10 N" }
+                    ],
+                    answer: "b",
+                    explanation: "Total milliequivalents $=100(0.2)+100(0.3)=50$ in a final volume of 200 mL, so $N=\\frac{50}{200}=0.25$ N."
+                },
+                {
+                    id: "ch13",
+                    text: "A buffer contains 0.2 M acetic acid and 0.02 M sodium acetate ($pK_a=4.74$). The pH of the buffer is:",
+                    options: [
+                        { key: "a", text: "4.74" },
+                        { key: "b", text: "5.74" },
+                        { key: "c", text: "2.74" },
+                        { key: "d", text: "3.74" }
+                    ],
+                    answer: "d",
+                    explanation: "Henderson–Hasselbalch: $pH=pK_a+\\log\\frac{[\\text{salt}]}{[\\text{acid}]}=4.74+\\log\\frac{0.02}{0.2}=4.74-1=3.74$."
+                },
+                {
+                    id: "ch14",
+                    text: "For a first-order reaction, 75% completion takes 60 minutes. The time required for 50% completion is:",
+                    options: [
+                        { key: "a", text: "20 min" },
+                        { key: "b", text: "30 min" },
+                        { key: "c", text: "40 min" },
+                        { key: "d", text: "15 min" }
+                    ],
+                    answer: "b",
+                    explanation: "75% completion = two half-lives ($100\\to50\\to25$). Hence $2t_{1/2}=60$ min, so $t_{1/2}=30$ min — first-order half-life is concentration-independent."
+                },
+                {
+                    id: "ch15",
+                    text: "Given $E^{\\circ}_{\\mathrm{Zn^{2+}/Zn}}=-0.76$ V and $E^{\\circ}_{\\mathrm{Cu^{2+}/Cu}}=+0.34$ V, the standard emf of the Daniell cell and the electrode where reduction occurs are:",
+                    options: [
+                        { key: "a", text: "0.42 V, zinc electrode" },
+                        { key: "b", text: "1.10 V, copper electrode" },
+                        { key: "c", text: "1.10 V, zinc electrode" },
+                        { key: "d", text: "0.42 V, copper electrode" }
+                    ],
+                    answer: "b",
+                    explanation: "$E^{\\circ}_{cell}=E^{\\circ}_{cathode}-E^{\\circ}_{anode}=0.34-(-0.76)=1.10$ V; Cu$^{2+}$ is reduced at the copper cathode while zinc dissolves at the anode."
+                },
+                {
+                    id: "ch16",
+                    text: "A current of 9.65 A is passed through molten $\\mathrm{AlCl_3}$ for 1000 s. The mass of aluminium deposited (Al = 27) is:",
+                    options: [
+                        { key: "a", text: "2.7 g" },
+                        { key: "b", text: "0.9 g" },
+                        { key: "c", text: "8.1 g" },
+                        { key: "d", text: "0.3 g" }
+                    ],
+                    answer: "b",
+                    explanation: "Charge $=9.65\\times1000=9650$ C $=0.1$ F. $\\mathrm{Al^{3+}}+3e^-\\to\\mathrm{Al}$ needs 3 F per mole, so moles Al $=0.1/3$ and mass $=\\frac{0.1}{3}\\times27=0.9$ g."
+                },
+                {
+                    id: "ch17",
+                    text: "For a reaction, $\\Delta H=+30$ kJ mol$^{-1}$ and $\\Delta S=+100$ J K$^{-1}$ mol$^{-1}$. The reaction becomes spontaneous above:",
+                    options: [
+                        { key: "a", text: "300 K" },
+                        { key: "b", text: "3000 K" },
+                        { key: "c", text: "30 K" },
+                        { key: "d", text: "600 K" }
+                    ],
+                    answer: "a",
+                    explanation: "Spontaneity needs $\\Delta G=\\Delta H-T\\Delta S<0$, i.e. $T>\\frac{\\Delta H}{\\Delta S}=\\frac{30000}{100}=300$ K."
+                },
+                {
+                    id: "ch18",
+                    text: "Which pair of oxides is correctly matched with its nature?",
+                    options: [
+                        { key: "a", text: "$\\mathrm{CO}$ — acidic; $\\mathrm{Al_2O_3}$ — basic" },
+                        { key: "b", text: "$\\mathrm{NO}$ — neutral; $\\mathrm{SnO_2}$ — amphoteric" },
+                        { key: "c", text: "$\\mathrm{N_2O}$ — acidic; $\\mathrm{ZnO}$ — basic" },
+                        { key: "d", text: "$\\mathrm{SO_2}$ — neutral; $\\mathrm{MgO}$ — amphoteric" }
+                    ],
+                    answer: "b",
+                    explanation: "NO, N$_2$O and CO are neutral oxides; SnO$_2$, ZnO and Al$_2$O$_3$ are amphoteric; SO$_2$ is acidic and MgO basic. Only option b pairs both correctly."
+                },
+                {
+                    id: "ch19",
+                    text: "In the ozone test, starch–iodide paper turns blue because ozone:",
+                    options: [
+                        { key: "a", text: "Reduces iodide to iodine, which colours starch" },
+                        { key: "b", text: "Oxidises iodide to iodine, which colours starch" },
+                        { key: "c", text: "Bleaches starch and releases hydrogen iodide" },
+                        { key: "d", text: "Forms a blue ozonide complex with the starch" }
+                    ],
+                    answer: "b",
+                    explanation: "$\\mathrm{O_3+2KI+H_2O\\to 2KOH+O_2+I_2}$ — ozone is a strong oxidiser; the liberated I$_2$ forms the blue starch–iodine complex. Iodide is oxidised, not reduced."
+                },
+                {
+                    id: "ch20",
+                    text: "Aqua regia dissolves gold. The correct composition of the mixture and the active dissolving species are:",
+                    options: [
+                        { key: "a", text: "3 : 1 HCl : $\\mathrm{HNO_3}$; nascent chlorine attacks gold" },
+                        { key: "b", text: "1 : 3 HCl : $\\mathrm{HNO_3}$; nitrous fumes attack gold" },
+                        { key: "c", text: "3 : 1 $\\mathrm{HNO_3}$ : HCl; peroxide radicals attack gold" },
+                        { key: "d", text: "1 : 1 HCl : $\\mathrm{H_2SO_4}$; sulphate complexes attack gold" }
+                    ],
+                    answer: "a",
+                    explanation: "Aqua regia is 3 volumes conc. HCl to 1 volume conc. HNO$_3$; the oxidation produces nascent chlorine/NOCl which converts gold to soluble $\\mathrm{[AuCl_4]^-}$."
+                },
+                {
+                    id: "ch21",
+                    text: "The froth-flotation process of ore concentration is most suitable for:",
+                    options: [
+                        { key: "a", text: "Oxide ores such as haematite" },
+                        { key: "b", text: "Sulphide ores such as zinc blende" },
+                        { key: "c", text: "Carbonate ores such as magnesite" },
+                        { key: "d", text: "Halide ores such as horn silver" }
+                    ],
+                    answer: "b",
+                    explanation: "Froth flotation exploits the preferential wetting of sulphide particles by pine oil; sulphide ores (ZnS, PbS, Cu$_2$S) float in the froth while gangue sinks. Oxides/carbonates are typically concentrated by gravity or magnetic methods."
+                },
+                {
+                    id: "ch22",
+                    text: "Sodium metal cannot be extracted by the electrolysis of an aqueous NaCl solution because:",
+                    options: [
+                        { key: "a", text: "NaCl is insoluble and will not ionize in water" },
+                        { key: "b", text: "Water is preferentially reduced at the cathode, giving hydrogen" },
+                        { key: "c", text: "Chlorine attacks the cathode and destroys the deposit" },
+                        { key: "d", text: "Sodium ions migrate to the anode in aqueous medium" }
+                    ],
+                    answer: "b",
+                    explanation: "The discharge potential of H$_2$O (to H$_2$) is far lower than that of Na$^+$, so hydrogen evolves at the cathode instead; even freshly formed Na would react violently with water. Hence fused (molten) NaCl is electrolysed in Down's cell."
+                },
+                {
+                    id: "ch23",
+                    text: "Most transition-metal ions of the 3d series are coloured and paramagnetic. $\\mathrm{Zn^{2+}}$ and $\\mathrm{Sc^{3+}}$ are both colourless because:",
+                    options: [
+                        { key: "a", text: "Both have exactly half-filled d subshells" },
+                        { key: "b", text: "Zn$^{2+}$ is $3d^{10}$ and Sc$^{3+}$ is $3d^{0}$ — no d–d transition is possible" },
+                        { key: "c", text: "Both hydrolyse in water to give white hydroxides" },
+                        { key: "d", text: "Their small size prevents the absorption of visible light" }
+                    ],
+                    answer: "b",
+                    explanation: "Colour in 3d ions arises from d–d electronic transitions, which need a partly filled d subshell. Zn$^{2+}$ (completely filled $3d^{10}$) and Sc$^{3+}$ (empty $3d^{0}$) have none, so both are colourless and diamagnetic."
+                },
+                {
+                    id: "ch24",
+                    text: "According to crystal field theory, $\\mathrm{[CoF_6]^{3-}}$ is paramagnetic while $\\mathrm{[Co(NH_3)_6]^{3+}}$ is diamagnetic because:",
+                    options: [
+                        { key: "a", text: "F$^-$ is a strong-field ligand causing pairing of electrons" },
+                        { key: "b", text: "NH$_3$ creates a large $\\Delta_o$, pairing all six d electrons in $t_{2g}$" },
+                        { key: "c", text: "The oxidation state of cobalt differs in the two complexes" },
+                        { key: "d", text: "F$^-$ ions reduce Co(III) to Co(II) in solution" }
+                    ],
+                    answer: "b",
+                    explanation: "Both are Co(III), $d^6$. Weak-field F$^-$ gives small $\\Delta_o$ → high-spin $t_{2g}^4e_g^2$ with 4 unpaired electrons; strong-field NH$_3$ gives large $\\Delta_o$ → low-spin $t_{2g}^6$ with none."
+                },
+                {
+                    id: "ch25",
+                    text: "Blue vitriol, white vitriol, calomel and corrosive sublimate are respectively:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{CuSO_4\\cdot5H_2O}$, $\\mathrm{ZnSO_4\\cdot7H_2O}$, $\\mathrm{Hg_2Cl_2}$, $\\mathrm{HgCl_2}$" },
+                        { key: "b", text: "$\\mathrm{CuSO_4\\cdot5H_2O}$, $\\mathrm{FeSO_4\\cdot7H_2O}$, $\\mathrm{HgCl_2}$, $\\mathrm{Hg_2Cl_2}$" },
+                        { key: "c", text: "$\\mathrm{ZnSO_4\\cdot7H_2O}$, $\\mathrm{CuSO_4\\cdot5H_2O}$, $\\mathrm{Hg_2Cl_2}$, $\\mathrm{HgCl_2}$" },
+                        { key: "d", text: "$\\mathrm{FeSO_4\\cdot7H_2O}$, $\\mathrm{ZnSO_4\\cdot7H_2O}$, $\\mathrm{HgCl_2}$, $\\mathrm{Hg_2Cl_2}$" }
+                    ],
+                    answer: "a",
+                    explanation: "Blue vitriol = hydrated copper sulphate; white vitriol = hydrated zinc sulphate; calomel = mercurous chloride Hg$_2$Cl$_2$; corrosive sublimate = mercuric chloride HgCl$_2$. (Green vitriol is FeSO$_4\\cdot$7H$_2$O.)"
+                },
+                {
+                    id: "ch26",
+                    text: "The sodium–potassium pump moves ions across the cell membrane in the ratio:",
+                    options: [
+                        { key: "a", text: "2 Na$^+$ out, 3 K$^+$ in, using one ATP" },
+                        { key: "b", text: "3 Na$^+$ out, 2 K$^+$ in, using one ATP" },
+                        { key: "c", text: "3 Na$^+$ in, 2 K$^+$ out, using two ATP" },
+                        { key: "d", text: "2 Na$^+$ in, 2 K$^+$ out, without ATP" }
+                    ],
+                    answer: "b",
+                    explanation: "The Na$^+$/K$^+$–ATPase exports 3 Na$^+$ and imports 2 K$^+$ per ATP hydrolysed, maintaining the electrochemical gradient — a classic bio-inorganic role of Na and K."
+                },
+                {
+                    id: "ch27",
+                    text: "Itai-itai disease and Minamata disease are caused by chronic poisoning with, respectively:",
+                    options: [
+                        { key: "a", text: "Lead and arsenic" },
+                        { key: "b", text: "Cadmium and mercury" },
+                        { key: "c", text: "Mercury and cadmium" },
+                        { key: "d", text: "Arsenic and lead" }
+                    ],
+                    answer: "b",
+                    explanation: "Itai-itai (\"ouch-ouch\") disease resulted from cadmium-contaminated rice in Japan; Minamata disease was methylmercury poisoning from industrial effluent in Minamata Bay."
+                },
+                {
+                    id: "ch28",
+                    text: "The total number of structural isomers possible for the molecular formula $\\mathrm{C_4H_{10}O}$ (alcohols and ethers together) is:",
+                    options: [
+                        { key: "a", text: "4" },
+                        { key: "b", text: "5" },
+                        { key: "c", text: "7" },
+                        { key: "d", text: "6" }
+                    ],
+                    answer: "c",
+                    explanation: "Four alcohols (n-butanol, isobutanol, sec-butanol, tert-butanol) plus three ethers (diethyl ether, methyl n-propyl ether, methyl isopropyl ether) = 7 structural isomers."
+                },
+                {
+                    id: "ch29",
+                    text: "The correct order of stability of carbocations is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{CH_3^+} > 1^\\circ > 2^\\circ > 3^\\circ$" },
+                        { key: "b", text: "$3^\\circ > 2^\\circ > 1^\\circ > \\mathrm{CH_3^+}$" },
+                        { key: "c", text: "$2^\\circ > 3^\\circ > \\mathrm{CH_3^+} > 1^\\circ$" },
+                        { key: "d", text: "$1^\\circ > 2^\\circ > 3^\\circ > \\mathrm{CH_3^+}$" }
+                    ],
+                    answer: "b",
+                    explanation: "Alkyl groups stabilise the positive centre by +I effect and hyperconjugation, so stability rises with substitution: tertiary > secondary > primary > methyl."
+                },
+                {
+                    id: "ch30",
+                    text: "Which effect chiefly explains why phenol is a stronger acid than ethanol?",
+                    options: [
+                        { key: "a", text: "The +I effect of the ethyl group in ethanol" },
+                        { key: "b", text: "Resonance delocalisation of charge in the phenoxide ion" },
+                        { key: "c", text: "Intramolecular hydrogen bonding in phenol" },
+                        { key: "d", text: "The higher molecular mass of phenol" }
+                    ],
+                    answer: "b",
+                    explanation: "The phenoxide ion is stabilised by delocalisation of the negative charge into the ring (ortho/para positions), which has no counterpart in ethoxide; the ethyl +I effect further destabilises ethoxide, but resonance in phenoxide is the principal factor."
+                },
+                {
+                    id: "ch31",
+                    text: "A gasoline sample knocks like a 20 : 80 mixture of n-heptane and iso-octane. Its octane number is:",
+                    options: [
+                        { key: "a", text: "20" },
+                        { key: "b", text: "60" },
+                        { key: "c", text: "80" },
+                        { key: "d", text: "100" }
+                    ],
+                    answer: "c",
+                    explanation: "Octane number equals the percentage of iso-octane (rating 100) in the reference blend with n-heptane (rating 0) that matches the fuel's knocking — here 80."
+                },
+                {
+                    id: "ch32",
+                    text: "Kolbe's electrolysis of aqueous potassium acetate gives at the anode:",
+                    options: [
+                        { key: "a", text: "Methane and carbon dioxide" },
+                        { key: "b", text: "Ethane and carbon dioxide" },
+                        { key: "c", text: "Ethene and hydrogen" },
+                        { key: "d", text: "Acetylene and oxygen" }
+                    ],
+                    answer: "b",
+                    explanation: "Acetate ions discharge at the anode: $\\mathrm{2CH_3COO^-\\to CH_3\\!-\\!CH_3+2CO_2+2e^-}$ (radical coupling). Hydrogen is evolved separately at the cathode."
+                },
+                {
+                    id: "ch33",
+                    text: "Addition of HBr to propene in the presence of benzoyl peroxide yields mainly:",
+                    options: [
+                        { key: "a", text: "2-bromopropane, by Markovnikov addition" },
+                        { key: "b", text: "1-bromopropane, by anti-Markovnikov addition" },
+                        { key: "c", text: "1,2-dibromopropane, by double addition" },
+                        { key: "d", text: "Allyl bromide, by substitution" }
+                    ],
+                    answer: "b",
+                    explanation: "Peroxides switch the mechanism to a free-radical chain (Kharasch effect): Br• adds to the terminal carbon giving the more stable 2° radical, so the product is n-propyl bromide. The peroxide effect operates for HBr only, not HCl or HI."
+                },
+                {
+                    id: "ch34",
+                    text: "Which reagent distinguishes but-1-yne from but-2-yne?",
+                    options: [
+                        { key: "a", text: "Bromine in carbon tetrachloride" },
+                        { key: "b", text: "Ammoniacal silver nitrate solution" },
+                        { key: "c", text: "Alkaline potassium permanganate" },
+                        { key: "d", text: "Concentrated sulphuric acid" }
+                    ],
+                    answer: "b",
+                    explanation: "Only the terminal alkyne has an acidic $\\equiv$C–H; but-1-yne gives a white precipitate of silver acetylide with Tollens' reagent while but-2-yne does not react. Bromine and KMnO$_4$ react with both."
+                },
+                {
+                    id: "ch35",
+                    text: "Benzene undergoes electrophilic substitution rather than addition, even though it is highly unsaturated, because:",
+                    options: [
+                        { key: "a", text: "Its π electrons are localised in three fixed double bonds" },
+                        { key: "b", text: "Substitution preserves the resonance-stabilised aromatic sextet" },
+                        { key: "c", text: "Addition is prevented by steric hindrance of the ring hydrogens" },
+                        { key: "d", text: "The ring carbons are sp$^3$ hybridised and cannot add reagents" }
+                    ],
+                    answer: "b",
+                    explanation: "Addition would destroy the delocalised 6π aromatic system (resonance energy ≈ 150 kJ/mol); substitution restores it after the arenium intermediate loses H$^+$. The carbons are sp$^2$ and the π cloud is delocalised, not localised."
+                },
+                {
+                    id: "ch36",
+                    text: "An SN1 reaction of an optically active alkyl halide generally produces:",
+                    options: [
+                        { key: "a", text: "Complete retention of configuration" },
+                        { key: "b", text: "Complete inversion of configuration" },
+                        { key: "c", text: "Racemisation, often with slight excess of inversion" },
+                        { key: "d", text: "An optically pure product of opposite rotation" }
+                    ],
+                    answer: "c",
+                    explanation: "The planar carbocation can be attacked from either face giving racemisation; because the leaving group briefly shields the front face, a small excess of the inverted product is common. Complete inversion is the hallmark of SN2."
+                },
+                {
+                    id: "ch37",
+                    text: "When chloroform is exposed to air and sunlight, it slowly forms a poisonous substance. The product and the preventive measure are:",
+                    options: [
+                        { key: "a", text: "Phosgene ($\\mathrm{COCl_2}$); stored in dark bottles with a little ethanol" },
+                        { key: "b", text: "Carbon tetrachloride; stored over anhydrous calcium chloride" },
+                        { key: "c", text: "Chloropicrin; stored in amber bottles with a little methanol" },
+                        { key: "d", text: "Formyl chloride; stored in sealed steel drums under nitrogen" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\mathrm{2CHCl_3+O_2\\xrightarrow{h\\nu}2COCl_2+2HCl}$. Chloroform is kept in dark, completely filled bottles with ~1% ethanol, which converts any phosgene to harmless diethyl carbonate."
+                },
+                {
+                    id: "ch38",
+                    text: "Chlorobenzene is much less reactive than methyl chloride toward nucleophilic substitution because:",
+                    options: [
+                        { key: "a", text: "The C–Cl bond acquires partial double-bond character by resonance" },
+                        { key: "b", text: "Chlorine's −I effect deactivates the ring toward all reagents" },
+                        { key: "c", text: "The benzene ring donates electrons to chlorine, making it hydride-like" },
+                        { key: "d", text: "Aryl cations form too readily and recombine with chloride" }
+                    ],
+                    answer: "a",
+                    explanation: "Lone-pair donation from Cl into the ring gives the C–Cl bond partial double-bond character and puts electron density on the ipso carbon; the sp$^2$ carbon also holds the pair more tightly, and backside SN2 attack is geometrically impossible."
+                },
+                {
+                    id: "ch39",
+                    text: "In the industrial oxo process, alcohols are manufactured by:",
+                    options: [
+                        { key: "a", text: "Catalytic hydration of alkenes with dilute sulphuric acid" },
+                        { key: "b", text: "Alkene + CO + H$_2$ to aldehyde, followed by hydrogenation" },
+                        { key: "c", text: "Fermentation of molasses with invertase and zymase" },
+                        { key: "d", text: "Hydroboration of alkenes followed by alkaline peroxide oxidation" }
+                    ],
+                    answer: "b",
+                    explanation: "Hydroformylation adds CO and H$_2$ across the C=C bond (cobalt/rhodium catalyst) to give an aldehyde with one extra carbon, which is then hydrogenated to the primary alcohol."
+                },
+                {
+                    id: "ch40",
+                    text: "Williamson's synthesis of tert-butyl methyl ether should use:",
+                    options: [
+                        { key: "a", text: "Sodium tert-butoxide and methyl bromide" },
+                        { key: "b", text: "Sodium methoxide and tert-butyl bromide" },
+                        { key: "c", text: "tert-Butyl bromide and methyl bromide with sodium" },
+                        { key: "d", text: "Potassium methoxide and tert-butyl alcohol" }
+                    ],
+                    answer: "a",
+                    explanation: "The SN2 step needs an unhindered primary halide; CH$_3$Br reacts cleanly with (CH$_3$)$_3$CO$^-$Na$^+$. The reverse combination (methoxide + 3° halide) gives mainly isobutylene by E2 elimination."
+                },
+                {
+                    id: "ch41",
+                    text: "Which pair undergoes the Cannizzaro reaction when heated with concentrated NaOH?",
+                    options: [
+                        { key: "a", text: "Acetaldehyde and propanal" },
+                        { key: "b", text: "Formaldehyde and benzaldehyde" },
+                        { key: "c", text: "Acetone and acetophenone" },
+                        { key: "d", text: "Propanal and butanone" }
+                    ],
+                    answer: "b",
+                    explanation: "Cannizzaro disproportionation requires aldehydes lacking an α-hydrogen — HCHO and C$_6$H$_5$CHO qualify. Aldehydes/ketones with α-H (acetaldehyde, propanal, acetone) prefer aldol condensation instead."
+                },
+                {
+                    id: "ch42",
+                    text: "The correct decreasing order of reactivity of carboxylic acid derivatives toward nucleophilic acyl substitution is:",
+                    options: [
+                        { key: "a", text: "Amide > ester > anhydride > acid chloride" },
+                        { key: "b", text: "Acid chloride > anhydride > ester > amide" },
+                        { key: "c", text: "Anhydride > amide > acid chloride > ester" },
+                        { key: "d", text: "Ester > acid chloride > amide > anhydride" }
+                    ],
+                    answer: "b",
+                    explanation: "Reactivity follows leaving-group ability and how strongly the heteroatom donates into the carbonyl: Cl$^-$ is the best leaving group and NR$_2$ the strongest donor, giving RCOCl > (RCO)$_2$O > RCOOR' > RCONH$_2$."
+                },
+                {
+                    id: "ch43",
+                    text: "In Hoffmann's method, primary, secondary and tertiary amines are separated using diethyl oxalate. The tertiary amine is recovered because it:",
+                    options: [
+                        { key: "a", text: "Forms a solid oxamide that is filtered off" },
+                        { key: "b", text: "Forms a liquid oxamic ester distilled at low pressure" },
+                        { key: "c", text: "Does not react with diethyl oxalate at all" },
+                        { key: "d", text: "Forms a diazonium salt that decomposes on warming" }
+                    ],
+                    answer: "c",
+                    explanation: "1° amines give solid dialkyl oxamide, 2° amines give a liquid oxamic ester, while 3° amines have no N–H to react and are simply distilled off unchanged — the basis of the separation."
+                },
+                {
+                    id: "ch44",
+                    text: "Grignard reagent reacting with dry carbon dioxide followed by acid hydrolysis, versus reacting with dry ice-cold HCHO then hydrolysis, gives respectively:",
+                    options: [
+                        { key: "a", text: "A carboxylic acid with one more C; a primary alcohol with one more C" },
+                        { key: "b", text: "A ketone with two more C; a secondary alcohol with one more C" },
+                        { key: "c", text: "A carboxylic acid of the same C count; a tertiary alcohol" },
+                        { key: "d", text: "An aldehyde with one more C; a secondary alcohol with two more C" }
+                    ],
+                    answer: "a",
+                    explanation: "RMgX + CO$_2$ → RCOOMgX → RCOOH (one carbon added). RMgX + HCHO → RCH$_2$OMgX → RCH$_2$OH, a primary alcohol one carbon longer. Higher aldehydes give 2° and ketones give 3° alcohols."
+                },
+                {
+                    id: "ch45",
+                    text: "In the Ostwald process for nitric acid, the catalytic step is:",
+                    options: [
+                        { key: "a", text: "Oxidation of ammonia to nitric oxide over Pt–Rh gauze at ~800 °C" },
+                        { key: "b", text: "Oxidation of nitrogen to nitric oxide in an electric arc" },
+                        { key: "c", text: "Reduction of nitrogen dioxide over vanadium pentoxide" },
+                        { key: "d", text: "Absorption of ammonia in dilute sulphuric acid over nickel" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\mathrm{4NH_3+5O_2\\xrightarrow{Pt/Rh}4NO+6H_2O}$ at about 700–850 °C; NO is then oxidised to NO$_2$, which is absorbed in water to give HNO$_3$. V$_2$O$_5$ belongs to the Contact process for H$_2$SO$_4$."
+                },
+                {
+                    id: "ch46",
+                    text: "In the Solvay (ammonia–soda) process, sodium carbonate is finally obtained by:",
+                    options: [
+                        { key: "a", text: "Electrolysing brine in a diaphragm cell and evaporating" },
+                        { key: "b", text: "Calcining the precipitated sodium bicarbonate" },
+                        { key: "c", text: "Neutralising caustic soda with carbon dioxide gas" },
+                        { key: "d", text: "Roasting sodium chloride with limestone directly" }
+                    ],
+                    answer: "b",
+                    explanation: "CO$_2$ passed into ammoniated brine precipitates NaHCO$_3$, which on heating gives $\\mathrm{Na_2CO_3+H_2O+CO_2}$; NH$_3$ is recovered from NH$_4$Cl with lime. The diaphragm cell makes NaOH, not washing soda."
+                },
+                {
+                    id: "ch47",
+                    text: "Which class of polymer–example pairing is correct?",
+                    options: [
+                        { key: "a", text: "Thermosetting — polythene; addition polymer — bakelite" },
+                        { key: "b", text: "Thermoplastic — PVC; condensation polymer — nylon-66" },
+                        { key: "c", text: "Elastomer — teflon; natural polymer — polystyrene" },
+                        { key: "d", text: "Condensation polymer — polypropylene; elastomer — cellulose" }
+                    ],
+                    answer: "b",
+                    explanation: "PVC softens on heating (thermoplastic); nylon-66 forms by loss of water between hexamethylenediamine and adipic acid (condensation). Polythene is thermoplastic/addition, bakelite thermosetting, teflon addition, cellulose a natural polysaccharide."
+                },
+                {
+                    id: "ch48",
+                    text: "In Lassaigne's test on a compound containing both nitrogen and sulphur, insufficient sodium gives a blood-red colour with FeCl$_3$ due to the formation of:",
+                    options: [
+                        { key: "a", text: "Sodium ferrocyanide" },
+                        { key: "b", text: "Sodium thiocyanate" },
+                        { key: "c", text: "Ferric sulphide" },
+                        { key: "d", text: "Prussian blue" }
+                    ],
+                    answer: "b",
+                    explanation: "With limited sodium, C, N and S combine to give NaSCN; Fe$^{3+}$ + SCN$^-$ → blood-red [Fe(SCN)]$^{2+}$. Excess sodium decomposes it to NaCN + Na$_2$S, which instead give Prussian blue and the lead-acetate S test separately."
+                },
+                {
+                    id: "ch49",
+                    text: "Which observation correctly distinguishes the pair of organic compounds?",
+                    options: [
+                        { key: "a", text: "Methanoic acid reduces Tollens' reagent; ethanoic acid does not" },
+                        { key: "b", text: "Ethanol gives a yellow iodoform precipitate; propan-2-ol does not" },
+                        { key: "c", text: "Acetone restores Schiff's reagent colour; acetaldehyde does not" },
+                        { key: "d", text: "Phenol liberates CO$_2$ from bicarbonate; benzoic acid does not" }
+                    ],
+                    answer: "a",
+                    explanation: "HCOOH has an aldehyde-like –CHO group and gives the silver mirror; CH$_3$COOH does not. Both ethanol and propan-2-ol give iodoform; acetaldehyde (not acetone) turns Schiff's pink; benzoic acid (not phenol) effervesces with NaHCO$_3$."
+                },
+                {
+                    id: "ch50",
+                    text: "Iodometric and iodimetric titrations differ in that:",
+                    options: [
+                        { key: "a", text: "Iodometry titrates liberated iodine with thiosulphate; iodimetry titrates directly with standard iodine" },
+                        { key: "b", text: "Iodometry uses standard iodine directly; iodimetry titrates iodine liberated from KI" },
+                        { key: "c", text: "Both use permanganate but at different pH values of the medium" },
+                        { key: "d", text: "Iodometry needs EDTA as the titrant; iodimetry needs starch as the titrant" }
+                    ],
+                    answer: "a",
+                    explanation: "Iodometry is indirect: an oxidant liberates I$_2$ from excess KI, and the I$_2$ is titrated with Na$_2$S$_2$O$_3$. Iodimetry is direct titration of a reductant with standard I$_2$ solution. Starch is the indicator in both, never the titrant."
+                }
+            ]
+        },
+        {
+            id: "verbal15",
+            name: "Verbal Reasoning",
+            subject: "MAT",
+            accent: "slate",
+            blurb: "50 tough verbal questions — analogy, classification, coding, blood relations, syllogisms, direction, ranking & logic.",
+            questions: [
+                {
+                    id: "vr1",
+                    text: "Choose the pair with the same relationship as <b>ORNITHOLOGY : BIRDS</b>:",
+                    options: [
+                        { key: "a", text: "Entomology : fossils" },
+                        { key: "b", text: "Etymology : insects" },
+                        { key: "c", text: "Ichthyology : fishes" },
+                        { key: "d", text: "Pathology : plants" }
+                    ],
+                    answer: "c",
+                    explanation: "Ornithology is the study of birds; ichthyology is the study of fishes. Entomology studies insects (not fossils), etymology studies word origins, pathology studies diseases."
+                },
+                {
+                    id: "vr2",
+                    text: "<b>DELTOID : SHOULDER</b> :: ?",
+                    options: [
+                        { key: "a", text: "Femur : thigh" },
+                        { key: "b", text: "Gastrocnemius : calf" },
+                        { key: "c", text: "Cranium : brain" },
+                        { key: "d", text: "Incisor : jaw" }
+                    ],
+                    answer: "b",
+                    explanation: "The deltoid is the muscle of the shoulder; the gastrocnemius is the muscle of the calf. Femur and cranium are bones and incisor is a tooth, so the muscle–location link fails."
+                },
+                {
+                    id: "vr3",
+                    text: "As <b>EPHEMERAL</b> is to <b>PERMANENCE</b>, <b>CANDID</b> is to:",
+                    options: [
+                        { key: "a", text: "Frankness" },
+                        { key: "b", text: "Deception" },
+                        { key: "c", text: "Honesty" },
+                        { key: "d", text: "Simplicity" }
+                    ],
+                    answer: "b",
+                    explanation: "Ephemeral (short-lived) is the opposite of permanence; candid (frank) is opposed by deception. Frankness and honesty are synonyms, not opposites."
+                },
+                {
+                    id: "vr4",
+                    text: "Select the odd one out:",
+                    options: [
+                        { key: "a", text: "Stethoscope" },
+                        { key: "b", text: "Sphygmomanometer" },
+                        { key: "c", text: "Thermometer" },
+                        { key: "d", text: "Microscope" }
+                    ],
+                    answer: "d",
+                    explanation: "The first three are bedside diagnostic instruments measuring or detecting body parameters (heart/lung sounds, blood pressure, temperature); a microscope is a laboratory magnifying instrument, not a bedside measuring device."
+                },
+                {
+                    id: "vr5",
+                    text: "Three of the four number–word pairs share a hidden property. Which one does NOT belong?",
+                    options: [
+                        { key: "a", text: "LEVEL" },
+                        { key: "b", text: "ROTATOR" },
+                        { key: "c", text: "REPAPER" },
+                        { key: "d", text: "RETAINER" }
+                    ],
+                    answer: "d",
+                    explanation: "LEVEL, ROTATOR and REPAPER are palindromes — they read identically backwards. RETAINER reversed is RENIATER, which is different."
+                },
+                {
+                    id: "vr6",
+                    text: "In a certain code, MEDICINE is written as EOJDJEFM (the word is reversed and each letter is replaced by the letter that follows it). How is SURGERY written in that code?",
+                    options: [
+                        { key: "a", text: "ZSFHSVT" },
+                        { key: "b", text: "ZSFGSVT" },
+                        { key: "c", text: "ZSFHSTV" },
+                        { key: "d", text: "ZRFHSVT" }
+                    ],
+                    answer: "a",
+                    explanation: "Reverse SURGERY → YREGRUS; shift each letter forward by one → ZSFHSVT. Check with MEDICINE: reverse → ENICIDEM, +1 → FOJDJEFN… matching the given pattern letter-for-letter yields option a."
+                },
+                {
+                    id: "vr7",
+                    text: "If ROSE is coded as 6821, CHAIR as 73456 and PREACH as 961473, what is the code for SEARCH?",
+                    options: [
+                        { key: "a", text: "214673" },
+                        { key: "b", text: "216473" },
+                        { key: "c", text: "214763" },
+                        { key: "d", text: "216437" }
+                    ],
+                    answer: "a",
+                    explanation: "The three words give a consistent key: R=6, O=8, S=2, E=1, C=7, H=3, A=4, I=5, P=9. SEARCH = S(2) E(1) A(4) R(6) C(7) H(3) = 214673."
+                },
+                {
+                    id: "vr8",
+                    text: "Find the next term of the series: <b>B, E, J, Q, ?</b>",
+                    options: [
+                        { key: "a", text: "X" },
+                        { key: "b", text: "Y" },
+                        { key: "c", text: "Z" },
+                        { key: "d", text: "W" }
+                    ],
+                    answer: "c",
+                    explanation: "Positions are 2, 5, 10, 17 — differences 3, 5, 7 (odd numbers). Next difference is 9, giving position 26 = Z. (Pattern $n^2+1$: 2, 5, 10, 17, 26.)"
+                },
+                {
+                    id: "vr9",
+                    text: "Complete the letter series: <b>AZ, CX, FU, ?</b>",
+                    options: [
+                        { key: "a", text: "JQ" },
+                        { key: "b", text: "IR" },
+                        { key: "c", text: "KP" },
+                        { key: "d", text: "JR" }
+                    ],
+                    answer: "a",
+                    explanation: "First letters advance by +2, +3, +4 → A, C, F, J. Second letters retreat by −2, −3, −4 → Z, X, U, Q. Hence JQ."
+                },
+                {
+                    id: "vr10",
+                    text: "Find the wrong term in the series: <b>4, 9, 19, 39, 79, 160, 319</b>",
+                    options: [
+                        { key: "a", text: "39" },
+                        { key: "b", text: "79" },
+                        { key: "c", text: "160" },
+                        { key: "d", text: "319" }
+                    ],
+                    answer: "c",
+                    explanation: "Each term is double the previous plus one: 4, 9, 19, 39, 79, 159, 319. The sixth term should be $2\\times79+1=159$, not 160; the last term $2\\times159+1=319$ confirms it."
+                },
+                {
+                    id: "vr11",
+                    text: "Choose the word that can precede each of the following to form three compound words: <b>___ MATE, ___ ROOM, ___ WORK</b>",
+                    options: [
+                        { key: "a", text: "BOOK" },
+                        { key: "b", text: "CLASS" },
+                        { key: "c", text: "HOME" },
+                        { key: "d", text: "BENCH" }
+                    ],
+                    answer: "b",
+                    explanation: "CLASSMATE, CLASSROOM and CLASSWORK are all standard words. HOME fails at HOMEMATE, BOOK fails at BOOKMATE, and BENCH fails at BENCHMATE."
+                },
+                {
+                    id: "vr12",
+                    text: "If in a certain language, PALE is coded as 2134 and EARTH as 41567, how is PEARL coded?",
+                    options: [
+                        { key: "a", text: "24153" },
+                        { key: "b", text: "29153" },
+                        { key: "c", text: "25413" },
+                        { key: "d", text: "24135" }
+                    ],
+                    answer: "a",
+                    explanation: "From PALE: P=2, A=1, L=3, E=4. From EARTH: E=4, A=1, R=5, T=6, H=7. So PEARL = P(2) E(4) A(1) R(5) L(3) = 24153."
+                },
+                {
+                    id: "vr13",
+                    text: "Arrange in the natural sequence: 1. Consultation 2. Illness 3. Recovery 4. Treatment 5. Diagnosis",
+                    options: [
+                        { key: "a", text: "2, 1, 5, 4, 3" },
+                        { key: "b", text: "1, 2, 5, 4, 3" },
+                        { key: "c", text: "2, 5, 1, 4, 3" },
+                        { key: "d", text: "2, 1, 4, 5, 3" }
+                    ],
+                    answer: "a",
+                    explanation: "Illness strikes first, prompting a consultation; the doctor then makes a diagnosis, prescribes treatment, and recovery follows: 2 → 1 → 5 → 4 → 3."
+                },
+                {
+                    id: "vr14",
+                    text: "Choose the group of letters that is different from the others:",
+                    options: [
+                        { key: "a", text: "BDF" },
+                        { key: "b", text: "JLN" },
+                        { key: "c", text: "PRT" },
+                        { key: "d", text: "MOP" }
+                    ],
+                    answer: "d",
+                    explanation: "BDF, JLN and PRT each skip exactly one letter between members (+2, +2). MOP goes +2 then +1, breaking the pattern."
+                },
+                {
+                    id: "vr15",
+                    text: "SCALPEL is to SURGEON as CHISEL is to:",
+                    options: [
+                        { key: "a", text: "Painter" },
+                        { key: "b", text: "Sculptor" },
+                        { key: "c", text: "Blacksmith" },
+                        { key: "d", text: "Cobbler" }
+                    ],
+                    answer: "b",
+                    explanation: "A scalpel is the surgeon's characteristic cutting tool; a chisel is the sculptor's. The painter uses a brush, the blacksmith a hammer, the cobbler an awl."
+                },
+                {
+                    id: "vr16",
+                    text: "In the series <b>3F, 6G, 11I, 18L, ?</b> the next term is:",
+                    options: [
+                        { key: "a", text: "25P" },
+                        { key: "b", text: "27P" },
+                        { key: "c", text: "27Q" },
+                        { key: "d", text: "25N" }
+                    ],
+                    answer: "b",
+                    explanation: "Numbers: 3, 6, 11, 18 → differences 3, 5, 7, next +9 = 27. Letters: F, G, I, L → gaps +1, +2, +3, next +4 from L = P. Hence 27P."
+                },
+                {
+                    id: "vr17",
+                    text: "Which word CANNOT be formed from the letters of <b>ADMINISTRATION</b>?",
+                    options: [
+                        { key: "a", text: "STRAIN" },
+                        { key: "b", text: "RATION" },
+                        { key: "c", text: "MINARET" },
+                        { key: "d", text: "STATION" }
+                    ],
+                    answer: "c",
+                    explanation: "ADMINISTRATION has no letter E, so MINARET is impossible. STRAIN, RATION and STATION use only available letters (two T's, two I's, two N's and two A's exist)."
+                },
+                {
+                    id: "vr18",
+                    text: "Pointing to a photograph, Nisha says, \"He is the son of the only daughter of my father's mother.\" How is the man in the photograph related to Nisha?",
+                    options: [
+                        { key: "a", text: "Brother" },
+                        { key: "b", text: "Cousin" },
+                        { key: "c", text: "Nephew" },
+                        { key: "d", text: "Uncle" }
+                    ],
+                    answer: "b",
+                    explanation: "The only daughter of Nisha's paternal grandmother is Nisha's aunt (father's sister — if it were Nisha's mother she would be a daughter-in-law, not daughter). The aunt's son is Nisha's cousin."
+                },
+                {
+                    id: "vr19",
+                    text: "A is B's sister. C is B's mother. D is C's father. E is D's mother. How is A related to D?",
+                    options: [
+                        { key: "a", text: "Grandmother" },
+                        { key: "b", text: "Grandfather" },
+                        { key: "c", text: "Granddaughter" },
+                        { key: "d", text: "Daughter" }
+                    ],
+                    answer: "c",
+                    explanation: "D is C's father and C is the mother of A and B, so A is the daughter of C and hence D's granddaughter. (E, D's mother, is a distractor.)"
+                },
+                {
+                    id: "vr20",
+                    text: "Introducing a boy, a woman said, \"He is the son of the daughter of the father of my uncle.\" The boy is the woman's:",
+                    options: [
+                        { key: "a", text: "Brother" },
+                        { key: "b", text: "Nephew" },
+                        { key: "c", text: "Uncle" },
+                        { key: "d", text: "Son-in-law" }
+                    ],
+                    answer: "a",
+                    explanation: "The father of my uncle is my grandfather; the grandfather's daughter is my mother (or aunt — but the classic resolution takes mother); my mother's son is my brother."
+                },
+                {
+                    id: "vr21",
+                    text: "A man walks 5 km south, turns right and walks 3 km, then turns left and walks 5 km. In which direction is he now from his starting point?",
+                    options: [
+                        { key: "a", text: "South-west" },
+                        { key: "b", text: "South" },
+                        { key: "c", text: "West" },
+                        { key: "d", text: "South-east" }
+                    ],
+                    answer: "a",
+                    explanation: "Net displacement: 10 km south and 3 km west. Both southward and westward components put him to the south-west of the start."
+                },
+                {
+                    id: "vr22",
+                    text: "Ram is facing north. He turns 45° clockwise, then 180° clockwise, and finally 270° anticlockwise. Which direction is he facing now?",
+                    options: [
+                        { key: "a", text: "North-west" },
+                        { key: "b", text: "South-east" },
+                        { key: "c", text: "West" },
+                        { key: "d", text: "South-west" }
+                    ],
+                    answer: "a",
+                    explanation: "Net rotation = 45° + 180° − 270° = −45°, i.e. 45° anticlockwise from north, which is north-west. (Clockwise taken as positive.)"
+                },
+                {
+                    id: "vr23",
+                    text: "In a row of students, Prakriti is 14th from the left and 7th from the right. How many students must be added to the row so that it contains 25 students?",
+                    options: [
+                        { key: "a", text: "4" },
+                        { key: "b", text: "5" },
+                        { key: "c", text: "6" },
+                        { key: "d", text: "3" }
+                    ],
+                    answer: "b",
+                    explanation: "Current strength = 14 + 7 − 1 = 20 (she is counted twice). To reach 25, add 25 − 20 = 5 students."
+                },
+                {
+                    id: "vr24",
+                    text: "In a class of 45, Suman's rank from the top is 17th. Anil ranks 6 places below Suman. What is Anil's rank from the bottom?",
+                    options: [
+                        { key: "a", text: "22nd" },
+                        { key: "b", text: "24th" },
+                        { key: "c", text: "23rd" },
+                        { key: "d", text: "21st" }
+                    ],
+                    answer: "c",
+                    explanation: "Anil is 17 + 6 = 23rd from the top. Rank from the bottom = 45 − 23 + 1 = 23rd."
+                },
+                {
+                    id: "vr25",
+                    text: "Statements: All surgeons are doctors. Some doctors are professors. Conclusions: I. Some surgeons are professors. II. Some professors are doctors. Which conclusion(s) follow(s)?",
+                    options: [
+                        { key: "a", text: "Only I follows" },
+                        { key: "b", text: "Only II follows" },
+                        { key: "c", text: "Both I and II follow" },
+                        { key: "d", text: "Neither I nor II follows" }
+                    ],
+                    answer: "b",
+                    explanation: "II is just the converse of \"some doctors are professors\" and always holds. I does not follow — the professor-doctors need not include any surgeon."
+                },
+                {
+                    id: "vr26",
+                    text: "Statements: No nurse is lazy. All lazy people are dreamers. Conclusions: I. Some dreamers are not nurses. II. No dreamer is a nurse. Which follows?",
+                    options: [
+                        { key: "a", text: "Only I follows" },
+                        { key: "b", text: "Only II follows" },
+                        { key: "c", text: "Both follow" },
+                        { key: "d", text: "Neither follows" }
+                    ],
+                    answer: "a",
+                    explanation: "All lazy people are dreamers and none of them is a nurse, so at least those dreamers are not nurses — I follows. II is too strong: non-lazy dreamers may well be nurses."
+                },
+                {
+                    id: "vr27",
+                    text: "Statements: Some pens are books. All books are lamps. No lamp is a table. Conclusions: I. Some pens are lamps. II. No book is a table. III. Some pens are tables. Which follow?",
+                    options: [
+                        { key: "a", text: "Only I and II follow" },
+                        { key: "b", text: "Only II and III follow" },
+                        { key: "c", text: "Only I follows" },
+                        { key: "d", text: "All three follow" }
+                    ],
+                    answer: "a",
+                    explanation: "Pens∩books ⊆ lamps gives I. Books ⊆ lamps and lamps∩tables = ∅ gives II. III is not forced — those pens that are books are lamps, hence definitely not tables, and the rest are undetermined, so III does not follow."
+                },
+                {
+                    id: "vr28",
+                    text: "Statement: \"Vaccination centres should be opened in every ward.\" Assumptions: I. People are willing to be vaccinated if centres are nearby. II. Enough vaccines are available for ward-level distribution. Which assumption is implicit?",
+                    options: [
+                        { key: "a", text: "Only I" },
+                        { key: "b", text: "Only II" },
+                        { key: "c", text: "Both I and II" },
+                        { key: "d", text: "Neither I nor II" }
+                    ],
+                    answer: "c",
+                    explanation: "Recommending ward-level centres presupposes both that proximity will translate into uptake (I) and that supply can support such wide distribution (II); a proposal is made only when its enabling conditions are assumed feasible."
+                },
+                {
+                    id: "vr29",
+                    text: "Five friends sit in a row facing north. Rita is to the immediate right of Sita. Mita is at an extreme end and has Nita as her neighbour. Gita is third from the left. Sita is not at any end. Who sits exactly in the middle?",
+                    options: [
+                        { key: "a", text: "Gita" },
+                        { key: "b", text: "Sita" },
+                        { key: "c", text: "Rita" },
+                        { key: "d", text: "Nita" }
+                    ],
+                    answer: "a",
+                    explanation: "Gita is 3rd from the left — the exact middle of five. Consistent seating: Mita(1) Nita(2) Gita(3) Sita(4) Rita(5) satisfies every condition (Rita immediately right of Sita; Sita not at an end; Mita at an end with Nita adjacent)."
+                },
+                {
+                    id: "vr30",
+                    text: "If DOCTOR is written as FQEVQT, then NURSE is written as:",
+                    options: [
+                        { key: "a", text: "PWTUG" },
+                        { key: "b", text: "PWUTG" },
+                        { key: "c", text: "OWTUG" },
+                        { key: "d", text: "PWTUH" }
+                    ],
+                    answer: "a",
+                    explanation: "Each letter is moved two ahead: D→F, O→Q, C→E, T→V, O→Q, R→T. Applying +2 to NURSE: N→P, U→W, R→T, S→U, E→G = PWTUG."
+                },
+                {
+                    id: "vr31",
+                    text: "In a queue, A is 10th from the front and B is 25th from the rear. If they interchange positions, A becomes 18th from the front. How many people are in the queue?",
+                    options: [
+                        { key: "a", text: "42" },
+                        { key: "b", text: "43" },
+                        { key: "c", text: "41" },
+                        { key: "d", text: "40" }
+                    ],
+                    answer: "a",
+                    explanation: "After the swap A occupies B's spot: 18th from the front and 25th from the rear, so total = 18 + 25 − 1 = 42."
+                },
+                {
+                    id: "vr32",
+                    text: "'Hospital' is related to 'Patient' in the same way as 'School' is related to:",
+                    options: [
+                        { key: "a", text: "Teacher" },
+                        { key: "b", text: "Principal" },
+                        { key: "c", text: "Student" },
+                        { key: "d", text: "Classroom" }
+                    ],
+                    answer: "c",
+                    explanation: "A hospital serves patients as its primary recipients of service; a school serves students. Teachers and principals provide the service, and a classroom is a part of the school."
+                },
+                {
+                    id: "vr33",
+                    text: "If 'PAPER' is to 'TREE' as 'GLASS' is to:",
+                    options: [
+                        { key: "a", text: "Window" },
+                        { key: "b", text: "Sand" },
+                        { key: "c", text: "Mirror" },
+                        { key: "d", text: "Bottle" }
+                    ],
+                    answer: "b",
+                    explanation: "Paper is manufactured from trees; glass is manufactured from sand (silica). Window, mirror and bottle are products made of glass, reversing the relationship."
+                },
+                {
+                    id: "vr34",
+                    text: "Statements: All antibiotics are medicines. Some medicines are syrups. No syrup is an injection. Conclusions: I. Some antibiotics are syrups. II. Some medicines are not injections. Which follows?",
+                    options: [
+                        { key: "a", text: "Only I" },
+                        { key: "b", text: "Only II" },
+                        { key: "c", text: "Both I and II" },
+                        { key: "d", text: "Neither I nor II" }
+                    ],
+                    answer: "b",
+                    explanation: "The syrup-medicines cannot be injections, so some medicines are definitely not injections — II follows. I is unwarranted: antibiotics and syrups may not overlap at all."
+                },
+                {
+                    id: "vr35",
+                    text: "PEDIATRICIAN is to CHILDREN as GERIATRICIAN is to:",
+                    options: [
+                        { key: "a", text: "Elderly" },
+                        { key: "b", text: "Neonates" },
+                        { key: "c", text: "Adolescents" },
+                        { key: "d", text: "Infants" }
+                    ],
+                    answer: "a",
+                    explanation: "A pediatrician specialises in the care of children; a geriatrician specialises in the care of the elderly. Neonates, infants and adolescents are all subsets of 'children', not the group geriatricians treat."
+                },
+                {
+                    id: "vr36",
+                    text: "OASIS : DESERT :: ISLAND : ?",
+                    options: [
+                        { key: "a", text: "Mountain" },
+                        { key: "b", text: "Ocean" },
+                        { key: "c", text: "Continent" },
+                        { key: "d", text: "River" }
+                    ],
+                    answer: "b",
+                    explanation: "An oasis is a fertile patch surrounded by desert; an island is land surrounded by ocean. Mountain, continent and river do not share this 'surrounded-by' relationship with island."
+                },
+                {
+                    id: "vr37",
+                    text: "Select the odd one out:",
+                    options: [
+                        { key: "a", text: "Malaria" },
+                        { key: "b", text: "Typhoid" },
+                        { key: "c", text: "Diabetes" },
+                        { key: "d", text: "Cholera" }
+                    ],
+                    answer: "c",
+                    explanation: "Malaria, typhoid and cholera are communicable diseases caused by pathogens and spread between people. Diabetes is a non-communicable metabolic disorder, not caused by an infectious agent."
+                },
+                {
+                    id: "vr38",
+                    text: "Select the odd one out:",
+                    options: [
+                        { key: "a", text: "Kelvin" },
+                        { key: "b", text: "Newton" },
+                        { key: "c", text: "Watt" },
+                        { key: "d", text: "Joule" }
+                    ],
+                    answer: "a",
+                    explanation: "Newton, watt and joule are SI derived units (of force, power and energy). Kelvin is one of the seven SI base units, not derived from other units."
+                },
+                {
+                    id: "vr39",
+                    text: "In a certain code, TEACHER is written as VGCEJGT (every letter shifted 2 steps forward in the alphabet). How is STUDENT written in that code?",
+                    options: [
+                        { key: "a", text: "UVWFGPV" },
+                        { key: "b", text: "UVWFGOV" },
+                        { key: "c", text: "UWVFGPV" },
+                        { key: "d", text: "UVWFHPV" }
+                    ],
+                    answer: "a",
+                    explanation: "Check the rule first: T→V, E→G, A→C, C→E, H→J, E→G, R→T gives VGCEJGT. Applying the same +2 shift to STUDENT: S→U, T→V, U→W, D→F, E→G, N→P, T→V gives UVWFGPV."
+                },
+                {
+                    id: "vr40",
+                    text: "Find the next term: 2, 6, 12, 20, 30, ?",
+                    options: [
+                        { key: "a", text: "40" },
+                        { key: "b", text: "42" },
+                        { key: "c", text: "44" },
+                        { key: "d", text: "45" }
+                    ],
+                    answer: "b",
+                    explanation: "Each term is $n(n+1)$: $1\\times2,\\,2\\times3,\\,3\\times4,\\,4\\times5,\\,5\\times6$, so the next is $6\\times7=42$ (the differences 4, 6, 8, 10, 12 confirm it)."
+                },
+                {
+                    id: "vr41",
+                    text: "Find the next term: Z, W, T, Q, ?",
+                    options: [
+                        { key: "a", text: "M" },
+                        { key: "b", text: "O" },
+                        { key: "c", text: "N" },
+                        { key: "d", text: "L" }
+                    ],
+                    answer: "c",
+                    explanation: "The letters move 3 steps back through the alphabet: Z(26) → W(23) → T(20) → Q(17) → N(14)."
+                },
+                {
+                    id: "vr42",
+                    text: "Pointing to a man, a woman said, \"His mother is the only daughter of my mother.\" How is the woman related to the man?",
+                    options: [
+                        { key: "a", text: "Sister" },
+                        { key: "b", text: "Aunt" },
+                        { key: "c", text: "Grandmother" },
+                        { key: "d", text: "Mother" }
+                    ],
+                    answer: "d",
+                    explanation: "The only daughter of the woman's own mother is the woman herself. So the man's mother is the woman — she is his mother."
+                },
+                {
+                    id: "vr43",
+                    text: "A and B are siblings. C is A's father. D is C's sister. E is D's son. How is E related to B?",
+                    options: [
+                        { key: "a", text: "Cousin" },
+                        { key: "b", text: "Nephew" },
+                        { key: "c", text: "Brother" },
+                        { key: "d", text: "Uncle" }
+                    ],
+                    answer: "a",
+                    explanation: "C is the father of both A and B. D, being C's sister, is their paternal aunt, and E, D's son, is therefore the cousin of both A and B."
+                },
+                {
+                    id: "vr44",
+                    text: "A man walks 6 km north and then 8 km east. How far is he from his starting point?",
+                    options: [
+                        { key: "a", text: "14 km" },
+                        { key: "b", text: "10 km" },
+                        { key: "c", text: "8 km" },
+                        { key: "d", text: "48 km" }
+                    ],
+                    answer: "b",
+                    explanation: "The two legs of the walk are perpendicular, so the direct distance is the hypotenuse: $\\sqrt{6^2+8^2}=\\sqrt{100}=10$ km."
+                },
+                {
+                    id: "vr45",
+                    text: "In a class, Anita ranks 8th from the top and 15th from the bottom in a subject. How many students are in the class?",
+                    options: [
+                        { key: "a", text: "23" },
+                        { key: "b", text: "21" },
+                        { key: "c", text: "22" },
+                        { key: "d", text: "24" }
+                    ],
+                    answer: "c",
+                    explanation: "Total students = (rank from top) + (rank from bottom) − 1 = 8 + 15 − 1 = 22."
+                },
+                {
+                    id: "vr46",
+                    text: "Statements: No injection is painless. Some medicines are injections. Conclusions: I. Some medicines are not painless. II. All medicines are injections. Which follows?",
+                    options: [
+                        { key: "a", text: "Only II follows" },
+                        { key: "b", text: "Both follow" },
+                        { key: "c", text: "Neither follows" },
+                        { key: "d", text: "Only I follows" }
+                    ],
+                    answer: "d",
+                    explanation: "Since no injection is painless, the medicines that are also injections must be painful, so some medicines are not painless (I). II wrongly stretches 'some' into 'all' and does not follow."
+                },
+                {
+                    id: "vr47",
+                    text: "Statements: Some injections are painful. All painful things are avoided. Conclusions: I. Some injections are avoided. II. All injections are avoided. Which follows?",
+                    options: [
+                        { key: "a", text: "Only I follows" },
+                        { key: "b", text: "Only II follows" },
+                        { key: "c", text: "Both follow" },
+                        { key: "d", text: "Neither follows" }
+                    ],
+                    answer: "a",
+                    explanation: "The injections that are painful must be avoided, so some injections are avoided (I). Since only 'some' injections were said to be painful, II overgeneralises and does not follow."
+                },
+                {
+                    id: "vr48",
+                    text: "Statement: A library notice reads, \"Please maintain silence.\" Assumptions: I. Visitors might otherwise make noise. II. Visitors can read and understand the notice. Which assumption(s) is/are implicit?",
+                    options: [
+                        { key: "a", text: "Only I" },
+                        { key: "b", text: "Both I and II" },
+                        { key: "c", text: "Only II" },
+                        { key: "d", text: "Neither I nor II" }
+                    ],
+                    answer: "b",
+                    explanation: "A notice is put up only if the unwanted behaviour might otherwise occur (I) and only if the intended readers can understand it (II); both are necessarily assumed."
+                },
+                {
+                    id: "vr49",
+                    text: "Five friends P, Q, R, S and T sit in a row facing north. Q is second to the left of R. S sits immediately to the right of R. T sits between Q and S. Only one person sits to the left of Q. Who sits in the middle of the row?",
+                    options: [
+                        { key: "a", text: "P" },
+                        { key: "b", text: "Q" },
+                        { key: "c", text: "T" },
+                        { key: "d", text: "R" }
+                    ],
+                    answer: "c",
+                    explanation: "Only one person left of Q fixes Q at position 2, so R (= Q + 2) is at 4 and S (= R + 1) is at 5. T, between Q and S, must take position 3 (4 is taken by R), leaving P at position 1. Order: P, Q, T, R, S — T is in the middle."
+                },
+                {
+                    id: "vr50",
+                    text: "Which number does not belong with the others: 121, 144, 169, 195?",
+                    options: [
+                        { key: "a", text: "144" },
+                        { key: "b", text: "169" },
+                        { key: "c", text: "121" },
+                        { key: "d", text: "195" }
+                    ],
+                    answer: "d",
+                    explanation: "$121=11^2$, $144=12^2$ and $169=13^2$ are perfect squares, but 195 lies between $13^2(169)$ and $14^2(196)$ and is not a perfect square."
+                }
+            ]
+        }
+    ]
+};
+
 /* All days live here; the dashboard initializes with Day 1. */
 const STUDENT = { name: "Prakriti Subedi", role: "CEE Aspirant 2026" };
-const DAYS = [DAY1, DAY2, DAY3, DAY4, DAY5, DAY6, DAY7, DAY8, DAY9, DAY10, DAY11, DAY12, DAY13, DAY14];
+const DAYS = [DAY1, DAY2, DAY3, DAY4, DAY5, DAY6, DAY7, DAY8, DAY9, DAY10, DAY11, DAY12, DAY13, DAY14, DAY15];
 
 /* The CEE/IOE subjects shown on the dashboard performance panel.
    Chapters are mapped to a subject via their `subject` field; subjects with
