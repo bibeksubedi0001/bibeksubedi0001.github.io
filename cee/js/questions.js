@@ -11246,6 +11246,88 @@ const DAY15 = {
     ]
 };
 
+/* ----------------------------------------------------------------
+   DAY 15 syllabus map — Subject → Topic → Sub-topic → [question ids].
+   Powers the collapsible chapter-wise distribution on the results
+   screen (same drill-down Day 14 uses). Chemistry follows the CEE
+   weightage (Physical 17 · Inorganic 10 · Organic 17 · Applied 3 ·
+   Analytical 3); Verbal Reasoning is grouped by question type.
+   Every one of the 100 question ids appears exactly once.
+   ---------------------------------------------------------------- */
+const DAY15_SYLLABUS = [
+    { subject: "Chemistry", accent: "amber", topics: [
+        { topic: "Physical Chemistry", subs: [
+            { name: "Stoichiometry & Mole Concept", ids: ["ch1", "ch2"] },
+            { name: "Atomic Structure", ids: ["ch3", "ch4"] },
+            { name: "Periodic Properties", ids: ["ch5"] },
+            { name: "Nuclear Chemistry", ids: ["ch6"] },
+            { name: "Chemical Bonding & Shapes", ids: ["ch7"] },
+            { name: "Redox & Equivalent Concept", ids: ["ch8"] },
+            { name: "States of Matter (Gases)", ids: ["ch9"] },
+            { name: "Solid State", ids: ["ch10"] },
+            { name: "Chemical Equilibrium", ids: ["ch11"] },
+            { name: "Solutions & Concentration", ids: ["ch12"] },
+            { name: "Ionic Equilibrium (Buffers)", ids: ["ch13"] },
+            { name: "Chemical Kinetics", ids: ["ch14"] },
+            { name: "Electrochemistry", ids: ["ch15", "ch16"] },
+            { name: "Chemical Thermodynamics", ids: ["ch17"] }
+        ] },
+        { topic: "Inorganic Chemistry", subs: [
+            { name: "Oxides & Ozone", ids: ["ch18", "ch19"] },
+            { name: "Noble Metals (Aqua Regia)", ids: ["ch20"] },
+            { name: "Metallurgy", ids: ["ch21", "ch22"] },
+            { name: "Transition Elements", ids: ["ch23"] },
+            { name: "Coordination Compounds", ids: ["ch24"] },
+            { name: "Compounds of Metals", ids: ["ch25"] },
+            { name: "Industrial Processes (Ostwald & Solvay)", ids: ["ch45", "ch46"] }
+        ] },
+        { topic: "Organic Chemistry", subs: [
+            { name: "Isomerism", ids: ["ch28"] },
+            { name: "General Organic Chemistry", ids: ["ch29", "ch30"] },
+            { name: "Hydrocarbons", ids: ["ch32", "ch33", "ch34"] },
+            { name: "Aromatic Chemistry", ids: ["ch35"] },
+            { name: "Haloalkanes & Haloarenes", ids: ["ch36", "ch37", "ch38"] },
+            { name: "Alcohols, Phenols & Ethers", ids: ["ch39", "ch40"] },
+            { name: "Carbonyl Compounds & Acids", ids: ["ch41", "ch42", "ch44"] },
+            { name: "Amines", ids: ["ch43"] },
+            { name: "Polymers", ids: ["ch47"] }
+        ] },
+        { topic: "Applied Chemistry", subs: [
+            { name: "Biomolecules & Bio-inorganic", ids: ["ch26"] },
+            { name: "Environmental Chemistry", ids: ["ch27"] },
+            { name: "Chemistry of Fuels", ids: ["ch31"] }
+        ] },
+        { topic: "Analytical Chemistry", subs: [
+            { name: "Qualitative Analysis (Lassaigne)", ids: ["ch48"] },
+            { name: "Functional-group Tests", ids: ["ch49"] },
+            { name: "Volumetric Analysis (Iodometry)", ids: ["ch50"] }
+        ] }
+    ] },
+    { subject: "MAT", accent: "slate", topics: [
+        { topic: "Analogy & Classification", subs: [
+            { name: "Verbal Analogy", ids: ["vr1", "vr2", "vr3", "vr15", "vr32", "vr33", "vr35", "vr36"] },
+            { name: "Odd One Out", ids: ["vr4", "vr5", "vr14", "vr37", "vr38", "vr50"] },
+            { name: "Word Formation", ids: ["vr11", "vr17"] }
+        ] },
+        { topic: "Coding & Series", subs: [
+            { name: "Coding-Decoding", ids: ["vr6", "vr7", "vr12", "vr30", "vr39"] },
+            { name: "Number & Letter Series", ids: ["vr8", "vr9", "vr10", "vr16", "vr40", "vr41"] },
+            { name: "Logical Sequence", ids: ["vr13"] }
+        ] },
+        { topic: "Relations & Arrangements", subs: [
+            { name: "Blood Relations", ids: ["vr18", "vr19", "vr20", "vr42", "vr43"] },
+            { name: "Direction Sense", ids: ["vr21", "vr22", "vr44"] },
+            { name: "Ranking & Order", ids: ["vr23", "vr24", "vr31", "vr45"] },
+            { name: "Seating Arrangement", ids: ["vr29", "vr49"] }
+        ] },
+        { topic: "Logical Deduction", subs: [
+            { name: "Syllogism", ids: ["vr25", "vr26", "vr27", "vr34", "vr46", "vr47"] },
+            { name: "Statement & Assumption", ids: ["vr28", "vr48"] }
+        ] }
+    ] }
+];
+DAY15.syllabus = DAY15_SYLLABUS;
+
 /* All days live here; the dashboard initializes with Day 1. */
 const STUDENT = { name: "Prakriti Subedi", role: "CEE Aspirant 2026" };
 const DAYS = [DAY1, DAY2, DAY3, DAY4, DAY5, DAY6, DAY7, DAY8, DAY9, DAY10, DAY11, DAY12, DAY13, DAY14, DAY15];

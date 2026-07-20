@@ -220,6 +220,12 @@
             }
 
             const chapNames = day.chapters.map(c => c.name).join(" \u00B7 ");
+            // Day 15 onward: show the chapter-wise question distribution instead of a plain name list.
+            const descHtml = day.day >= 15
+                ? `<div class="dc-dist">` + day.chapters.map(c =>
+                    `<span class="dc-chip" data-accent="${c.accent}">${c.name}<b>${c.questions.length}</b></span>`
+                  ).join("") + `</div>`
+                : `<p class="dc-desc">${chapNames}</p>`;
 
             const card = el("button", "card day-card");
             card.type = "button";
@@ -231,7 +237,7 @@
                     <span class="${statusCls}">${statusTxt}</span>
                  </div>
                  <h3>${day.subtitle}</h3>
-                 <p class="dc-desc">${chapNames}</p>
+                 ${descHtml}
                  <div class="dc-scoreline"${scoreHidden ? " hidden" : ""}>
                     <div class="dc-bar"><span style="width:${barW}%"></span></div>
                     <b>${scoreTxt}</b>
