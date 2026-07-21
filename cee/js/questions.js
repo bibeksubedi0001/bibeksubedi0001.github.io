@@ -11328,9 +11328,1323 @@ const DAY15_SYLLABUS = [
 ];
 DAY15.syllabus = DAY15_SYLLABUS;
 
+/* ============================================================
+   DAY 16 — Chemistry (full CEE syllabus) + Reproductive System
+   50 Chemistry MCQs following the official CEE weightage
+   (Physical 17 · Inorganic 10 · Organic 17 · Applied 3 ·
+   Analytical 3) + 50 human Reproductive System MCQs (organs,
+   gametogenesis, ovarian & menstrual cycle) per the CEE syllabus.
+   ============================================================ */
+const DAY16 = {
+    day: 16,
+    title: "Day 16",
+    subtitle: "Chemistry (Full Syllabus) + Reproductive System · 100 Q",
+    durationMinutes: 90,
+    negativeMarking: 0.25,
+    chapters: [
+        {
+            id: "chem16",
+            name: "Chemistry (Full Syllabus)",
+            subject: "Chemistry",
+            accent: "amber",
+            blurb: "50 syllabus-based questions on CEE weightage — physical 17 · inorganic 10 · organic 17 · applied 3 · analytical 3.",
+            questions: [
+                {
+                    id: "ch51",
+                    text: "The volume of oxygen at STP required for the complete combustion of 2.24 L of methane measured at STP is:",
+                    options: [
+                        { key: "a", text: "2.24 L" },
+                        { key: "b", text: "4.48 L" },
+                        { key: "c", text: "1.12 L" },
+                        { key: "d", text: "8.96 L" }
+                    ],
+                    answer: "b",
+                    explanation: "$\\mathrm{CH_4+2O_2\\to CO_2+2H_2O}$. 2.24 L $=0.1$ mol $\\mathrm{CH_4}$ needs $0.2$ mol $\\mathrm{O_2}=0.2\\times22.4=4.48$ L at STP."
+                },
+                {
+                    id: "ch52",
+                    text: "An organic compound contains 40% carbon, 6.7% hydrogen and 53.3% oxygen by mass. Its empirical formula is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{C_2H_4O_2}$" },
+                        { key: "b", text: "$\\mathrm{CH_2O}$" },
+                        { key: "c", text: "$\\mathrm{CHO}$" },
+                        { key: "d", text: "$\\mathrm{C_2H_6O}$" }
+                    ],
+                    answer: "b",
+                    explanation: "Divide by atomic masses: C $=40/12=3.33$, H $=6.7/1=6.7$, O $=53.3/16=3.33$. Simplest ratio $1:2:1$ gives $\\mathrm{CH_2O}$."
+                },
+                {
+                    id: "ch53",
+                    text: "The de-Broglie wavelength of an electron accelerated through a potential difference of 100 V is about:",
+                    options: [
+                        { key: "a", text: "12.3 Å" },
+                        { key: "b", text: "1.23 Å" },
+                        { key: "c", text: "0.123 Å" },
+                        { key: "d", text: "122.7 Å" }
+                    ],
+                    answer: "b",
+                    explanation: "$\\lambda=\\dfrac{12.27}{\\sqrt{V}}$ Å $=\\dfrac{12.27}{\\sqrt{100}}=1.23$ Å."
+                },
+                {
+                    id: "ch54",
+                    text: "The maximum number of electrons that can be accommodated in a subshell with quantum numbers $n=3,\\ l=2$ is:",
+                    options: [
+                        { key: "a", text: "6" },
+                        { key: "b", text: "10" },
+                        { key: "c", text: "2" },
+                        { key: "d", text: "14" }
+                    ],
+                    answer: "b",
+                    explanation: "$l=2$ is the d subshell with $2l+1=5$ orbitals; each holds 2 electrons, so the maximum is 10."
+                },
+                {
+                    id: "ch55",
+                    text: "Among the isoelectronic species $\\mathrm{O^{2-}}$, $\\mathrm{F^{-}}$, $\\mathrm{Na^{+}}$ and $\\mathrm{Mg^{2+}}$, the smallest in size is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{O^{2-}}$" },
+                        { key: "b", text: "$\\mathrm{F^{-}}$" },
+                        { key: "c", text: "$\\mathrm{Na^{+}}$" },
+                        { key: "d", text: "$\\mathrm{Mg^{2+}}$" }
+                    ],
+                    answer: "d",
+                    explanation: "All have 10 electrons; size decreases as nuclear charge increases, so $\\mathrm{Mg^{2+}}$ (Z = 12) is the smallest."
+                },
+                {
+                    id: "ch56",
+                    text: "The hybridisation of the sulphur atom and the shape of the $\\mathrm{SF_6}$ molecule are:",
+                    options: [
+                        { key: "a", text: "$sp^3$, tetrahedral" },
+                        { key: "b", text: "$sp^3d$, trigonal bipyramidal" },
+                        { key: "c", text: "$sp^3d^2$, octahedral" },
+                        { key: "d", text: "$sp^3d^2$, square planar" }
+                    ],
+                    answer: "c",
+                    explanation: "Six bond pairs and no lone pair around S give $sp^3d^2$ hybridisation and a regular octahedral shape."
+                },
+                {
+                    id: "ch57",
+                    text: "The oxidation number of chromium in the dichromate ion $\\mathrm{Cr_2O_7^{2-}}$ is:",
+                    options: [
+                        { key: "a", text: "+3" },
+                        { key: "b", text: "+7" },
+                        { key: "c", text: "+6" },
+                        { key: "d", text: "+12" }
+                    ],
+                    answer: "c",
+                    explanation: "$2x+7(-2)=-2\\Rightarrow 2x=12\\Rightarrow x=+6$ for each chromium."
+                },
+                {
+                    id: "ch58",
+                    text: "At constant temperature a gas occupies 500 mL at 1 atm. Its volume when the pressure is raised to 2.5 atm is:",
+                    options: [
+                        { key: "a", text: "200 mL" },
+                        { key: "b", text: "1250 mL" },
+                        { key: "c", text: "250 mL" },
+                        { key: "d", text: "125 mL" }
+                    ],
+                    answer: "a",
+                    explanation: "Boyle's law $P_1V_1=P_2V_2$: $V_2=\\dfrac{500\\times1}{2.5}=200$ mL."
+                },
+                {
+                    id: "ch59",
+                    text: "The number of atoms per unit cell in a body-centred cubic (bcc) lattice is:",
+                    options: [
+                        { key: "a", text: "1" },
+                        { key: "b", text: "2" },
+                        { key: "c", text: "4" },
+                        { key: "d", text: "6" }
+                    ],
+                    answer: "b",
+                    explanation: "$8$ corners $\\times\\tfrac18 + 1$ body centre $=1+1=2$ atoms per unit cell."
+                },
+                {
+                    id: "ch60",
+                    text: "For $\\mathrm{N_2(g)+3H_2(g)\\rightleftharpoons 2NH_3(g)}$ at equilibrium, adding more $\\mathrm{NH_3}$ causes the equilibrium to shift:",
+                    options: [
+                        { key: "a", text: "to the right, forming more ammonia" },
+                        { key: "b", text: "to the left, favouring the reactants" },
+                        { key: "c", text: "not at all, since $K_c$ is constant" },
+                        { key: "d", text: "forward and backward alternately" }
+                    ],
+                    answer: "b",
+                    explanation: "By Le-Chatelier's principle, adding a product drives the equilibrium backward to consume the added $\\mathrm{NH_3}$."
+                },
+                {
+                    id: "ch61",
+                    text: "The molarity of a solution containing 9.8 g of $\\mathrm{H_2SO_4}$ (molar mass 98) in 500 mL of solution is:",
+                    options: [
+                        { key: "a", text: "0.1 M" },
+                        { key: "b", text: "0.4 M" },
+                        { key: "c", text: "0.2 M" },
+                        { key: "d", text: "2 M" }
+                    ],
+                    answer: "c",
+                    explanation: "Moles $=9.8/98=0.1$; molarity $=0.1/0.5=0.2$ M."
+                },
+                {
+                    id: "ch62",
+                    text: "The pH of a 0.001 M solution of HCl (assumed fully ionised) is:",
+                    options: [
+                        { key: "a", text: "2" },
+                        { key: "b", text: "1" },
+                        { key: "c", text: "3" },
+                        { key: "d", text: "11" }
+                    ],
+                    answer: "c",
+                    explanation: "HCl is a strong acid, so $[\\mathrm{H^+}]=10^{-3}$ M and $\\mathrm{pH}=-\\log(10^{-3})=3$."
+                },
+                {
+                    id: "ch63",
+                    text: "The unit of the rate constant of a zero-order reaction is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{s^{-1}}$" },
+                        { key: "b", text: "$\\mathrm{mol\\,L^{-1}\\,s^{-1}}$" },
+                        { key: "c", text: "$\\mathrm{L\\,mol^{-1}\\,s^{-1}}$" },
+                        { key: "d", text: "$\\mathrm{mol^{-1}\\,L^{2}\\,s^{-1}}$" }
+                    ],
+                    answer: "b",
+                    explanation: "For a zero-order reaction rate $=k$, so $k$ carries the units of rate, $\\mathrm{mol\\,L^{-1}\\,s^{-1}}$."
+                },
+                {
+                    id: "ch64",
+                    text: "The quantity of electricity needed to deposit one mole of aluminium during the electrolysis of molten alumina is:",
+                    options: [
+                        { key: "a", text: "1 F" },
+                        { key: "b", text: "2 F" },
+                        { key: "c", text: "3 F" },
+                        { key: "d", text: "0.33 F" }
+                    ],
+                    answer: "c",
+                    explanation: "$\\mathrm{Al^{3+}+3e^-\\to Al}$ requires 3 faradays (3 mol of electrons) per mole of aluminium."
+                },
+                {
+                    id: "ch65",
+                    text: "The standard electrode potential assigned to the standard hydrogen electrode (SHE) is:",
+                    options: [
+                        { key: "a", text: "0.00 V" },
+                        { key: "b", text: "+1.00 V" },
+                        { key: "c", text: "−0.76 V" },
+                        { key: "d", text: "+0.34 V" }
+                    ],
+                    answer: "a",
+                    explanation: "The SHE is the reference electrode whose potential is defined as exactly 0.00 V at all temperatures."
+                },
+                {
+                    id: "ch66",
+                    text: "During the isothermal expansion of an ideal gas, the change in internal energy ($\\Delta U$) is:",
+                    options: [
+                        { key: "a", text: "positive" },
+                        { key: "b", text: "negative" },
+                        { key: "c", text: "zero" },
+                        { key: "d", text: "equal to the work done" }
+                    ],
+                    answer: "c",
+                    explanation: "The internal energy of an ideal gas depends only on temperature; at constant T, $\\Delta U=0$."
+                },
+                {
+                    id: "ch67",
+                    text: "When a radioactive nucleus emits a β-particle, its mass number (A) and atomic number (Z) change as follows:",
+                    options: [
+                        { key: "a", text: "A decreases by 4, Z decreases by 2" },
+                        { key: "b", text: "A remains the same, Z increases by 1" },
+                        { key: "c", text: "A remains the same, Z decreases by 1" },
+                        { key: "d", text: "both A and Z remain unchanged" }
+                    ],
+                    answer: "b",
+                    explanation: "In β⁻ decay a neutron becomes a proton plus an electron; the mass number is unchanged while the atomic number rises by 1."
+                },
+                {
+                    id: "ch68",
+                    text: "Heavy water used as a moderator in nuclear reactors is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{H_2O_2}$" },
+                        { key: "b", text: "$\\mathrm{D_2O}$" },
+                        { key: "c", text: "$\\mathrm{H_2^{18}O}$" },
+                        { key: "d", text: "$\\mathrm{T_2O}$" }
+                    ],
+                    answer: "b",
+                    explanation: "Heavy water is deuterium oxide, $\\mathrm{D_2O}$, in which ordinary hydrogen is replaced by its isotope deuterium."
+                },
+                {
+                    id: "ch69",
+                    text: "The depletion of the stratospheric ozone layer is caused chiefly by:",
+                    options: [
+                        { key: "a", text: "carbon dioxide" },
+                        { key: "b", text: "methane" },
+                        { key: "c", text: "chlorofluorocarbons (CFCs)" },
+                        { key: "d", text: "sulphur dioxide" }
+                    ],
+                    answer: "c",
+                    explanation: "CFCs release chlorine radicals in the stratosphere that catalytically destroy ozone; $\\mathrm{CO_2}$ and $\\mathrm{CH_4}$ are greenhouse gases, not the main ozone destroyers."
+                },
+                {
+                    id: "ch70",
+                    text: "In the brown-ring test for nitrate ions, the brown ring is due to the complex:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{[Fe(H_2O)_5NO]^{2+}}$" },
+                        { key: "b", text: "$\\mathrm{FeSO_4\\cdot7H_2O}$" },
+                        { key: "c", text: "$\\mathrm{Fe_2(SO_4)_3}$" },
+                        { key: "d", text: "$\\mathrm{[Fe(H_2O)_6]^{3+}}$" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\mathrm{NO}$ liberated from the nitrate reacts with $\\mathrm{Fe^{2+}}$ to give the brown nitrosyl complex $\\mathrm{[Fe(H_2O)_5NO]^{2+}}$ at the acid–solution interface."
+                },
+                {
+                    id: "ch71",
+                    text: "The correct order of oxidising power of the halogens is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{I_2>Br_2>Cl_2>F_2}$" },
+                        { key: "b", text: "$\\mathrm{F_2>Cl_2>Br_2>I_2}$" },
+                        { key: "c", text: "$\\mathrm{Cl_2>F_2>Br_2>I_2}$" },
+                        { key: "d", text: "$\\mathrm{F_2>Br_2>Cl_2>I_2}$" }
+                    ],
+                    answer: "b",
+                    explanation: "Oxidising power decreases down the group as the standard reduction potential falls; fluorine is the strongest oxidiser among the halogens."
+                },
+                {
+                    id: "ch72",
+                    text: "The gas that turns acidified potassium dichromate paper green is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{CO_2}$" },
+                        { key: "b", text: "$\\mathrm{SO_2}$" },
+                        { key: "c", text: "$\\mathrm{H_2S}$" },
+                        { key: "d", text: "$\\mathrm{NH_3}$" }
+                    ],
+                    answer: "b",
+                    explanation: "$\\mathrm{SO_2}$ reduces orange $\\mathrm{Cr_2O_7^{2-}}$ (Cr +6) to green $\\mathrm{Cr^{3+}}$; $\\mathrm{CO_2}$ shows no such reaction."
+                },
+                {
+                    id: "ch73",
+                    text: "In the extraction of iron in a blast furnace, the role of limestone (CaCO₃) is to:",
+                    options: [
+                        { key: "a", text: "reduce the iron oxide to iron" },
+                        { key: "b", text: "remove silica as a fusible calcium-silicate slag" },
+                        { key: "c", text: "act as the principal fuel" },
+                        { key: "d", text: "supply the reducing gas carbon monoxide" }
+                    ],
+                    answer: "b",
+                    explanation: "$\\mathrm{CaCO_3\\to CaO+CO_2}$; the CaO combines with the acidic gangue $\\mathrm{SiO_2}$ to form $\\mathrm{CaSiO_3}$ (slag). Reduction of the ore is done by CO."
+                },
+                {
+                    id: "ch74",
+                    text: "Washing soda is chemically:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{NaHCO_3}$" },
+                        { key: "b", text: "$\\mathrm{NaOH}$" },
+                        { key: "c", text: "$\\mathrm{Na_2CO_3\\cdot10H_2O}$" },
+                        { key: "d", text: "anhydrous $\\mathrm{Na_2CO_3}$" }
+                    ],
+                    answer: "c",
+                    explanation: "Washing soda is hydrated sodium carbonate, $\\mathrm{Na_2CO_3\\cdot10H_2O}$; baking soda is $\\mathrm{NaHCO_3}$."
+                },
+                {
+                    id: "ch75",
+                    text: "The number of unpaired electrons in the low-spin complex $\\mathrm{[Fe(CN)_6]^{4-}}$ is:",
+                    options: [
+                        { key: "a", text: "0" },
+                        { key: "b", text: "4" },
+                        { key: "c", text: "2" },
+                        { key: "d", text: "6" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\mathrm{Fe^{2+}}$ is $d^6$; the strong-field $\\mathrm{CN^-}$ ligand gives low-spin $t_{2g}^6e_g^0$, so there are no unpaired electrons (diamagnetic)."
+                },
+                {
+                    id: "ch76",
+                    text: "Green ferrous sulphate crystals ($\\mathrm{FeSO_4\\cdot7H_2O}$) on strong heating finally leave a reddish-brown residue together with two gases. These products are:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{Fe_2O_3}$, $\\mathrm{SO_2}$ and $\\mathrm{SO_3}$" },
+                        { key: "b", text: "$\\mathrm{FeO}$ and $\\mathrm{SO_2}$ only" },
+                        { key: "c", text: "$\\mathrm{FeS}$ and $\\mathrm{O_2}$" },
+                        { key: "d", text: "$\\mathrm{Fe_3O_4}$ and $\\mathrm{SO_2}$" }
+                    ],
+                    answer: "a",
+                    explanation: "After losing water, $\\mathrm{2FeSO_4\\to Fe_2O_3+SO_2+SO_3}$; the residue is reddish-brown ferric oxide."
+                },
+                {
+                    id: "ch77",
+                    text: "The central metal ions in chlorophyll and in haemoglobin are, respectively:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{Fe^{2+}}$ and $\\mathrm{Mg^{2+}}$" },
+                        { key: "b", text: "$\\mathrm{Mg^{2+}}$ and $\\mathrm{Fe^{2+}}$" },
+                        { key: "c", text: "$\\mathrm{Ca^{2+}}$ and $\\mathrm{Fe^{2+}}$" },
+                        { key: "d", text: "$\\mathrm{Mg^{2+}}$ and $\\mathrm{Co^{2+}}$" }
+                    ],
+                    answer: "b",
+                    explanation: "Chlorophyll has a magnesium centre, while the haem of haemoglobin has an iron ($\\mathrm{Fe^{2+}}$) centre. Cobalt is central to vitamin $\\mathrm{B_{12}}$."
+                },
+                {
+                    id: "ch78",
+                    text: "The most stable free radical among the following is:",
+                    options: [
+                        { key: "a", text: "methyl radical" },
+                        { key: "b", text: "benzyl radical" },
+                        { key: "c", text: "primary ethyl radical" },
+                        { key: "d", text: "vinyl radical" }
+                    ],
+                    answer: "b",
+                    explanation: "The benzyl radical is stabilised by resonance delocalisation over the aromatic ring, making it the most stable; vinyl and methyl radicals are the least stable."
+                },
+                {
+                    id: "ch79",
+                    text: "Which of the following is the strongest acid?",
+                    options: [
+                        { key: "a", text: "acetic acid" },
+                        { key: "b", text: "chloroacetic acid" },
+                        { key: "c", text: "dichloroacetic acid" },
+                        { key: "d", text: "trichloroacetic acid" }
+                    ],
+                    answer: "d",
+                    explanation: "Electron-withdrawing Cl atoms (−I effect) stabilise the carboxylate ion; more chlorines give a stronger acid, so $\\mathrm{CCl_3COOH>CHCl_2COOH>CH_2ClCOOH>CH_3COOH}$."
+                },
+                {
+                    id: "ch80",
+                    text: "The IUPAC name of $\\mathrm{(CH_3)_2CHCH_2CHO}$ is:",
+                    options: [
+                        { key: "a", text: "2-methylbutanal" },
+                        { key: "b", text: "3-methylbutanal" },
+                        { key: "c", text: "isopentanal" },
+                        { key: "d", text: "3-methylbutan-1-ol" }
+                    ],
+                    answer: "b",
+                    explanation: "Numbering from the −CHO carbon gives a four-carbon chain (butanal) with a methyl branch on C-3, i.e. 3-methylbutanal."
+                },
+                {
+                    id: "ch81",
+                    text: "Sodium propanoate heated with soda lime gives mainly:",
+                    options: [
+                        { key: "a", text: "propane" },
+                        { key: "b", text: "ethane" },
+                        { key: "c", text: "methane" },
+                        { key: "d", text: "propene" }
+                    ],
+                    answer: "b",
+                    explanation: "Decarboxylation with soda lime removes the −COOH as carbonate, giving an alkane with one fewer carbon: propanoate → ethane."
+                },
+                {
+                    id: "ch82",
+                    text: "Addition of HBr to propene in the absence of peroxide gives predominantly:",
+                    options: [
+                        { key: "a", text: "2-bromopropane" },
+                        { key: "b", text: "1-bromopropane" },
+                        { key: "c", text: "1,2-dibromopropane" },
+                        { key: "d", text: "propan-2-ol" }
+                    ],
+                    answer: "a",
+                    explanation: "By Markovnikov's rule, $\\mathrm{H}$ adds to the carbon bearing more hydrogens and $\\mathrm{Br}$ to the more substituted carbon via the more stable 2° carbocation, giving 2-bromopropane."
+                },
+                {
+                    id: "ch83",
+                    text: "Acetylene passed into ammoniacal cuprous chloride solution gives a red precipitate of:",
+                    options: [
+                        { key: "a", text: "copper(I) acetylide" },
+                        { key: "b", text: "cuprous carbide" },
+                        { key: "c", text: "copper metal" },
+                        { key: "d", text: "cupric acetylide" }
+                    ],
+                    answer: "a",
+                    explanation: "The acidic terminal $\\equiv$C–H is replaced by copper(I) to give red $\\mathrm{Cu-C\\equiv C-Cu}$, a test for terminal alkynes."
+                },
+                {
+                    id: "ch84",
+                    text: "In the nitration of benzene with a mixture of concentrated $\\mathrm{HNO_3}$ and $\\mathrm{H_2SO_4}$, the attacking electrophile is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{NO^{+}}$" },
+                        { key: "b", text: "$\\mathrm{NO_2^{+}}$" },
+                        { key: "c", text: "$\\mathrm{NO_2^{-}}$" },
+                        { key: "d", text: "$\\mathrm{HNO_3}$" }
+                    ],
+                    answer: "b",
+                    explanation: "$\\mathrm{H_2SO_4}$ protonates $\\mathrm{HNO_3}$, which loses water to form the nitronium ion $\\mathrm{NO_2^{+}}$, the electrophile in aromatic nitration."
+                },
+                {
+                    id: "ch85",
+                    text: "Which alkyl halide reacts fastest by an $\\mathrm{S_N1}$ mechanism?",
+                    options: [
+                        { key: "a", text: "n-butyl bromide" },
+                        { key: "b", text: "ethyl bromide" },
+                        { key: "c", text: "tert-butyl bromide" },
+                        { key: "d", text: "methyl bromide" }
+                    ],
+                    answer: "c",
+                    explanation: "$\\mathrm{S_N1}$ rate depends on carbocation stability; the tertiary (tert-butyl) halide forms the most stable carbocation and reacts fastest."
+                },
+                {
+                    id: "ch86",
+                    text: "Warming a primary amine with chloroform and alcoholic KOH produces a foul-smelling isocyanide. This reaction is the:",
+                    options: [
+                        { key: "a", text: "Lassaigne's test" },
+                        { key: "b", text: "carbylamine test" },
+                        { key: "c", text: "iodoform test" },
+                        { key: "d", text: "Hinsberg test" }
+                    ],
+                    answer: "b",
+                    explanation: "The carbylamine (isocyanide) reaction is given only by primary amines with $\\mathrm{CHCl_3}$ and alcoholic KOH, producing offensive-smelling isocyanides."
+                },
+                {
+                    id: "ch87",
+                    text: "Which compound gives a positive iodoform test?",
+                    options: [
+                        { key: "a", text: "methanol" },
+                        { key: "b", text: "ethanol" },
+                        { key: "c", text: "diethyl ether" },
+                        { key: "d", text: "propan-1-ol" }
+                    ],
+                    answer: "b",
+                    explanation: "The iodoform test is positive for a $\\mathrm{CH_3CH(OH)-}$ or $\\mathrm{CH_3CO-}$ group; among these only ethanol qualifies."
+                },
+                {
+                    id: "ch88",
+                    text: "Phenol gives a characteristic colour with neutral ferric chloride solution. The colour is:",
+                    options: [
+                        { key: "a", text: "violet" },
+                        { key: "b", text: "blood-red" },
+                        { key: "c", text: "blue" },
+                        { key: "d", text: "green" }
+                    ],
+                    answer: "a",
+                    explanation: "Phenols form a violet-coloured iron–phenolate complex with neutral $\\mathrm{FeCl_3}$, a standard test for the phenolic group."
+                },
+                {
+                    id: "ch89",
+                    text: "Williamson's synthesis of ethers proceeds through which mechanism?",
+                    options: [
+                        { key: "a", text: "$\\mathrm{S_N1}$" },
+                        { key: "b", text: "$\\mathrm{S_N2}$" },
+                        { key: "c", text: "electrophilic addition" },
+                        { key: "d", text: "free-radical substitution" }
+                    ],
+                    answer: "b",
+                    explanation: "An alkoxide ion attacks the alkyl halide in a single $\\mathrm{S_N2}$ step, so unhindered primary halides give the best yields while 3° halides tend to eliminate."
+                },
+                {
+                    id: "ch90",
+                    text: "Which reagent distinguishes an aldehyde from a ketone?",
+                    options: [
+                        { key: "a", text: "2,4-dinitrophenylhydrazine" },
+                        { key: "b", text: "sodium bisulphite" },
+                        { key: "c", text: "Tollens' reagent" },
+                        { key: "d", text: "Grignard reagent" }
+                    ],
+                    answer: "c",
+                    explanation: "Aldehydes reduce Tollens' reagent to a silver mirror whereas ketones do not; 2,4-DNP and $\\mathrm{NaHSO_3}$ react with both."
+                },
+                {
+                    id: "ch91",
+                    text: "Acetic acid heated with ethanol and a little concentrated $\\mathrm{H_2SO_4}$ gives a fruity-smelling ester. The reaction is called:",
+                    options: [
+                        { key: "a", text: "saponification" },
+                        { key: "b", text: "esterification" },
+                        { key: "c", text: "Kolbe's reaction" },
+                        { key: "d", text: "Cannizzaro reaction" }
+                    ],
+                    answer: "b",
+                    explanation: "Acid + alcohol with an acid catalyst gives ester + water (Fischer esterification); the product ethyl acetate has a fruity odour."
+                },
+                {
+                    id: "ch92",
+                    text: "Nitrobenzene reduced with tin and concentrated HCl gives:",
+                    options: [
+                        { key: "a", text: "nitrosobenzene" },
+                        { key: "b", text: "phenylhydroxylamine" },
+                        { key: "c", text: "aniline" },
+                        { key: "d", text: "azobenzene" }
+                    ],
+                    answer: "c",
+                    explanation: "Reduction of nitrobenzene in acidic medium (Sn/HCl) goes to completion, giving aniline; the nitroso and hydroxylamine stages appear only under milder conditions."
+                },
+                {
+                    id: "ch93",
+                    text: "Aniline is a weaker base than ethylamine because:",
+                    options: [
+                        { key: "a", text: "the lone pair on nitrogen is delocalised into the benzene ring" },
+                        { key: "b", text: "it has a higher molecular mass" },
+                        { key: "c", text: "it is only sparingly soluble in water" },
+                        { key: "d", text: "the ring donates its electrons to nitrogen" }
+                    ],
+                    answer: "a",
+                    explanation: "In aniline the nitrogen lone pair is conjugated with the ring, so it is less available for protonation; in ethylamine the lone pair is fully available and further enriched by the +I effect."
+                },
+                {
+                    id: "ch94",
+                    text: "A Grignard reagent reacts with a ketone and the product is hydrolysed. The alcohol obtained is:",
+                    options: [
+                        { key: "a", text: "a primary alcohol" },
+                        { key: "b", text: "a secondary alcohol" },
+                        { key: "c", text: "a tertiary alcohol" },
+                        { key: "d", text: "a carboxylic acid" }
+                    ],
+                    answer: "c",
+                    explanation: "$\\mathrm{RMgX}$ adds to the ketone carbonyl and hydrolysis gives a tertiary alcohol (formaldehyde → 1°, other aldehydes → 2°, $\\mathrm{CO_2}$ → acid)."
+                },
+                {
+                    id: "ch95",
+                    text: "In the Contact process for sulphuric acid, the catalyst used to oxidise $\\mathrm{SO_2}$ to $\\mathrm{SO_3}$ is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{V_2O_5}$" },
+                        { key: "b", text: "Pt–Rh gauze" },
+                        { key: "c", text: "Fe with Mo promoter" },
+                        { key: "d", text: "finely divided nickel" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\mathrm{2SO_2+O_2\\rightleftharpoons 2SO_3}$ uses vanadium pentoxide ($\\mathrm{V_2O_5}$); Pt–Rh belongs to Ostwald's process and Fe–Mo to Haber's process."
+                },
+                {
+                    id: "ch96",
+                    text: "Which of the following is a natural, biodegradable polymer?",
+                    options: [
+                        { key: "a", text: "polythene" },
+                        { key: "b", text: "starch" },
+                        { key: "c", text: "polyvinyl chloride" },
+                        { key: "d", text: "nylon-6,6" }
+                    ],
+                    answer: "b",
+                    explanation: "Starch is a natural polysaccharide and biodegradable; polythene, PVC and nylon are synthetic polymers that are largely non-biodegradable."
+                },
+                {
+                    id: "ch97",
+                    text: "The radioisotope most commonly used as a γ-source in the radiotherapy of cancer is:",
+                    options: [
+                        { key: "a", text: "carbon-14" },
+                        { key: "b", text: "sodium-24" },
+                        { key: "c", text: "cobalt-60" },
+                        { key: "d", text: "phosphorus-32" }
+                    ],
+                    answer: "c",
+                    explanation: "Cobalt-60 emits high-energy γ-rays used in external-beam radiotherapy; C-14 is used for dating and Na-24 for studying blood circulation."
+                },
+                {
+                    id: "ch98",
+                    text: "In Lassaigne's test, nitrogen present in an organic compound is detected by the appearance of a Prussian-blue colour, which is due to:",
+                    options: [
+                        { key: "a", text: "ferric ferrocyanide" },
+                        { key: "b", text: "sodium thiocyanate" },
+                        { key: "c", text: "ferrous sulphide" },
+                        { key: "d", text: "ferric thiocyanate" }
+                    ],
+                    answer: "a",
+                    explanation: "Fusion with sodium converts N to $\\mathrm{NaCN}$; with $\\mathrm{Fe^{2+}/Fe^{3+}}$ this yields Prussian blue, $\\mathrm{Fe_4[Fe(CN)_6]_3}$."
+                },
+                {
+                    id: "ch99",
+                    text: "A mixture of common salt and camphor is best separated by:",
+                    options: [
+                        { key: "a", text: "filtration" },
+                        { key: "b", text: "sublimation" },
+                        { key: "c", text: "fractional distillation" },
+                        { key: "d", text: "crystallisation" }
+                    ],
+                    answer: "b",
+                    explanation: "Camphor sublimes on gentle heating while sodium chloride does not, so sublimation cleanly separates the two solids."
+                },
+                {
+                    id: "ch100",
+                    text: "In the titration of acetic acid (a weak acid) against sodium hydroxide (a strong base), the most suitable indicator is:",
+                    options: [
+                        { key: "a", text: "phenolphthalein" },
+                        { key: "b", text: "methyl orange" },
+                        { key: "c", text: "methyl red" },
+                        { key: "d", text: "litmus" }
+                    ],
+                    answer: "a",
+                    explanation: "The equivalence point of a weak-acid–strong-base titration is slightly basic (pH ≈ 8–9), which matches phenolphthalein's range (8.3–10.0); methyl orange changes colour in the acidic region."
+                }
+            ]
+        },
+        {
+            id: "repro16",
+            name: "Reproductive System",
+            subject: "Zoology",
+            accent: "rose",
+            blurb: "50 questions on the human reproductive system — organs, gametogenesis, ovarian & menstrual cycle.",
+            questions: [
+                {
+                    id: "rs1",
+                    text: "In the human male, sperms are produced in the:",
+                    options: [
+                        { key: "a", text: "epididymis" },
+                        { key: "b", text: "prostate gland" },
+                        { key: "c", text: "seminiferous tubules of the testis" },
+                        { key: "d", text: "vas deferens" }
+                    ],
+                    answer: "c",
+                    explanation: "Spermatogenesis takes place in the walls of the seminiferous tubules of the testes; the epididymis only stores and matures the sperm."
+                },
+                {
+                    id: "rs2",
+                    text: "The testes lie outside the abdominal cavity in the scrotum because spermatogenesis requires a temperature:",
+                    options: [
+                        { key: "a", text: "equal to the core body temperature" },
+                        { key: "b", text: "about 2–3°C below body temperature" },
+                        { key: "c", text: "about 5°C above body temperature" },
+                        { key: "d", text: "close to 45°C" }
+                    ],
+                    answer: "b",
+                    explanation: "The scrotum keeps the testes about 2–3°C cooler than the body core, a condition essential for normal sperm production."
+                },
+                {
+                    id: "rs3",
+                    text: "Sperms are stored and acquire motility mainly in the:",
+                    options: [
+                        { key: "a", text: "seminal vesicle" },
+                        { key: "b", text: "urethra" },
+                        { key: "c", text: "prostate" },
+                        { key: "d", text: "epididymis" }
+                    ],
+                    answer: "d",
+                    explanation: "Sperms leaving the seminiferous tubules mature, are stored in, and gain motility within the epididymis."
+                },
+                {
+                    id: "rs4",
+                    text: "The vas deferens carries sperms from the:",
+                    options: [
+                        { key: "a", text: "epididymis to the ejaculatory duct" },
+                        { key: "b", text: "testis to the epididymis" },
+                        { key: "c", text: "urethra to the penis" },
+                        { key: "d", text: "seminal vesicle to the urethra" }
+                    ],
+                    answer: "a",
+                    explanation: "The vas deferens conveys mature sperms from the tail of the epididymis to the ejaculatory duct, which opens into the urethra."
+                },
+                {
+                    id: "rs5",
+                    text: "The fructose-rich alkaline secretion that nourishes sperms and forms the major part of the semen is produced by the:",
+                    options: [
+                        { key: "a", text: "prostate gland" },
+                        { key: "b", text: "seminal vesicles" },
+                        { key: "c", text: "bulbourethral glands" },
+                        { key: "d", text: "epididymis" }
+                    ],
+                    answer: "b",
+                    explanation: "The seminal vesicles secrete a fructose-rich fluid that supplies energy to the sperm and makes up roughly 60% of the semen volume."
+                },
+                {
+                    id: "rs6",
+                    text: "Which gland encircles the upper part of the male urethra and adds a milky, slightly alkaline fluid to the semen?",
+                    options: [
+                        { key: "a", text: "Cowper's gland" },
+                        { key: "b", text: "seminal vesicle" },
+                        { key: "c", text: "prostate gland" },
+                        { key: "d", text: "adrenal gland" }
+                    ],
+                    answer: "c",
+                    explanation: "The single prostate gland surrounds the urethra at the base of the bladder and contributes a milky alkaline secretion to the semen."
+                },
+                {
+                    id: "rs7",
+                    text: "The secretion of the bulbourethral (Cowper's) glands mainly serves to:",
+                    options: [
+                        { key: "a", text: "lubricate and neutralise acidity in the urethra" },
+                        { key: "b", text: "produce the male hormone testosterone" },
+                        { key: "c", text: "store mature spermatozoa" },
+                        { key: "d", text: "form the bulk of the seminal fructose" }
+                    ],
+                    answer: "a",
+                    explanation: "Cowper's glands release a mucus-like pre-ejaculatory fluid that lubricates the urethra and neutralises traces of acidic urine."
+                },
+                {
+                    id: "rs8",
+                    text: "The ovaries are the primary female reproductive organs because they produce:",
+                    options: [
+                        { key: "a", text: "only ova" },
+                        { key: "b", text: "only hormones" },
+                        { key: "c", text: "ova and testosterone" },
+                        { key: "d", text: "ova and the hormones oestrogen and progesterone" }
+                    ],
+                    answer: "d",
+                    explanation: "The ovaries are dual organs: they release the female gametes (ova) and also secrete the hormones oestrogen and progesterone."
+                },
+                {
+                    id: "rs9",
+                    text: "The finger-like projections at the ovarian end of the oviduct that sweep the released ovum into the tube are the:",
+                    options: [
+                        { key: "a", text: "villi" },
+                        { key: "b", text: "fimbriae" },
+                        { key: "c", text: "cilia" },
+                        { key: "d", text: "infundibular lobes" }
+                    ],
+                    answer: "b",
+                    explanation: "The fimbriae are the fringed projections of the infundibulum that collect the ovulated ovum and guide it into the fallopian tube."
+                },
+                {
+                    id: "rs10",
+                    text: "The inner glandular, vascular lining of the uterus that is shed during menstruation is the:",
+                    options: [
+                        { key: "a", text: "myometrium" },
+                        { key: "b", text: "perimetrium" },
+                        { key: "c", text: "endometrium" },
+                        { key: "d", text: "peritoneum" }
+                    ],
+                    answer: "c",
+                    explanation: "The endometrium is the innermost uterine lining; it thickens each cycle and is shed as the menstrual flow if pregnancy does not occur."
+                },
+                {
+                    id: "rs11",
+                    text: "The narrow lower part of the uterus that projects into and opens into the vagina is the:",
+                    options: [
+                        { key: "a", text: "cervix" },
+                        { key: "b", text: "fundus" },
+                        { key: "c", text: "fallopian tube" },
+                        { key: "d", text: "infundibulum" }
+                    ],
+                    answer: "a",
+                    explanation: "The cervix is the narrow neck of the uterus that connects the uterine cavity to the vagina."
+                },
+                {
+                    id: "rs12",
+                    text: "In humans, fertilisation of the ovum normally occurs in the:",
+                    options: [
+                        { key: "a", text: "uterus" },
+                        { key: "b", text: "ovary" },
+                        { key: "c", text: "cervix" },
+                        { key: "d", text: "ampulla of the fallopian tube" }
+                    ],
+                    answer: "d",
+                    explanation: "Fertilisation usually takes place in the ampulla, the widest region of the fallopian tube, not in the uterus."
+                },
+                {
+                    id: "rs13",
+                    text: "After fertilisation, the blastocyst normally implants itself in the:",
+                    options: [
+                        { key: "a", text: "wall of the fallopian tube" },
+                        { key: "b", text: "endometrium of the uterus" },
+                        { key: "c", text: "cervix" },
+                        { key: "d", text: "ovarian cortex" }
+                    ],
+                    answer: "b",
+                    explanation: "The blastocyst embeds into the thick, prepared endometrium of the uterus; implantation elsewhere (e.g. in the tube) is an ectopic pregnancy."
+                },
+                {
+                    id: "rs14",
+                    text: "The corpus luteum is formed in the:",
+                    options: [
+                        { key: "a", text: "ovary, from the ruptured Graafian follicle" },
+                        { key: "b", text: "uterus, from the endometrium" },
+                        { key: "c", text: "fallopian tube, from the fimbriae" },
+                        { key: "d", text: "placenta, after implantation" }
+                    ],
+                    answer: "a",
+                    explanation: "After ovulation the empty Graafian follicle in the ovary is converted into the corpus luteum, which secretes progesterone."
+                },
+                {
+                    id: "rs15",
+                    text: "The formation of mature sperms from germ cells in the testis is called:",
+                    options: [
+                        { key: "a", text: "oogenesis" },
+                        { key: "b", text: "spermiation" },
+                        { key: "c", text: "spermatogenesis" },
+                        { key: "d", text: "capacitation" }
+                    ],
+                    answer: "c",
+                    explanation: "Spermatogenesis is the whole sequence by which diploid spermatogonia give rise to haploid, motile spermatozoa."
+                },
+                {
+                    id: "rs16",
+                    text: "The correct sequence of stages in spermatogenesis is:",
+                    options: [
+                        { key: "a", text: "spermatogonium → spermatid → secondary spermatocyte → sperm" },
+                        { key: "b", text: "spermatogonium → primary spermatocyte → secondary spermatocyte → spermatid → sperm" },
+                        { key: "c", text: "primary spermatocyte → spermatogonium → spermatid → sperm" },
+                        { key: "d", text: "spermatid → secondary spermatocyte → primary spermatocyte → sperm" }
+                    ],
+                    answer: "b",
+                    explanation: "A spermatogonium enlarges to a primary spermatocyte, whose meiosis I gives secondary spermatocytes, meiosis II gives spermatids, which mature into sperms."
+                },
+                {
+                    id: "rs17",
+                    text: "During spermatogenesis, the chromosome number is halved when:",
+                    options: [
+                        { key: "a", text: "the spermatogonium divides mitotically" },
+                        { key: "b", text: "the spermatid changes into a sperm" },
+                        { key: "c", text: "the secondary spermatocyte forms spermatids" },
+                        { key: "d", text: "the primary spermatocyte divides into secondary spermatocytes" }
+                    ],
+                    answer: "d",
+                    explanation: "Meiosis I converts the diploid (2n) primary spermatocyte into two haploid (n) secondary spermatocytes — that is the reduction division."
+                },
+                {
+                    id: "rs18",
+                    text: "Within the seminiferous tubules, the cells that nourish and support the developing sperms are the:",
+                    options: [
+                        { key: "a", text: "Sertoli cells" },
+                        { key: "b", text: "Leydig cells" },
+                        { key: "c", text: "germ cells" },
+                        { key: "d", text: "chromaffin cells" }
+                    ],
+                    answer: "a",
+                    explanation: "Sertoli (nurse) cells provide nutrition and support to the developing germ cells and also secrete the hormone inhibin."
+                },
+                {
+                    id: "rs19",
+                    text: "The interstitial cells of Leydig, lying between the seminiferous tubules, secrete:",
+                    options: [
+                        { key: "a", text: "inhibin" },
+                        { key: "b", text: "testosterone" },
+                        { key: "c", text: "oestrogen" },
+                        { key: "d", text: "follicle-stimulating hormone" }
+                    ],
+                    answer: "b",
+                    explanation: "The Leydig (interstitial) cells produce the male sex hormone testosterone under the influence of luteinising hormone (ICSH)."
+                },
+                {
+                    id: "rs20",
+                    text: "The transformation of a non-motile spermatid into a motile spermatozoon is called:",
+                    options: [
+                        { key: "a", text: "spermiation" },
+                        { key: "b", text: "capacitation" },
+                        { key: "c", text: "spermiogenesis" },
+                        { key: "d", text: "spermatogenesis" }
+                    ],
+                    answer: "c",
+                    explanation: "Spermiogenesis is the metamorphosis of the rounded spermatid into a streamlined, flagellated sperm; the later release into the tubule lumen is spermiation."
+                },
+                {
+                    id: "rs21",
+                    text: "The acrosome at the tip of the sperm head is derived from the ________ and contains ________.",
+                    options: [
+                        { key: "a", text: "Golgi complex; hydrolytic enzymes" },
+                        { key: "b", text: "mitochondria; ATP" },
+                        { key: "c", text: "centriole; DNA" },
+                        { key: "d", text: "nucleus; hormones" }
+                    ],
+                    answer: "a",
+                    explanation: "The cap-like acrosome forms from the Golgi complex and stores hydrolytic enzymes (such as hyaluronidase) that help the sperm penetrate the egg."
+                },
+                {
+                    id: "rs22",
+                    text: "In human females, oogenesis begins:",
+                    options: [
+                        { key: "a", text: "during embryonic (fetal) life, before birth" },
+                        { key: "b", text: "at puberty" },
+                        { key: "c", text: "at the time of each ovulation" },
+                        { key: "d", text: "only after fertilisation" }
+                    ],
+                    answer: "a",
+                    explanation: "Oogonia multiply and enter meiosis I during fetal life; the primary oocytes then stay arrested until puberty, when the cycle resumes."
+                },
+                {
+                    id: "rs23",
+                    text: "The correct sequence of oogenesis is:",
+                    options: [
+                        { key: "a", text: "oogonium → secondary oocyte → primary oocyte → ovum" },
+                        { key: "b", text: "oogonium → primary oocyte → secondary oocyte → ovum" },
+                        { key: "c", text: "primary oocyte → oogonium → ovum → polar body" },
+                        { key: "d", text: "oogonium → ovum → primary oocyte → secondary oocyte" }
+                    ],
+                    answer: "b",
+                    explanation: "An oogonium becomes a primary oocyte (2n); meiosis I gives a secondary oocyte (n) plus a polar body, and meiosis II gives the ovum."
+                },
+                {
+                    id: "rs24",
+                    text: "The secondary oocyte released at ovulation remains arrested, until fertilisation, in the stage of:",
+                    options: [
+                        { key: "a", text: "prophase I" },
+                        { key: "b", text: "anaphase I" },
+                        { key: "c", text: "metaphase II" },
+                        { key: "d", text: "telophase II" }
+                    ],
+                    answer: "c",
+                    explanation: "The secondary oocyte is ovulated while arrested at metaphase of meiosis II and completes the division only if a sperm penetrates it."
+                },
+                {
+                    id: "rs25",
+                    text: "One primary oocyte completing oogenesis finally produces:",
+                    options: [
+                        { key: "a", text: "one functional ovum and three polar bodies" },
+                        { key: "b", text: "four functional ova" },
+                        { key: "c", text: "two ova and two polar bodies" },
+                        { key: "d", text: "four polar bodies and no ovum" }
+                    ],
+                    answer: "a",
+                    explanation: "Unequal cytoplasmic divisions give a single large functional ovum and three tiny polar bodies, unlike spermatogenesis which gives four sperms."
+                },
+                {
+                    id: "rs26",
+                    text: "The polar bodies formed during oogenesis are:",
+                    options: [
+                        { key: "a", text: "the actual functional gametes" },
+                        { key: "b", text: "cells that become the placenta" },
+                        { key: "c", text: "cells that form the corpus luteum" },
+                        { key: "d", text: "small, non-functional cells that soon degenerate" }
+                    ],
+                    answer: "d",
+                    explanation: "Polar bodies receive very little cytoplasm, are non-functional and soon degenerate; they ensure the ovum keeps most of the cytoplasm and reserves."
+                },
+                {
+                    id: "rs27",
+                    text: "The cytoplasmic divisions in oogenesis are unequal so that:",
+                    options: [
+                        { key: "a", text: "all four cells are of equal size" },
+                        { key: "b", text: "the ovum retains most of the cytoplasm and stored food" },
+                        { key: "c", text: "the polar bodies receive most of the cytoplasm" },
+                        { key: "d", text: "no cytoplasm is passed to the ovum" }
+                    ],
+                    answer: "b",
+                    explanation: "Unequal cleavage concentrates the cytoplasm and nutrient reserves in the single ovum, equipping it to support early development of the embryo."
+                },
+                {
+                    id: "rs28",
+                    text: "A key difference between spermatogenesis and oogenesis is that:",
+                    options: [
+                        { key: "a", text: "oogenesis requires meiosis but spermatogenesis does not" },
+                        { key: "b", text: "sperms are diploid while ova are haploid" },
+                        { key: "c", text: "one primary oocyte forms one ovum whereas one primary spermatocyte forms four sperms" },
+                        { key: "d", text: "oogenesis occurs in the testis" }
+                    ],
+                    answer: "c",
+                    explanation: "Both use meiosis and give haploid gametes, but one primary oocyte yields a single functional ovum (plus polar bodies) while one primary spermatocyte yields four sperms."
+                },
+                {
+                    id: "rs29",
+                    text: "The fully mature ovarian follicle that ruptures to release the ovum is the:",
+                    options: [
+                        { key: "a", text: "Graafian follicle" },
+                        { key: "b", text: "primordial follicle" },
+                        { key: "c", text: "corpus albicans" },
+                        { key: "d", text: "atretic follicle" }
+                    ],
+                    answer: "a",
+                    explanation: "The Graafian (mature) follicle is the large, fluid-filled follicle that bursts at ovulation to release the secondary oocyte."
+                },
+                {
+                    id: "rs30",
+                    text: "In a typical 28-day cycle, ovulation occurs around day 14 and is triggered by a mid-cycle surge of:",
+                    options: [
+                        { key: "a", text: "follicle-stimulating hormone" },
+                        { key: "b", text: "luteinising hormone (LH)" },
+                        { key: "c", text: "progesterone" },
+                        { key: "d", text: "inhibin" }
+                    ],
+                    answer: "b",
+                    explanation: "A sharp mid-cycle surge of LH (against a background of high oestrogen) triggers rupture of the Graafian follicle around day 14."
+                },
+                {
+                    id: "rs31",
+                    text: "The hormone that mainly stimulates the growth and maturation of the ovarian follicles is:",
+                    options: [
+                        { key: "a", text: "luteinising hormone" },
+                        { key: "b", text: "progesterone" },
+                        { key: "c", text: "oxytocin" },
+                        { key: "d", text: "follicle-stimulating hormone (FSH)" }
+                    ],
+                    answer: "d",
+                    explanation: "FSH from the anterior pituitary stimulates a group of follicles to grow, one of which matures into the Graafian follicle."
+                },
+                {
+                    id: "rs32",
+                    text: "The corpus luteum develops from the ruptured Graafian follicle under the influence of:",
+                    options: [
+                        { key: "a", text: "luteinising hormone (LH)" },
+                        { key: "b", text: "follicle-stimulating hormone" },
+                        { key: "c", text: "oestrogen alone" },
+                        { key: "d", text: "relaxin" }
+                    ],
+                    answer: "a",
+                    explanation: "After ovulation, LH converts the emptied follicle into the corpus luteum, which then secretes progesterone."
+                },
+                {
+                    id: "rs33",
+                    text: "The corpus luteum secretes mainly the hormone:",
+                    options: [
+                        { key: "a", text: "follicle-stimulating hormone" },
+                        { key: "b", text: "prolactin" },
+                        { key: "c", text: "progesterone" },
+                        { key: "d", text: "testosterone" }
+                    ],
+                    answer: "c",
+                    explanation: "The corpus luteum secretes large amounts of progesterone (and some oestrogen), maintaining the endometrium for possible implantation."
+                },
+                {
+                    id: "rs34",
+                    text: "If fertilisation does not occur, the corpus luteum regresses into a whitish scar tissue called the:",
+                    options: [
+                        { key: "a", text: "corpus callosum" },
+                        { key: "b", text: "corpus cavernosum" },
+                        { key: "c", text: "corpus albicans" },
+                        { key: "d", text: "corpus striatum" }
+                    ],
+                    answer: "c",
+                    explanation: "Without pregnancy the corpus luteum degenerates into the non-functional corpus albicans; progesterone then falls and menstruation follows."
+                },
+                {
+                    id: "rs35",
+                    text: "The phase of the ovarian cycle that follows ovulation and is dominated by the corpus luteum is the:",
+                    options: [
+                        { key: "a", text: "follicular phase" },
+                        { key: "b", text: "luteal phase" },
+                        { key: "c", text: "menstrual phase" },
+                        { key: "d", text: "proliferative phase" }
+                    ],
+                    answer: "b",
+                    explanation: "The luteal (post-ovulatory) phase is characterised by an active corpus luteum and high progesterone; the follicular phase precedes ovulation."
+                },
+                {
+                    id: "rs36",
+                    text: "The average length of the human menstrual cycle is about:",
+                    options: [
+                        { key: "a", text: "28 days" },
+                        { key: "b", text: "14 days" },
+                        { key: "c", text: "40 days" },
+                        { key: "d", text: "7 days" }
+                    ],
+                    answer: "a",
+                    explanation: "The menstrual cycle averages about 28 days, though a normal range of 21–35 days is common."
+                },
+                {
+                    id: "rs37",
+                    text: "Menstrual bleeding (days 1–5) results from the breakdown of the endometrium following:",
+                    options: [
+                        { key: "a", text: "a rise in FSH" },
+                        { key: "b", text: "a surge of LH" },
+                        { key: "c", text: "a rise in oestrogen" },
+                        { key: "d", text: "a fall in progesterone and oestrogen" }
+                    ],
+                    answer: "d",
+                    explanation: "When the corpus luteum regresses, progesterone and oestrogen drop sharply; the unsupported endometrium breaks down, producing the menstrual flow."
+                },
+                {
+                    id: "rs38",
+                    text: "The proliferative (follicular) phase, during which the endometrium is rebuilt after menstruation, is driven mainly by:",
+                    options: [
+                        { key: "a", text: "progesterone" },
+                        { key: "b", text: "oestrogen" },
+                        { key: "c", text: "human chorionic gonadotropin" },
+                        { key: "d", text: "relaxin" }
+                    ],
+                    answer: "b",
+                    explanation: "Rising oestrogen from the growing follicles stimulates repair and thickening (proliferation) of the endometrium."
+                },
+                {
+                    id: "rs39",
+                    text: "During the secretory (luteal) phase, the endometrium is kept thick and glandular chiefly by:",
+                    options: [
+                        { key: "a", text: "progesterone" },
+                        { key: "b", text: "follicle-stimulating hormone" },
+                        { key: "c", text: "oestrogen only" },
+                        { key: "d", text: "oxytocin" }
+                    ],
+                    answer: "a",
+                    explanation: "Progesterone from the corpus luteum makes the endometrium secretory and richly vascular, preparing it for implantation."
+                },
+                {
+                    id: "rs40",
+                    text: "The correct hormonal control sequence of the female reproductive cycle is:",
+                    options: [
+                        { key: "a", text: "pituitary → hypothalamus → ovary" },
+                        { key: "b", text: "ovary → hypothalamus → pituitary" },
+                        { key: "c", text: "hypothalamus (GnRH) → anterior pituitary (FSH, LH) → ovary (oestrogen, progesterone)" },
+                        { key: "d", text: "adrenal → ovary → pituitary" }
+                    ],
+                    answer: "c",
+                    explanation: "GnRH from the hypothalamus stimulates the anterior pituitary to release FSH and LH, which act on the ovary to secrete oestrogen and progesterone, with feedback control."
+                },
+                {
+                    id: "rs41",
+                    text: "The first menstruation, marking the onset of the reproductive phase at puberty, is called:",
+                    options: [
+                        { key: "a", text: "menarche" },
+                        { key: "b", text: "menopause" },
+                        { key: "c", text: "ovulation" },
+                        { key: "d", text: "gestation" }
+                    ],
+                    answer: "a",
+                    explanation: "Menarche is the first menstrual flow, occurring at puberty (usually 11–14 years), signalling the start of the reproductive period."
+                },
+                {
+                    id: "rs42",
+                    text: "The permanent cessation of the menstrual cycle, usually around 45–50 years of age, is termed:",
+                    options: [
+                        { key: "a", text: "menarche" },
+                        { key: "b", text: "menopause" },
+                        { key: "c", text: "amenorrhoea" },
+                        { key: "d", text: "gestation" }
+                    ],
+                    answer: "b",
+                    explanation: "Menopause is the natural end of menstrual cycling, occurring roughly between 45 and 50 years as ovarian function declines."
+                },
+                {
+                    id: "rs43",
+                    text: "If fertilisation occurs, menstruation is suspended because the corpus luteum is maintained by:",
+                    options: [
+                        { key: "a", text: "a fall in progesterone" },
+                        { key: "b", text: "FSH from the pituitary" },
+                        { key: "c", text: "prolactin from the placenta" },
+                        { key: "d", text: "human chorionic gonadotropin (hCG)" }
+                    ],
+                    answer: "d",
+                    explanation: "hCG from the developing embryo/trophoblast sustains the corpus luteum, so progesterone stays high, the endometrium is retained and menstruation stops."
+                },
+                {
+                    id: "rs44",
+                    text: "Fusion of a haploid sperm with a haploid ovum at fertilisation produces a:",
+                    options: [
+                        { key: "a", text: "diploid zygote" },
+                        { key: "b", text: "haploid zygote" },
+                        { key: "c", text: "diploid gamete" },
+                        { key: "d", text: "haploid blastocyst" }
+                    ],
+                    answer: "a",
+                    explanation: "Fertilisation combines the haploid (n) sperm and haploid (n) ovum, restoring the diploid (2n) chromosome number in the zygote."
+                },
+                {
+                    id: "rs45",
+                    text: "The enzyme released from the sperm acrosome that helps it penetrate the coverings of the ovum is:",
+                    options: [
+                        { key: "a", text: "amylase" },
+                        { key: "b", text: "hyaluronidase" },
+                        { key: "c", text: "pepsin" },
+                        { key: "d", text: "lipase" }
+                    ],
+                    answer: "b",
+                    explanation: "Acrosomal hyaluronidase (with other enzymes) dissolves the hyaluronic-acid-rich corona radiata and zona pellucida, letting the sperm reach the egg membrane."
+                },
+                {
+                    id: "rs46",
+                    text: "The hormone detected in the urine as the basis of most pregnancy tests is:",
+                    options: [
+                        { key: "a", text: "oestrogen" },
+                        { key: "b", text: "luteinising hormone" },
+                        { key: "c", text: "human chorionic gonadotropin (hCG)" },
+                        { key: "d", text: "thyroxine" }
+                    ],
+                    answer: "c",
+                    explanation: "hCG, produced soon after implantation, appears in the mother's urine and is the marker detected by common pregnancy test kits."
+                },
+                {
+                    id: "rs47",
+                    text: "Besides acting as an endocrine organ, the placenta also:",
+                    options: [
+                        { key: "a", text: "allows exchange of nutrients, gases and wastes between mother and foetus" },
+                        { key: "b", text: "produces the ova" },
+                        { key: "c", text: "stores the sperm" },
+                        { key: "d", text: "directly mixes maternal and fetal blood" }
+                    ],
+                    answer: "a",
+                    explanation: "The placenta secretes hormones (hCG, progesterone, oestrogen) and mediates exchange of nutrients, respiratory gases and wastes without direct mixing of maternal and fetal blood."
+                },
+                {
+                    id: "rs48",
+                    text: "The normal human gestation (pregnancy) period is approximately:",
+                    options: [
+                        { key: "a", text: "180 days" },
+                        { key: "b", text: "365 days" },
+                        { key: "c", text: "120 days" },
+                        { key: "d", text: "280 days (about 9 months)" }
+                    ],
+                    answer: "d",
+                    explanation: "Human gestation lasts about 280 days (40 weeks, roughly 9 months) counted from the last menstrual period to birth."
+                },
+                {
+                    id: "rs49",
+                    text: "The development of secondary sexual characters in females is brought about mainly by:",
+                    options: [
+                        { key: "a", text: "progesterone" },
+                        { key: "b", text: "oestrogen" },
+                        { key: "c", text: "testosterone" },
+                        { key: "d", text: "oxytocin" }
+                    ],
+                    answer: "b",
+                    explanation: "Oestrogen, secreted by the ovarian follicles, promotes the female secondary sexual characters such as breast development and widening of the pelvis."
+                },
+                {
+                    id: "rs50",
+                    text: "Progesterone is essential for the continuation of pregnancy mainly because it:",
+                    options: [
+                        { key: "a", text: "maintains the endometrium and supports pregnancy" },
+                        { key: "b", text: "triggers ovulation" },
+                        { key: "c", text: "causes menstruation" },
+                        { key: "d", text: "stimulates follicle growth" }
+                    ],
+                    answer: "a",
+                    explanation: "Progesterone maintains the thick secretory endometrium and suppresses uterine contractions, sustaining pregnancy; a fall in progesterone triggers menstruation."
+                }
+            ]
+        }
+    ]
+};
+/* ----------------------------------------------------------------
+   DAY 16 syllabus map — Subject → Topic → Sub-topic → [ids].
+   Powers the collapsible chapter-wise distribution on the results
+   screen. Chemistry follows the CEE weightage (Physical 17 ·
+   Inorganic 10 · Organic 17 · Applied 3 · Analytical 3); the
+   Reproductive System is grouped by organs, gametogenesis, cycles
+   and fertilisation. Every one of the 100 ids appears exactly once.
+   ---------------------------------------------------------------- */
+const DAY16_SYLLABUS = [
+    { subject: "Chemistry", accent: "amber", topics: [
+        { topic: "Physical Chemistry", subs: [
+            { name: "Stoichiometry & Mole Concept", ids: ["ch51", "ch52"] },
+            { name: "Atomic Structure", ids: ["ch53", "ch54"] },
+            { name: "Periodic Properties", ids: ["ch55"] },
+            { name: "Chemical Bonding & Shapes", ids: ["ch56"] },
+            { name: "Redox Reactions", ids: ["ch57"] },
+            { name: "States of Matter (Gases)", ids: ["ch58"] },
+            { name: "Solid State", ids: ["ch59"] },
+            { name: "Chemical Equilibrium", ids: ["ch60"] },
+            { name: "Volumetric Analysis (Concentration)", ids: ["ch61"] },
+            { name: "Ionic Equilibrium", ids: ["ch62"] },
+            { name: "Chemical Kinetics", ids: ["ch63"] },
+            { name: "Electrochemistry", ids: ["ch64", "ch65"] },
+            { name: "Chemical Thermodynamics", ids: ["ch66"] },
+            { name: "Nuclear Chemistry", ids: ["ch67"] }
+        ] },
+        { topic: "Inorganic Chemistry", subs: [
+            { name: "Hydrogen & p-Block Non-metals", ids: ["ch68", "ch69"] },
+            { name: "Nitrogen Family & Halogens", ids: ["ch70", "ch71"] },
+            { name: "Sulphur Compounds", ids: ["ch72"] },
+            { name: "Metallurgy & s-Block", ids: ["ch73", "ch74"] },
+            { name: "Transition Metals & Coordination", ids: ["ch75", "ch76"] },
+            { name: "Bio-inorganic Chemistry", ids: ["ch77"] }
+        ] },
+        { topic: "Organic Chemistry", subs: [
+            { name: "General Organic Chemistry", ids: ["ch78", "ch79"] },
+            { name: "IUPAC Nomenclature", ids: ["ch80"] },
+            { name: "Hydrocarbons", ids: ["ch81", "ch82", "ch83"] },
+            { name: "Aromatic Chemistry", ids: ["ch84"] },
+            { name: "Haloalkanes & Haloarenes", ids: ["ch85", "ch86"] },
+            { name: "Alcohols & Phenols", ids: ["ch87", "ch88"] },
+            { name: "Ethers", ids: ["ch89"] },
+            { name: "Aldehydes & Ketones", ids: ["ch90"] },
+            { name: "Carboxylic Acids & Esters", ids: ["ch91"] },
+            { name: "Nitro Compounds", ids: ["ch92"] },
+            { name: "Amines", ids: ["ch93"] },
+            { name: "Organometallics (Grignard)", ids: ["ch94"] }
+        ] },
+        { topic: "Applied Chemistry", subs: [
+            { name: "Manufacturing Processes", ids: ["ch95"] },
+            { name: "Chemistry in Everyday Life", ids: ["ch96"] },
+            { name: "Applied Radiochemistry", ids: ["ch97"] }
+        ] },
+        { topic: "Analytical Chemistry", subs: [
+            { name: "Chemical Tests (Lassaigne)", ids: ["ch98"] },
+            { name: "Separation Techniques", ids: ["ch99"] },
+            { name: "Titrations", ids: ["ch100"] }
+        ] }
+    ] },
+    { subject: "Zoology", accent: "rose", topics: [
+        { topic: "Reproductive Organs", subs: [
+            { name: "Male Reproductive System", ids: ["rs1", "rs2", "rs3", "rs4", "rs5", "rs6", "rs7"] },
+            { name: "Female Reproductive System", ids: ["rs8", "rs9", "rs10", "rs11", "rs12", "rs13", "rs14"] }
+        ] },
+        { topic: "Gametogenesis", subs: [
+            { name: "Spermatogenesis", ids: ["rs15", "rs16", "rs17", "rs18", "rs19", "rs20", "rs21"] },
+            { name: "Oogenesis", ids: ["rs22", "rs23", "rs24", "rs25", "rs26", "rs27", "rs28"] }
+        ] },
+        { topic: "Ovarian & Menstrual Cycle", subs: [
+            { name: "Ovarian Cycle & Follicles", ids: ["rs29", "rs30", "rs31", "rs32", "rs33", "rs34", "rs35"] },
+            { name: "Menstrual Cycle", ids: ["rs36", "rs37", "rs38", "rs39", "rs40", "rs41", "rs42", "rs43"] }
+        ] },
+        { topic: "Fertilisation & Reproductive Health", subs: [
+            { name: "Fertilisation & Early Development", ids: ["rs44", "rs45", "rs46", "rs47", "rs48"] },
+            { name: "Reproductive Hormones & Health", ids: ["rs49", "rs50"] }
+        ] }
+    ] }
+];
+DAY16.syllabus = DAY16_SYLLABUS;
+
 /* All days live here; the dashboard initializes with Day 1. */
 const STUDENT = { name: "Prakriti Subedi", role: "CEE Aspirant 2026" };
-const DAYS = [DAY1, DAY2, DAY3, DAY4, DAY5, DAY6, DAY7, DAY8, DAY9, DAY10, DAY11, DAY12, DAY13, DAY14, DAY15];
+const DAYS = [DAY1, DAY2, DAY3, DAY4, DAY5, DAY6, DAY7, DAY8, DAY9, DAY10, DAY11, DAY12, DAY13, DAY14, DAY15, DAY16];
 
 /* The CEE/IOE subjects shown on the dashboard performance panel.
    Chapters are mapped to a subject via their `subject` field; subjects with

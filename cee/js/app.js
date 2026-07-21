@@ -10,7 +10,7 @@
     /* ---------- constants ---------- */
     const STORAGE_KEY = "cee_dashboard_prakriti";
     const LEGACY_KEYS = ["cee_dashboard_prakriti_v3", "cee_dashboard_prakriti_v2", "cee_dashboard_prakriti_v1"];
-    const PLANNED_DAYS = 15;
+    const PLANNED_DAYS = 16;
     const TEST_DURATION_MS = 36 * 60 * 1000; // default 36 minutes per test
     // Per-day override via day.durationMinutes (e.g. Day 14 mock test = 180 min).
     const dayDurationMs = (day) => (day && day.durationMinutes ? day.durationMinutes : 36) * 60 * 1000;
@@ -220,11 +220,9 @@
             }
 
             const chapNames = day.chapters.map(c => c.name).join(" \u00B7 ");
-            // Day 15 onward: show the chapter-wise question distribution instead of a plain name list.
+            // Day 15 onward: show the chapter-wise question distribution as normal text.
             const descHtml = day.day >= 15
-                ? `<div class="dc-dist">` + day.chapters.map(c =>
-                    `<span class="dc-chip" data-accent="${c.accent}">${c.name}<b>${c.questions.length}</b></span>`
-                  ).join("") + `</div>`
+                ? `<p class="dc-desc">` + day.chapters.map(c => `${c.name}: ${c.questions.length}`).join(" \u00B7 ") + `</p>`
                 : `<p class="dc-desc">${chapNames}</p>`;
 
             const card = el("button", "card day-card");

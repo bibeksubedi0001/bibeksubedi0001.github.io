@@ -913,20 +913,6 @@ h1, h2, h3, h4 {
 .day-card h3 { font-size: 1.16rem; }
 .dc-desc { margin: 0; color: var(--ink-faint); font-size: 0.85rem; font-weight: 500; }
 
-/* Chapter-wise question distribution (Day 15 onward) */
-.dc-dist { display: flex; flex-wrap: wrap; gap: 7px; }
-.dc-chip {
-    display: inline-flex; align-items: center; gap: 7px;
-    padding: 4px 5px 4px 11px; border-radius: 999px;
-    background: var(--accent-soft); color: var(--accent);
-    font-size: 0.78rem; font-weight: 600; line-height: 1.25;
-}
-.dc-chip b {
-    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.74rem;
-    background: var(--accent); color: #fff;
-    padding: 1px 8px; border-radius: 999px;
-}
-
 .dc-scoreline { display: flex; align-items: center; gap: 12px; }
 .dc-bar { flex: 1; height: 8px; border-radius: 99px; background: var(--bg); overflow: hidden; }
 .dc-bar span { display: block; height: 100%; width: 0; border-radius: 99px; background: linear-gradient(90deg, #3b82f6, #1d4ed8); transition: width 0.6s var(--ease); }
