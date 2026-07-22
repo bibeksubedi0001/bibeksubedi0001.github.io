@@ -12642,9 +12642,1345 @@ const DAY16_SYLLABUS = [
 ];
 DAY16.syllabus = DAY16_SYLLABUS;
 
+/* ============================================================
+    DAY 17 — CEE-syllabus mixed test at IOE-style difficulty
+    Chemistry follows the official 2026 CEE scope and weightage:
+    Physical 17 · Inorganic 10 · Organic 17 · Applied 3 ·
+    Analytical 3. The remaining sections are 10 human Reproductive
+    System · 20 Properties of Triangle · 20 Limit, Continuity &
+    Integration.
+   ============================================================ */
+const DAY17 = {
+    day: 17,
+    title: "Day 17",
+    subtitle: "IOE-Level: Chemistry + Reproduction + Triangle + Calculus · 100 Q",
+    durationMinutes: 90,
+    negativeMarking: 0.25,
+    chapters: [
+        {
+            id: "chem17",
+            name: "Chemistry (Full Syllabus)",
+            subject: "Chemistry",
+            accent: "amber",
+            blurb: "50 questions from the official 2026 CEE scope and 17 · 10 · 17 · 3 · 3 weightage, written at harder IOE-style difficulty.",
+            questions: [
+                {
+                    id: "ch101",
+                    text: "14 g of $\\mathrm{CaO}$ is allowed to react with 22 g of $\\mathrm{CO_2}$ to form $\\mathrm{CaCO_3}$. The mass of $\\mathrm{CaCO_3}$ formed is (Ca = 40, C = 12, O = 16):",
+                    options: [
+                        { key: "a", text: "50 g" },
+                        { key: "b", text: "25 g" },
+                        { key: "c", text: "39 g" },
+                        { key: "d", text: "18 g" }
+                    ],
+                    answer: "b",
+                    explanation: "$\\mathrm{CaO+CO_2\\to CaCO_3}$. Moles: $\\mathrm{CaO}=14/56=0.25$, $\\mathrm{CO_2}=22/44=0.5$. $\\mathrm{CaO}$ is limiting, so $0.25$ mol $\\mathrm{CaCO_3}=0.25\\times100=25$ g."
+                },
+                {
+                    id: "ch102",
+                    text: "A gaseous hydrocarbon contains 85.7% carbon by mass and has a vapour density of 28. Its molecular formula is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{C_4H_8}$" },
+                        { key: "b", text: "$\\mathrm{C_3H_6}$" },
+                        { key: "c", text: "$\\mathrm{C_4H_{10}}$" },
+                        { key: "d", text: "$\\mathrm{C_2H_4}$" }
+                    ],
+                    answer: "a",
+                    explanation: "Molar mass $=2\\times28=56$. Carbon $=0.857\\times56\\approx48\\Rightarrow4$ C; hydrogen $=56-48=8\\Rightarrow8$ H. Formula $\\mathrm{C_4H_8}$."
+                },
+                {
+                    id: "ch103",
+                    text: "The energy of the electron in the ground state of the hydrogen atom is $-13.6$ eV. The energy required to remove the electron from the first excited state is:",
+                    options: [
+                        { key: "a", text: "13.6 eV" },
+                        { key: "b", text: "10.2 eV" },
+                        { key: "c", text: "1.51 eV" },
+                        { key: "d", text: "3.4 eV" }
+                    ],
+                    answer: "d",
+                    explanation: "$E_n=-13.6/n^2$ eV. First excited state $n=2\\Rightarrow E_2=-3.4$ eV, so the ionization energy from this level is $+3.4$ eV."
+                },
+                {
+                    id: "ch104",
+                    text: "The uncertainty in the velocity of an electron (mass $9.1\\times10^{-31}$ kg) is $3\\times10^{4}$ m/s. The minimum uncertainty in its position is about ($h=6.6\\times10^{-34}$ J·s):",
+                    options: [
+                        { key: "a", text: "$1.9\\times10^{-3}$ m" },
+                        { key: "b", text: "$1.9\\times10^{-5}$ m" },
+                        { key: "c", text: "$5.8\\times10^{-9}$ m" },
+                        { key: "d", text: "$1.9\\times10^{-9}$ m" }
+                    ],
+                    answer: "d",
+                    explanation: "$\\Delta x\\ge\\dfrac{h}{4\\pi m\\,\\Delta v}=\\dfrac{6.6\\times10^{-34}}{4\\pi(9.1\\times10^{-31})(3\\times10^{4})}\\approx1.9\\times10^{-9}$ m."
+                },
+                {
+                    id: "ch105",
+                    text: "The number of unpaired electrons present in the $\\mathrm{Fe^{2+}}$ ion (atomic number of Fe = 26) is:",
+                    options: [
+                        { key: "a", text: "6" },
+                        { key: "b", text: "5" },
+                        { key: "c", text: "4" },
+                        { key: "d", text: "3" }
+                    ],
+                    answer: "c",
+                    explanation: "Fe: $[\\mathrm{Ar}]3d^6 4s^2$. $\\mathrm{Fe^{2+}}$ loses the two $4s$ electrons giving $3d^6$, which has 4 unpaired electrons."
+                },
+                {
+                    id: "ch106",
+                    text: "The correct order of the first ionization energy for the elements B, C, N and O is:",
+                    options: [
+                        { key: "a", text: "B < C < N < O" },
+                        { key: "b", text: "B < C < O < N" },
+                        { key: "c", text: "O < N < C < B" },
+                        { key: "d", text: "B < O < C < N" }
+                    ],
+                    answer: "b",
+                    explanation: "IE rises across a period, but the half-filled $2p^3$ of N is extra stable, so IE(N) > IE(O). Hence B < C < O < N."
+                },
+                {
+                    id: "ch107",
+                    text: "The most suitable Williamson route for preparing tert-butyl methyl ether is:",
+                    options: [
+                        { key: "a", text: "sodium tert-butoxide + methyl iodide" },
+                        { key: "b", text: "sodium methoxide + tert-butyl bromide" },
+                        { key: "c", text: "sodium tert-butoxide + tert-butyl bromide" },
+                        { key: "d", text: "sodium methoxide + tert-butyl alcohol" }
+                    ],
+                    answer: "a",
+                    explanation: "Williamson synthesis proceeds by $\\mathrm{S_N2}$ attack, so the halide should be unhindered. Sodium tert-butoxide attacks methyl iodide to form $\\mathrm{(CH_3)_3COCH_3}$; a tertiary halide would undergo elimination."
+                },
+                {
+                    id: "ch108",
+                    text: "Which pair of molecules both have zero net dipole moment?",
+                    options: [
+                        { key: "a", text: "$\\mathrm{H_2O}$ and $\\mathrm{NH_3}$" },
+                        { key: "b", text: "$\\mathrm{CO_2}$ and $\\mathrm{BF_3}$" },
+                        { key: "c", text: "$\\mathrm{CO_2}$ and $\\mathrm{H_2O}$" },
+                        { key: "d", text: "$\\mathrm{NH_3}$ and $\\mathrm{BF_3}$" }
+                    ],
+                    answer: "b",
+                    explanation: "Linear $\\mathrm{CO_2}$ and trigonal-planar $\\mathrm{BF_3}$ are symmetric, so their bond dipoles cancel. Bent $\\mathrm{H_2O}$ and pyramidal $\\mathrm{NH_3}$ are polar."
+                },
+                {
+                    id: "ch109",
+                    text: "At the same temperature, the ratio of the root-mean-square speeds of hydrogen and oxygen molecules is:",
+                    options: [
+                        { key: "a", text: "1 : 4" },
+                        { key: "b", text: "1 : 16" },
+                        { key: "c", text: "16 : 1" },
+                        { key: "d", text: "4 : 1" }
+                    ],
+                    answer: "d",
+                    explanation: "$v_{rms}\\propto1/\\sqrt{M}$, so $\\dfrac{v_{H_2}}{v_{O_2}}=\\sqrt{\\dfrac{32}{2}}=\\sqrt{16}=4$, i.e. 4 : 1."
+                },
+                {
+                    id: "ch110",
+                    text: "$\\mathrm{C_2H_5MgBr}$ reacts with formaldehyde followed by acidic hydrolysis. The organic product is:",
+                    options: [
+                        { key: "a", text: "ethanol" },
+                        { key: "b", text: "propan-1-ol" },
+                        { key: "c", text: "propan-2-ol" },
+                        { key: "d", text: "butan-1-ol" }
+                    ],
+                    answer: "b",
+                    explanation: "A Grignard reagent adds its alkyl group to formaldehyde and, after hydrolysis, gives a primary alcohol with one additional carbon: $\\mathrm{C_2H_5CH_2OH}$ (propan-1-ol)."
+                },
+                {
+                    id: "ch111",
+                    text: "The standard enthalpies of formation of $\\mathrm{CO_2(g)}$ and $\\mathrm{CO(g)}$ are $-393.5$ and $-110.5$ kJ/mol. The enthalpy change for $\\mathrm{CO(g)+\\tfrac12O_2(g)\\to CO_2(g)}$ is:",
+                    options: [
+                        { key: "a", text: "$-504.0$ kJ" },
+                        { key: "b", text: "$-283.0$ kJ" },
+                        { key: "c", text: "$+283.0$ kJ" },
+                        { key: "d", text: "$-110.5$ kJ" }
+                    ],
+                    answer: "b",
+                    explanation: "$\\Delta H=\\Delta H_f(\\mathrm{CO_2})-\\Delta H_f(\\mathrm{CO})=-393.5-(-110.5)=-283.0$ kJ."
+                },
+                {
+                    id: "ch112",
+                    text: "A reaction has $\\Delta H=+30$ kJ/mol and $\\Delta S=+100$ J/K·mol. It becomes spontaneous above a temperature of:",
+                    options: [
+                        { key: "a", text: "30 K" },
+                        { key: "b", text: "273 K" },
+                        { key: "c", text: "300 K" },
+                        { key: "d", text: "3000 K" }
+                    ],
+                    answer: "c",
+                    explanation: "Spontaneous when $\\Delta G=\\Delta H-T\\Delta S<0\\Rightarrow T>\\dfrac{\\Delta H}{\\Delta S}=\\dfrac{30000}{100}=300$ K."
+                },
+                {
+                    id: "ch113",
+                    text: "For $\\mathrm{N_2(g)+3H_2(g)\\rightleftharpoons 2NH_3(g)}$, the correct relation between $K_p$ and $K_c$ is:",
+                    options: [
+                        { key: "a", text: "$K_p=K_c(RT)^{2}$" },
+                        { key: "b", text: "$K_p=K_c(RT)^{-2}$" },
+                        { key: "c", text: "$K_p=K_c(RT)$" },
+                        { key: "d", text: "$K_p=K_c$" }
+                    ],
+                    answer: "b",
+                    explanation: "$K_p=K_c(RT)^{\\Delta n}$ with $\\Delta n=2-(1+3)=-2$, giving $K_p=K_c(RT)^{-2}$."
+                },
+                {
+                    id: "ch114",
+                    text: "The pH of a buffer containing 0.2 M $\\mathrm{CH_3COOH}$ and 0.2 M $\\mathrm{CH_3COONa}$ is ($pK_a=4.74$):",
+                    options: [
+                        { key: "a", text: "4.74" },
+                        { key: "b", text: "9.26" },
+                        { key: "c", text: "2.37" },
+                        { key: "d", text: "5.74" }
+                    ],
+                    answer: "a",
+                    explanation: "Henderson equation: $pH=pK_a+\\log\\dfrac{[\\text{salt}]}{[\\text{acid}]}=4.74+\\log1=4.74$."
+                },
+                {
+                    id: "ch115",
+                    text: "The solubility product of $\\mathrm{Ag_2CrO_4}$ is $4\\times10^{-12}$. Its solubility in mol/L is:",
+                    options: [
+                        { key: "a", text: "$1\\times10^{-4}$" },
+                        { key: "b", text: "$2\\times10^{-4}$" },
+                        { key: "c", text: "$1\\times10^{-6}$" },
+                        { key: "d", text: "$4\\times10^{-4}$" }
+                    ],
+                    answer: "a",
+                    explanation: "$K_{sp}=(2s)^2(s)=4s^3=4\\times10^{-12}\\Rightarrow s^3=10^{-12}\\Rightarrow s=10^{-4}$ mol/L."
+                },
+                {
+                    id: "ch116",
+                    text: "For a first-order reaction, 75% of the reactant is consumed in 60 minutes. The half-life of the reaction is:",
+                    options: [
+                        { key: "a", text: "15 min" },
+                        { key: "b", text: "20 min" },
+                        { key: "c", text: "40 min" },
+                        { key: "d", text: "30 min" }
+                    ],
+                    answer: "d",
+                    explanation: "75% consumed leaves 25%, i.e. two half-lives (100→50→25%). So $2t_{1/2}=60\\Rightarrow t_{1/2}=30$ min."
+                },
+                {
+                    id: "ch117",
+                    text: "The rate constant of a reaction doubles when the temperature rises from 300 K to 310 K. The activation energy is closest to ($R=8.314$ J/K·mol):",
+                    options: [
+                        { key: "a", text: "12.4 kJ/mol" },
+                        { key: "b", text: "26.6 kJ/mol" },
+                        { key: "c", text: "53.6 kJ/mol" },
+                        { key: "d", text: "107 kJ/mol" }
+                    ],
+                    answer: "c",
+                    explanation: "$\\log\\dfrac{k_2}{k_1}=\\dfrac{E_a}{2.303R}\\left(\\dfrac{T_2-T_1}{T_1T_2}\\right)$. With $\\log2=0.301$, $E_a=\\dfrac{0.301\\times2.303\\times8.314\\times300\\times310}{10}\\approx53.6$ kJ/mol."
+                },
+                {
+                    id: "ch118",
+                    text: "For the cell $\\mathrm{Zn|Zn^{2+}(1\\,M)||Cu^{2+}(1\\,M)|Cu}$, $E^\\circ_{cell}=1.10$ V. If $[\\mathrm{Cu^{2+}}]$ is lowered to $0.01$ M, the EMF at 298 K becomes $\\left(\\dfrac{2.303RT}{F}=0.059\\right)$:",
+                    options: [
+                        { key: "a", text: "1.041 V" },
+                        { key: "b", text: "1.159 V" },
+                        { key: "c", text: "1.100 V" },
+                        { key: "d", text: "0.982 V" }
+                    ],
+                    answer: "a",
+                    explanation: "$E=E^\\circ-\\dfrac{0.059}{2}\\log\\dfrac{[\\mathrm{Zn^{2+}}]}{[\\mathrm{Cu^{2+}}]}=1.10-0.0295\\log\\dfrac{1}{0.01}=1.10-0.059=1.041$ V."
+                },
+                {
+                    id: "ch119",
+                    text: "25.0 mL of an $\\mathrm{Fe^{2+}}$ solution requires 20.0 mL of 0.0200 M $\\mathrm{KMnO_4}$ for complete oxidation in acidic medium. The molarity of $\\mathrm{Fe^{2+}}$ is:",
+                    options: [
+                        { key: "a", text: "0.0160 M" },
+                        { key: "b", text: "0.0400 M" },
+                        { key: "c", text: "0.0800 M" },
+                        { key: "d", text: "0.100 M" }
+                    ],
+                    answer: "c",
+                    explanation: "$\\mathrm{MnO_4^-+5Fe^{2+}+8H^+\\to Mn^{2+}+5Fe^{3+}+4H_2O}$. Moles $\\mathrm{MnO_4^-}=0.0200\\times0.0200=4.00\\times10^{-4}$, so moles $\\mathrm{Fe^{2+}}=2.00\\times10^{-3}$ and $M=0.00200/0.0250=0.0800$."
+                },
+                {
+                    id: "ch120",
+                    text: "Normal saline is 0.9% (w/v) $\\mathrm{NaCl}$. Assuming complete dissociation, its ideal osmotic pressure at 310 K is approximately ($M_{NaCl}=58.5$ g/mol, $R=0.0821$ L·atm/K·mol):",
+                    options: [
+                        { key: "a", text: "3.9 atm" },
+                        { key: "b", text: "7.8 atm" },
+                        { key: "c", text: "15.6 atm" },
+                        { key: "d", text: "0.31 atm" }
+                    ],
+                    answer: "b",
+                    explanation: "0.9% (w/v) means 9 g/L, so $M=9/58.5=0.154$ M. With van't Hoff factor $i=2$, $\\pi=iMRT=2(0.154)(0.0821)(310)\\approx7.8$ atm, explaining its near-isotonic use."
+                },
+                {
+                    id: "ch121",
+                    text: "For the exothermic Contact-process equilibrium $\\mathrm{2SO_2(g)+O_2(g)\\rightleftharpoons2SO_3(g)}$, the industrial conditions giving the best rate-yield compromise are:",
+                    options: [
+                        { key: "a", text: "200°C, no catalyst, very high pressure" },
+                        { key: "b", text: "about 450°C, $\\mathrm{V_2O_5}$, excess oxygen" },
+                        { key: "c", text: "about 900°C, platinum, limited oxygen" },
+                        { key: "d", text: "about 450°C, iron, excess sulphur dioxide" }
+                    ],
+                    answer: "b",
+                    explanation: "Lower temperature favours the exothermic forward reaction but is too slow; about 450°C with $\\mathrm{V_2O_5}$ gives a practical rate. Excess $\\mathrm{O_2}$ shifts equilibrium toward $\\mathrm{SO_3}$."
+                },
+                {
+                    id: "ch122",
+                    text: "A heat-sensitive liquid decomposes near its normal boiling point and contains a non-volatile impurity. The most suitable purification technique is:",
+                    options: [
+                        { key: "a", text: "simple distillation at atmospheric pressure" },
+                        { key: "b", text: "fractional crystallisation from hot solvent" },
+                        { key: "c", text: "vacuum distillation at reduced pressure" },
+                        { key: "d", text: "paper chromatography with a polar solvent" }
+                    ],
+                    answer: "c",
+                    explanation: "Lowering external pressure lowers the boiling point, so vacuum distillation separates the volatile liquid from the non-volatile impurity without heating it to its decomposition temperature."
+                },
+                {
+                    id: "ch123",
+                    text: "The two oxygen-oxygen bonds in an ozone molecule are:",
+                    options: [
+                        { key: "a", text: "one single and one double bond of fixed lengths" },
+                        { key: "b", text: "equal and identical to an O-O single bond" },
+                        { key: "c", text: "equal and intermediate between single and double bonds" },
+                        { key: "d", text: "unequal because ozone has an ionic structure" }
+                    ],
+                    answer: "c",
+                    explanation: "Ozone is a resonance hybrid of two equivalent canonical structures. Both O-O bonds therefore have bond order 1.5 and equal lengths intermediate between single and double bonds."
+                },
+                {
+                    id: "ch124",
+                    text: "The alkali metal that forms a superoxide $\\mathrm{MO_2}$ on burning in excess oxygen is:",
+                    options: [
+                        { key: "a", text: "Li" },
+                        { key: "b", text: "Na" },
+                        { key: "c", text: "H" },
+                        { key: "d", text: "K" }
+                    ],
+                    answer: "d",
+                    explanation: "Li forms the oxide and Na the peroxide, while larger cations (K, Rb, Cs) stabilise the superoxide $\\mathrm{O_2^-}$; hence K gives $\\mathrm{KO_2}$."
+                },
+                {
+                    id: "ch125",
+                    text: "Which drying agent can be used to obtain dry ammonia gas without reacting with it?",
+                    options: [
+                        { key: "a", text: "anhydrous $\\mathrm{CaCl_2}$" },
+                        { key: "b", text: "concentrated $\\mathrm{H_2SO_4}$" },
+                        { key: "c", text: "phosphorus pentoxide" },
+                        { key: "d", text: "quicklime ($\\mathrm{CaO}$)" }
+                    ],
+                    answer: "d",
+                    explanation: "Quicklime removes water but does not react with ammonia. $\\mathrm{CaCl_2}$ forms an addition compound with $\\mathrm{NH_3}$, while concentrated $\\mathrm{H_2SO_4}$ and $\\mathrm{P_2O_5}$ react with this basic gas."
+                },
+                {
+                    id: "ch126",
+                    text: "Which of the following oxides is neutral?",
+                    options: [
+                        { key: "a", text: "$\\mathrm{CO_2}$" },
+                        { key: "b", text: "$\\mathrm{N_2O_5}$" },
+                        { key: "c", text: "$\\mathrm{N_2O}$" },
+                        { key: "d", text: "$\\mathrm{SO_2}$" }
+                    ],
+                    answer: "c",
+                    explanation: "$\\mathrm{N_2O}$ (and CO, NO) are neutral oxides; $\\mathrm{CO_2}$, $\\mathrm{N_2O_5}$ and $\\mathrm{SO_2}$ are acidic."
+                },
+                {
+                    id: "ch127",
+                    text: "When chlorine reacts with hot concentrated $\\mathrm{NaOH}$, the oxidation states of chlorine in the two chlorine-containing products and their molar ratio $\\mathrm{NaCl:NaClO_3}$ are:",
+                    options: [
+                        { key: "a", text: "$-1,+1$ and $1:1$" },
+                        { key: "b", text: "$-1,+3$ and $3:1$" },
+                        { key: "c", text: "$-1,+5$ and $5:1$" },
+                        { key: "d", text: "$+1,+5$ and $1:5$" }
+                    ],
+                    answer: "c",
+                    explanation: "$\\mathrm{3Cl_2+6NaOH\\to5NaCl+NaClO_3+3H_2O}$. Chlorine disproportionates to $-1$ and $+5$, and the product ratio $\\mathrm{NaCl:NaClO_3}$ is $5:1$."
+                },
+                {
+                    id: "ch128",
+                    text: "In the self-reduction step during copper extraction, cuprous oxide reacts with cuprous sulphide according to:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{Cu_2O+Cu_2S\\to2Cu+SO_2}$" },
+                        { key: "b", text: "$\\mathrm{Cu_2O+2Cu_2S\\to4Cu+SO_2}$" },
+                        { key: "c", text: "$\\mathrm{2Cu_2O+Cu_2S\\to6Cu+SO_2}$" },
+                        { key: "d", text: "$\\mathrm{2CuO+CuS\\to3Cu+SO_3}$" }
+                    ],
+                    answer: "c",
+                    explanation: "The balanced self-reduction reaction is $\\mathrm{2Cu_2O+Cu_2S\\to6Cu+SO_2}$. It produces blister copper without an external reducing agent."
+                },
+                {
+                    id: "ch129",
+                    text: "Which of the following ions is colourless in aqueous solution?",
+                    options: [
+                        { key: "a", text: "$\\mathrm{Cu^{2+}}$" },
+                        { key: "b", text: "$\\mathrm{Fe^{2+}}$" },
+                        { key: "c", text: "$\\mathrm{Ni^{2+}}$" },
+                        { key: "d", text: "$\\mathrm{Sc^{3+}}$" }
+                    ],
+                    answer: "d",
+                    explanation: "$\\mathrm{Sc^{3+}}$ is $3d^0$; with no d-electrons no d–d transition is possible, so it is colourless."
+                },
+                {
+                    id: "ch130",
+                    text: "The number of unpaired electrons in the low-spin complex $[\\mathrm{Fe(CN)_6}]^{4-}$ is:",
+                    options: [
+                        { key: "a", text: "4" },
+                        { key: "b", text: "0" },
+                        { key: "c", text: "2" },
+                        { key: "d", text: "6" }
+                    ],
+                    answer: "b",
+                    explanation: "Fe²⁺ is $3d^6$; the strong-field $\\mathrm{CN^-}$ ligand pairs all electrons in $t_{2g}^6$, so the complex is diamagnetic (0 unpaired)."
+                },
+                {
+                    id: "ch131",
+                    text: "The process of concentrating a sulphide ore using oil and water is called:",
+                    options: [
+                        { key: "a", text: "leaching" },
+                        { key: "b", text: "roasting" },
+                        { key: "c", text: "froth flotation" },
+                        { key: "d", text: "calcination" }
+                    ],
+                    answer: "c",
+                    explanation: "Froth flotation concentrates sulphide ores; oil-wetted sulphide particles rise with the froth while gangue settles."
+                },
+                {
+                    id: "ch132",
+                    text: "Which ion-biological role pairing is correct?",
+                    options: [
+                        { key: "a", text: "magnesium — oxygen carrier in haemoglobin" },
+                        { key: "b", text: "cobalt — central metal in vitamin $\\mathrm{B_{12}}$" },
+                        { key: "c", text: "sodium — central metal in chlorophyll" },
+                        { key: "d", text: "iron — principal extracellular cation" }
+                    ],
+                    answer: "b",
+                    explanation: "Cobalt is the central metal ion of cobalamin (vitamin $\\mathrm{B_{12}}$). Iron carries oxygen in haemoglobin, magnesium is central in chlorophyll, and sodium is the main extracellular cation."
+                },
+                {
+                    id: "ch133",
+                    text: "The correct order of stability of the carbocations I. $\\mathrm{CH_3^+}$, II. $\\mathrm{CH_3CH_2^+}$, III. $\\mathrm{(CH_3)_2CH^+}$, IV. $\\mathrm{(CH_3)_3C^+}$ is:",
+                    options: [
+                        { key: "a", text: "I < II < III < IV" },
+                        { key: "b", text: "IV < III < II < I" },
+                        { key: "c", text: "II < I < III < IV" },
+                        { key: "d", text: "I < III < II < IV" }
+                    ],
+                    answer: "a",
+                    explanation: "More alkyl groups increase +I and hyperconjugation, stabilising the cation: methyl < 1° < 2° < 3°."
+                },
+                {
+                    id: "ch134",
+                    text: "The correct order of increasing acidic strength is:",
+                    options: [
+                        { key: "a", text: "phenol < ethanol < water" },
+                        { key: "b", text: "ethanol < water < phenol" },
+                        { key: "c", text: "phenol < water < ethanol" },
+                        { key: "d", text: "water < ethanol < phenol" }
+                    ],
+                    answer: "b",
+                    explanation: "$pK_a$: ethanol ($\\approx16$) < water (15.7) < phenol (10). The resonance-stabilised phenoxide ion makes phenol the most acidic."
+                },
+                {
+                    id: "ch135",
+                    text: "The number of stereoisomers possible for tartaric acid (2,3-dihydroxybutanedioic acid) is:",
+                    options: [
+                        { key: "a", text: "4" },
+                        { key: "b", text: "2" },
+                        { key: "c", text: "1" },
+                        { key: "d", text: "3" }
+                    ],
+                    answer: "d",
+                    explanation: "Two equivalent stereocentres produce a meso form, so only three stereoisomers exist: (+), (−) and the optically inactive meso."
+                },
+                {
+                    id: "ch136",
+                    text: "The IUPAC name of $\\mathrm{(CH_3)_2CHCH_2CHO}$ is:",
+                    options: [
+                        { key: "a", text: "3-methylbutanal" },
+                        { key: "b", text: "2-methylbutanal" },
+                        { key: "c", text: "3-methylbutan-1-ol" },
+                        { key: "d", text: "2-methylpropanal" }
+                    ],
+                    answer: "a",
+                    explanation: "The longest chain containing –CHO is butanal (C1 = CHO); the methyl branch sits on C3, giving 3-methylbutanal."
+                },
+                {
+                    id: "ch137",
+                    text: "In the monochlorination of 2-methylbutane, the number of distinct monochloro structural products (ignoring stereoisomers) is:",
+                    options: [
+                        { key: "a", text: "3" },
+                        { key: "b", text: "4" },
+                        { key: "c", text: "5" },
+                        { key: "d", text: "6" }
+                    ],
+                    answer: "b",
+                    explanation: "The four sets of non-equivalent hydrogens give four products: 1-chloro-2-methylbutane, 2-chloro-2-methylbutane, 2-chloro-3-methylbutane and 1-chloro-3-methylbutane."
+                },
+                {
+                    id: "ch138",
+                    text: "The addition of HBr to propene in the presence of organic peroxides gives predominantly:",
+                    options: [
+                        { key: "a", text: "2-bromopropane" },
+                        { key: "b", text: "1-bromopropane" },
+                        { key: "c", text: "1,2-dibromopropane" },
+                        { key: "d", text: "propan-2-ol" }
+                    ],
+                    answer: "b",
+                    explanation: "Peroxides trigger anti-Markovnikov (Kharasch) free-radical addition, placing Br on the terminal carbon to give 1-bromopropane."
+                },
+                {
+                    id: "ch139",
+                    text: "Which compound reacts with ammoniacal $\\mathrm{AgNO_3}$ to give a white precipitate?",
+                    options: [
+                        { key: "a", text: "2-butyne" },
+                        { key: "b", text: "1,3-butadiene" },
+                        { key: "c", text: "propene" },
+                        { key: "d", text: "1-butyne" }
+                    ],
+                    answer: "d",
+                    explanation: "Only terminal alkynes have an acidic $\\equiv$C–H; 1-butyne forms silver acetylide (white ppt), whereas internal 2-butyne does not."
+                },
+                {
+                    id: "ch140",
+                    text: "Which group is both meta-directing and deactivating in electrophilic aromatic substitution?",
+                    options: [
+                        { key: "a", text: "$-\\mathrm{OCH_3}$" },
+                        { key: "b", text: "$-\\mathrm{CH_3}$" },
+                        { key: "c", text: "$-\\mathrm{NO_2}$" },
+                        { key: "d", text: "$-\\mathrm{Cl}$" }
+                    ],
+                    answer: "c",
+                    explanation: "$-\\mathrm{NO_2}$ withdraws electrons (−M, −I), deactivating the ring and directing incoming electrophiles to the meta position."
+                },
+                {
+                    id: "ch141",
+                    text: "Which alkyl halide undergoes $\\mathrm{S_N1}$ hydrolysis most rapidly?",
+                    options: [
+                        { key: "a", text: "$\\mathrm{CH_3Cl}$" },
+                        { key: "b", text: "$\\mathrm{CH_3CH_2Cl}$" },
+                        { key: "c", text: "$\\mathrm{(CH_3)_2CHCl}$" },
+                        { key: "d", text: "$\\mathrm{(CH_3)_3CCl}$" }
+                    ],
+                    answer: "d",
+                    explanation: "$\\mathrm{S_N1}$ rate follows carbocation stability; the tertiary $\\mathrm{(CH_3)_3C^+}$ is most stable, so tert-butyl chloride reacts fastest."
+                },
+                {
+                    id: "ch142",
+                    text: "Which alcohol gives an immediate turbidity with Lucas reagent (conc. HCl + $\\mathrm{ZnCl_2}$) at room temperature?",
+                    options: [
+                        { key: "a", text: "1-butanol" },
+                        { key: "b", text: "2-butanol" },
+                        { key: "c", text: "tert-butanol" },
+                        { key: "d", text: "methanol" }
+                    ],
+                    answer: "c",
+                    explanation: "The Lucas test proceeds by $\\mathrm{S_N1}$; a tertiary alcohol gives an immediate cloudiness because the 3° carbocation forms most readily."
+                },
+                {
+                    id: "ch143",
+                    text: "Which of the following undergoes the Cannizzaro reaction (and NOT aldol condensation)?",
+                    options: [
+                        { key: "a", text: "ethanal" },
+                        { key: "b", text: "propanal" },
+                        { key: "c", text: "acetone" },
+                        { key: "d", text: "benzaldehyde" }
+                    ],
+                    answer: "d",
+                    explanation: "Cannizzaro needs an aldehyde with no $\\alpha$-hydrogen; benzaldehyde qualifies and disproportionates rather than undergoing aldol condensation."
+                },
+                {
+                    id: "ch144",
+                    text: "The strongest acid among the following is:",
+                    options: [
+                        { key: "a", text: "acetic acid" },
+                        { key: "b", text: "formic acid" },
+                        { key: "c", text: "trichloroacetic acid" },
+                        { key: "d", text: "chloroacetic acid" }
+                    ],
+                    answer: "c",
+                    explanation: "Three electron-withdrawing Cl atoms strongly stabilise the carboxylate anion, so trichloroacetic acid ($pK_a\\approx0.7$) is the most acidic."
+                },
+                {
+                    id: "ch145",
+                    text: "The correct order of basicity in aqueous solution is:",
+                    options: [
+                        { key: "a", text: "$\\mathrm{NH_3 > CH_3NH_2 > (CH_3)_2NH}$" },
+                        { key: "b", text: "$\\mathrm{(CH_3)_2NH > CH_3NH_2 > NH_3}$" },
+                        { key: "c", text: "$\\mathrm{(CH_3)_3N > (CH_3)_2NH > CH_3NH_2}$" },
+                        { key: "d", text: "$\\mathrm{CH_3NH_2 > NH_3 > (CH_3)_2NH}$" }
+                    ],
+                    answer: "b",
+                    explanation: "In water the balance of +I effect and solvation makes the secondary amine most basic: $\\mathrm{(CH_3)_2NH > CH_3NH_2 > NH_3}$."
+                },
+                {
+                    id: "ch146",
+                    text: "Nitrobenzene is reduced with $\\mathrm{Sn/HCl}$ and the product is then treated with excess $\\mathrm{NaOH}$. The final organic product is:",
+                    options: [
+                        { key: "a", text: "phenol" },
+                        { key: "b", text: "benzene" },
+                        { key: "c", text: "benzoic acid" },
+                        { key: "d", text: "aniline" }
+                    ],
+                    answer: "d",
+                    explanation: "$\\mathrm{Sn/HCl}$ reduces $-\\mathrm{NO_2}$ to the anilinium salt. Excess $\\mathrm{NaOH}$ liberates the free base, aniline ($\\mathrm{C_6H_5NH_2}$)."
+                },
+                {
+                    id: "ch147",
+                    text: "The correct decreasing order of reactivity of carboxylic acid derivatives toward nucleophilic acyl substitution is:",
+                    options: [
+                        { key: "a", text: "acid chloride > acid anhydride > ester > amide" },
+                        { key: "b", text: "acid anhydride > acid chloride > amide > ester" },
+                        { key: "c", text: "amide > ester > acid anhydride > acid chloride" },
+                        { key: "d", text: "ester > amide > acid chloride > acid anhydride" }
+                    ],
+                    answer: "a",
+                    explanation: "Reactivity follows leaving-group ability: $\\mathrm{Cl^-}$ leaves most readily, then carboxylate, alkoxide and finally the strongly basic $\\mathrm{NH_2^-}$. Thus acid chloride > anhydride > ester > amide."
+                },
+                {
+                    id: "ch148",
+                    text: "Buna-S, an important synthetic rubber, is a copolymer of:",
+                    options: [
+                        { key: "a", text: "chloroprene and styrene" },
+                        { key: "b", text: "1,3-butadiene and acrylonitrile" },
+                        { key: "c", text: "1,3-butadiene and styrene" },
+                        { key: "d", text: "ethylene glycol and terephthalic acid" }
+                    ],
+                    answer: "c",
+                    explanation: "Buna-S (SBR) is formed by copolymerising 1,3-butadiene with styrene. Butadiene with acrylonitrile gives Buna-N, while chloroprene gives neoprene."
+                },
+                {
+                    id: "ch149",
+                    text: "In Lassaigne's test, the presence of nitrogen in an organic compound is confirmed by the formation of:",
+                    options: [
+                        { key: "a", text: "Prussian blue" },
+                        { key: "b", text: "a blood-red colour" },
+                        { key: "c", text: "a white precipitate" },
+                        { key: "d", text: "a black precipitate" }
+                    ],
+                    answer: "a",
+                    explanation: "Fused sodium converts N to $\\mathrm{NaCN}$; with $\\mathrm{Fe^{2+}/Fe^{3+}}$ it gives ferric ferrocyanide (Prussian blue). A blood-red colour indicates N and S together."
+                },
+                {
+                    id: "ch150",
+                    text: "A radioactive isotope has a half-life of 10 days. The fraction remaining undecayed after 40 days is:",
+                    options: [
+                        { key: "a", text: "1/4" },
+                        { key: "b", text: "1/8" },
+                        { key: "c", text: "1/16" },
+                        { key: "d", text: "1/32" }
+                    ],
+                    answer: "c",
+                    explanation: "40 days is 4 half-lives, so the remaining fraction $=(1/2)^4=1/16$."
+                }
+            ]
+        },
+        {
+            id: "repro17",
+            name: "Reproductive System",
+            subject: "Zoology",
+            accent: "rose",
+            blurb: "10 human reproduction questions — gametogenesis, ovarian & menstrual cycle, fertilisation.",
+            questions: [
+                {
+                    id: "rs51",
+                    text: "The complete sequence that produces haploid spermatids from diploid spermatogonia is called:",
+                    options: [
+                        { key: "a", text: "spermatogenesis" },
+                        { key: "b", text: "spermiogenesis" },
+                        { key: "c", text: "spermiation" },
+                        { key: "d", text: "gametogenesis" }
+                    ],
+                    answer: "a",
+                    explanation: "Spermatogenesis is the whole process; spermiogenesis is only the maturation of spermatids into spermatozoa, and spermiation is their release into the tubule lumen."
+                },
+                {
+                    id: "rs52",
+                    text: "In human spermatogenesis, the first cells that are haploid are the:",
+                    options: [
+                        { key: "a", text: "primary spermatocytes" },
+                        { key: "b", text: "spermatogonia" },
+                        { key: "c", text: "secondary spermatocytes" },
+                        { key: "d", text: "Sertoli cells" }
+                    ],
+                    answer: "c",
+                    explanation: "Meiosis I converts diploid primary spermatocytes into haploid secondary spermatocytes; every stage from there on is haploid."
+                },
+                {
+                    id: "rs53",
+                    text: "The hormone secreted by the Leydig (interstitial) cells of the testis is:",
+                    options: [
+                        { key: "a", text: "inhibin" },
+                        { key: "b", text: "testosterone" },
+                        { key: "c", text: "FSH" },
+                        { key: "d", text: "LH" }
+                    ],
+                    answer: "b",
+                    explanation: "Leydig cells secrete testosterone under LH stimulation; Sertoli cells secrete inhibin, while FSH and LH come from the anterior pituitary."
+                },
+                {
+                    id: "rs54",
+                    text: "Nutrition to the developing germ cells inside the seminiferous tubules is provided by the:",
+                    options: [
+                        { key: "a", text: "Sertoli cells" },
+                        { key: "b", text: "Leydig cells" },
+                        { key: "c", text: "epididymis" },
+                        { key: "d", text: "prostate gland" }
+                    ],
+                    answer: "a",
+                    explanation: "Sertoli (nurse) cells nourish and support the developing spermatids; Leydig cells lie outside the tubules and secrete testosterone."
+                },
+                {
+                    id: "rs55",
+                    text: "The acrosome of a human sperm is derived from the:",
+                    options: [
+                        { key: "a", text: "Golgi complex" },
+                        { key: "b", text: "mitochondria" },
+                        { key: "c", text: "centriole" },
+                        { key: "d", text: "nucleus" }
+                    ],
+                    answer: "a",
+                    explanation: "During spermiogenesis the Golgi complex forms the acrosome, a cap of hydrolytic enzymes that helps the sperm penetrate the egg."
+                },
+                {
+                    id: "rs56",
+                    text: "In the human ovary, the first meiotic division of the primary oocyte is completed:",
+                    options: [
+                        { key: "a", text: "before birth" },
+                        { key: "b", text: "at puberty" },
+                        { key: "c", text: "just before ovulation" },
+                        { key: "d", text: "after fertilisation" }
+                    ],
+                    answer: "c",
+                    explanation: "The primary oocyte is arrested in prophase I from fetal life and completes meiosis I only just before ovulation, forming the secondary oocyte and first polar body."
+                },
+                {
+                    id: "rs57",
+                    text: "The secondary oocyte released at ovulation is arrested in:",
+                    options: [
+                        { key: "a", text: "prophase I" },
+                        { key: "b", text: "metaphase I" },
+                        { key: "c", text: "anaphase II" },
+                        { key: "d", text: "metaphase II" }
+                    ],
+                    answer: "d",
+                    explanation: "Meiosis II of the secondary oocyte halts at metaphase II and completes only when a sperm penetrates the egg."
+                },
+                {
+                    id: "rs58",
+                    text: "The surge of which hormone directly triggers ovulation at about day 14 of the menstrual cycle?",
+                    options: [
+                        { key: "a", text: "FSH" },
+                        { key: "b", text: "LH" },
+                        { key: "c", text: "progesterone" },
+                        { key: "d", text: "estrogen" }
+                    ],
+                    answer: "b",
+                    explanation: "A sharp mid-cycle LH surge (induced by rising estrogen) causes the mature Graafian follicle to rupture and release the oocyte."
+                },
+                {
+                    id: "rs59",
+                    text: "After ovulation, the ruptured Graafian follicle is transformed into the:",
+                    options: [
+                        { key: "a", text: "corpus albicans" },
+                        { key: "b", text: "corpus callosum" },
+                        { key: "c", text: "corpus spongiosum" },
+                        { key: "d", text: "corpus luteum" }
+                    ],
+                    answer: "d",
+                    explanation: "The remnant follicle becomes the corpus luteum, which secretes progesterone; if no pregnancy occurs it degenerates into the corpus albicans."
+                },
+                {
+                    id: "rs60",
+                    text: "In the human female, fertilisation of the egg normally occurs in the:",
+                    options: [
+                        { key: "a", text: "uterus" },
+                        { key: "b", text: "cervix" },
+                        { key: "c", text: "ampulla of the fallopian tube" },
+                        { key: "d", text: "ovary" }
+                    ],
+                    answer: "c",
+                    explanation: "Fertilisation typically takes place at the ampullary–isthmic junction (ampulla) of the oviduct, not in the uterus."
+                }
+            ]
+        },
+        {
+            id: "triangle17",
+            name: "Properties of Triangle",
+            subject: "Mathematics",
+            accent: "cyan",
+            blurb: "20 IOE-level questions — sine & cosine rules, area, circum/in/ex-radii, half-angle & projection identities.",
+            questions: [
+                {
+                    id: "pt1",
+                    text: "In a triangle $ABC$, if $\\dfrac{a}{\\cos A}=\\dfrac{b}{\\cos B}=\\dfrac{c}{\\cos C}$, then the triangle is:",
+                    options: [
+                        { key: "a", text: "right-angled" },
+                        { key: "b", text: "isosceles" },
+                        { key: "c", text: "equilateral" },
+                        { key: "d", text: "obtuse-angled" }
+                    ],
+                    answer: "c",
+                    explanation: "By the sine rule $a\\propto\\sin A$, so $\\tan A=\\tan B=\\tan C$; hence $A=B=C=60^\\circ$, an equilateral triangle."
+                },
+                {
+                    id: "pt2",
+                    text: "In triangle $ABC$, $a=5$, $b=7$ and $c=8$. The value of $\\cos B$ is:",
+                    options: [
+                        { key: "a", text: "$\\dfrac12$" },
+                        { key: "b", text: "$\\dfrac{1}{7}$" },
+                        { key: "c", text: "$\\dfrac{5}{7}$" },
+                        { key: "d", text: "$\\dfrac{13}{20}$" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\cos B=\\dfrac{a^2+c^2-b^2}{2ac}=\\dfrac{25+64-49}{80}=\\dfrac{40}{80}=\\dfrac12$, so $B=60^\\circ$."
+                },
+                {
+                    id: "pt3",
+                    text: "The area of a triangle with two sides 5 cm and 8 cm enclosing an angle of $30^\\circ$ is:",
+                    options: [
+                        { key: "a", text: "20 cm²" },
+                        { key: "b", text: "40 cm²" },
+                        { key: "c", text: "10 cm²" },
+                        { key: "d", text: "$10\\sqrt3$ cm²" }
+                    ],
+                    answer: "c",
+                    explanation: "$\\text{Area}=\\tfrac12ab\\sin C=\\tfrac12(5)(8)\\sin30^\\circ=\\tfrac12(40)\\left(\\tfrac12\\right)=10$ cm²."
+                },
+                {
+                    id: "pt4",
+                    text: "In a triangle, side $a=6$ and $\\sin A=\\dfrac{3}{5}$. The circumradius $R$ is:",
+                    options: [
+                        { key: "a", text: "10" },
+                        { key: "b", text: "3" },
+                        { key: "c", text: "2.5" },
+                        { key: "d", text: "5" }
+                    ],
+                    answer: "d",
+                    explanation: "$\\dfrac{a}{\\sin A}=2R\\Rightarrow R=\\dfrac{a}{2\\sin A}=\\dfrac{6}{2\\times3/5}=5$."
+                },
+                {
+                    id: "pt5",
+                    text: "In a triangle with sides $a,b,c$ and circumradius $R$, the area $\\Delta$ equals:",
+                    options: [
+                        { key: "a", text: "$\\dfrac{abc}{4R}$" },
+                        { key: "b", text: "$\\dfrac{abc}{2R}$" },
+                        { key: "c", text: "$\\dfrac{abc}{R}$" },
+                        { key: "d", text: "$\\dfrac{2abc}{R}$" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\Delta=\\dfrac{abc}{4R}$ (equivalently $\\Delta=2R^2\\sin A\\sin B\\sin C$)."
+                },
+                {
+                    id: "pt6",
+                    text: "A triangle has area $\\Delta=24$ and perimeter $32$. Its inradius is:",
+                    options: [
+                        { key: "a", text: "0.75" },
+                        { key: "b", text: "1.5" },
+                        { key: "c", text: "3" },
+                        { key: "d", text: "2" }
+                    ],
+                    answer: "b",
+                    explanation: "$r=\\dfrac{\\Delta}{s}$ with $s=\\dfrac{32}{2}=16$, so $r=\\dfrac{24}{16}=1.5$."
+                },
+                {
+                    id: "pt7",
+                    text: "In any triangle, the inradius $r$ equals:",
+                    options: [
+                        { key: "a", text: "$4R\\sin\\dfrac{A}{2}\\sin\\dfrac{B}{2}\\sin\\dfrac{C}{2}$" },
+                        { key: "b", text: "$4R\\cos\\dfrac{A}{2}\\cos\\dfrac{B}{2}\\cos\\dfrac{C}{2}$" },
+                        { key: "c", text: "$4R\\sin A\\sin B\\sin C$" },
+                        { key: "d", text: "$R\\sin\\dfrac{A}{2}\\sin\\dfrac{B}{2}\\sin\\dfrac{C}{2}$" }
+                    ],
+                    answer: "a",
+                    explanation: "$r=4R\\sin\\tfrac{A}{2}\\sin\\tfrac{B}{2}\\sin\\tfrac{C}{2}$ (whereas $r_1=4R\\sin\\tfrac{A}{2}\\cos\\tfrac{B}{2}\\cos\\tfrac{C}{2}$)."
+                },
+                {
+                    id: "pt8",
+                    text: "In a triangle with $s=\\dfrac{a+b+c}{2}$, the half-angle formula for $\\tan\\dfrac{A}{2}$ is:",
+                    options: [
+                        { key: "a", text: "$\\sqrt{\\dfrac{s(s-a)}{(s-b)(s-c)}}$" },
+                        { key: "b", text: "$\\sqrt{\\dfrac{(s-a)(s-b)}{s(s-c)}}$" },
+                        { key: "c", text: "$\\sqrt{\\dfrac{(s-b)(s-c)}{s(s-a)}}$" },
+                        { key: "d", text: "$\\dfrac{\\Delta}{s(s-a)}$" }
+                    ],
+                    answer: "c",
+                    explanation: "$\\tan\\dfrac{A}{2}=\\sqrt{\\dfrac{(s-b)(s-c)}{s(s-a)}}=\\dfrac{r}{s-a}$."
+                },
+                {
+                    id: "pt9",
+                    text: "The radius $r_1$ of the escribed circle opposite vertex $A$ is:",
+                    options: [
+                        { key: "a", text: "$\\dfrac{\\Delta}{s-a}$" },
+                        { key: "b", text: "$\\dfrac{\\Delta}{s}$" },
+                        { key: "c", text: "$\\dfrac{\\Delta}{s-b}$" },
+                        { key: "d", text: "$\\Delta(s-a)$" }
+                    ],
+                    answer: "a",
+                    explanation: "$r_1=\\dfrac{\\Delta}{s-a}$ (similarly $r_2=\\dfrac{\\Delta}{s-b}$ and $r_3=\\dfrac{\\Delta}{s-c}$)."
+                },
+                {
+                    id: "pt10",
+                    text: "In any triangle, the product $r\\,r_1 r_2 r_3$ equals:",
+                    options: [
+                        { key: "a", text: "$\\Delta$" },
+                        { key: "b", text: "$\\Delta^2$" },
+                        { key: "c", text: "$s^2$" },
+                        { key: "d", text: "$R^2$" }
+                    ],
+                    answer: "b",
+                    explanation: "$r=\\dfrac{\\Delta}{s}$ and $r_1r_2r_3=\\dfrac{\\Delta^3}{(s-a)(s-b)(s-c)}=s\\Delta$, so $r\\,r_1r_2r_3=\\dfrac{\\Delta}{s}\\cdot s\\Delta=\\Delta^2$."
+                },
+                {
+                    id: "pt11",
+                    text: "The projection formula for side $a$ of a triangle is $a=$",
+                    options: [
+                        { key: "a", text: "$b\\cos B+c\\cos C$" },
+                        { key: "b", text: "$b\\sin C+c\\sin B$" },
+                        { key: "c", text: "$b\\cos A+c\\cos A$" },
+                        { key: "d", text: "$b\\cos C+c\\cos B$" }
+                    ],
+                    answer: "d",
+                    explanation: "Projecting the other two sides onto side $a$ gives $a=b\\cos C+c\\cos B$."
+                },
+                {
+                    id: "pt12",
+                    text: "In any triangle, $r_1+r_2+r_3-r$ equals:",
+                    options: [
+                        { key: "a", text: "$4R$" },
+                        { key: "b", text: "$2R$" },
+                        { key: "c", text: "$R$" },
+                        { key: "d", text: "$4r$" }
+                    ],
+                    answer: "a",
+                    explanation: "$r_1+r_2+r_3=4R+r$, so $r_1+r_2+r_3-r=4R$."
+                },
+                {
+                    id: "pt13",
+                    text: "In triangle $ABC$, if $a=\\sqrt3$, $b=1$ and $A=60^\\circ$, then angle $B$ is:",
+                    options: [
+                        { key: "a", text: "30°" },
+                        { key: "b", text: "45°" },
+                        { key: "c", text: "60°" },
+                        { key: "d", text: "90°" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\dfrac{a}{\\sin A}=\\dfrac{b}{\\sin B}\\Rightarrow\\sin B=\\dfrac{b\\sin A}{a}=\\dfrac{1\\cdot(\\sqrt3/2)}{\\sqrt3}=\\dfrac12$, so $B=30^\\circ$."
+                },
+                {
+                    id: "pt14",
+                    text: "The sides of a triangle are 7, 8 and 13. Its largest angle is:",
+                    options: [
+                        { key: "a", text: "90°" },
+                        { key: "b", text: "120°" },
+                        { key: "c", text: "135°" },
+                        { key: "d", text: "150°" }
+                    ],
+                    answer: "b",
+                    explanation: "The largest angle faces side 13: $\\cos C=\\dfrac{7^2+8^2-13^2}{2\\cdot7\\cdot8}=\\dfrac{-56}{112}=-\\dfrac12$, so $C=120^\\circ$."
+                },
+                {
+                    id: "pt15",
+                    text: "Napier's analogy expresses $\\tan\\dfrac{B-C}{2}$ as:",
+                    options: [
+                        { key: "a", text: "$\\dfrac{b+c}{b-c}\\tan\\dfrac{A}{2}$" },
+                        { key: "b", text: "$\\dfrac{b-c}{b+c}\\tan\\dfrac{A}{2}$" },
+                        { key: "c", text: "$\\dfrac{b-c}{b+c}\\cot\\dfrac{A}{2}$" },
+                        { key: "d", text: "$\\dfrac{b-c}{b+c}\\cos\\dfrac{A}{2}$" }
+                    ],
+                    answer: "c",
+                    explanation: "Napier's analogy: $\\tan\\dfrac{B-C}{2}=\\dfrac{b-c}{b+c}\\cot\\dfrac{A}{2}$."
+                },
+                {
+                    id: "pt16",
+                    text: "The area of a triangle with sides 13, 14 and 15 is:",
+                    options: [
+                        { key: "a", text: "168" },
+                        { key: "b", text: "42" },
+                        { key: "c", text: "91" },
+                        { key: "d", text: "84" }
+                    ],
+                    answer: "d",
+                    explanation: "$s=21$; $\\Delta=\\sqrt{21\\cdot8\\cdot7\\cdot6}=\\sqrt{7056}=84$."
+                },
+                {
+                    id: "pt17",
+                    text: "In any triangle $ABC$, $\\cot A+\\cot B+\\cot C$ equals:",
+                    options: [
+                        { key: "a", text: "$\\dfrac{a^2+b^2+c^2}{2\\Delta}$" },
+                        { key: "b", text: "$\\dfrac{a^2+b^2+c^2}{4\\Delta}$" },
+                        { key: "c", text: "$\\dfrac{4\\Delta}{a^2+b^2+c^2}$" },
+                        { key: "d", text: "$\\dfrac{abc}{4\\Delta}$" }
+                    ],
+                    answer: "b",
+                    explanation: "Using $\\cot A=\\dfrac{b^2+c^2-a^2}{4\\Delta}$ and adding cyclically gives $\\cot A+\\cot B+\\cot C=\\dfrac{a^2+b^2+c^2}{4\\Delta}$."
+                },
+                {
+                    id: "pt18",
+                    text: "The length of the median $AD$ to side $a=BC$ (with $b=AC$, $c=AB$) is $AD=\\tfrac12\\sqrt{\\;?\\;}$, where the expression under the root is:",
+                    options: [
+                        { key: "a", text: "$b^2+c^2-a^2$" },
+                        { key: "b", text: "$2b^2+2c^2+a^2$" },
+                        { key: "c", text: "$2b^2+2c^2-a^2$" },
+                        { key: "d", text: "$b^2+c^2+2a^2$" }
+                    ],
+                    answer: "c",
+                    explanation: "By Apollonius' theorem $AB^2+AC^2=2AD^2+2BD^2$, giving $AD=\\tfrac12\\sqrt{2b^2+2c^2-a^2}$."
+                },
+                {
+                    id: "pt19",
+                    text: "If $R$ and $r$ are the circumradius and inradius, the distance $d$ between circumcentre and incentre satisfies:",
+                    options: [
+                        { key: "a", text: "$d^2=R^2+2Rr$" },
+                        { key: "b", text: "$d^2=2Rr-R^2$" },
+                        { key: "c", text: "$d^2=R^2-Rr$" },
+                        { key: "d", text: "$d^2=R^2-2Rr$" }
+                    ],
+                    answer: "d",
+                    explanation: "Euler's formula: $OI^2=R^2-2Rr$, which also implies $R\\ge2r$."
+                },
+                {
+                    id: "pt20",
+                    text: "A regular hexagon is inscribed in a circle of radius $r$. The area of the hexagon is:",
+                    options: [
+                        { key: "a", text: "$\\dfrac{\\sqrt3}{2}r^2$" },
+                        { key: "b", text: "$\\dfrac{3\\sqrt3}{2}r^2$" },
+                        { key: "c", text: "$3\\sqrt3\\,r^2$" },
+                        { key: "d", text: "$6r^2$" }
+                    ],
+                    answer: "b",
+                    explanation: "The hexagon splits into 6 equilateral triangles of side $r$: area $=6\\cdot\\dfrac{\\sqrt3}{4}r^2=\\dfrac{3\\sqrt3}{2}r^2$."
+                }
+            ]
+        },
+        {
+            id: "calculus17",
+            name: "Limit, Continuity & Integration",
+            subject: "Mathematics",
+            accent: "emerald",
+            blurb: "20 IOE-level questions — indeterminate limits, continuity, and indefinite & definite integration.",
+            questions: [
+                {
+                    id: "lci1",
+                    text: "$\\displaystyle\\lim_{x\\to0}\\frac{\\sin5x}{\\tan3x}$ equals:",
+                    options: [
+                        { key: "a", text: "$\\dfrac53$" },
+                        { key: "b", text: "$\\dfrac35$" },
+                        { key: "c", text: "1" },
+                        { key: "d", text: "15" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\dfrac{\\sin5x}{\\tan3x}=\\dfrac{\\sin5x}{5x}\\cdot\\dfrac{3x}{\\tan3x}\\cdot\\dfrac{5}{3}\\to\\dfrac53$."
+                },
+                {
+                    id: "lci2",
+                    text: "$\\displaystyle\\lim_{x\\to0}\\frac{1-\\cos2x}{x^2}$ equals:",
+                    options: [
+                        { key: "a", text: "1" },
+                        { key: "b", text: "4" },
+                        { key: "c", text: "2" },
+                        { key: "d", text: "$\\dfrac12$" }
+                    ],
+                    answer: "c",
+                    explanation: "$1-\\cos2x=2\\sin^2x$, so the limit $=2\\left(\\dfrac{\\sin x}{x}\\right)^2\\to2$."
+                },
+                {
+                    id: "lci3",
+                    text: "$\\displaystyle\\lim_{x\\to\\infty}\\left(1+\\frac{3}{x}\\right)^{2x}$ equals:",
+                    options: [
+                        { key: "a", text: "$e^3$" },
+                        { key: "b", text: "$e^2$" },
+                        { key: "c", text: "$e^6$" },
+                        { key: "d", text: "$e^{3/2}$" }
+                    ],
+                    answer: "c",
+                    explanation: "$\\left(1+\\dfrac3x\\right)^{2x}=\\left[\\left(1+\\dfrac3x\\right)^{x}\\right]^{2}\\to(e^3)^2=e^6$."
+                },
+                {
+                    id: "lci4",
+                    text: "$\\displaystyle\\lim_{x\\to0}\\frac{e^{3x}-1}{\\sin2x}$ equals:",
+                    options: [
+                        { key: "a", text: "$\\dfrac32$" },
+                        { key: "b", text: "$\\dfrac23$" },
+                        { key: "c", text: "3" },
+                        { key: "d", text: "1" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\dfrac{e^{3x}-1}{3x}\\to1$ and $\\dfrac{2x}{\\sin2x}\\to1$, so the limit $=\\dfrac{3}{2}$."
+                },
+                {
+                    id: "lci5",
+                    text: "$\\displaystyle\\lim_{x\\to2}\\frac{x^3-8}{x^2-4}$ equals:",
+                    options: [
+                        { key: "a", text: "2" },
+                        { key: "b", text: "4" },
+                        { key: "c", text: "3" },
+                        { key: "d", text: "$\\infty$" }
+                    ],
+                    answer: "c",
+                    explanation: "Factor: $\\dfrac{(x-2)(x^2+2x+4)}{(x-2)(x+2)}=\\dfrac{x^2+2x+4}{x+2}\\to\\dfrac{12}{4}=3$."
+                },
+                {
+                    id: "lci6",
+                    text: "$\\displaystyle\\lim_{x\\to\\infty}\\left(\\sqrt{x^2+x}-x\\right)$ equals:",
+                    options: [
+                        { key: "a", text: "0" },
+                        { key: "b", text: "1" },
+                        { key: "c", text: "$\\dfrac12$" },
+                        { key: "d", text: "$\\infty$" }
+                    ],
+                    answer: "c",
+                    explanation: "Rationalise: $\\dfrac{x}{\\sqrt{x^2+x}+x}=\\dfrac{1}{\\sqrt{1+1/x}+1}\\to\\dfrac12$."
+                },
+                {
+                    id: "lci7",
+                    text: "$\\displaystyle\\lim_{x\\to0}\\frac{\\ln(1+x)-x}{x^2}$ equals:",
+                    options: [
+                        { key: "a", text: "0" },
+                        { key: "b", text: "$\\dfrac12$" },
+                        { key: "c", text: "$-1$" },
+                        { key: "d", text: "$-\\dfrac12$" }
+                    ],
+                    answer: "d",
+                    explanation: "Expand $\\ln(1+x)=x-\\dfrac{x^2}{2}+\\dots$; the numerator $=-\\dfrac{x^2}{2}+\\dots$, so the limit $=-\\dfrac12$."
+                },
+                {
+                    id: "lci8",
+                    text: "If $f(x)=\\dfrac{\\sqrt{1+kx}-\\sqrt{1-kx}}{x}$ for $x\\ne0$ is continuous at $x=0$ with $f(0)=2$, then $k=$",
+                    options: [
+                        { key: "a", text: "1" },
+                        { key: "b", text: "4" },
+                        { key: "c", text: "$\\dfrac12$" },
+                        { key: "d", text: "2" }
+                    ],
+                    answer: "d",
+                    explanation: "Rationalising, $\\displaystyle\\lim_{x\\to0}\\dfrac{2kx}{x(\\sqrt{1+kx}+\\sqrt{1-kx})}=\\dfrac{2k}{2}=k$. Continuity needs $k=f(0)=2$."
+                },
+                {
+                    id: "lci9",
+                    text: "The function $f(x)=|x-3|$ is:",
+                    options: [
+                        { key: "a", text: "discontinuous at $x=3$" },
+                        { key: "b", text: "continuous but not differentiable at $x=3$" },
+                        { key: "c", text: "differentiable at $x=3$" },
+                        { key: "d", text: "undefined at $x=3$" }
+                    ],
+                    answer: "b",
+                    explanation: "A modulus function is continuous everywhere but has a corner at $x=3$, so it is continuous yet non-differentiable there."
+                },
+                {
+                    id: "lci10",
+                    text: "The greatest-integer function $f(x)=[x]$ is discontinuous at:",
+                    options: [
+                        { key: "a", text: "no point" },
+                        { key: "b", text: "every integer" },
+                        { key: "c", text: "$x=0$ only" },
+                        { key: "d", text: "every real number" }
+                    ],
+                    answer: "b",
+                    explanation: "$[x]$ jumps by 1 at each integer, so it is discontinuous at every integer and continuous elsewhere."
+                },
+                {
+                    id: "lci11",
+                    text: "$\\displaystyle\\int\\frac{dx}{x^2+9}$ equals:",
+                    options: [
+                        { key: "a", text: "$\\dfrac13\\tan^{-1}\\dfrac{x}{3}+C$" },
+                        { key: "b", text: "$\\tan^{-1}\\dfrac{x}{3}+C$" },
+                        { key: "c", text: "$\\dfrac13\\ln(x^2+9)+C$" },
+                        { key: "d", text: "$\\dfrac19\\tan^{-1}\\dfrac{x}{3}+C$" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\displaystyle\\int\\dfrac{dx}{x^2+a^2}=\\dfrac1a\\tan^{-1}\\dfrac{x}{a}+C$ with $a=3$."
+                },
+                {
+                    id: "lci12",
+                    text: "$\\displaystyle\\int\\frac{2x}{x^2+1}\\,dx$ equals:",
+                    options: [
+                        { key: "a", text: "$\\dfrac12\\ln(x^2+1)+C$" },
+                        { key: "b", text: "$\\ln(x^2+1)+C$" },
+                        { key: "c", text: "$2\\tan^{-1}x+C$" },
+                        { key: "d", text: "$\\dfrac{1}{x^2+1}+C$" }
+                    ],
+                    answer: "b",
+                    explanation: "The numerator is the derivative of the denominator: $\\displaystyle\\int\\dfrac{f'(x)}{f(x)}dx=\\ln|f(x)|+C=\\ln(x^2+1)+C$."
+                },
+                {
+                    id: "lci13",
+                    text: "$\\displaystyle\\int x\\cos x\\,dx$ equals:",
+                    options: [
+                        { key: "a", text: "$x\\sin x+\\cos x+C$" },
+                        { key: "b", text: "$x\\sin x-\\cos x+C$" },
+                        { key: "c", text: "$-x\\sin x+\\cos x+C$" },
+                        { key: "d", text: "$x\\cos x+\\sin x+C$" }
+                    ],
+                    answer: "a",
+                    explanation: "By parts: $\\displaystyle\\int x\\cos x\\,dx=x\\sin x-\\int\\sin x\\,dx=x\\sin x+\\cos x+C$."
+                },
+                {
+                    id: "lci14",
+                    text: "$\\displaystyle\\int_0^{\\pi/2}\\frac{\\sin x}{\\sin x+\\cos x}\\,dx$ equals:",
+                    options: [
+                        { key: "a", text: "$\\dfrac{\\pi}{2}$" },
+                        { key: "b", text: "$\\dfrac{\\pi}{4}$" },
+                        { key: "c", text: "$\\pi$" },
+                        { key: "d", text: "1" }
+                    ],
+                    answer: "b",
+                    explanation: "Using $\\int_0^{a}f(x)dx=\\int_0^a f(a-x)dx$ and adding, $2I=\\int_0^{\\pi/2}1\\,dx=\\dfrac{\\pi}{2}$, so $I=\\dfrac{\\pi}{4}$."
+                },
+                {
+                    id: "lci15",
+                    text: "$\\displaystyle\\int_0^{1}\\frac{dx}{\\sqrt{1-x^2}}$ equals:",
+                    options: [
+                        { key: "a", text: "$\\dfrac{\\pi}{4}$" },
+                        { key: "b", text: "$\\pi$" },
+                        { key: "c", text: "1" },
+                        { key: "d", text: "$\\dfrac{\\pi}{2}$" }
+                    ],
+                    answer: "d",
+                    explanation: "$\\displaystyle\\int\\dfrac{dx}{\\sqrt{1-x^2}}=\\sin^{-1}x$; from 0 to 1 this is $\\sin^{-1}1-\\sin^{-1}0=\\dfrac{\\pi}{2}$."
+                },
+                {
+                    id: "lci16",
+                    text: "$\\displaystyle\\int_{-\\pi/2}^{\\pi/2} x^3\\cos x\\,dx$ equals:",
+                    options: [
+                        { key: "a", text: "1" },
+                        { key: "b", text: "0" },
+                        { key: "c", text: "$\\pi$" },
+                        { key: "d", text: "2" }
+                    ],
+                    answer: "b",
+                    explanation: "$x^3\\cos x$ is odd (odd × even), so its integral over the symmetric interval $[-\\pi/2,\\pi/2]$ is 0."
+                },
+                {
+                    id: "lci17",
+                    text: "The area bounded by $y=x^2$, the x-axis and the lines $x=0$ and $x=3$ is:",
+                    options: [
+                        { key: "a", text: "9" },
+                        { key: "b", text: "27" },
+                        { key: "c", text: "3" },
+                        { key: "d", text: "18" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\displaystyle\\int_0^3 x^2\\,dx=\\left[\\dfrac{x^3}{3}\\right]_0^3=\\dfrac{27}{3}=9$ square units."
+                },
+                {
+                    id: "lci18",
+                    text: "$\\displaystyle\\int\\frac{dx}{x^2-1}$ equals:",
+                    options: [
+                        { key: "a", text: "$\\dfrac12\\ln\\left|\\dfrac{x+1}{x-1}\\right|+C$" },
+                        { key: "b", text: "$\\ln|x^2-1|+C$" },
+                        { key: "c", text: "$\\dfrac12\\ln\\left|\\dfrac{x-1}{x+1}\\right|+C$" },
+                        { key: "d", text: "$\\tan^{-1}x+C$" }
+                    ],
+                    answer: "c",
+                    explanation: "$\\dfrac{1}{x^2-1}=\\dfrac12\\left(\\dfrac{1}{x-1}-\\dfrac{1}{x+1}\\right)$; integrating gives $\\dfrac12\\ln\\left|\\dfrac{x-1}{x+1}\\right|+C$."
+                },
+                {
+                    id: "lci19",
+                    text: "$\\displaystyle\\int e^{x}\\left(\\frac1x-\\frac{1}{x^2}\\right)dx$ equals:",
+                    options: [
+                        { key: "a", text: "$\\dfrac{e^x}{x^2}+C$" },
+                        { key: "b", text: "$e^x\\ln x+C$" },
+                        { key: "c", text: "$-\\dfrac{e^x}{x^2}+C$" },
+                        { key: "d", text: "$\\dfrac{e^x}{x}+C$" }
+                    ],
+                    answer: "d",
+                    explanation: "$\\displaystyle\\int e^x(f(x)+f'(x))dx=e^x f(x)+C$ with $f(x)=\\dfrac1x$, $f'(x)=-\\dfrac{1}{x^2}$, giving $\\dfrac{e^x}{x}+C$."
+                },
+                {
+                    id: "lci20",
+                    text: "$\\displaystyle\\int_0^{\\pi} \\sin^2 x\\,dx$ equals:",
+                    options: [
+                        { key: "a", text: "$\\dfrac{\\pi}{2}$" },
+                        { key: "b", text: "$\\pi$" },
+                        { key: "c", text: "$\\dfrac{\\pi}{4}$" },
+                        { key: "d", text: "0" }
+                    ],
+                    answer: "a",
+                    explanation: "$\\sin^2x=\\dfrac{1-\\cos2x}{2}$, so $\\displaystyle\\int_0^\\pi\\sin^2x\\,dx=\\left[\\dfrac{x}{2}-\\dfrac{\\sin2x}{4}\\right]_0^\\pi=\\dfrac{\\pi}{2}$."
+                }
+            ]
+        }
+    ]
+};
+/* ----------------------------------------------------------------
+    DAY 17 syllabus map — Subject → Topic → Sub-topic → [ids].
+    Chemistry follows syllabus_bachelor_program_revised__2026.pdf:
+    Physical 17 · Inorganic 10 · Organic 17 · Applied 3 ·
+    Analytical 3. Every one of the 100 ids appears exactly once.
+   ---------------------------------------------------------------- */
+const DAY17_SYLLABUS = [
+    { subject: "Chemistry", accent: "amber", topics: [
+        { topic: "Physical Chemistry", subs: [
+            { name: "Basic Concepts & Stoichiometry", ids: ["ch101", "ch102"] },
+            { name: "Atomic Structure", ids: ["ch103", "ch104", "ch105"] },
+            { name: "Classification of Elements & Periodicity", ids: ["ch106"] },
+            { name: "Chemical Bonding & Shape of Molecules", ids: ["ch108"] },
+            { name: "States of Matter", ids: ["ch109"] },
+            { name: "Chemical Thermodynamics", ids: ["ch111", "ch112"] },
+            { name: "Chemical Equilibrium", ids: ["ch113"] },
+            { name: "Ionic Equilibrium", ids: ["ch114", "ch115"] },
+            { name: "Chemical Kinetics", ids: ["ch116", "ch117"] },
+            { name: "Electrochemistry", ids: ["ch118"] },
+            { name: "Nuclear Chemistry", ids: ["ch150"] }
+        ] },
+        { topic: "Inorganic Chemistry", subs: [
+            { name: "Chemistry of Non-metals", ids: ["ch123", "ch125", "ch126", "ch127"] },
+            { name: "Chemistry of Metals", ids: ["ch124", "ch128", "ch129", "ch130", "ch131"] },
+            { name: "Bio-inorganic Chemistry", ids: ["ch132"] }
+        ] },
+        { topic: "Organic Chemistry", subs: [
+            { name: "General Organic Chemistry", ids: ["ch133"] },
+            { name: "Isomerism", ids: ["ch135"] },
+            { name: "IUPAC Nomenclature", ids: ["ch136"] },
+            { name: "Hydrocarbons", ids: ["ch137", "ch138", "ch139"] },
+            { name: "Aromatic Hydrocarbons", ids: ["ch140"] },
+            { name: "Haloalkanes & Haloarenes", ids: ["ch141"] },
+            { name: "Alcohols & Phenols", ids: ["ch134", "ch142"] },
+            { name: "Ethers", ids: ["ch107"] },
+            { name: "Aldehydes & Ketones", ids: ["ch143"] },
+            { name: "Carboxylic Acid & Derivatives", ids: ["ch144", "ch147"] },
+            { name: "Nitro-compounds", ids: ["ch146"] },
+            { name: "Amines", ids: ["ch145"] },
+            { name: "Organometallic Compounds", ids: ["ch110"] }
+        ] },
+        { topic: "Applied Chemistry", subs: [
+            { name: "Manufacturing Processes", ids: ["ch121"] },
+            { name: "Applications of Osmotic Pressure", ids: ["ch120"] },
+            { name: "Chemistry in Service to Mankind", ids: ["ch148"] }
+        ] },
+        { topic: "Analytical Chemistry", subs: [
+            { name: "Chemical Tests", ids: ["ch149"] },
+            { name: "Separation Techniques", ids: ["ch122"] },
+            { name: "Types of Titration", ids: ["ch119"] }
+        ] }
+    ] },
+    { subject: "Zoology", accent: "rose", topics: [
+        { topic: "Gametogenesis", subs: [
+            { name: "Spermatogenesis", ids: ["rs51", "rs52", "rs53", "rs54", "rs55"] },
+            { name: "Oogenesis", ids: ["rs56", "rs57"] }
+        ] },
+        { topic: "Ovarian & Menstrual Cycle", subs: [
+            { name: "Ovulation & Corpus Luteum", ids: ["rs58", "rs59"] }
+        ] },
+        { topic: "Fertilisation", subs: [
+            { name: "Site of Fertilisation", ids: ["rs60"] }
+        ] }
+    ] },
+    { subject: "Mathematics", accent: "cyan", topics: [
+        { topic: "Properties of Triangle", subs: [
+            { name: "Sine & Cosine Rules", ids: ["pt1", "pt2", "pt13", "pt14"] },
+            { name: "Area of Triangle", ids: ["pt3", "pt5", "pt16"] },
+            { name: "Circumradius & Inradius", ids: ["pt4", "pt6", "pt7"] },
+            { name: "Half-angle & Projection Formulae", ids: ["pt8", "pt11", "pt15"] },
+            { name: "Escribed Circles & Identities", ids: ["pt9", "pt10", "pt12", "pt17"] },
+            { name: "Medians, Euler Line & Polygons", ids: ["pt18", "pt19", "pt20"] }
+        ] },
+        { topic: "Limit, Continuity & Integration", subs: [
+            { name: "Limits", ids: ["lci1", "lci2", "lci3", "lci4", "lci5", "lci6", "lci7"] },
+            { name: "Continuity & Differentiability", ids: ["lci8", "lci9", "lci10"] },
+            { name: "Indefinite Integration", ids: ["lci11", "lci12", "lci13", "lci18", "lci19"] },
+            { name: "Definite Integration & Area", ids: ["lci14", "lci15", "lci16", "lci17", "lci20"] }
+        ] }
+    ] }
+];
+DAY17.syllabus = DAY17_SYLLABUS;
+
 /* All days live here; the dashboard initializes with Day 1. */
 const STUDENT = { name: "Prakriti Subedi", role: "CEE Aspirant 2026" };
-const DAYS = [DAY1, DAY2, DAY3, DAY4, DAY5, DAY6, DAY7, DAY8, DAY9, DAY10, DAY11, DAY12, DAY13, DAY14, DAY15, DAY16];
+const DAYS = [DAY1, DAY2, DAY3, DAY4, DAY5, DAY6, DAY7, DAY8, DAY9, DAY10, DAY11, DAY12, DAY13, DAY14, DAY15, DAY16, DAY17];
 
 /* The CEE/IOE subjects shown on the dashboard performance panel.
    Chapters are mapped to a subject via their `subject` field; subjects with

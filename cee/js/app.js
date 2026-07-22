@@ -10,7 +10,7 @@
     /* ---------- constants ---------- */
     const STORAGE_KEY = "cee_dashboard_prakriti";
     const LEGACY_KEYS = ["cee_dashboard_prakriti_v3", "cee_dashboard_prakriti_v2", "cee_dashboard_prakriti_v1"];
-    const PLANNED_DAYS = 16;
+    const PLANNED_DAYS = 17;
     const TEST_DURATION_MS = 36 * 60 * 1000; // default 36 minutes per test
     // Per-day override via day.durationMinutes (e.g. Day 14 mock test = 180 min).
     const dayDurationMs = (day) => (day && day.durationMinutes ? day.durationMinutes : 36) * 60 * 1000;
