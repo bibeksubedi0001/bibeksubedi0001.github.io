@@ -113,6 +113,19 @@
         return Math.max(2, Math.min(40, 0.32 * Math.min(dOpt, dRow)));
     }
 
+    // max over a small neighbourhood — tolerates the grid sitting slightly off a fill
+    function darknessMax(x, y, r) {
+        const rr = r * 0.75, st = r * 0.6;
+        let m = 0;
+        for (let oy = -1; oy <= 1; oy++) {
+            for (let ox = -1; ox <= 1; ox++) {
+                const d = darknessAt(x + ox * st, y + oy * st, rr);
+                if (d > m) m = d;
+            }
+        }
+        return m;
+    }
+
     /* ---------- detection ---------- */
     function detect() {
         if (!omr.gray) return;
@@ -127,7 +140,7 @@
             for (let oi = 0; oi < 4; oi++) {
                 const { u, v } = bubbleUV(qi, oi, nBlocks);
                 const p = map(u, v);
-                cells.push({ p, d: darknessAt(p.x, p.y, r) });
+                cells.push({ p, d: darknessMax(p.x, p.y, r) });
             }
             const base = Math.min(cells[0].d, cells[1].d, cells[2].d, cells[3].d);
             const marked = [];
@@ -137,7 +150,9 @@
             if (marked.length === 1) letter = LETTERS[marked[0].i];
             else if (marked.length > 1) {
                 marked.sort((m, n2) => n2.ex - m.ex);
-                letter = marked[0].ex - marked[1].ex > MULTI_GAP ? LETTERS[marked[0].i] : "x";
+                // single answer only if the darkest clearly dominates the runner-up
+                letter = (marked[0].ex - marked[1].ex > MULTI_GAP && marked[0].ex > 2 * marked[1].ex)
+                    ? LETTERS[marked[0].i] : "x";
             }
             letters.push(letter);
             dotRows.push(cells.map(cell => cell.p));
@@ -331,20 +346,25 @@
     /* ---------- automatic table detection ---------- */
     // Finds the printed block borders (adaptive threshold -> connected components ->
     // extreme-point quad) so the user doesn't have to drag the corners manually.
+    // Progressive passes catch faint / thin / blurry print; dilation heals broken lines.
     function autoDetectCorners() {
-        if (!omr.gray) return false;
+        if (!omr.img || !omr.gray) return false;
         const nBlocks = blockCount(flatQuestions(dayObj()).length);
-        const sc = Math.min(1, 900 / Math.max(omr.W, omr.H));
-        const w = Math.max(50, Math.round(omr.W * sc));
-        const h = Math.max(50, Math.round(omr.H * sc));
+        const sc = Math.min(1, 1100 / Math.max(omr.W, omr.H));
+        const w = Math.max(60, Math.round(omr.W * sc));
+        const h = Math.max(60, Math.round(omr.H * sc));
 
-        // downscaled grayscale
+        // area-averaged downscale (nearest-neighbour sampling loses 1px printed lines)
+        const dc = document.createElement("canvas");
+        dc.width = w; dc.height = h;
+        const dctx = dc.getContext("2d", { willReadFrequently: true });
+        dctx.imageSmoothingEnabled = true;
+        dctx.imageSmoothingQuality = "high";
+        dctx.drawImage(omr.img, 0, 0, w, h);
+        const data = dctx.getImageData(0, 0, w, h).data;
         const g = new Uint8ClampedArray(w * h);
-        for (let y = 0; y < h; y++) {
-            const row = Math.min(omr.H - 1, Math.round(y / sc)) * omr.W;
-            for (let x = 0; x < w; x++) {
-                g[y * w + x] = omr.gray[row + Math.min(omr.W - 1, Math.round(x / sc))];
-            }
+        for (let i = 0, p = 0; p < g.length; i += 4, p++) {
+            g[p] = (data[i] * 77 + data[i + 1] * 150 + data[i + 2] * 29) >> 8;
         }
 
         // integral image for local-mean thresholding
@@ -356,8 +376,282 @@
                 ii[(y + 1) * (w + 1) + x + 1] = ii[y * (w + 1) + x + 1] + rs;
             }
         }
+
+        const passes = [
+            { f: 0.87, cap: 220, dil: 1, minH: 0.30, edge: false },
+            { f: 0.93, cap: 235, dil: 1, minH: 0.26, edge: false },
+            { f: 0.97, cap: 246, dil: 2, minH: 0.20, edge: true }
+        ];
+        // score every pass's quad against the actual bubble content and keep the best —
+        // a paper outline can masquerade as a border in an early pass while the true
+        // (fainter) borders only appear in a later one
+        const oldGap = omr.gapFrac;
+        let best = null;
+        const dbg = [];
+        for (let pi = 0; pi < passes.length; pi++) {
+            const r = detectPass(g, ii, w, h, nBlocks, passes[pi]);
+            if (!r) { dbg.push({ pi, found: false }); continue; }
+            const corners = [r.tl, r.tr, r.br, r.bl].map(p => ({ x: p.x / sc, y: p.y / sc }));
+
+            // estimate the block gap from the detected boxes
+            // (bboxes widen by blockHeight*sin(tilt), which shrinks the visible gap — undo that)
+            const chosen = r.chosen;
+            let gf = null;
+            if (chosen.length >= 2) {
+                const s = Math.abs(Math.sin(Math.atan2(r.tr.y - r.tl.y, r.tr.x - r.tl.x)));
+                const avgH = chosen.reduce((a, c) => a + (c.maxY - c.minY + 1), 0) / chosen.length;
+                let gaps = 0;
+                for (let i = 1; i < chosen.length; i++) gaps += (chosen[i].minX - chosen[i - 1].maxX) + avgH * s;
+                const span = (chosen[chosen.length - 1].maxX - chosen[0].minX + 1) - avgH * s;
+                gf = Math.max(0, Math.min(0.05, (gaps / (chosen.length - 1)) / Math.max(1, span)));
+            }
+
+            omr.gapFrac = gf != null ? gf : oldGap;
+            const sq = scoreQuad(corners);
+            omr.gapFrac = oldGap;
+            const score = sq.single - 0.5 * sq.multi + Math.min(sq.meanEx, 150) / 1500;
+            const plausible = sq.single >= 0.15 && sq.multi <= 0.35 && sq.meanEx >= 55;
+            dbg.push({
+                pi, found: true, nChosen: r.chosen.length, gf,
+                corners: corners.map(c => [Math.round(c.x), Math.round(c.y)]),
+                single: +sq.single.toFixed(3), multi: +sq.multi.toFixed(3),
+                meanEx: Math.round(sq.meanEx), score: +score.toFixed(3), plausible
+            });
+            if (plausible && (!best || score > best.score)) best = { corners, gf, score };
+        }
+        if (window.CEE_OMR) window.CEE_OMR._debug = { w, h, sc, dbg };
+
+        // content-based grid fit: rectify via the paper outline (or whole image)
+        // and globally lock onto the 50-row / option-column pattern — works even
+        // when the printed borders are too faint to see; always competes with the
+        // border quad and the better-scoring one wins
+        const paper = detectPaperQuad(g, w, h, sc);
+        const fit = gridFitRect(paper, nBlocks);
+        if (window.CEE_OMR) window.CEE_OMR._debug.fit = fit ? fit.dbg : null;
+
+        const cands = [];
+        if (best) cands.push({ corners: best.corners, nf: omr.numFrac, gf: best.gf != null ? best.gf : oldGap, tag: "border" });
+        if (fit) cands.push({ corners: fit.corners, nf: fit.nf, gf: fit.gf, tag: "gridfit" });
+        let win = null;
+        for (const cd of cands) {
+            const keepNf = omr.numFrac, keepGf = omr.gapFrac;
+            omr.numFrac = cd.nf; omr.gapFrac = cd.gf;
+            const sq = scoreQuad(cd.corners);
+            omr.numFrac = keepNf; omr.gapFrac = keepGf;
+            cd.metric = sq.single - 0.5 * sq.multi + Math.min(sq.meanEx, 150) / 1500;
+            cd.plaus = sq.single >= 0.15 && sq.multi <= 0.35 && sq.meanEx >= 55;
+            cd.sq = { single: +sq.single.toFixed(3), multi: +sq.multi.toFixed(3), meanEx: Math.round(sq.meanEx) };
+        }
+        if (window.CEE_OMR) window.CEE_OMR._debug.cands = cands.map(c => ({ tag: c.tag, metric: +c.metric.toFixed(3), plaus: c.plaus, sq: c.sq }));
+        cands.forEach(cd => { if (cd.plaus && (!win || cd.metric > win.metric)) win = cd; });
+        if (!win) { omr.gapFrac = oldGap; return false; }
+        omr.corners = win.corners;
+        omr.numFrac = win.nf;
+        omr.gapFrac = win.gf;
+        syncTuneSliders();
+        if (window.CEE_OMR) window.CEE_OMR._debug.mode = win.tag;
+        return true;
+    }
+
+    function syncTuneSliders() {
+        const nEl = $("omrNumW"), gEl = $("omrGap");
+        if (nEl) nEl.value = String(Math.round(omr.numFrac * 100));
+        if (gEl) gEl.value = String(Math.round(omr.gapFrac * 1000));
+    }
+
+    // paper = largest bright region of the photo (fallback: the whole image)
+    function detectPaperQuad(g, w, h, sc) {
+        const sample = [];
+        for (let i = 0; i < g.length; i += 7) sample.push(g[i]);
+        sample.sort((a, b) => a - b);
+        const p95 = sample[(sample.length * 0.95) | 0];
+        const thr = Math.max(120, Math.round(0.72 * p95));
+        const bright = new Uint8Array(w * h);
+        for (let i = 0; i < g.length; i++) bright[i] = g[i] >= thr ? 1 : 0;
+
+        const label = new Int32Array(w * h);
+        const stack = new Int32Array(w * h);
+        let bestC = null, next = 0;
+        for (let i = 0; i < w * h; i++) {
+            if (!bright[i] || label[i]) continue;
+            next++;
+            let sp = 0, count = 0;
+            let vTL = Infinity, vTR = -Infinity, vBR = -Infinity, vBL = Infinity;
+            let tl = null, tr = null, br = null, bl = null;
+            stack[sp++] = i; label[i] = next;
+            while (sp) {
+                const p = stack[--sp];
+                const x = p % w, y = (p / w) | 0;
+                count++;
+                const s = x + y, d2 = x - y;
+                if (s < vTL) { vTL = s; tl = { x, y }; }
+                if (s > vBR) { vBR = s; br = { x, y }; }
+                if (d2 > vTR) { vTR = d2; tr = { x, y }; }
+                if (d2 < vBL) { vBL = d2; bl = { x, y }; }
+                if (x > 0 && bright[p - 1] && !label[p - 1]) { label[p - 1] = next; stack[sp++] = p - 1; }
+                if (x < w - 1 && bright[p + 1] && !label[p + 1]) { label[p + 1] = next; stack[sp++] = p + 1; }
+                if (y > 0 && bright[p - w] && !label[p - w]) { label[p - w] = next; stack[sp++] = p - w; }
+                if (y < h - 1 && bright[p + w] && !label[p + w]) { label[p + w] = next; stack[sp++] = p + w; }
+            }
+            if (!bestC || count > bestC.count) bestC = { count, tl, tr, br, bl };
+        }
+        if (!bestC || bestC.count < 0.25 * w * h) {
+            return [{ x: 0, y: 0 }, { x: omr.W, y: 0 }, { x: omr.W, y: omr.H }, { x: 0, y: omr.H }];
+        }
+        return [bestC.tl, bestC.tr, bestC.br, bestC.bl].map(p => ({ x: p.x / sc, y: p.y / sc }));
+    }
+
+    // rectify through the reference quad, then fit rows (50-comb) and the
+    // block/option column structure on 1-D darkness profiles
+    function gridFitRect(refQuad, nBlocks) {
+        const M = quadMapper(refQuad);
+        const WR = 840, HR = 1120;
+        const gImg = omr.gray, GW = omr.W, GH = omr.H;
+        const colD = new Uint8Array(WR * HR);
+        const rowProf = new Float64Array(HR);
+        for (let yy = 0; yy < HR; yy++) {
+            const v = (yy + 0.5) / HR;
+            let rs = 0;
+            for (let xx = 0; xx < WR; xx++) {
+                const u = (xx + 0.5) / WR;
+                const p = M(u, v);
+                let d = 0;
+                const xi = p.x | 0, yi = p.y | 0;
+                if (xi >= 0 && yi >= 0 && xi < GW && yi < GH) d = 255 - gImg[yi * GW + xi];
+                colD[yy * WR + xx] = d;
+                rs += d;
+            }
+            rowProf[yy] = rs / WR;
+        }
+        smooth1d(rowProf, 2);
+
+        const idx = (arr, x) => arr[Math.max(0, Math.min(arr.length - 1, Math.round(x)))];
+        const rowScore = (t, hh) => {
+            let s = 0;
+            for (let r = 0; r < 50; r++) s += idx(rowProf, t + (r + 0.5) * hh / 50);
+            return s;
+        };
+        let bt = 0, bh = HR * 0.6, bs = -Infinity;
+        for (let t = 0; t <= HR * 0.58; t += 5) {
+            for (let hh = HR * 0.34; hh <= HR - t; hh += 5) {
+                const s = rowScore(t, hh);
+                if (s > bs) { bs = s; bt = t; bh = hh; }
+            }
+        }
+        for (let t = Math.max(0, bt - 6); t <= bt + 6; t += 1) {
+            for (let hh = Math.max(20, bh - 6); hh <= Math.min(HR - t, bh + 6); hh += 1) {
+                const s = rowScore(t, hh);
+                if (s > bs) { bs = s; bt = t; bh = hh; }
+            }
+        }
+
+        const colProf = new Float64Array(WR);
+        const y0 = Math.max(0, Math.round(bt)), y1 = Math.min(HR - 1, Math.round(bt + bh));
+        for (let xx = 0; xx < WR; xx++) {
+            let s = 0;
+            for (let yy = y0; yy <= y1; yy++) s += colD[yy * WR + xx];
+            colProf[xx] = s / Math.max(1, y1 - y0 + 1);
+        }
+        smooth1d(colProf, 2);
+
+        const prints = nBlocks === 4 ? [4] : [4, nBlocks];
+        let bestF = null;
+        for (const nPrint of prints) {
+            for (let L = 0; L <= 0.30001; L += 0.01) {
+                for (let R = Math.min(1, L + 0.5); R <= 1.00001; R += 0.01) {
+                    for (let gRel = 0; gRel <= 0.0251; gRel += 0.005) {
+                        for (let nf = 0.12; nf <= 0.301; nf += 0.02) {
+                            const s = colScore(colProf, WR, L, R, gRel, nf, nPrint);
+                            if (!bestF || s > bestF.s) bestF = { s, L, R, gRel, nf, nPrint };
+                        }
+                    }
+                }
+            }
+        }
+        if (!bestF) return null;
+        for (let L = Math.max(0, bestF.L - 0.012); L <= bestF.L + 0.0121; L += 0.003) {
+            for (let R = Math.max(L + 0.4, bestF.R - 0.012); R <= Math.min(1, bestF.R + 0.012) + 1e-9; R += 0.003) {
+                for (let gRel = Math.max(0, bestF.gRel - 0.004); gRel <= bestF.gRel + 0.0041; gRel += 0.002) {
+                    for (let nf = Math.max(0.10, bestF.nf - 0.03); nf <= bestF.nf + 0.0301; nf += 0.01) {
+                        const s = colScore(colProf, WR, L, R, gRel, nf, bestF.nPrint);
+                        if (s > bestF.s) bestF = { s, L, R, gRel, nf, nPrint: bestF.nPrint };
+                    }
+                }
+            }
+        }
+
+        const T = bestF.R - bestF.L;
+        const wB = T * (1 - bestF.gRel * (bestF.nPrint - 1)) / bestF.nPrint;
+        const gAbs = T * bestF.gRel;
+        const uL = bestF.L;
+        const uR = bestF.L + nBlocks * wB + (nBlocks - 1) * gAbs;
+        const vT = bt / HR, vB = (bt + bh) / HR;
+        const corners = [M(uL, vT), M(uR, vT), M(uR, vB), M(uL, vB)].map(p => ({ x: p.x, y: p.y }));
+        const span = uR - uL;
+        return {
+            corners,
+            nf: bestF.nf,
+            gf: span > 0 ? Math.max(0, Math.min(0.05, gAbs / span)) : omr.gapFrac,
+            dbg: { bt: Math.round(bt), bh: Math.round(bh), L: +bestF.L.toFixed(3), R: +bestF.R.toFixed(3), gRel: bestF.gRel, nf: bestF.nf, nPrint: bestF.nPrint }
+        };
+    }
+
+    // peaks at number column (digits/cross-outs) + 4 option columns, valleys between
+    // options — peak-minus-valley contrast rejects half-offset alignments
+    function colScore(colProf, WR, L, R, gRel, nf, nPrint) {
+        const T = R - L;
+        const wB = T * (1 - gRel * (nPrint - 1)) / nPrint;
+        if (wB <= 0.02) return -Infinity;
+        const at = (u) => colProf[Math.max(0, Math.min(WR - 1, Math.round(u * WR)))];
+        let peaks = 0, valleys = 0, nPk = 0, nVl = 0;
+        for (let b = 0; b < nPrint; b++) {
+            const bl = L + b * (wB + T * gRel);
+            peaks += 0.75 * at(bl + wB * nf * 0.5); nPk += 0.75;
+            let prev = null;
+            for (let o = 0; o < 4; o++) {
+                const u = bl + wB * (nf + (1 - nf) * (o + 0.5) / 4);
+                peaks += at(u); nPk++;
+                if (prev != null) { valleys += at((prev + u) / 2); nVl++; }
+                prev = u;
+            }
+        }
+        return peaks / nPk - 0.85 * (valleys / nVl);
+    }
+
+    function smooth1d(a, r) {
+        const n = a.length, src = Float64Array.from(a);
+        for (let i = 0; i < n; i++) {
+            let s = 0, c = 0;
+            for (let j = Math.max(0, i - r); j <= Math.min(n - 1, i + r); j++) { s += src[j]; c++; }
+            a[i] = s / c;
+        }
+    }
+
+    // fraction of questions that read as one clean fill / as smeared multi-fills
+    function scoreQuad(corners) {
+        const N = flatQuestions(dayObj()).length;
+        const nBlocks = blockCount(N);
+        const map = quadMapper(corners);
+        const r = sampleRadius(map, nBlocks);
+        let single = 0, multi = 0, exSum = 0;
+        for (let qi = 0; qi < N; qi++) {
+            const ds = [];
+            for (let oi = 0; oi < 4; oi++) {
+                const { u, v } = bubbleUV(qi, oi, nBlocks);
+                const p = map(u, v);
+                ds.push(darknessMax(p.x, p.y, r));
+            }
+            const base = Math.min(ds[0], ds[1], ds[2], ds[3]);
+            const marked = ds.filter(d => d - base > FILL_REL).length;
+            if (marked === 1) { single++; exSum += Math.max(ds[0], ds[1], ds[2], ds[3]) - base; }
+            else if (marked > 1) multi++;
+        }
+        return { single: single / N, multi: multi / N, meanEx: single ? exSum / single : 0 };
+    }
+
+    function detectPass(g, ii, w, h, nBlocks, ps) {
         const win = Math.max(8, Math.round(Math.max(w, h) / 24));
-        const ink = new Uint8Array(w * h);
+        let ink = new Uint8Array(w * h);
         for (let y = 0; y < h; y++) {
             const y0 = Math.max(0, y - win), y1 = Math.min(h - 1, y + win);
             for (let x = 0; x < w; x++) {
@@ -366,7 +660,20 @@
                 const sum = ii[(y1 + 1) * (w + 1) + x1 + 1] - ii[y0 * (w + 1) + x1 + 1]
                     - ii[(y1 + 1) * (w + 1) + x0] + ii[y0 * (w + 1) + x0];
                 const px = g[y * w + x];
-                ink[y * w + x] = (px < (sum / area) * 0.87 && px < 220) ? 1 : 0;
+                ink[y * w + x] = (px < (sum / area) * ps.f && px < ps.cap) ? 1 : 0;
+            }
+        }
+        // dilate to heal thin/broken border lines
+        for (let d = 0; d < ps.dil; d++) {
+            const src = ink;
+            ink = new Uint8Array(w * h);
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    const i = y * w + x;
+                    if (src[i] ||
+                        (x > 0 && src[i - 1]) || (x < w - 1 && src[i + 1]) ||
+                        (y > 0 && src[i - w]) || (y < h - 1 && src[i + w])) ink[i] = 1;
+                }
             }
         }
 
@@ -394,12 +701,12 @@
             comps.push({ id: nextLabel, count, minX, maxX, minY, maxY });
         }
 
-        // keep components that look like tall block borders, left to right
+        // keep components that look like tall block borders
         let cand = comps.filter(c => {
             const bw = c.maxX - c.minX + 1, bh = c.maxY - c.minY + 1;
-            if (bh < 0.32 * h || bw < 0.04 * w || bw > 0.97 * w || bh > 0.985 * h) return false;
-            if (c.minX <= 1 || c.minY <= 1 || c.maxX >= w - 2 || c.maxY >= h - 2) return false;
-            return c.count / (bw * bh) < 0.6 && c.count > (bw + bh);
+            if (bh < ps.minH * h || bw < 0.035 * w || bw > 0.97 * w || bh > 0.99 * h) return false;
+            if (!ps.edge && (c.minX <= 1 || c.minY <= 1 || c.maxX >= w - 2 || c.maxY >= h - 2)) return false;
+            return c.count / (bw * bh) < 0.6 && c.count > 0.6 * (bw + bh);
         });
         // drop containers (paper-edge ring / outer frame): a much bigger box holding another candidate
         const bboxArea = c => (c.maxX - c.minX + 1) * (c.maxY - c.minY + 1);
@@ -417,12 +724,25 @@
             });
         }
         cand.sort((a, b) => (a.minX + a.maxX) - (b.minX + b.maxX));
-        if (!cand.length) return false;
+        if (!cand.length) return null;
 
         // pick the blocks the selected day actually uses
         let chosen, cutFrac = 0;
         if (cand.length >= nBlocks) {
-            chosen = cand.slice(0, nBlocks);
+            // best consecutive window: most uniform widths and clean gaps
+            let best = null;
+            for (let i = 0; i + nBlocks <= cand.length; i++) {
+                const grp = cand.slice(i, i + nBlocks);
+                const ws = grp.map(c => c.maxX - c.minX + 1);
+                const meanW = ws.reduce((a, b) => a + b, 0) / ws.length;
+                let score = ws.reduce((a, b) => a + Math.abs(b - meanW), 0) / meanW;
+                for (let j = 1; j < grp.length; j++) {
+                    const gp = grp[j].minX - grp[j - 1].maxX;
+                    score += (gp < 0 ? 2 : gp / meanW) * 0.5;
+                }
+                if (!best || score < best.score) best = { grp, score };
+            }
+            chosen = best.grp;
         } else {
             chosen = cand;
             // borders merged into one component: cut the 4-block table proportionally
@@ -447,7 +767,7 @@
                 if (d < vBL) { vBL = d; bl = { x, y }; }
             }
         }
-        if (!tl || !tr || !br || !bl) return false;
+        if (!tl || !tr || !br || !bl) return null;
         if (cutFrac > 0) {
             tr = { x: tl.x + (tr.x - tl.x) * cutFrac, y: tl.y + (tr.y - tl.y) * cutFrac };
             br = { x: bl.x + (br.x - bl.x) * cutFrac, y: bl.y + (br.y - bl.y) * cutFrac };
@@ -455,24 +775,8 @@
 
         const area = 0.5 * Math.abs(
             tl.x * (tr.y - bl.y) + tr.x * (br.y - tl.y) + br.x * (bl.y - tr.y) + bl.x * (tl.y - br.y));
-        if (area < 0.10 * w * h) return false;
-
-        omr.corners = [tl, tr, br, bl].map(p => ({ x: p.x / sc, y: p.y / sc }));
-
-        // estimate the block gap from the detected boxes
-        // (bboxes widen by blockHeight*sin(tilt), which shrinks the visible gap — undo that)
-        if (chosen.length >= 2) {
-            const s = Math.abs(Math.sin(Math.atan2(tr.y - tl.y, tr.x - tl.x)));
-            const avgH = chosen.reduce((a, c) => a + (c.maxY - c.minY + 1), 0) / chosen.length;
-            let gaps = 0;
-            for (let i = 1; i < chosen.length; i++) gaps += (chosen[i].minX - chosen[i - 1].maxX) + avgH * s;
-            const span = (chosen[chosen.length - 1].maxX - chosen[0].minX + 1) - avgH * s;
-            const gf = Math.max(0, Math.min(0.05, (gaps / (chosen.length - 1)) / Math.max(1, span)));
-            omr.gapFrac = gf;
-            const gapEl = $("omrGap");
-            if (gapEl) gapEl.value = String(Math.round(gf * 1000));
-        }
-        return true;
+        if (area < 0.06 * w * h) return null;
+        return { tl, tr, br, bl, chosen };
     }
 
     /* ---------- stages ---------- */
