@@ -188,16 +188,20 @@
             ctx.beginPath(); ctx.moveTo(t.x, t.y); ctx.lineTo(bt.x, bt.y); ctx.stroke();
         }
 
-        // sample dots
+        // sample dots: small solid markers with a white halo (visible on black fills)
         for (let qi = 0; qi < omr.dotRows.length; qi++) {
             const chosen = omr.letters[qi];
             omr.dotRows[qi].forEach((p, oi) => {
                 const on = chosen === LETTERS[oi];
+                const multi = chosen === "x";
+                const r = on ? omr.radius * 0.5 : multi ? omr.radius * 0.38 : omr.radius * 0.2;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, on ? omr.radius * 0.8 : omr.radius * 0.45, 0, Math.PI * 2);
-                if (on) { ctx.fillStyle = "rgba(5,150,105,0.75)"; ctx.fill(); }
-                else if (chosen === "x") { ctx.fillStyle = "rgba(217,119,6,0.45)"; ctx.fill(); }
-                else { ctx.strokeStyle = "rgba(37,99,235,0.4)"; ctx.lineWidth = lw; ctx.stroke(); }
+                ctx.arc(p.x, p.y, Math.max(1.5, r), 0, Math.PI * 2);
+                ctx.lineWidth = lw * 1.4;
+                ctx.strokeStyle = "rgba(255,255,255,0.95)";
+                ctx.stroke();
+                ctx.fillStyle = on ? "#047857" : multi ? "#b45309" : "#1e3a8a";
+                ctx.fill();
             });
         }
 
