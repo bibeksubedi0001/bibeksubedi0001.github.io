@@ -476,6 +476,15 @@
     }
 
     /* ---------- open / close / apply ---------- */
+    function resetScan() {
+        stopCamera();
+        omr.letters = [];
+        omr.dotRows = [];
+        omr.img = null;
+        omr.gray = null;
+        omr.corners = null;
+    }
+
     function openScanner() {
         window.CEE_APP.openOmr();
         renderReport();
@@ -483,11 +492,7 @@
     }
 
     function closeScanner() {
-        stopCamera();
-        omr.letters = [];
-        omr.dotRows = [];
-        omr.img = null;
-        omr.gray = null;
+        resetScan();
         window.CEE_APP.closeOmr();
     }
 
@@ -501,11 +506,24 @@
             const letter = omr.letters[i];
             if (letter && letter !== "x") answers[q.id] = letter;
         });
-        stopCamera();
+        resetScan();
         window.CEE_APP.applyScan(n, answers);
     }
 
     /* ---------- init ---------- */
+    // Open the scanner preloaded with a specific day's answer key (used by day cards).
+    window.CEE_OMR = {
+        open(dayNum) {
+            if (dayNum && DAYS.some(d => d.day === dayNum)) {
+                omr.dayNum = dayNum;
+                const sel = $("omrDaySel");
+                if (sel) sel.value = String(dayNum);
+            }
+            resetScan();
+            openScanner();
+        }
+    };
+
     function fillDaySelect() {
         const sel = $("omrDaySel");
         DAYS.forEach(day => {

@@ -227,14 +227,20 @@
                 ? `<p class="dc-desc">` + day.chapters.map(c => `${c.name}: ${c.questions.length}`).join(" \u00B7 ") + `</p>`
                 : `<p class="dc-desc">${chapNames}</p>`;
 
-            const card = el("button", "card day-card");
-            card.type = "button";
+            const card = el("div", "card day-card");
             card.dataset.day = day.day;
             card.dataset.accent = "blue";
+            card.setAttribute("role", "button");
+            card.tabIndex = 0;
             card.innerHTML =
                 `<div class="dc-top">
                     <div class="day-badge"><span>Day</span><b>${day.day}</b></div>
-                    <span class="${statusCls}">${statusTxt}</span>
+                    <div class="dc-top-right">
+                        <span class="${statusCls}">${statusTxt}</span>
+                        <button type="button" class="dc-scan" title="Scan OMR sheet \u00B7 graded against the Day ${day.day} answer key" aria-label="Scan OMR sheet for Day ${day.day}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                        </button>
+                    </div>
                  </div>
                  <h3>${day.subtitle}</h3>
                  ${descHtml}
@@ -250,7 +256,16 @@
                     </div>
                     <span class="dc-cta">${cta}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
                  </div>`;
-            card.addEventListener("click", () => openDay(day.day));
+            card.addEventListener("click", (ev) => {
+                if (ev.target.closest(".dc-scan")) return;
+                openDay(day.day);
+            });
+            card.addEventListener("keydown", (ev) => {
+                if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); openDay(day.day); }
+            });
+            card.querySelector(".dc-scan").addEventListener("click", () => {
+                if (window.CEE_OMR) window.CEE_OMR.open(day.day);
+            });
             grid.appendChild(card);
         });
     }

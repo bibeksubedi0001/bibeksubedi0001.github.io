@@ -1762,5 +1762,30 @@ body::before, body::after { display: none !important; }
 
 .omr-note { margin: 0; font-size: 0.76rem; line-height: 1.55; color: var(--ink-faint); }
 
+/* ---------- per-day scan button on day cards ---------- */
+.dc-top-right { display: flex; align-items: center; gap: 8px; }
+
+.dc-scan {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: var(--bg);
+    color: var(--brand);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+.dc-scan:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+.dc-scan:active { box-shadow: var(--nm-inset-sm); transform: none; }
+.dc-scan svg { width: 17px; height: 17px; }
+
+.day-card:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
 .omr-apply { justify-content: center; }
 .omr-apply[disabled] { opacity: 0.55; cursor: default; box-shadow: var(--nm-inset-sm); transform: none; }
