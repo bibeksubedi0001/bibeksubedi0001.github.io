@@ -31,7 +31,7 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/styles.css?v=27" />
+    <link rel="stylesheet" href="css/styles.css?v=28" />
 </head>
 
 <body>
@@ -410,8 +410,8 @@
                             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                             <circle cx="12" cy="13" r="4" />
                         </svg>
-                        <p>Start the camera and align the bubble table inside the guide,<br />or upload a photo of the
-                            sheet.</p>
+                        <p>Start the camera and align the bubble table roughly inside the guide — it is detected
+                            automatically after capture.<br />Or upload a photo of the sheet.</p>
                     </div>
                     <div class="omr-frame omr-live" id="omrLive" hidden>
                         <video id="omrVideo" playsinline muted autoplay></video>
@@ -460,6 +460,14 @@
                     <p class="omr-hint" id="omrHint">Start the camera and align the sheet, or upload a photo.</p>
 
                     <div class="omr-tune" id="omrTune" hidden>
+                        <button type="button" class="btn" id="omrAutoBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3" />
+                                <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+                            </svg>
+                            Auto-Detect Grid
+                        </button>
                         <label>Number column <input type="range" id="omrNumW" min="8" max="35" value="20" /></label>
                         <label>Column gap <input type="range" id="omrGap" min="0" max="50" value="10" /></label>
                     </div>
@@ -488,11 +496,11 @@
         <p class="foot">Built for <b>Prakriti Subedi</b> · CEE 2026 preparation · Progress is saved on this device.</p>
     </main>
 
-    <script src="js/day18.js?v=27"></script>
-    <script src="js/day19.js?v=27"></script>
-    <script src="js/questions.js?v=27"></script>
-    <script src="js/app.js?v=27"></script>
-    <script src="js/omr.js?v=27"></script>
+    <script src="js/day18.js?v=28"></script>
+    <script src="js/day19.js?v=28"></script>
+    <script src="js/questions.js?v=28"></script>
+    <script src="js/app.js?v=28"></script>
+    <script src="js/omr.js?v=28"></script>
 </body>
 
 </html>

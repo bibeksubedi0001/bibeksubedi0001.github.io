@@ -328,6 +328,137 @@
         renderReport();
     }
 
+    /* ---------- automatic table detection ---------- */
+    // Finds the printed block borders (adaptive threshold -> connected components ->
+    // extreme-point quad) so the user doesn't have to drag the corners manually.
+    function autoDetectCorners() {
+        if (!omr.gray) return false;
+        const nBlocks = blockCount(flatQuestions(dayObj()).length);
+        const sc = Math.min(1, 900 / Math.max(omr.W, omr.H));
+        const w = Math.max(50, Math.round(omr.W * sc));
+        const h = Math.max(50, Math.round(omr.H * sc));
+
+        // downscaled grayscale
+        const g = new Uint8ClampedArray(w * h);
+        for (let y = 0; y < h; y++) {
+            const row = Math.min(omr.H - 1, Math.round(y / sc)) * omr.W;
+            for (let x = 0; x < w; x++) {
+                g[y * w + x] = omr.gray[row + Math.min(omr.W - 1, Math.round(x / sc))];
+            }
+        }
+
+        // integral image for local-mean thresholding
+        const ii = new Uint32Array((w + 1) * (h + 1));
+        for (let y = 0; y < h; y++) {
+            let rs = 0;
+            for (let x = 0; x < w; x++) {
+                rs += g[y * w + x];
+                ii[(y + 1) * (w + 1) + x + 1] = ii[y * (w + 1) + x + 1] + rs;
+            }
+        }
+        const win = Math.max(8, Math.round(Math.max(w, h) / 24));
+        const ink = new Uint8Array(w * h);
+        for (let y = 0; y < h; y++) {
+            const y0 = Math.max(0, y - win), y1 = Math.min(h - 1, y + win);
+            for (let x = 0; x < w; x++) {
+                const x0 = Math.max(0, x - win), x1 = Math.min(w - 1, x + win);
+                const area = (x1 - x0 + 1) * (y1 - y0 + 1);
+                const sum = ii[(y1 + 1) * (w + 1) + x1 + 1] - ii[y0 * (w + 1) + x1 + 1]
+                    - ii[(y1 + 1) * (w + 1) + x0] + ii[y0 * (w + 1) + x0];
+                const px = g[y * w + x];
+                ink[y * w + x] = (px < (sum / area) * 0.87 && px < 220) ? 1 : 0;
+            }
+        }
+
+        // connected components (4-neighbour flood fill)
+        const label = new Int32Array(w * h);
+        const stack = new Int32Array(w * h);
+        const comps = [];
+        let nextLabel = 0;
+        for (let i = 0; i < w * h; i++) {
+            if (!ink[i] || label[i]) continue;
+            nextLabel++;
+            let sp = 0, count = 0, minX = w, maxX = -1, minY = h, maxY = -1;
+            stack[sp++] = i; label[i] = nextLabel;
+            while (sp) {
+                const p = stack[--sp];
+                const px = p % w, py = (p / w) | 0;
+                count++;
+                if (px < minX) minX = px; if (px > maxX) maxX = px;
+                if (py < minY) minY = py; if (py > maxY) maxY = py;
+                if (px > 0 && ink[p - 1] && !label[p - 1]) { label[p - 1] = nextLabel; stack[sp++] = p - 1; }
+                if (px < w - 1 && ink[p + 1] && !label[p + 1]) { label[p + 1] = nextLabel; stack[sp++] = p + 1; }
+                if (py > 0 && ink[p - w] && !label[p - w]) { label[p - w] = nextLabel; stack[sp++] = p - w; }
+                if (py < h - 1 && ink[p + w] && !label[p + w]) { label[p + w] = nextLabel; stack[sp++] = p + w; }
+            }
+            comps.push({ id: nextLabel, count, minX, maxX, minY, maxY });
+        }
+
+        // keep components that look like tall block borders, left to right
+        const cand = comps.filter(c => {
+            const bw = c.maxX - c.minX + 1, bh = c.maxY - c.minY + 1;
+            if (bh < 0.32 * h || bw < 0.04 * w || bw > 0.97 * w || bh > 0.985 * h) return false;
+            if (c.minX <= 1 || c.minY <= 1 || c.maxX >= w - 2 || c.maxY >= h - 2) return false;
+            return c.count / (bw * bh) < 0.6 && c.count > (bw + bh);
+        }).sort((a, b) => (a.minX + a.maxX) - (b.minX + b.maxX));
+        if (!cand.length) return false;
+
+        // pick the blocks the selected day actually uses
+        let chosen, cutFrac = 0;
+        if (cand.length >= nBlocks) {
+            chosen = cand.slice(0, nBlocks);
+        } else {
+            chosen = cand;
+            // borders merged into one component: cut the 4-block table proportionally
+            if (nBlocks < 4 && cand.length === 1 && (cand[0].maxX - cand[0].minX) > 0.55 * w) {
+                const gpf = omr.gapFrac, wB = (1 - 3 * gpf) / 4;
+                cutFrac = nBlocks * wB + (nBlocks - 1) * gpf;
+            }
+        }
+        const use = new Uint8Array(nextLabel + 1);
+        chosen.forEach(c => { use[c.id] = 1; });
+
+        // extreme-point corners of the chosen borders (true quad, handles tilt)
+        let tl = null, tr = null, br = null, bl = null;
+        let vTL = Infinity, vTR = -Infinity, vBR = -Infinity, vBL = Infinity;
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                if (!use[label[y * w + x]]) continue;
+                const s = x + y, d = x - y;
+                if (s < vTL) { vTL = s; tl = { x, y }; }
+                if (s > vBR) { vBR = s; br = { x, y }; }
+                if (d > vTR) { vTR = d; tr = { x, y }; }
+                if (d < vBL) { vBL = d; bl = { x, y }; }
+            }
+        }
+        if (!tl || !tr || !br || !bl) return false;
+        if (cutFrac > 0) {
+            tr = { x: tl.x + (tr.x - tl.x) * cutFrac, y: tl.y + (tr.y - tl.y) * cutFrac };
+            br = { x: bl.x + (br.x - bl.x) * cutFrac, y: bl.y + (br.y - bl.y) * cutFrac };
+        }
+
+        const area = 0.5 * Math.abs(
+            tl.x * (tr.y - bl.y) + tr.x * (br.y - tl.y) + br.x * (bl.y - tr.y) + bl.x * (tl.y - br.y));
+        if (area < 0.10 * w * h) return false;
+
+        omr.corners = [tl, tr, br, bl].map(p => ({ x: p.x / sc, y: p.y / sc }));
+
+        // estimate the block gap from the detected boxes
+        // (bboxes widen by blockHeight*sin(tilt), which shrinks the visible gap — undo that)
+        if (chosen.length >= 2) {
+            const s = Math.abs(Math.sin(Math.atan2(tr.y - tl.y, tr.x - tl.x)));
+            const avgH = chosen.reduce((a, c) => a + (c.maxY - c.minY + 1), 0) / chosen.length;
+            let gaps = 0;
+            for (let i = 1; i < chosen.length; i++) gaps += (chosen[i].minX - chosen[i - 1].maxX) + avgH * s;
+            const span = (chosen[chosen.length - 1].maxX - chosen[0].minX + 1) - avgH * s;
+            const gf = Math.max(0, Math.min(0.05, (gaps / (chosen.length - 1)) / Math.max(1, span)));
+            omr.gapFrac = gf;
+            const gapEl = $("omrGap");
+            if (gapEl) gapEl.value = String(Math.round(gf * 1000));
+        }
+        return true;
+    }
+
     /* ---------- stages ---------- */
     function setStage(stage, hint) {
         $("omrIdle").hidden = stage !== "idle";
@@ -441,7 +572,10 @@
             { x: W * (1 - insetX), y: H * (1 - insetY) },
             { x: W * insetX, y: H * (1 - insetY) }
         ];
-        setStage("frozen", "Drag the corner handles so the frame hugs the bubble table \u2014 green dots must sit on your filled bubbles. Tap a tile on the right to fix a misread.");
+        const auto = autoDetectCorners();
+        setStage("frozen", auto
+            ? "Bubble table detected automatically \u2014 green dots sit on your marks. Drag a corner or tap a tile only if something looks off."
+            : "Couldn't find the table automatically \u2014 drag the corner handles so the frame hugs the bubble table.");
         detect();
     }
 
@@ -557,7 +691,15 @@
         $("omrDaySel").addEventListener("change", (ev) => {
             omr.dayNum = +ev.target.value;
             drawGuide();
-            if (omr.gray) detect(); else renderReport();
+            if (omr.gray) { autoDetectCorners(); detect(); } else renderReport();
+        });
+        $("omrAutoBtn").addEventListener("click", () => {
+            if (!omr.gray) return;
+            const ok = autoDetectCorners();
+            $("omrHint").textContent = ok
+                ? "Bubble table re-detected \u2014 check that the green dots sit on your marks."
+                : "Couldn't find the table automatically \u2014 drag the corner handles instead.";
+            detect();
         });
         $("omrNumW").addEventListener("input", (ev) => {
             omr.numFrac = +ev.target.value / 100;
