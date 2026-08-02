@@ -387,6 +387,7 @@
         // (fainter) borders only appear in a later one
         const oldGap = omr.gapFrac;
         let best = null;
+        let firstFound = null; // earliest geometric quad, kept for empty sheets
         const dbg = [];
         for (let pi = 0; pi < passes.length; pi++) {
             const r = detectPass(g, ii, w, h, nBlocks, passes[pi]);
@@ -417,6 +418,7 @@
                 single: +sq.single.toFixed(3), multi: +sq.multi.toFixed(3),
                 meanEx: Math.round(sq.meanEx), score: +score.toFixed(3), plausible
             });
+            if (!firstFound) firstFound = { corners, gf };
             if (plausible && (!best || score > best.score)) best = { corners, gf, score };
         }
         if (window.CEE_OMR) window.CEE_OMR._debug = { w, h, sc, dbg };
@@ -426,24 +428,52 @@
         // when the printed borders are too faint to see; always competes with the
         // border quad and the better-scoring one wins
         const paper = detectPaperQuad(g, w, h, sc);
-        const fit = gridFitRect(paper, nBlocks);
-        if (window.CEE_OMR) window.CEE_OMR._debug.fit = fit ? fit.dbg : null;
+        if (window.CEE_OMR) window.CEE_OMR._debug.paper = { isPaper: paper.isPaper, quad: paper.quad.map(p => [Math.round(p.x), Math.round(p.y)]) };
+        const fits = gridFitRect(paper.quad, nBlocks, paper.isPaper) || [];
+        if (window.CEE_OMR) window.CEE_OMR._debug.fit = fits.map(f => f.dbg);
 
         const cands = [];
-        if (best) cands.push({ corners: best.corners, nf: omr.numFrac, gf: best.gf != null ? best.gf : oldGap, tag: "border" });
-        if (fit) cands.push({ corners: fit.corners, nf: fit.nf, gf: fit.gf, tag: "gridfit" });
+        const borderCand = best || firstFound;
+        if (borderCand) {
+            // the number-column width varies between sheet designs — scan for the
+            // best fit before letting the border quad compete
+            let bNf = omr.numFrac, bMet = -Infinity;
+            const keepNf2 = omr.numFrac, keepGf2 = omr.gapFrac;
+            omr.gapFrac = borderCand.gf != null ? borderCand.gf : oldGap;
+            for (let nf = 0.10; nf <= 0.281; nf += 0.02) {
+                omr.numFrac = nf;
+                const sq = scoreQuad(borderCand.corners);
+                const met = sq.single - 0.5 * sq.multi + Math.min(sq.meanEx, 150) / 1500;
+                if (met > bMet) { bMet = met; bNf = nf; }
+            }
+            omr.numFrac = keepNf2; omr.gapFrac = keepGf2;
+            cands.push({ corners: borderCand.corners, nf: bNf, gf: borderCand.gf != null ? borderCand.gf : oldGap, tag: "border" });
+        }
+        fits.forEach((f, i) => cands.push({ corners: f.corners, nf: f.nf, gf: f.gf, tag: "gridfit" + i }));
         let win = null;
         for (const cd of cands) {
             const keepNf = omr.numFrac, keepGf = omr.gapFrac;
             omr.numFrac = cd.nf; omr.gapFrac = cd.gf;
             const sq = scoreQuad(cd.corners);
+            const rc = rowContrast(cd.corners);
             omr.numFrac = keepNf; omr.gapFrac = keepGf;
-            cd.metric = sq.single - 0.5 * sq.multi + Math.min(sq.meanEx, 150) / 1500;
-            cd.plaus = sq.single >= 0.15 && sq.multi <= 0.35 && sq.meanEx >= 55;
-            cd.sq = { single: +sq.single.toFixed(3), multi: +sq.multi.toFixed(3), meanEx: Math.round(sq.meanEx) };
+            cd.metric = sq.single - 0.5 * sq.multi + Math.min(sq.meanEx, 150) / 1500 + Math.min(rc, 40) / 40;
+            cd.plaus = sq.single >= 0.15 && sq.multi <= 0.35 && sq.meanEx >= 55 && rc >= 4;
+            cd.sq = { single: +sq.single.toFixed(3), multi: +sq.multi.toFixed(3), meanEx: Math.round(sq.meanEx), rc: +rc.toFixed(1) };
         }
         if (window.CEE_OMR) window.CEE_OMR._debug.cands = cands.map(c => ({ tag: c.tag, metric: +c.metric.toFixed(3), plaus: c.plaus, sq: c.sq }));
         cands.forEach(cd => { if (cd.plaus && (!win || cd.metric > win.metric)) win = cd; });
+        // empty / barely-filled sheet: no content to validate against — trust the
+        // geometric border quad (or the grid fit) rather than giving up, preferring
+        // whichever aligns with the 50-row rhythm
+        if (!win && cands.length) {
+            let structBest = null;
+            cands.forEach(cd => {
+                if (cd.sq.rc >= 4 && (!structBest || cd.sq.rc > structBest.sq.rc)) structBest = cd;
+            });
+            win = structBest || cands.find(c => c.tag === "border") || cands[0];
+            if (window.CEE_OMR) window.CEE_OMR._debug.weak = true;
+        }
         if (!win) { omr.gapFrac = oldGap; return false; }
         omr.corners = win.corners;
         omr.numFrac = win.nf;
@@ -461,19 +491,61 @@
 
     // paper = largest bright region of the photo (fallback: the whole image)
     function detectPaperQuad(g, w, h, sc) {
-        const sample = [];
-        for (let i = 0; i < g.length; i += 7) sample.push(g[i]);
-        sample.sort((a, b) => a - b);
-        const p95 = sample[(sample.length * 0.95) | 0];
-        const thr = Math.max(120, Math.round(0.72 * p95));
+        // Otsu split, iterated: if it only splits off dark speckle (nearly all
+        // "bright"), re-run on the upper class until paper separates from carpet
+        const hist = new Uint32Array(256);
+        let total = 0;
+        for (let i = 0; i < g.length; i += 4) { hist[g[i]]++; total++; }
+        let lo = 0, thr = 127;
+        for (let round = 0; round < 3; round++) {
+            let sum = 0, cnt = 0;
+            for (let i = lo; i < 256; i++) { sum += i * hist[i]; cnt += hist[i]; }
+            let sumB = 0, wB = 0, maxVar = -1;
+            thr = lo;
+            for (let t = lo; t < 256; t++) {
+                wB += hist[t];
+                if (!wB) continue;
+                const wF = cnt - wB;
+                if (!wF) break;
+                sumB += t * hist[t];
+                const mB = sumB / wB, mF = (sum - sumB) / wF;
+                const v = wB * wF * (mB - mF) * (mB - mF);
+                if (v > maxVar) { maxVar = v; thr = t; }
+            }
+            let brightN = 0;
+            for (let t = thr + 1; t < 256; t++) brightN += hist[t];
+            if (brightN / total <= 0.92) break;
+            lo = thr + 1;
+        }
+        thr = Math.max(100, thr + 1);
+        let brightN = 0;
+        for (let t = thr; t < 256; t++) brightN += hist[t];
+        if (brightN / total > 0.92) { // no distinct background — photo is all paper
+            return { quad: [{ x: 0, y: 0 }, { x: omr.W, y: 0 }, { x: omr.W, y: omr.H }, { x: 0, y: omr.H }], isPaper: false };
+        }
         const bright = new Uint8Array(w * h);
         for (let i = 0; i < g.length; i++) bright[i] = g[i] >= thr ? 1 : 0;
+        // close thin dark creases (paper folds) that would split the paper in two;
+        // corners are still measured on the ORIGINAL bright pixels only
+        let mask = bright;
+        for (let d = 0; d < 2; d++) {
+            const src = mask;
+            mask = new Uint8Array(w * h);
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    const i = y * w + x;
+                    if (src[i] ||
+                        (x > 0 && src[i - 1]) || (x < w - 1 && src[i + 1]) ||
+                        (y > 0 && src[i - w]) || (y < h - 1 && src[i + w])) mask[i] = 1;
+                }
+            }
+        }
 
         const label = new Int32Array(w * h);
         const stack = new Int32Array(w * h);
         let bestC = null, next = 0;
         for (let i = 0; i < w * h; i++) {
-            if (!bright[i] || label[i]) continue;
+            if (!mask[i] || label[i]) continue;
             next++;
             let sp = 0, count = 0;
             let vTL = Infinity, vTR = -Infinity, vBR = -Infinity, vBL = Infinity;
@@ -483,27 +555,29 @@
                 const p = stack[--sp];
                 const x = p % w, y = (p / w) | 0;
                 count++;
-                const s = x + y, d2 = x - y;
-                if (s < vTL) { vTL = s; tl = { x, y }; }
-                if (s > vBR) { vBR = s; br = { x, y }; }
-                if (d2 > vTR) { vTR = d2; tr = { x, y }; }
-                if (d2 < vBL) { vBL = d2; bl = { x, y }; }
-                if (x > 0 && bright[p - 1] && !label[p - 1]) { label[p - 1] = next; stack[sp++] = p - 1; }
-                if (x < w - 1 && bright[p + 1] && !label[p + 1]) { label[p + 1] = next; stack[sp++] = p + 1; }
-                if (y > 0 && bright[p - w] && !label[p - w]) { label[p - w] = next; stack[sp++] = p - w; }
-                if (y < h - 1 && bright[p + w] && !label[p + w]) { label[p + w] = next; stack[sp++] = p + w; }
+                if (bright[p]) {
+                    const s = x + y, d2 = x - y;
+                    if (s < vTL) { vTL = s; tl = { x, y }; }
+                    if (s > vBR) { vBR = s; br = { x, y }; }
+                    if (d2 > vTR) { vTR = d2; tr = { x, y }; }
+                    if (d2 < vBL) { vBL = d2; bl = { x, y }; }
+                }
+                if (x > 0 && mask[p - 1] && !label[p - 1]) { label[p - 1] = next; stack[sp++] = p - 1; }
+                if (x < w - 1 && mask[p + 1] && !label[p + 1]) { label[p + 1] = next; stack[sp++] = p + 1; }
+                if (y > 0 && mask[p - w] && !label[p - w]) { label[p - w] = next; stack[sp++] = p - w; }
+                if (y < h - 1 && mask[p + w] && !label[p + w]) { label[p + w] = next; stack[sp++] = p + w; }
             }
-            if (!bestC || count > bestC.count) bestC = { count, tl, tr, br, bl };
+            if (tl && (!bestC || count > bestC.count)) bestC = { count, tl, tr, br, bl };
         }
         if (!bestC || bestC.count < 0.25 * w * h) {
-            return [{ x: 0, y: 0 }, { x: omr.W, y: 0 }, { x: omr.W, y: omr.H }, { x: 0, y: omr.H }];
+            return { quad: [{ x: 0, y: 0 }, { x: omr.W, y: 0 }, { x: omr.W, y: omr.H }, { x: 0, y: omr.H }], isPaper: false };
         }
-        return [bestC.tl, bestC.tr, bestC.br, bestC.bl].map(p => ({ x: p.x / sc, y: p.y / sc }));
+        return { quad: [bestC.tl, bestC.tr, bestC.br, bestC.bl].map(p => ({ x: p.x / sc, y: p.y / sc })), isPaper: true };
     }
 
     // rectify through the reference quad, then fit rows (50-comb) and the
     // block/option column structure on 1-D darkness profiles
-    function gridFitRect(refQuad, nBlocks) {
+    function gridFitRect(refQuad, nBlocks, isPaper) {
         const M = quadMapper(refQuad);
         const WR = 840, HR = 1120;
         const gImg = omr.gray, GW = omr.W, GH = omr.H;
@@ -526,94 +600,157 @@
         smooth1d(rowProf, 2);
 
         const idx = (arr, x) => arr[Math.max(0, Math.min(arr.length - 1, Math.round(x)))];
-        const rowScore = (t, hh) => {
+        // high-pass the profile so bold print (headers, summary tables) can't
+        // dominate — only the fast row-to-row rhythm survives
+        const hp = new Float64Array(HR);
+        {
+            const R2 = 30;
+            for (let y = 0; y < HR; y++) {
+                let s = 0, c = 0;
+                for (let j = Math.max(0, y - R2); j <= Math.min(HR - 1, y + R2); j++) { s += rowProf[j]; c++; }
+                hp[y] = Math.max(0, rowProf[y] - s / c);
+            }
+        }
+        // row pitch via autocorrelation — periodicity is unambiguous even when other
+        // tables/headers lurk on the sheet
+        const pMaxCap = ((isPaper ? 0.80 : 1.0) * HR) / 50;
+        const pMin = 6, pMax = Math.max(pMin + 1, Math.min(26, Math.floor(pMaxCap)));
+        const acArr = [];
+        let acMax = 0;
+        for (let p = pMin; p <= pMax; p++) {
+            let s = 0, n = 0;
+            for (let y = 0; y + p < HR; y++) { s += hp[y] * hp[y + p]; n++; }
+            const v = s / n;
+            acArr.push({ p, v });
+            if (v > acMax) acMax = v;
+        }
+        const pitches = [];
+        for (let i = 0; i < acArr.length && pitches.length < 3; i++) {
+            const a = acArr[i];
+            const l = i > 0 ? acArr[i - 1].v : -1, r = i < acArr.length - 1 ? acArr[i + 1].v : -1;
+            if (a.v >= 0.72 * acMax && a.v >= l && a.v >= r) pitches.push(a.p);
+        }
+        if (!pitches.length) pitches.push(acArr.reduce((m, a) => (a.v > m.v ? a : m), acArr[0]).p);
+        if (window.CEE_OMR && window.CEE_OMR._debug) window.CEE_OMR._debug.ac = {
+            pitches, top: acArr.slice().sort((a, b) => b.v - a.v).slice(0, 6).map(a => ({ p: a.p, v: Math.round(a.v) }))
+        };
+
+        // phase search at (nearly) locked pitch; ends just outside must be quiet
+        const comb = (t, p) => {
             let s = 0;
-            for (let r = 0; r < 50; r++) s += idx(rowProf, t + (r + 0.5) * hh / 50);
+            for (let r = 0; r < 50; r++) s += idx(hp, t + (r + 0.5) * p);
+            for (let r = 1; r < 50; r++) s -= 0.9 * idx(hp, t + r * p);
+            s -= 4 * idx(hp, t - p / 2);
+            s -= 4 * idx(hp, t + 50 * p + p / 2);
             return s;
         };
-        let bt = 0, bh = HR * 0.6, bs = -Infinity;
-        for (let t = 0; t <= HR * 0.58; t += 5) {
-            for (let hh = HR * 0.34; hh <= HR - t; hh += 5) {
-                const s = rowScore(t, hh);
-                if (s > bs) { bs = s; bt = t; bh = hh; }
+        const rowCands = [];
+        for (const p0 of pitches) {
+            for (let p = p0 - 0.8; p <= p0 + 0.8001; p += 0.1) {
+                const span = 50 * p;
+                if (span > (isPaper ? 0.82 : 1.0) * HR || span < 0.28 * HR) continue;
+                for (let t = 0; t + span <= HR; t += 1) {
+                    rowCands.push({ t, hh: span, s: comb(t, p) });
+                }
             }
         }
-        for (let t = Math.max(0, bt - 6); t <= bt + 6; t += 1) {
-            for (let hh = Math.max(20, bh - 6); hh <= Math.min(HR - t, bh + 6); hh += 1) {
-                const s = rowScore(t, hh);
-                if (s > bs) { bs = s; bt = t; bh = hh; }
+        if (!rowCands.length) return null;
+        rowCands.sort((a, b) => b.s - a.s);
+        // only the best comb fit competes — content metrics can't tell a row-shifted
+        // grid from the true one, but the comb score always can
+        const picks = [];
+        for (const rc of rowCands) {
+            if (picks.length >= 1) break;
+            if (picks.some(pk => Math.abs(pk.t - rc.t) < 10 && Math.abs(pk.hh - rc.hh) < 14)) continue;
+            picks.push({ ...rc });
+        }
+        const results = [];
+        for (const pick of picks) {
+            const fit = fitColumns(colProfFor(pick.t, pick.hh), pick.t, pick.hh);
+            if (fit) results.push(fit);
+        }
+        return results;
+
+        function colProfFor(bt, bh) {
+            const colProf = new Float64Array(WR);
+            const y0 = Math.max(0, Math.round(bt)), y1 = Math.min(HR - 1, Math.round(bt + bh));
+            for (let xx = 0; xx < WR; xx++) {
+                let s = 0;
+                for (let yy = y0; yy <= y1; yy++) s += colD[yy * WR + xx];
+                colProf[xx] = s / Math.max(1, y1 - y0 + 1);
             }
+            smooth1d(colProf, 2);
+            return colProf;
         }
 
-        const colProf = new Float64Array(WR);
-        const y0 = Math.max(0, Math.round(bt)), y1 = Math.min(HR - 1, Math.round(bt + bh));
-        for (let xx = 0; xx < WR; xx++) {
-            let s = 0;
-            for (let yy = y0; yy <= y1; yy++) s += colD[yy * WR + xx];
-            colProf[xx] = s / Math.max(1, y1 - y0 + 1);
-        }
-        smooth1d(colProf, 2);
-
-        const prints = nBlocks === 4 ? [4] : [4, nBlocks];
-        let bestF = null;
-        for (const nPrint of prints) {
-            for (let L = 0; L <= 0.30001; L += 0.01) {
-                for (let R = Math.min(1, L + 0.5); R <= 1.00001; R += 0.01) {
-                    for (let gRel = 0; gRel <= 0.0251; gRel += 0.005) {
-                        for (let nf = 0.12; nf <= 0.301; nf += 0.02) {
-                            const s = colScore(colProf, WR, L, R, gRel, nf, nPrint);
-                            if (!bestF || s > bestF.s) bestF = { s, L, R, gRel, nf, nPrint };
+        function fitColumns(colProf, bt, bh) {
+            const prints = nBlocks === 4 ? [4] : [4, nBlocks];
+            let bestF = null;
+            for (const nPrint of prints) {
+                for (let L = 0; L <= 0.30001; L += 0.01) {
+                    for (let R = Math.min(1, L + 0.5); R <= 1.00001; R += 0.01) {
+                        for (let gRel = 0; gRel <= 0.0251; gRel += 0.005) {
+                            for (let nf = 0.12; nf <= 0.301; nf += 0.02) {
+                                const s = colScore(colProf, WR, L, R, gRel, nf, nPrint);
+                                if (!bestF || s > bestF.s) bestF = { s, L, R, gRel, nf, nPrint };
+                            }
                         }
                     }
                 }
             }
-        }
-        if (!bestF) return null;
-        for (let L = Math.max(0, bestF.L - 0.012); L <= bestF.L + 0.0121; L += 0.003) {
-            for (let R = Math.max(L + 0.4, bestF.R - 0.012); R <= Math.min(1, bestF.R + 0.012) + 1e-9; R += 0.003) {
-                for (let gRel = Math.max(0, bestF.gRel - 0.004); gRel <= bestF.gRel + 0.0041; gRel += 0.002) {
-                    for (let nf = Math.max(0.10, bestF.nf - 0.03); nf <= bestF.nf + 0.0301; nf += 0.01) {
-                        const s = colScore(colProf, WR, L, R, gRel, nf, bestF.nPrint);
-                        if (s > bestF.s) bestF = { s, L, R, gRel, nf, nPrint: bestF.nPrint };
+            if (!bestF) return null;
+            for (let L = Math.max(0, bestF.L - 0.012); L <= bestF.L + 0.0121; L += 0.003) {
+                for (let R = Math.max(L + 0.4, bestF.R - 0.012); R <= Math.min(1, bestF.R + 0.012) + 1e-9; R += 0.003) {
+                    for (let gRel = Math.max(0, bestF.gRel - 0.004); gRel <= bestF.gRel + 0.0041; gRel += 0.002) {
+                        for (let nf = Math.max(0.10, bestF.nf - 0.03); nf <= bestF.nf + 0.0301; nf += 0.01) {
+                            const s = colScore(colProf, WR, L, R, gRel, nf, bestF.nPrint);
+                            if (s > bestF.s) bestF = { s, L, R, gRel, nf, nPrint: bestF.nPrint };
+                        }
                     }
                 }
             }
-        }
 
-        const T = bestF.R - bestF.L;
-        const wB = T * (1 - bestF.gRel * (bestF.nPrint - 1)) / bestF.nPrint;
-        const gAbs = T * bestF.gRel;
-        const uL = bestF.L;
-        const uR = bestF.L + nBlocks * wB + (nBlocks - 1) * gAbs;
-        const vT = bt / HR, vB = (bt + bh) / HR;
-        const corners = [M(uL, vT), M(uR, vT), M(uR, vB), M(uL, vB)].map(p => ({ x: p.x, y: p.y }));
-        const span = uR - uL;
-        return {
-            corners,
-            nf: bestF.nf,
-            gf: span > 0 ? Math.max(0, Math.min(0.05, gAbs / span)) : omr.gapFrac,
-            dbg: { bt: Math.round(bt), bh: Math.round(bh), L: +bestF.L.toFixed(3), R: +bestF.R.toFixed(3), gRel: bestF.gRel, nf: bestF.nf, nPrint: bestF.nPrint }
-        };
+            const T = bestF.R - bestF.L;
+            const wB = T * (1 - bestF.gRel * (bestF.nPrint - 1)) / bestF.nPrint;
+            const gAbs = T * bestF.gRel;
+            const uL = bestF.L;
+            const uR = bestF.L + nBlocks * wB + (nBlocks - 1) * gAbs;
+            const vT = bt / HR, vB = (bt + bh) / HR;
+            const corners = [M(uL, vT), M(uR, vT), M(uR, vB), M(uL, vB)].map(p => ({ x: p.x, y: p.y }));
+            const span = uR - uL;
+            return {
+                corners,
+                nf: bestF.nf,
+                gf: span > 0 ? Math.max(0, Math.min(0.05, gAbs / span)) : omr.gapFrac,
+                dbg: { bt: Math.round(bt), bh: Math.round(bh), L: +bestF.L.toFixed(3), R: +bestF.R.toFixed(3), gRel: bestF.gRel, nf: bestF.nf, nPrint: bestF.nPrint }
+            };
+        }
     }
 
-    // peaks at number column (digits/cross-outs) + 4 option columns, valleys between
-    // options — peak-minus-valley contrast rejects half-offset alignments
+    // peaks at number column (digits/cross-outs) + 4 option columns; valleys between
+    // options, between numbers and A, and in the block gaps — the extra valleys pin
+    // the phase so the fit can't lock one option-column off
     function colScore(colProf, WR, L, R, gRel, nf, nPrint) {
         const T = R - L;
         const wB = T * (1 - gRel * (nPrint - 1)) / nPrint;
         if (wB <= 0.02) return -Infinity;
         const at = (u) => colProf[Math.max(0, Math.min(WR - 1, Math.round(u * WR)))];
         let peaks = 0, valleys = 0, nPk = 0, nVl = 0;
+        let prevD = null;
         for (let b = 0; b < nPrint; b++) {
             const bl = L + b * (wB + T * gRel);
-            peaks += 0.75 * at(bl + wB * nf * 0.5); nPk += 0.75;
+            const numU = bl + wB * nf * 0.5;
+            peaks += 0.75 * at(numU); nPk += 0.75;
+            if (prevD != null) { valleys += at((prevD + bl) / 2); nVl++; } // block gap
             let prev = null;
             for (let o = 0; o < 4; o++) {
                 const u = bl + wB * (nf + (1 - nf) * (o + 0.5) / 4);
                 peaks += at(u); nPk++;
                 if (prev != null) { valleys += at((prev + u) / 2); nVl++; }
+                else { valleys += at((numU + u) / 2); nVl++; } // numbers -> A
                 prev = u;
             }
+            prevD = prev;
         }
         return peaks / nPk - 0.85 * (valleys / nVl);
     }
@@ -627,7 +764,30 @@
         }
     }
 
-    // fraction of questions that read as one clean fill / as smeared multi-fills
+    // structural check: mean darkness on the 50 row-centre lines minus the 49
+    // between-row lines, sampled through the quad — near zero for misaligned quads
+    function rowContrast(corners) {
+        const map = quadMapper(corners);
+        const nBlocks = blockCount(flatQuestions(dayObj()).length);
+        const r = Math.max(1.5, sampleRadius(map, nBlocks) * 0.5);
+        const line = (v) => {
+            let s = 0, n = 0;
+            for (let k = 0; k < 24; k++) {
+                const u = 0.02 + 0.96 * (k + 0.5) / 24;
+                const p = map(u, v);
+                s += darknessAt(p.x, p.y, r); n++;
+            }
+            return s / n;
+        };
+        let centres = 0, bounds = 0;
+        for (let i = 0; i < 50; i++) centres += line((i + 0.5) / 50);
+        for (let i = 1; i < 50; i++) bounds += line(i / 50);
+        return centres / 50 - bounds / 49;
+    }
+
+    // fraction of questions that read as one clean fill / as smeared multi-fills;
+    // EXACT-centre sampling on purpose — misaligned grids must score badly here
+    // (final reading uses the tolerant darknessMax instead)
     function scoreQuad(corners) {
         const N = flatQuestions(dayObj()).length;
         const nBlocks = blockCount(N);
@@ -639,7 +799,7 @@
             for (let oi = 0; oi < 4; oi++) {
                 const { u, v } = bubbleUV(qi, oi, nBlocks);
                 const p = map(u, v);
-                ds.push(darknessMax(p.x, p.y, r));
+                ds.push(darknessAt(p.x, p.y, r));
             }
             const base = Math.min(ds[0], ds[1], ds[2], ds[3]);
             const marked = ds.filter(d => d - base > FILL_REL).length;
@@ -886,6 +1046,10 @@
         omr.img = img;
         omr.W = W; omr.H = H;
         omr.gray = buildGray(img);
+        // fresh layout params per photo — a previous scan's fitted values must not leak
+        omr.numFrac = 0.20;
+        omr.gapFrac = 0.010;
+        syncTuneSliders();
         omr.corners = [
             { x: W * insetX, y: H * insetY },
             { x: W * (1 - insetX), y: H * insetY },
