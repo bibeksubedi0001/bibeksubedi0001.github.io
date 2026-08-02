@@ -395,12 +395,28 @@
         }
 
         // keep components that look like tall block borders, left to right
-        const cand = comps.filter(c => {
+        let cand = comps.filter(c => {
             const bw = c.maxX - c.minX + 1, bh = c.maxY - c.minY + 1;
             if (bh < 0.32 * h || bw < 0.04 * w || bw > 0.97 * w || bh > 0.985 * h) return false;
             if (c.minX <= 1 || c.minY <= 1 || c.maxX >= w - 2 || c.maxY >= h - 2) return false;
             return c.count / (bw * bh) < 0.6 && c.count > (bw + bh);
-        }).sort((a, b) => (a.minX + a.maxX) - (b.minX + b.maxX));
+        });
+        // drop containers (paper-edge ring / outer frame): a much bigger box holding another candidate
+        const bboxArea = c => (c.maxX - c.minX + 1) * (c.maxY - c.minY + 1);
+        cand = cand.filter(a => !cand.some(b => b !== a &&
+            bboxArea(a) > 1.4 * bboxArea(b) &&
+            b.minX >= a.minX - 2 && b.maxX <= a.maxX + 2 &&
+            b.minY >= a.minY - 2 && b.maxY <= a.maxY + 2));
+        // drop height outliers (edge shadows etc.) vs the median candidate
+        if (cand.length > 1) {
+            const hs = cand.map(c => c.maxY - c.minY + 1).sort((a, b) => a - b);
+            const med = hs[(hs.length - 1) >> 1];
+            cand = cand.filter(c => {
+                const bh = c.maxY - c.minY + 1;
+                return bh > 0.72 * med && bh < 1.38 * med;
+            });
+        }
+        cand.sort((a, b) => (a.minX + a.maxX) - (b.minX + b.maxX));
         if (!cand.length) return false;
 
         // pick the blocks the selected day actually uses
