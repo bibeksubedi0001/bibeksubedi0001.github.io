@@ -162,8 +162,10 @@
        ============================================================ */
     function showView(name) {
         $("modulesGrid").hidden = name !== "dashboard";
+        $("omrEntry").hidden = name !== "dashboard";
         $("testView").hidden = name !== "test";
         $("resultsView").hidden = name !== "results";
+        $("omrView").hidden = name !== "omr";
     }
 
     function openDay(n) {
@@ -821,6 +823,41 @@
         chart.options.scales.y.max = chartMax();
         chart.update();
     }
+
+    /* ============================================================
+       OMR scanner bridge (used by js/omr.js)
+       ============================================================ */
+    window.CEE_APP = {
+        openOmr() {
+            showView("omr");
+            scrollToEl($("omrView"));
+        },
+        closeOmr() {
+            backToDashboard();
+        },
+        isSubmitted(n) {
+            const st = state.days[n];
+            return !!(st && st.submitted);
+        },
+        applyScan(n, answers) {
+            const day = getDayObj(n);
+            if (!day) return;
+            const st = state.days[n];
+            st.answers = answers || {};
+            st.submitted = true;
+            st.deadline = null;
+            st.autoSubmitted = false;
+            state.activeDay = n;
+            state.filter = "all";
+            stopTickerIfIdle();
+            save();
+            renderResults();
+            updateDashboard();
+            renderDayCards();
+            showView("results");
+            scrollToEl($("resultsView"));
+        }
+    };
 
     /* ============================================================
        Init

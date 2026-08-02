@@ -31,7 +31,7 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/styles.css?v=23" />
+    <link rel="stylesheet" href="css/styles.css?v=24" />
 </head>
 
 <body>
@@ -229,6 +229,30 @@
         <!-- ---------- VIEW 1 · landing cards (rendered by JS) ---------- -->
         <section class="modules-grid" id="modulesGrid" aria-label="Available days"></section>
 
+        <!-- ---------- OMR scanner · entry card ---------- -->
+        <section class="card omr-entry" id="omrEntry">
+            <span class="omr-entry-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                    <circle cx="12" cy="13" r="4" />
+                </svg>
+            </span>
+            <div class="omr-entry-txt">
+                <h3>OMR Sheet Scanner</h3>
+                <p>Solved a test on paper? Point the camera at your filled OMR sheet — the black-marked bubbles are
+                    read automatically and graded against the day's answer key.</p>
+            </div>
+            <button type="button" class="btn-primary" id="omrOpenBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                    <circle cx="12" cy="13" r="4" />
+                </svg>
+                Open Scanner
+            </button>
+        </section>
+
         <!-- ---------- VIEW 2 · exam (single scroll, jumbled) ---------- -->
         <section class="card test-view" id="testView" data-accent="blue" hidden>
             <div class="exam-bar">
@@ -358,13 +382,117 @@
             <div class="analysis" id="analysisList"></div>
         </section>
 
+        <!-- ---------- VIEW 4 · OMR sheet scanner ---------- -->
+        <section class="card omr-view" id="omrView" hidden>
+            <div class="omr-head">
+                <button type="button" class="icon-back" id="omrBack" aria-label="Back to dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5M11 18l-6-6 6-6" />
+                    </svg>
+                </button>
+                <div class="omr-head-info">
+                    <h3>OMR Sheet Scanner</h3>
+                    <p>Fill bubbles solid black · scan · the sheet is graded instantly.</p>
+                </div>
+                <label class="omr-day">
+                    <span>Answer key</span>
+                    <select id="omrDaySel"></select>
+                </label>
+            </div>
+
+            <div class="omr-body">
+                <!-- left: camera / capture stage -->
+                <div class="omr-stage">
+                    <div class="omr-frame omr-idle" id="omrIdle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                            <circle cx="12" cy="13" r="4" />
+                        </svg>
+                        <p>Start the camera and align the bubble table inside the guide,<br />or upload a photo of the
+                            sheet.</p>
+                    </div>
+                    <div class="omr-frame omr-live" id="omrLive" hidden>
+                        <video id="omrVideo" playsinline muted autoplay></video>
+                        <canvas class="omr-guide" id="omrGuide"></canvas>
+                    </div>
+                    <div class="omr-frame omr-frozen" id="omrFrozen" hidden>
+                        <canvas id="omrWork" class="omr-work"></canvas>
+                    </div>
+
+                    <div class="omr-actions">
+                        <button type="button" class="btn-primary" id="omrStartBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                <circle cx="12" cy="13" r="4" />
+                            </svg>
+                            Start Camera
+                        </button>
+                        <button type="button" class="btn-primary" id="omrCaptureBtn" hidden>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="9" />
+                                <circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none" />
+                            </svg>
+                            Capture Sheet
+                        </button>
+                        <button type="button" class="btn" id="omrRetakeBtn" hidden>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 2v6h6" />
+                                <path d="M3 13a9 9 0 1 0 3-7.7L3 8" />
+                            </svg>
+                            Retake
+                        </button>
+                        <button type="button" class="btn" id="omrUploadBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <path d="M17 8l-5-5-5 5M12 3v12" />
+                            </svg>
+                            Upload Photo
+                        </button>
+                        <input type="file" id="omrFile" accept="image/*" style="display:none" />
+                    </div>
+
+                    <p class="omr-hint" id="omrHint">Start the camera and align the sheet, or upload a photo.</p>
+
+                    <div class="omr-tune" id="omrTune" hidden>
+                        <label>Number column <input type="range" id="omrNumW" min="8" max="35" value="20" /></label>
+                        <label>Column gap <input type="range" id="omrGap" min="0" max="50" value="10" /></label>
+                    </div>
+                </div>
+
+                <!-- right: detection + grading -->
+                <div class="omr-side">
+                    <div class="omr-sum">
+                        <div class="omr-chip" data-k="ok"><b id="omrCorrect">–</b><span>Correct</span></div>
+                        <div class="omr-chip" data-k="no"><b id="omrWrong">–</b><span>Wrong</span></div>
+                        <div class="omr-chip" data-k="skip"><b id="omrBlank">–</b><span>Blank</span></div>
+                        <div class="omr-chip" data-k="multi"><b id="omrMulti">–</b><span>Multi</span></div>
+                        <div class="omr-chip wide" data-k="marks"><b id="omrMarks">–</b><span
+                                id="omrMarksLbl">Marks</span></div>
+                    </div>
+                    <div class="omr-cells" id="omrCells"></div>
+                    <p class="omr-note">Tap a tile to fix a misread (cycles A → B → C → D → blank). ≠ means
+                        multiple bubbles detected — it stays ungraded until you fix it. Sheet numbers follow the
+                        day's official question order — the same order as Question Analysis.</p>
+                    <button type="button" class="btn-primary omr-apply" id="omrApplyBtn" disabled>Save as Day –
+                        result</button>
+                </div>
+            </div>
+        </section>
+
         <p class="foot">Built for <b>Prakriti Subedi</b> · CEE 2026 preparation · Progress is saved on this device.</p>
     </main>
 
-    <script src="js/day18.js?v=23"></script>
-    <script src="js/day19.js?v=23"></script>
-    <script src="js/questions.js?v=23"></script>
-    <script src="js/app.js?v=23"></script>
+    <script src="js/day18.js?v=24"></script>
+    <script src="js/day19.js?v=24"></script>
+    <script src="js/questions.js?v=24"></script>
+    <script src="js/app.js?v=24"></script>
+    <script src="js/omr.js?v=24"></script>
 </body>
 
 </html>
