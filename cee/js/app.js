@@ -474,7 +474,6 @@
         const day = curDayObj(), st = curState();
         const grid = $("analyticsGrid");
         grid.innerHTML = "";
-        if (day.syllabus) { renderSyllabusTree(day, st, grid); return; }
         day.chapters.forEach(ch => {
             const t = ch.questions.length;
             const correct = chScore(ch, st.answers);
@@ -496,6 +495,7 @@
                  <div class="a-foot"><span>&#10003; ${correct} &nbsp;&#10007; ${wrong} &nbsp;&#8211; ${skipped}</span><span>${pct}% marks</span></div>`;
             grid.appendChild(cardEl);
         });
+        if (day.syllabus) renderSyllabusTree(day, st, grid);
     }
 
     /* Collapsible Subject → Topic → Sub-topic marks breakdown (days with a syllabus map). */
@@ -517,6 +517,10 @@
             return { correct, wrong, skipped: total - correct - wrong, total, marks: correct - wrong * neg };
         };
         const pctOf = (m, t) => (t ? Math.max(0, Math.round(m / t * 100)) : 0);
+
+        const head = el("div", "syl-head");
+        head.innerHTML = `<b>Syllabus-wise breakdown</b><small>official CEE units &rarr; sub-topics &middot; tap to expand</small>`;
+        grid.appendChild(head);
 
         const wrap = el("div", "syl-tree");
 
@@ -543,6 +547,7 @@
                 html += `<details class="syl-topic"><summary class="syl-sum syl-sum-topic">
                         <span class="syl-caret"></span>
                         <span class="syl-title">${tp.topic}</span>
+                        ${tp.weight ? `<span class="syl-weight" title="Questions this unit carries in the real CEE paper">CEE ${tp.weight}Q</span>` : ""}
                         <span class="syl-mini"><span style="width:${pctOf(ts.marks, ts.total)}%"></span></span>
                         <span class="syl-marks">${fmt(ts.marks)}<small>/${ts.total}</small></span>
                     </summary><div class="syl-subs">`;

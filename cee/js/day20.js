@@ -2476,143 +2476,208 @@ const DAY20 = {
     ]
 };
 
+/* Topic names and `weight` (questions the unit carries in the real CEE paper) follow the
+   official MEC "Syllabus for Bachelor Level Common Entrance Examination (2020, revised 2026)". */
 const DAY20_SYLLABUS = [
     { subject: "Physics", accent: "blue", topics: [
-        { topic: "Mechanics & Properties of Matter", subs: [
-            { name: "Units, Dimensions & Vectors", ids: ["d20p1", "d20p2"] },
-            { name: "Kinematics & Projectile Motion", ids: ["d20p3"] },
-            { name: "Laws of Motion & Momentum", ids: ["d20p4"] },
-            { name: "Work, Energy & Circular Motion", ids: ["d20p5"] },
+        { topic: "1. Mechanics", weight: 10, subs: [
+            { name: "Physical Quantities, Vectors & Scalars", ids: ["d20p1", "d20p2"] },
+            { name: "Kinematics", ids: ["d20p3"] },
+            { name: "Dynamics", ids: ["d20p4"] },
             { name: "Rotational Dynamics", ids: ["d20p6"] },
-            { name: "Simple Harmonic Motion", ids: ["d20p7"] },
-            { name: "Fluid Statics & Surface Tension", ids: ["d20p8", "d20p9"] },
-            { name: "Gravitation & Satellites", ids: ["d20p10"] }
+            { name: "Fluid Statics & Dynamics", ids: ["d20p8", "d20p9"] },
+            { name: "Circular & Periodic Motion", ids: ["d20p5", "d20p7"] },
+            { name: "Gravity", ids: ["d20p10"] }
         ] },
-        { topic: "Heat & Thermodynamics", subs: [
-            { name: "Thermometry & Thermal Expansion", ids: ["d20p11", "d20p12"] },
-            { name: "Calorimetry", ids: ["d20p13"] },
-            { name: "Kinetic Theory of Gases", ids: ["d20p14"] },
-            { name: "Laws of Thermodynamics & Heat Engines", ids: ["d20p15", "d20p16"] }
+        { topic: "2. Heat & Thermodynamics", weight: 7, subs: [
+            { name: "Heat, Temperature & Thermometers", ids: ["d20p11"] },
+            { name: "Thermal Expansion", ids: ["d20p12"] },
+            { name: "Quantity of Heat", ids: ["d20p13"] },
+            { name: "Ideal Gas", ids: ["d20p14"] },
+            { name: "First Law of Thermodynamics", ids: ["d20p15"] },
+            { name: "Second Law of Thermodynamics", ids: ["d20p16"] }
         ] },
-        { topic: "Optics & Waves", subs: [
-            { name: "Reflection & Refraction", ids: ["d20p18", "d20p19", "d20p20"] },
-            { name: "Wave Motion & Stationary Waves", ids: ["d20p21", "d20p22"] },
-            { name: "Interference & Sound Intensity", ids: ["d20p23", "d20p24"] }
+        { topic: "3. Waves & Optics", weight: 8, subs: [
+            { name: "Wave Motion", ids: ["d20p22"] },
+            { name: "Stationary Waves", ids: ["d20p21"] },
+            { name: "Acoustic Phenomena", ids: ["d20p24"] },
+            { name: "Reflection, Refraction & Dispersion", ids: ["d20p18", "d20p19", "d20p20"] },
+            { name: "Interference", ids: ["d20p23"] }
         ] },
-        { topic: "Electricity & Magnetism", subs: [
-            { name: "Electrostatics & Capacitors", ids: ["d20p27", "d20p30", "d20p35", "d20p36"] },
-            { name: "Current Electricity & Thermoelectricity", ids: ["d20p25", "d20p28", "d20p31"] },
-            { name: "Magnetic Effects & Magnetic Materials", ids: ["d20p17", "d20p26", "d20p29"] },
-            { name: "Electromagnetic Induction & A.C.", ids: ["d20p32", "d20p34"] },
-            { name: "Field of Charge Distributions (Gauss)", ids: ["d20p33"] }
+        { topic: "4. Current Electricity & Magnetism", weight: 9, subs: [
+            { name: "Electrical Circuits & Instruments", ids: ["d20p25", "d20p31"] },
+            { name: "Thermoelectric Effect", ids: ["d20p28"] },
+            { name: "Alternating Currents", ids: ["d20p34"] },
+            { name: "Magnetic Properties of Materials", ids: ["d20p17"] },
+            { name: "Magnetic Field", ids: ["d20p26", "d20p29"] },
+            { name: "Electromagnetic Induction", ids: ["d20p32"] }
         ] },
-        { topic: "Modern & Nuclear Physics", subs: [
-            { name: "Photoelectric Effect & Photons", ids: ["d20p40", "d20p41", "d20p42"] },
-            { name: "Quantum & Atomic Physics", ids: ["d20p37", "d20p38"] },
-            { name: "Nuclear Physics & Radiation Units", ids: ["d20p39", "d20p49"] },
-            { name: "Semiconductors & Digital Electronics", ids: ["d20p43", "d20p44", "d20p45"] },
-            { name: "Particle Physics & Astrophysics", ids: ["d20p46", "d20p47", "d20p48", "d20p50"] }
+        { topic: "5. Electrostatics & Capacitors", weight: 4, subs: [
+            { name: "Electric Charge & Electric Field", ids: ["d20p27"] },
+            { name: "Field Strength, Potential & Gauss's Law", ids: ["d20p30", "d20p33", "d20p36"] },
+            { name: "Capacitors", ids: ["d20p35"] }
+        ] },
+        { topic: "6. Modern Physics", weight: 12, subs: [
+            { name: "Nuclear Physics", ids: ["d20p39", "d20p47"] },
+            { name: "Electron", ids: ["d20p38", "d20p41"] },
+            { name: "Photon & Photoelectric Effect", ids: ["d20p40", "d20p42"] },
+            { name: "Wave–Particle Duality", ids: ["d20p37"] },
+            { name: "Radioactivity", ids: ["d20p49"] },
+            { name: "Solids & Semiconductor Devices", ids: ["d20p43", "d20p44", "d20p45"] },
+            { name: "Particle Physics & Recent Trends", ids: ["d20p46", "d20p48", "d20p50"] }
         ] }
     ] },
     { subject: "Zoology", accent: "rose", topics: [
-        { topic: "Evolution & Origin of Life", subs: [
-            { name: "Theories & Human Evolution", ids: ["d20z51", "d20z52", "d20z53"] }
+        { topic: "1. Evolutionary Biology", weight: 3, subs: [
+            { name: "Evidences of Evolution", ids: ["d20z52"] },
+            { name: "Theories of Evolution", ids: ["d20z51"] },
+            { name: "Human Evolution", ids: ["d20z53"] }
         ] },
-        { topic: "Animal Diversity & Type Study", subs: [
-            { name: "Protozoa & Parasitology", ids: ["d20z56", "d20z57"] },
-            { name: "Earthworm & Other Invertebrate Types", ids: ["d20z58", "d20z59", "d20z62", "d20z63"] },
-            { name: "Body Plans & Classification", ids: ["d20z60", "d20z61"] },
-            { name: "Frog & Chordate Anatomy", ids: ["d20z54", "d20z55"] }
+        { topic: "2. Animal Diversity & Classification", weight: 4, subs: [
+            { name: "Diagnostic Features: Protozoa to Chordata", ids: ["d20z54", "d20z62", "d20z63"] },
+            { name: "Body Plans & Classification", ids: ["d20z60", "d20z61"] }
         ] },
-        { topic: "Human Anatomy & Physiology", subs: [
-            { name: "Tissues & Histology", ids: ["d20z71"] },
-            { name: "Digestive & Excretory Systems", ids: ["d20z74", "d20z79", "d20z83", "d20z89"] },
-            { name: "Circulatory & Respiratory Systems", ids: ["d20z72", "d20z75", "d20z78", "d20z81"] },
-            { name: "Nervous & Sensory Systems", ids: ["d20z73", "d20z80", "d20z84", "d20z85", "d20z90"] },
-            { name: "Endocrine System", ids: ["d20z76", "d20z77"] },
-            { name: "Reproductive System", ids: ["d20z82", "d20z87", "d20z88"] }
+        { topic: "3. Animal Tissues & Histology", weight: 4, subs: [
+            { name: "Epithelial Tissue", ids: ["d20z70"] },
+            { name: "Connective Tissue", ids: ["d20z71"] },
+            { name: "Nervous Tissue & Receptors", ids: ["d20z73", "d20z85"] }
         ] },
-        { topic: "Health, Disease & Applied Biology", subs: [
-            { name: "Communicable Disease & Immunity", ids: ["d20z66", "d20z67", "d20z68", "d20z69"] },
-            { name: "Cancer, Nutrition & Biotechnology", ids: ["d20z65", "d20z70", "d20z86"] },
-            { name: "Environment & Pollution", ids: ["d20z64"] }
+        { topic: "4. Study of Selected Animals", weight: 6, subs: [
+            { name: "Plasmodium & Malaria", ids: ["d20z56", "d20z57"] },
+            { name: "Earthworm (Pheretima)", ids: ["d20z58", "d20z59"] },
+            { name: "Frog (Rana)", ids: ["d20z55"] }
+        ] },
+        { topic: "5. Human Biology & Physiology", weight: 15, subs: [
+            { name: "Digestive System", ids: ["d20z74", "d20z79"] },
+            { name: "Respiratory System", ids: ["d20z78"] },
+            { name: "Circulatory System", ids: ["d20z72", "d20z75", "d20z81"] },
+            { name: "Excretory System", ids: ["d20z83", "d20z89"] },
+            { name: "Nervous System", ids: ["d20z80", "d20z90"] },
+            { name: "Sense Organs", ids: ["d20z84"] },
+            { name: "Endocrinology", ids: ["d20z76", "d20z77"] },
+            { name: "Reproductive System", ids: ["d20z82", "d20z88"] }
+        ] },
+        { topic: "6. Microbial Diseases & Immunology", weight: 4, subs: [
+            { name: "Diseases (TB, HIV, Hepatitis…)", ids: ["d20z66", "d20z67", "d20z68"] },
+            { name: "Immunity & Vaccines", ids: ["d20z69"] }
+        ] },
+        { topic: "7. Medical Technology & Applied Biology", weight: 2, subs: [
+            { name: "Amniocentesis & Transgenic Organisms", ids: ["d20z86", "d20z87"] },
+            { name: "Applied Microbiology & Nutrition", ids: ["d20z65"] }
+        ] },
+        { topic: "8. Biota, Environment & Conservation", weight: 2, subs: [
+            { name: "Environmental Pollution", ids: ["d20z64"] }
         ] }
     ] },
     { subject: "Botany", accent: "emerald", topics: [
-        { topic: "Plant Anatomy & Physiology", subs: [
-            { name: "Tissues & Vascular Anatomy", ids: ["d20b93", "d20b102", "d20b104"] },
-            { name: "Water Relations & Transpiration", ids: ["d20b100", "d20b103", "d20b107"] },
-            { name: "Photosynthesis & Respiration", ids: ["d20b97", "d20b99"] },
-            { name: "Growth & Photoperiodism", ids: ["d20b101"] }
+        { topic: "1. Basic Components of Life", weight: 2, subs: [
+            { name: "Carbohydrates", ids: ["d20b110"] },
+            { name: "Proteins & Enzymes", ids: ["d20b109"] }
         ] },
-        { topic: "Reproduction in Plants", subs: [
-            { name: "Pollination & Floral Mechanisms", ids: ["d20b94", "d20b95", "d20b98"] },
-            { name: "Embryology & Seed", ids: ["d20b118"] }
+        { topic: "2. Biodiversity", weight: 9, subs: [
+            { name: "Classification Systems", ids: ["d20b124"] },
+            { name: "Monera & Virus", ids: ["d20b121"] },
+            { name: "Fungi & Lichens", ids: ["d20b122", "d20b123"] },
+            { name: "Bryophytes & Pteridophytes", ids: ["d20b119", "d20b120"] },
+            { name: "Gymnosperms", ids: ["d20b118"] },
+            { name: "Angiosperms: Families & Morphology", ids: ["d20b116", "d20b117"] },
+            { name: "Economic Importance & Medicinal Plants of Nepal", ids: ["d20b91"] }
         ] },
-        { topic: "Cell Biology, Genetics & Molecular Biology", subs: [
-            { name: "Cell Structure & Organelles", ids: ["d20b112", "d20b114", "d20b115"] },
-            { name: "Cell Division", ids: ["d20b111", "d20b113", "d20b125"] },
-            { name: "Biomolecules", ids: ["d20b109", "d20b110"] },
-            { name: "Molecular Biology", ids: ["d20b128", "d20b129", "d20b130"] },
-            { name: "Mendelian & Human Genetics", ids: ["d20b126", "d20b127"] },
-            { name: "Genetic Engineering & Tissue Culture", ids: ["d20b92", "d20b96"] }
+        { topic: "3. Ecology & Vegetation", weight: 4, subs: [
+            { name: "Ecosystem Ecology", ids: ["d20b108"] },
+            { name: "Biogeochemical Cycles", ids: ["d20b105"] },
+            { name: "Vegetation, Adaptation & Succession", ids: ["d20b106", "d20b107"] }
         ] },
-        { topic: "Plant Diversity & Taxonomy", subs: [
-            { name: "Bacteria, Algae & Fungi", ids: ["d20b121", "d20b122", "d20b123"] },
-            { name: "Bryophytes, Pteridophytes & Gymnosperms", ids: ["d20b119", "d20b120"] },
-            { name: "Angiosperm Families & Classification", ids: ["d20b116", "d20b117", "d20b124"] },
-            { name: "Economic Botany", ids: ["d20b91"] }
+        { topic: "4. Cell Biology", weight: 5, subs: [
+            { name: "Cell Theory & Cell Types", ids: ["d20b112"] },
+            { name: "Cell Membrane", ids: ["d20b115"] },
+            { name: "Cell Organelles", ids: ["d20b114"] },
+            { name: "Cell Cycle & Cell Division", ids: ["d20b111", "d20b113"] }
         ] },
-        { topic: "Ecology", subs: [
-            { name: "Ecosystem & Nutrient Cycles", ids: ["d20b105", "d20b108"] },
-            { name: "Ecological Succession", ids: ["d20b106"] }
+        { topic: "5. Genetics", weight: 6, subs: [
+            { name: "Genetic Material & DNA Replication", ids: ["d20b128"] },
+            { name: "Central Dogma & Genetic Code", ids: ["d20b129", "d20b130"] },
+            { name: "Mendelian Genetics", ids: ["d20b127"] },
+            { name: "Sex-linked Inheritance", ids: ["d20b126"] },
+            { name: "Mutation & Polyploidy", ids: ["d20b125"] }
+        ] },
+        { topic: "6. Plant Anatomy", weight: 3, subs: [
+            { name: "Plant Tissues & Secondary Growth", ids: ["d20b93"] },
+            { name: "Types of Vascular Bundles", ids: ["d20b102"] },
+            { name: "Monocot & Dicot Root, Stem & Leaf", ids: ["d20b104"] }
+        ] },
+        { topic: "7. Plant Physiology", weight: 6, subs: [
+            { name: "Water Relations, Transpiration & Guttation", ids: ["d20b100", "d20b103"] },
+            { name: "Photosynthesis", ids: ["d20b97"] },
+            { name: "Respiration", ids: ["d20b99"] },
+            { name: "Plant Growth & Photoperiodism", ids: ["d20b101"] }
+        ] },
+        { topic: "8. Developmental Botany", weight: 2, subs: [
+            { name: "Pollination & its Types", ids: ["d20b94", "d20b95"] },
+            { name: "Gametogenesis & Fertilisation", ids: ["d20b98"] }
+        ] },
+        { topic: "9. Applied Botany", weight: 3, subs: [
+            { name: "Plant Tissue Culture", ids: ["d20b92"] },
+            { name: "Genetic Engineering", ids: ["d20b96"] }
         ] }
     ] },
     { subject: "Chemistry", accent: "amber", topics: [
-        { topic: "Physical Chemistry", subs: [
-            { name: "Mole Concept & Stoichiometry", ids: ["d20c131", "d20c141", "d20c142"] },
+        { topic: "1. Physical Chemistry", weight: 17, subs: [
+            { name: "Stoichiometry", ids: ["d20c141"] },
             { name: "Atomic Structure", ids: ["d20c132"] },
-            { name: "Equivalent Concept & Redox", ids: ["d20c134", "d20c135", "d20c137", "d20c146"] },
-            { name: "Chemical & Ionic Equilibrium", ids: ["d20c136", "d20c138", "d20c139", "d20c158"] },
+            { name: "Chemical Bonding & Shape of Molecules", ids: ["d20c144"] },
+            { name: "Redox Reaction", ids: ["d20c135", "d20c137", "d20c142"] },
+            { name: "States of Matter", ids: ["d20c145"] },
+            { name: "Chemical Equilibrium", ids: ["d20c138", "d20c158"] },
+            { name: "Volumetric Analysis & Concentration Terms", ids: ["d20c131", "d20c134"] },
+            { name: "Ionic Equilibrium", ids: ["d20c136", "d20c139"] },
             { name: "Chemical Kinetics", ids: ["d20c143"] },
-            { name: "Thermochemistry", ids: ["d20c147"] },
-            { name: "Bonding & States of Matter", ids: ["d20c144", "d20c145"] },
-            { name: "Electrochemistry", ids: ["d20c140"] }
+            { name: "Electrochemistry", ids: ["d20c140", "d20c146"] },
+            { name: "Chemical Thermodynamics", ids: ["d20c147"] },
+            { name: "Nuclear Chemistry", ids: ["d20c148"] }
         ] },
-        { topic: "Inorganic Chemistry", subs: [
-            { name: "Hydrogen & s-block Elements", ids: ["d20c133", "d20c157"] },
-            { name: "p-block Elements", ids: ["d20c150", "d20c151", "d20c152", "d20c153"] },
-            { name: "Coordination & Nuclear Chemistry", ids: ["d20c148", "d20c156"] },
-            { name: "Metallurgy", ids: ["d20c154", "d20c155"] },
-            { name: "Environmental Chemistry", ids: ["d20c149"] }
+        { topic: "2. Inorganic Chemistry", weight: 10, subs: [
+            { name: "Chemistry of Non-metals", ids: ["d20c152", "d20c153"] },
+            { name: "Chemistry of Metals & Metallurgy", ids: ["d20c133", "d20c154", "d20c155", "d20c157"] },
+            { name: "Coordination Compounds", ids: ["d20c156"] },
+            { name: "Bio-inorganic Chemistry", ids: ["d20c151"] }
         ] },
-        { topic: "Organic Chemistry", subs: [
-            { name: "Hydrocarbons & Hybridisation", ids: ["d20c165", "d20c170", "d20c175"] },
-            { name: "Haloalkanes & Ambident Nucleophiles", ids: ["d20c172", "d20c177", "d20c178"] },
-            { name: "Aldehydes, Ketones & Carboxylic Acids", ids: ["d20c162", "d20c168", "d20c171", "d20c174", "d20c180"] },
-            { name: "Amines & Diazonium Salts", ids: ["d20c164", "d20c176", "d20c179"] },
+        { topic: "3. Organic Chemistry", weight: 17, subs: [
+            { name: "General Organic Chemistry", ids: ["d20c165", "d20c178"] },
+            { name: "Hydrocarbons", ids: ["d20c170", "d20c175"] },
+            { name: "Haloalkanes & Haloarenes", ids: ["d20c172", "d20c177"] },
+            { name: "Aldehydes, Ketones & Carboxylic Acids", ids: ["d20c168", "d20c180"] },
+            { name: "Nitro-compounds", ids: ["d20c179"] },
+            { name: "Amines & Diazonium Salts", ids: ["d20c164", "d20c176"] },
             { name: "Biomolecules", ids: ["d20c163", "d20c169", "d20c173"] }
         ] },
-        { topic: "Applied & Analytical Chemistry", subs: [
-            { name: "Polymers & Industrial Processes", ids: ["d20c159", "d20c160", "d20c161"] },
-            { name: "Dyes & Drugs", ids: ["d20c166", "d20c167"] }
+        { topic: "4. Applied Chemistry", weight: 3, subs: [
+            { name: "Manufacturing Processes", ids: ["d20c160", "d20c161"] },
+            { name: "Chemistry in Service to Mankind", ids: ["d20c159", "d20c166", "d20c167"] },
+            { name: "Environmental Effect of Chemical Industry", ids: ["d20c149"] }
+        ] },
+        { topic: "5. Analytical Chemistry", weight: 3, subs: [
+            { name: "Chemical & Distinction Tests", ids: ["d20c150", "d20c162", "d20c171", "d20c174"] }
         ] }
     ] },
     { subject: "MAT", accent: "slate", topics: [
-        { topic: "Verbal Reasoning", subs: [
-            { name: "Series & Sequences", ids: ["d20m181", "d20m187"] },
+        { topic: "1. Verbal Reasoning", weight: 5, subs: [
             { name: "Coding–Decoding", ids: ["d20m183", "d20m190"] },
-            { name: "Analogy & Classification", ids: ["d20m184", "d20m186", "d20m200"] },
-            { name: "Blood Relations & Direction Sense", ids: ["d20m182", "d20m185"] }
+            { name: "Analogy & Classification", ids: ["d20m184", "d20m186", "d20m200"] }
         ] },
-        { topic: "Numerical Ability", subs: [
+        { topic: "2. Numerical Reasoning", weight: 5, subs: [
             { name: "Ages, Ratio & Distribution", ids: ["d20m188", "d20m194", "d20m195"] },
             { name: "Time, Calendar & Clocks", ids: ["d20m191", "d20m192"] },
             { name: "Geometry & Counting", ids: ["d20m193"] }
         ] },
-        { topic: "Non-Verbal Reasoning", subs: [
+        { topic: "3. Logical Sequencing", weight: 5, subs: [
+            { name: "Series & Meaningful Order", ids: ["d20m181", "d20m187"] },
+            { name: "Blood Relations", ids: ["d20m185"] },
             { name: "Venn Diagrams", ids: ["d20m189"] },
-            { name: "Number Puzzles", ids: ["d20m196"] },
+            { name: "Number Puzzles", ids: ["d20m196"] }
+        ] },
+        { topic: "4. Spatial Relation / Abstract Reasoning", weight: 5, subs: [
+            { name: "Direction Sense", ids: ["d20m182"] },
             { name: "Figure Series & Pattern Completion", ids: ["d20m197", "d20m199"] },
             { name: "Figure Assembly", ids: ["d20m198"] }
         ] }

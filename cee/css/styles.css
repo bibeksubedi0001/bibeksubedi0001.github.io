@@ -1113,6 +1113,11 @@ h1, h2, h3, h4 {
 .analytic .a-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.76rem; color: var(--ink-faint); font-weight: 600; }
 
 /* ---- Chapter-wise syllabus tree (results drill-down) ---- */
+.syl-head {
+    grid-column: 1 / -1; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    margin: 12px 2px 0; font-size: 0.98rem; color: var(--ink);
+}
+.syl-head small { font-weight: 600; font-size: 0.76rem; color: var(--ink-faint); }
 .syl-tree { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 12px; }
 .syl-subject { background: var(--bg); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); overflow: hidden; }
 .syl-sum { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 11px; padding: 15px 16px; user-select: none; }
@@ -1131,6 +1136,11 @@ details[open] > .syl-sum > .syl-caret { transform: rotate(45deg); }
 .syl-topic { background: var(--surface-2); border-radius: var(--radius-xs); box-shadow: var(--shadow-sm); overflow: hidden; }
 .syl-sum-topic { padding: 12px 14px; gap: 10px; }
 .syl-sum-topic .syl-title { font-size: 0.86rem; font-weight: 600; }
+.syl-weight {
+    flex: none; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.02em;
+    padding: 3px 8px; border-radius: 999px; white-space: nowrap;
+    background: var(--accent-soft); color: var(--accent);
+}
 .syl-mini { width: 66px; height: 6px; border-radius: 99px; background: rgba(148, 163, 184, 0.25); overflow: hidden; flex: none; }
 .syl-mini span { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.6s var(--ease); }
 .syl-mini.sm { width: 52px; }
@@ -1145,6 +1155,7 @@ details[open] > .syl-sum > .syl-caret { transform: rotate(45deg); }
     .syl-ico { display: none; }
     .syl-sub-counts { display: none; }
     .syl-mini.sm { width: 40px; }
+    .syl-weight { display: none; }
 }
 
 .analysis-head {
