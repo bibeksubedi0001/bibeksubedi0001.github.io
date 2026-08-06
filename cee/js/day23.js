@@ -19,7 +19,7 @@
 const DAY23 = {
     day: 23,
     title: "Day 23",
-    subtitle: "Human Biology & Physiology · Full Unit · Hard",
+    subtitle: "Human Biology & Physiology · Full Unit",
     durationMinutes: 100,
     negativeMarking: 0.25,
     chapters: [

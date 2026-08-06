@@ -26,7 +26,7 @@
 const DAY22 = {
     day: 22,
     title: "Day 22",
-    subtitle: "Human Biology & Physiology + Biodiversity · Hard",
+    subtitle: "Human Biology & Physiology + Biodiversity",
     durationMinutes: 180,
     negativeMarking: 0.25,
     chapters: [
