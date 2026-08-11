@@ -31,7 +31,7 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/styles.css?v=38" />
+    <link rel="stylesheet" href="css/styles.css?v=39" />
 </head>
 
 <body>
@@ -250,6 +250,31 @@
                     <circle cx="12" cy="13" r="4" />
                 </svg>
                 Open Scanner
+            </button>
+        </section>
+
+        <!-- ---------- Official syllabus · entry card ---------- -->
+        <section class="card omr-entry syllabus-entry" id="syllabusEntry">
+            <span class="omr-entry-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    <path d="M9 7h7M9 11h7" />
+                </svg>
+            </span>
+            <div class="omr-entry-txt">
+                <h3>Official CEE Syllabus</h3>
+                <p>The complete MECEE-BL course as published by the Medical Education Commission — every subject,
+                    unit and topic, with the exact number of questions each unit carries in the real paper.</p>
+            </div>
+            <button type="button" class="btn-primary" id="syllabusOpenBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                </svg>
+                View Syllabus
             </button>
         </section>
 
@@ -493,19 +518,41 @@
             </div>
         </section>
 
+        <!-- ---------- VIEW 5 · official CEE syllabus (reference) ---------- -->
+        <section class="card syllabus-view" id="syllabusView" hidden>
+            <div class="omr-head">
+                <button type="button" class="icon-back" id="syllabusBack" aria-label="Back to dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5M11 18l-6-6 6-6" />
+                    </svg>
+                </button>
+                <div class="omr-head-info">
+                    <h3>Official CEE Syllabus</h3>
+                    <p id="syllabusMeta">&ndash;</p>
+                </div>
+            </div>
+            <div class="syl-ref-stats" id="syllabusStats"></div>
+            <div class="syl-tree" id="syllabusBody"></div>
+            <p class="syl-ref-foot">Source: Medical Education Commission, <i>Syllabus for Bachelor Level Common
+                    Entrance Examination (2020, revised 2026)</i> &mdash; weightage table and unit/topic-wise
+                contents. Tap a subject, then a unit, to read its prescribed topics.</p>
+        </section>
+
         <p class="foot">Built for <b>Prakriti Subedi</b> · CEE 2026 preparation · Progress is saved on this device.</p>
     </main>
 
-    <script src="js/day18.js?v=38"></script>
-    <script src="js/day19.js?v=38"></script>
-    <script src="js/day20.js?v=38"></script>
-    <script src="js/day21.js?v=38"></script>
-    <script src="js/day22.js?v=38"></script>
-    <script src="js/day23.js?v=38"></script>
-    <script src="js/day24.js?v=38"></script>
-    <script src="js/questions.js?v=38"></script>
-    <script src="js/app.js?v=38"></script>
-    <script src="js/omr.js?v=38"></script>
+    <script src="js/day18.js?v=39"></script>
+    <script src="js/day19.js?v=39"></script>
+    <script src="js/day20.js?v=39"></script>
+    <script src="js/day21.js?v=39"></script>
+    <script src="js/day22.js?v=39"></script>
+    <script src="js/day23.js?v=39"></script>
+    <script src="js/day24.js?v=39"></script>
+    <script src="js/syllabus.js?v=39"></script>
+    <script src="js/questions.js?v=39"></script>
+    <script src="js/app.js?v=39"></script>
+    <script src="js/omr.js?v=39"></script>
 </body>
 
 </html>

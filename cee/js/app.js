@@ -163,9 +163,11 @@
     function showView(name) {
         $("modulesGrid").hidden = name !== "dashboard";
         $("omrEntry").hidden = name !== "dashboard";
+        $("syllabusEntry").hidden = name !== "dashboard";
         $("testView").hidden = name !== "test";
         $("resultsView").hidden = name !== "results";
         $("omrView").hidden = name !== "omr";
+        $("syllabusView").hidden = name !== "syllabus";
     }
 
     function openDay(n) {
@@ -196,6 +198,67 @@
         updateDashboard();
         showView("dashboard");
         scrollToEl($("modulesGrid"));
+    }
+
+    /* ============================================================
+       Official CEE syllabus (reference view)
+       ============================================================ */
+    let syllabusBuilt = false;
+
+    function renderSyllabusRef() {
+        if (syllabusBuilt || typeof CEE_SYLLABUS === "undefined") return;
+        const S = CEE_SYLLABUS, ex = S.exam;
+
+        $("syllabusMeta").textContent =
+            ex.questions + " questions \u00b7 " + ex.marks + " marks \u00b7 " +
+            ex.negative + " deducted per wrong answer \u00b7 " + (ex.durationMinutes / 60) + " hours";
+
+        $("syllabusStats").innerHTML = S.subjects.map(sub =>
+            `<div class="syl-ref-stat" data-accent="${sub.accent}">
+                <span class="syl-ref-stat-ico"><svg viewBox="0 0 24 24">${SUBJECT_ICON[sub.name] || ""}</svg></span>
+                <b>${sub.total}</b><span>${sub.name}</span>
+            </div>`).join("") +
+            `<div class="syl-ref-stat total"><b>${ex.marks}</b><span>Total</span></div>`;
+
+        const wrap = $("syllabusBody");
+        wrap.innerHTML = "";
+        S.subjects.forEach(sub => {
+            const subjEl = el("details", "syl-subject");
+            subjEl.dataset.accent = sub.accent;
+
+            let html = `<summary class="syl-sum syl-sum-subject">
+                    <span class="syl-caret"></span>
+                    <span class="syl-ico"><svg viewBox="0 0 24 24">${SUBJECT_ICON[sub.name] || ""}</svg></span>
+                    <span class="syl-title">${sub.name}</span>
+                    <span class="syl-ref-units">${sub.units.length} units</span>
+                    <span class="syl-marks">${sub.total}<small> Q</small></span>
+                </summary><div class="syl-body">`;
+
+            sub.units.forEach(u => {
+                html += `<details class="syl-topic"><summary class="syl-sum syl-sum-topic">
+                        <span class="syl-caret"></span>
+                        <span class="syl-title">${u.n}. ${u.title}</span>
+                        <span class="syl-weight" title="Questions this unit carries in the real CEE paper">CEE ${u.weight}Q</span>
+                        <span class="syl-mini"><span style="width:${Math.round(u.weight / sub.total * 100)}%"></span></span>
+                    </summary><div class="syl-ref-topics">`;
+                u.topics.forEach(t => {
+                    html += `<div class="syl-ref-topic">` +
+                        (t.label ? `<b>${t.label}</b>` : "") +
+                        `<p>${t.detail}</p></div>`;
+                });
+                html += `</div></details>`;
+            });
+            html += `</div>`;
+            subjEl.innerHTML = html;
+            wrap.appendChild(subjEl);
+        });
+        syllabusBuilt = true;
+    }
+
+    function openSyllabus() {
+        renderSyllabusRef();
+        showView("syllabus");
+        scrollToEl($("syllabusView"));
     }
 
     /* ============================================================
@@ -905,6 +968,8 @@
         $("toDashboardBtn").addEventListener("click", backToDashboard);
         $("submitBtn").addEventListener("click", attemptSubmit);
         $("retakeBtn").addEventListener("click", retake);
+        $("syllabusOpenBtn").addEventListener("click", openSyllabus);
+        $("syllabusBack").addEventListener("click", backToDashboard);
         document.querySelectorAll("#filterPills .pill").forEach(p =>
             p.addEventListener("click", () => applyFilter(p.dataset.f)));
     }
