@@ -24,6 +24,14 @@
         Mathematics: '<path d="M4 7h16M9 7v10M15 7v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
     };
 
+    // Civil model-set chapters all share one icon.
+    const CIVIL_ICON = '<path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-5h6v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+    ["Basic Civil", "Structural Mech", "Design of Str", "Soil Mechanics", "Water Resources",
+        "Hydropower", "Irrigation", "Transportation", "Water Supply"].forEach(n => { SUBJECT_ICON[n] = CIVIL_ICON; });
+
+    // "Day 7" for plan days, the set title for standalone model papers.
+    const dayTag = (day) => day.kind === "model" ? day.title : "Day " + day.day;
+
     const RESULT_RING_C = 2 * Math.PI * 52;
 
     /* ---------- state ---------- */
@@ -295,12 +303,13 @@
             card.dataset.accent = "blue";
             card.setAttribute("role", "button");
             card.tabIndex = 0;
+            const badge = day.badge || { top: "Day", main: day.day };
             card.innerHTML =
                 `<div class="dc-top">
-                    <div class="day-badge"><span>Day</span><b>${day.day}</b></div>
+                    <div class="day-badge"><span>${badge.top}</span><b>${badge.main}</b></div>
                     <div class="dc-top-right">
                         <span class="${statusCls}">${statusTxt}</span>
-                        <button type="button" class="dc-scan" title="Scan OMR sheet \u00B7 graded against the Day ${day.day} answer key" aria-label="Scan OMR sheet for Day ${day.day}">
+                        <button type="button" class="dc-scan" title="Scan OMR sheet \u00B7 graded against the ${dayTag(day)} answer key" aria-label="Scan OMR sheet for ${dayTag(day)}">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                         </button>
                     </div>
@@ -386,7 +395,9 @@
     function renderTest() {
         const day = curDayObj();
         $("testTitle").textContent = day.title + " \u00B7 " + day.subtitle;
-        $("testDayNum").textContent = day.day;
+        const badge = day.badge || { top: "Day", main: day.day };
+        $("testDayLabel").textContent = badge.top;
+        $("testDayNum").textContent = badge.main;
         $("testSub").textContent = "All " + dayTotalN(day) + " questions in one paper \u00B7 single correct answer.";
         $("testView").dataset.accent = "blue";
 
@@ -731,7 +742,7 @@
         });
 
         $("heroTotal").innerHTML = `${fmt(marks)}<small style="opacity:.7">/${allQ}</small>`;
-        $("heroDays").textContent = DAYS.length;
+        $("heroDays").textContent = DAYS.filter(d => d.kind !== "model").length;
         $("heroChapters").textContent = allQ;
         $("statScore").innerHTML = `${fmt(marks)}<small>/${allQ}</small>`;
         $("statAtt").innerHTML = `${answered}<small>/${allQ}</small>`;

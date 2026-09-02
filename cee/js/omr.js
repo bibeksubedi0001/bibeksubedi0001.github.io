@@ -329,7 +329,8 @@
 
         const apply = $("omrApplyBtn");
         apply.disabled = !scanned;
-        apply.textContent = "Save as Day " + omr.dayNum + " result";
+        const d = dayObj();
+        apply.textContent = "Save as " + (d && d.kind === "model" ? d.title : "Day " + omr.dayNum) + " result";
     }
 
     function onCellClick(ev) {
@@ -1152,7 +1153,8 @@
             const n = flatQuestions(day).length;
             const opt = document.createElement("option");
             opt.value = day.day;
-            opt.textContent = "Day " + day.day + " \u00B7 " + n + " Q \u00B7 " + day.subtitle;
+            const tag = day.kind === "model" ? day.title : "Day " + day.day;
+            opt.textContent = tag + " \u00B7 " + n + " Q \u00B7 " + day.subtitle;
             sel.appendChild(opt);
         });
         sel.value = String(omr.dayNum);
