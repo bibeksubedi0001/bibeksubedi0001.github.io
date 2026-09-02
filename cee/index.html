@@ -31,7 +31,8 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/styles.css?v=49" />
+    <link rel="stylesheet" href="css/styles.css?v=50" />
+    <link rel="stylesheet" href="css/civil.css?v=50" />
 </head>
 
 <body>
@@ -276,6 +277,208 @@
                 </svg>
                 View Syllabus
             </button>
+        </section>
+
+        <!-- ---------- Civil Engineering model sets · locked entry card ---------- -->
+        <section class="card omr-entry civil-entry" id="civilEntry">
+            <span class="omr-entry-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="11" width="16" height="10" rx="2" />
+                    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                </svg>
+            </span>
+            <div class="omr-entry-txt">
+                <h3>Civil Engineering · Model Sets</h3>
+                <p>A separate, access-key protected section holding the licence-style civil model papers, arranged
+                    set by set. Its own dashboard, exam interface and result sheet live inside.</p>
+            </div>
+            <button type="button" class="btn-primary" id="civilOpenBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="11" width="16" height="10" rx="2" />
+                    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                </svg>
+                Enter Section
+            </button>
+        </section>
+
+        <!-- ---------- Civil Engineering section (gated) ---------- -->
+        <section id="civilSection" aria-label="Civil Engineering model sets" hidden>
+
+            <!-- password gate -->
+            <div id="cvGate">
+                <div class="cv-gate">
+                    <span class="cv-gate-lock" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="11" width="16" height="10" rx="2" />
+                            <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                            <circle cx="12" cy="16" r="1.4" fill="currentColor" stroke="none" />
+                        </svg>
+                    </span>
+                    <h2>Protected section</h2>
+                    <p>The Civil Engineering model sets, exam interface and result dashboard are behind an access
+                        key. Enter it to continue.</p>
+                    <div class="cv-gate-form">
+                        <input type="password" id="cvPass" placeholder="Access key" autocomplete="off"
+                            aria-label="Access key" />
+                        <button type="button" class="cv-btn" id="cvUnlock">Unlock</button>
+                    </div>
+                    <p class="cv-gate-err" id="cvGateErr" hidden>Incorrect access key. Try again.</p>
+                    <p class="cv-gate-back"><button type="button" id="cvGateBack">Back to CEE dashboard</button></p>
+                </div>
+            </div>
+
+            <!-- unlocked portal -->
+            <div id="cvApp" hidden>
+                <div class="cv-head">
+                    <span class="cv-logo" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-5h6v5" />
+                        </svg>
+                    </span>
+                    <div class="cv-head-text">
+                        <div class="l1">Civil Engineering — Examination Portal</div>
+                        <div class="l2">Licence-style model papers · set-wise practice</div>
+                    </div>
+                    <div class="cv-head-actions">
+                        <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" id="cvExit">CEE dashboard</button>
+                        <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" id="cvLock">Lock</button>
+                    </div>
+                </div>
+
+                <!-- civil dashboard -->
+                <div id="cvDash" hidden>
+                    <div class="cv-hero">
+                        <span class="cv-eyebrow">Civil Engineering · Model Set Portal</span>
+                        <h2 id="cvHeroName">Welcome</h2>
+                        <p>Every civil question in this workspace, arranged set by set. Open a set to sit the paper in
+                            the examination interface, then review it question by question with solutions.</p>
+                        <div class="cv-chips" id="cvHeroChips"></div>
+                    </div>
+
+                    <div class="cv-kpis" id="cvKpis"></div>
+
+                    <div class="cv-sec-head">
+                        <div>
+                            <h3>Model sets</h3>
+                            <p>Each set is a full paper. Progress is saved as you go.</p>
+                        </div>
+                        <div class="cv-legend">
+                            <span><i style="background:#2e9e5b"></i>Completed</span>
+                            <span><i style="background:#f2a51e"></i>In progress</span>
+                            <span><i style="background:#c3ccda"></i>Not attempted</span>
+                        </div>
+                    </div>
+                    <div class="cv-set-list" id="cvSetList"></div>
+
+                    <div class="cv-sec-head">
+                        <div>
+                            <h3>Set-wise question distribution</h3>
+                            <p>How each set splits across the civil subjects.</p>
+                        </div>
+                    </div>
+                    <div id="cvBreakdown"></div>
+                </div>
+
+                <!-- civil exam interface -->
+                <div id="cvExam" hidden>
+                    <div class="cv-sec-head">
+                        <div>
+                            <h3 id="cvExamTitle">Civil Model Set</h3>
+                            <p id="cvExamSub"></p>
+                        </div>
+                        <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" id="cvBackToSets">Back to sets</button>
+                    </div>
+
+                    <div class="cv-exam">
+                        <div class="cv-infobox">
+                            <div>
+                                <div class="cv-ei-name" id="cvEiName">Candidate</div>
+                                <div class="cv-ei-timer">Time Remaining: <b id="cvTimer">--:--</b></div>
+                                <div class="cv-ei-answered" id="cvEiAnswered"></div>
+                                <button type="button" class="cv-ei-link" id="cvEiLink">View unanswered questions</button>
+                            </div>
+                            <span class="cv-ei-photo" id="cvEiPhoto">PS</span>
+                            <div class="cv-ei-popup" id="cvEiPopup" hidden></div>
+                        </div>
+
+                        <div class="cv-pager">
+                            <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" id="cvPrev">Previous</button>
+                            <span class="cv-pager-info" id="cvPagerInfo"></span>
+                            <button type="button" class="cv-btn cv-btn-blue cv-btn-sm" id="cvNext">Next</button>
+                        </div>
+                        <div class="cv-pager-nums" id="cvPagerNums"></div>
+
+                        <div id="cvQuestions"></div>
+
+                        <div class="cv-pager cv-pager-bottom">
+                            <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" id="cvPrevBottom">Previous</button>
+                            <span class="cv-pager-info" id="cvPagerInfoBottom"></span>
+                            <button type="button" class="cv-btn cv-btn-blue cv-btn-sm" id="cvNextBottom">Next</button>
+                            <button type="button" class="cv-btn cv-btn-green cv-btn-sm" id="cvSubmitBottom" hidden>Submit exam</button>
+                        </div>
+
+                        <div class="cv-exam-actions">
+                            <button type="button" class="cv-btn cv-btn-blue" id="cvSubmit">Submit exam</button>
+                            <span class="cv-muted" id="cvExamCount"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- civil result -->
+                <div id="cvResult" hidden>
+                    <div class="cv-res-head">
+                        <span class="cv-eyebrow" id="cvResEyebrow">Result</span>
+                        <h2 id="cvResTitle"></h2>
+                        <p id="cvResNote"></p>
+                    </div>
+
+                    <div class="cv-res-stats" id="cvResStats"></div>
+
+                    <div class="cv-sec-head">
+                        <div>
+                            <h3>Subject-wise performance</h3>
+                            <p>Correct answers against the questions each subject carries in this set.</p>
+                        </div>
+                        <div class="cv-head-actions">
+                            <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" id="cvResBack">Back to sets</button>
+                            <button type="button" class="cv-btn cv-btn-blue cv-btn-sm" id="cvRetake">Retake set</button>
+                        </div>
+                    </div>
+                    <div class="cv-subj-table" id="cvSubjTable"></div>
+
+                    <div class="cv-sec-head">
+                        <div>
+                            <h3>Question review</h3>
+                            <p>The correct option is highlighted in green; your wrong pick in red.</p>
+                        </div>
+                    </div>
+                    <div class="cv-review-filters" id="cvReviewFilters">
+                        <button type="button" class="cv-fpill active" data-filter="all">All</button>
+                        <button type="button" class="cv-fpill" data-filter="correct">Correct</button>
+                        <button type="button" class="cv-fpill" data-filter="wrong">Incorrect</button>
+                        <button type="button" class="cv-fpill" data-filter="skipped">Skipped</button>
+                        <button type="button" class="cv-fpill" data-filter="flagged">Flagged</button>
+                    </div>
+                    <div id="cvReview"></div>
+                </div>
+            </div>
+
+            <button type="button" class="cv-btn cv-btn-deep cv-go-top" id="cvGoTop" hidden>Back to top</button>
+
+            <div class="cv-modal-back" id="cvModalBack" hidden>
+                <div class="cv-modal" role="dialog" aria-modal="true" aria-labelledby="cvModalTitle">
+                    <h3 id="cvModalTitle">Submit exam?</h3>
+                    <p id="cvModalBody"></p>
+                    <div class="cv-modal-actions">
+                        <button type="button" class="cv-btn cv-btn-ghost" id="cvModalCancel">Cancel</button>
+                        <button type="button" class="cv-btn cv-btn-green" id="cvModalOk">OK</button>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- ---------- VIEW 2 · exam (single scroll, jumbled) ---------- -->
@@ -542,24 +745,25 @@
         <p class="foot">Built for <b>Prakriti Subedi</b> · CEE 2026 preparation · Progress is saved on this device.</p>
     </main>
 
-    <script src="js/day18.js?v=49"></script>
-    <script src="js/day19.js?v=49"></script>
-    <script src="js/day20.js?v=49"></script>
-    <script src="js/day21.js?v=49"></script>
-    <script src="js/day22.js?v=49"></script>
-    <script src="js/day23.js?v=49"></script>
-    <script src="js/day24.js?v=49"></script>
-    <script src="js/day25.js?v=49"></script>
-    <script src="js/day26.js?v=49"></script>
-    <script src="js/day27.js?v=49"></script>
-    <script src="js/day28.js?v=49"></script>
-    <script src="js/day29.js?v=49"></script>
-    <script src="js/day30.js?v=49"></script>
-    <script src="js/civil-model-1.js?v=49"></script>
-    <script src="js/syllabus.js?v=49"></script>
-    <script src="js/questions.js?v=49"></script>
-    <script src="js/app.js?v=49"></script>
-    <script src="js/omr.js?v=49"></script>
+    <script src="js/day18.js?v=50"></script>
+    <script src="js/day19.js?v=50"></script>
+    <script src="js/day20.js?v=50"></script>
+    <script src="js/day21.js?v=50"></script>
+    <script src="js/day22.js?v=50"></script>
+    <script src="js/day23.js?v=50"></script>
+    <script src="js/day24.js?v=50"></script>
+    <script src="js/day25.js?v=50"></script>
+    <script src="js/day26.js?v=50"></script>
+    <script src="js/day27.js?v=50"></script>
+    <script src="js/day28.js?v=50"></script>
+    <script src="js/day29.js?v=50"></script>
+    <script src="js/day30.js?v=50"></script>
+    <script src="js/civil-sets.js?v=50"></script>
+    <script src="js/syllabus.js?v=50"></script>
+    <script src="js/questions.js?v=50"></script>
+    <script src="js/app.js?v=50"></script>
+    <script src="js/omr.js?v=50"></script>
+    <script src="js/civil.js?v=50"></script>
 </body>
 
 </html>

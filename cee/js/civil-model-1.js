@@ -340,7 +340,7 @@ const CIVIL_MODEL_1 = {
                         { key: "d", text: "σ_r = √(σ_n² + σ_t²)" }
                     ],
                     answer: "d",
-                    explanation: "The resultant stress on an inclined plane is the vector sum of the normal stress (σ_n) and tangential stress (τ), so σ_r = √(σ_n² + τ²). Option (a) is intended to represent this, though it uses σ_t instead of τ."
+                    explanation: "The resultant stress on an inclined plane is the vector sum of the normal stress (σ_n) acting perpendicular to the plane and the tangential or shear stress (τ) acting along it. Being perpendicular to each other, their magnitudes combine by Pythagoras, so σ_r = √(σ_n² + τ²); the symbol σ_t is used here for that tangential component."
                 },
                 {
                     id: "cm1q024",
@@ -744,7 +744,7 @@ const CIVIL_MODEL_1 = {
                         { key: "d", text: "16 m³/s" }
                     ],
                     answer: "d",
-                    explanation: "For rectangular channel, y_c = (q²/g)^(1/3). So 1.13 = (q²/9.81)^(1/3). Cube both sides: 1.13³ = q²/9.81, 1.442 = q²/9.81, q²=14.15, q=3.76 m²/s. Then Q = q*B = 3.76*4=15.04 m³/s ≈16 m³/s. Option (a) 16 m³/s is closest."
+                    explanation: "For a rectangular channel the critical depth is y_c = (q²/g)^(1/3), so cubing gives q² = y_c³ × g = 1.13³ × 9.81 = 14.15, and the discharge per metre width is q = 3.76 m²/s. Multiplying by the 4 m width gives Q = 15.04 m³/s, so the nearest listed discharge is 16 m³/s."
                 },
                 {
                     id: "cm1q053",
@@ -1410,3 +1410,7 @@ const CIVIL_MODEL_1 = {
         }
     ]
 };
+
+/* Registered lazily — js/civil.js injects this file when the set is opened. */
+window.CIVIL_SET_DATA = window.CIVIL_SET_DATA || {};
+window.CIVIL_SET_DATA["civil-1"] = CIVIL_MODEL_1;

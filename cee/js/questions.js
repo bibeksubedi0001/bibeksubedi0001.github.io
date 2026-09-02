@@ -13981,7 +13981,7 @@ DAY17.syllabus = DAY17_SYLLABUS;
 /* All days live here; the dashboard initializes with Day 1.
    Entries with kind:"model" are standalone model papers, not part of the 30-day plan. */
 const STUDENT = { name: "Prakriti Subedi", role: "CEE Aspirant 2026" };
-const DAYS = [DAY1, DAY2, DAY3, DAY4, DAY5, DAY6, DAY7, DAY8, DAY9, DAY10, DAY11, DAY12, DAY13, DAY14, DAY15, DAY16, DAY17, DAY18, DAY19, DAY20, DAY21, DAY22, DAY23, DAY24, DAY25, DAY26, DAY27, DAY28, DAY29, DAY30, CIVIL_MODEL_1];
+const DAYS = [DAY1, DAY2, DAY3, DAY4, DAY5, DAY6, DAY7, DAY8, DAY9, DAY10, DAY11, DAY12, DAY13, DAY14, DAY15, DAY16, DAY17, DAY18, DAY19, DAY20, DAY21, DAY22, DAY23, DAY24, DAY25, DAY26, DAY27, DAY28, DAY29, DAY30];
 
 /* The CEE/IOE subjects shown on the dashboard performance panel.
    Chapters are mapped to a subject via their `subject` field; subjects with
