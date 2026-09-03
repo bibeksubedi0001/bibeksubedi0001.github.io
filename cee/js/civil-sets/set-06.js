@@ -387,7 +387,7 @@ const CIVIL_MODEL_6 = {
                         { key: "d", text: "320 mm" }
                     ],
                     answer: "d",
-                    explanation: "Anchorage length=16×D=16×20 mm=320 mm"
+                    explanation: "A U-bend, that is a 180 degree hook, is credited with an anchorage value of 16 times the bar diameter, so a 20 mm bar gives 16 times 20, or 320 mm. A 90 degree bend is worth only 8 diameters, which is why a hook is used where the development length available is short, such as at a simply supported end."
                 },
                 {
                     id: "cm6q027",
@@ -794,7 +794,7 @@ const CIVIL_MODEL_6 = {
                         { key: "d", text: "2.4m" }
                     ],
                     answer: "b",
-                    explanation: "\\(E_L = \\frac{(y_2 - y_1)^3}{4 y_1 y_2}\\) \\(E_L = \\frac{64}{20} = 3.2\\text{ m}\\)"
+                    explanation: "The energy lost across a hydraulic jump is (y2 minus y1) cubed divided by 4 y1 y2. With depths of 1 m and 5 m the numerator is 4 cubed, that is 64, and the denominator is 4 times 1 times 5, which is 20, so the loss is 3.2 m of head. That dissipation is the whole point of a stilling basin: the energy goes into turbulence and heat instead of scouring the bed downstream."
                 },
                 {
                     id: "cm6q057",
@@ -842,7 +842,7 @@ const CIVIL_MODEL_6 = {
                         { key: "d", text: "3.3" }
                     ],
                     answer: "a",
-                    explanation: "\\((h_s) = 1.5 \\cdot V_p^2 / 2g\\) \\(or\\\\ h_s = 0.5 \\cdot V_p \\cdot \\sqrt{D}\\) take, whichever is greater."
+                    explanation: "Submergence must be deep enough to stop air being drawn into the penstock as a vortex. Two rules are applied, hs equal to 1.5 times the penstock velocity head, and hs equal to 0.5 times the velocity times the root of the diameter, and the larger of the two governs. For this discharge and diameter that works out at about 1.18 m below the minimum forebay level."
                 },
                 {
                     id: "cm6q060",

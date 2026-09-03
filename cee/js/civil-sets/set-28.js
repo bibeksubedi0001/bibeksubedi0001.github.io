@@ -751,13 +751,13 @@ const CIVIL_MODEL_28 = {
                     src: "WATE701-00318",
                     text: "A water flows through a pipe at a velocity 2 m/s. The pressure gauge reading is 2 bar. The datum head is given to be 2 m. Find the piezometric head. Assume all. Bernoulli’s assumptions, Density of water = \\( 1000 \\text{kg/m}^3 \\), \\( g = 9.8 \\text{m/s}^2 \\).",
                     options: [
-                        { key: "a", text: "20.4 m" },
-                        { key: "b", text: "22.4 m" },
-                        { key: "c", text: "22.6 m" },
+                        { key: "a", text: "22.4 m" },
+                        { key: "b", text: "22.6 m" },
+                        { key: "c", text: "20.4 m" },
                         { key: "d", text: "20.6 m" }
                     ],
                     answer: "a",
-                    explanation: "Piezometric head = pressure head + datum head. Pressure = 2 bar = 2 * 10^5 Pa. Pressure head = p/(ρg) = (2e5) / (1000 * 9.8) = 200000 / 9800 = 20.408 m. Datum head = 2 m. So piezometric head = 20.408 + 2 = 22.408 m ≈ 22.4 m. So the option 22.4 m."
+                    explanation: "Piezometric head is the pressure head plus the elevation head, and it deliberately leaves out the velocity head. The pressure head is p over rho g, that is 2 times 10 to the fifth divided by (1000 times 9.8), which is 20.41 m. Adding the 2 m datum head gives 22.41 m, so the velocity of 2 m/s never enters the calculation. The key has been corrected from the printed 20.4 m."
                 },
                 {
                     id: "cm28q054",
@@ -770,7 +770,7 @@ const CIVIL_MODEL_28 = {
                         { key: "d", text: "tangent to the pathline" }
                     ],
                     answer: "b",
-                    explanation: "At any point in a flow, the velocity vector is tangent to the streamline at that point."
+                    explanation: "A streamline is drawn so that the velocity vector is tangent to it at every point, which is what makes flow across a streamline impossible. In steady flow the streamline and the pathline of a particle coincide, but in unsteady flow they separate, since the pattern itself changes while the particle moves."
                 },
                 {
                     id: "cm28q055",

@@ -223,7 +223,7 @@ const CIVIL_MODEL_27 = {
                         { key: "d", text: "None" }
                     ],
                     answer: "a",
-                    explanation: "Normal stress acts perpendicular to the area, while shear stress acts tangential."
+                    explanation: "Normal stress acts at right angles to the surface it is calculated on, and it is tensile or compressive depending on its sense. Shear stress acts in the plane of that surface. Any general stress on a plane can be resolved into these two components, and the planes on which the shear vanishes are the principal planes."
                 },
                 {
                     id: "cm27q015",
@@ -326,7 +326,7 @@ const CIVIL_MODEL_27 = {
                         { key: "d", text: "0.00047" }
                     ],
                     answer: "a",
-                    explanation: "Strain = Stress / E = 70 / 200,000 = 0.00035."
+                    explanation: "Within the elastic range Hooke's law gives strain as stress divided by Young's modulus, that is 70 divided by 200,000, which is 0.00035, or 350 microstrain. Strain is dimensionless, and the very small numbers involved are why it is normally quoted in microstrain in the field."
                 },
                 {
                     id: "cm27q023",
@@ -565,7 +565,7 @@ const CIVIL_MODEL_27 = {
                         { key: "d", text: "40%" }
                     ],
                     answer: "b",
-                    explanation: "For bases, liquid limit should not exceed 25 % and plasticity index must not exceed 6."
+                    explanation: "For a mechanically stabilised base the liquid limit must not exceed 25 percent and the plasticity index must not exceed 6, so that the fines cannot hold enough water to soften the layer or make it swell. The limits are relaxed for a subbase, where the stresses and the consequences of movement are smaller."
                 },
                 {
                     id: "cm27q040",
@@ -1210,7 +1210,7 @@ const CIVIL_MODEL_27 = {
                         { key: "d", text: "490 mm" }
                     ],
                     answer: "a",
-                    explanation: "\\(d = S - 2a\\\\ d = 270\\text{ mm} - 2(110\\text{ mm}) = 50\\text{ mm}\\)"
+                    explanation: "The clear gap between two wheels is the centre-to-centre spacing minus one contact diameter, since half a contact circle sits inside each side of the gap. That is 270 minus 2 times 110, which leaves 50 mm. The gap matters because closely spaced wheels behave as a single load deeper in the pavement, where their stress bulbs overlap."
                 },
                 {
                     id: "cm27q087",

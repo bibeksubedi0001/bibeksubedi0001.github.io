@@ -718,7 +718,7 @@ const CIVIL_MODEL_16 = {
                         { key: "d", text: "3m" }
                     ],
                     answer: "b",
-                    explanation: "For most economical rectangular, B=2y, so y=B/2=4m. Hydraulic radius R = y/2 = 2m."
+                    explanation: "The most economical rectangular section is the one whose width is twice its depth, so a bed width of 8 m corresponds to a depth of 4 m. Its hydraulic radius always works out at half the depth, here 2 m, which is the same result as for the best trapezoidal section and is what makes these proportions the most efficient for a given area."
                 },
                 {
                     id: "cm16q051",
@@ -835,7 +835,7 @@ const CIVIL_MODEL_16 = {
                         { key: "d", text: "55" }
                     ],
                     answer: "c",
-                    explanation: "For triangular channel, side slope 1H:4V means z=4. Specific energy E = y + V²/(2g)=5.06. With y=5, so 5 + V²/(2g)=5.06, thus V²/(2g)=0.06, V=√(0.06*2*9.81)=√1.1772=1.085 m/s. Area A = z y² = 4*25=100 m²? Actually, for triangular, A = z y², but careful: if side slope is 1H:4V, then z = horizontal/vertical = 1/4=0.25. So A = z y² = 0.25*25=6.25 m². Then V=Q/A. Also, for uniform flow, V = C√(R*S). Hydraulic radius R = A/P. Top width T=2zy=2*0.25*5=2.5m. Wetted perimeter P = 2y√(1+z²)=10√(1+0.0625)=10*1.031=10.31m. R=6.25/10.31=0.606m. S=0.001. So V = C√(0.606*0.001)=C√0.000606=C*0.02462. Set equal to 1.085, so C=1.085/0.02462=44.07. Close to 45. the option 45 is correct."
+                    explanation: "For a triangular section the area is z y squared and the top width is 2zy, so the hydraulic depth is half the flow depth. Subtracting the depth from the specific energy leaves the velocity head, from which the velocity follows, and Chezy's relation V equal to C times the root of RS then gives the coefficient C once the hydraulic radius and the bed slope of 1 in 1000 are substituted."
                 },
                 {
                     id: "cm16q060",

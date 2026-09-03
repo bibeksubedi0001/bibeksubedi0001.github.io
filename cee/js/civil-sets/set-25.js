@@ -201,7 +201,7 @@ const CIVIL_MODEL_25 = {
                         { key: "d", text: "Axis of rotation" }
                     ],
                     answer: "b",
-                    explanation: "This is a repeat of question 16. The axis is called the axis of reference."
+                    explanation: "The axis about which a moment of area is taken is the axis of reference. Moving to a parallel axis changes the value by A times the square of the distance between them, which is the parallel axis theorem, so a second moment of area means nothing until the axis it refers to is stated."
                 }
             ]
         },
@@ -497,7 +497,7 @@ const CIVIL_MODEL_25 = {
                         { key: "d", text: "insufficient data" }
                     ],
                     answer: "c",
-                    explanation: "K_a is always less than 1, while K_p is always greater than 1. Therefore, K_a &lt; K_p."
+                    explanation: "The active coefficient is always less than one and the passive coefficient always greater, and they are reciprocals of each other. Active pressure is the minimum the soil can exert, once it has stretched enough to mobilise its own shear strength, while passive is the maximum reached by compressing it, so Ka is necessarily the smaller."
                 },
                 {
                     id: "cm25q035",
@@ -510,7 +510,7 @@ const CIVIL_MODEL_25 = {
                         { key: "d", text: "greater than coefficient of active pressure" }
                     ],
                     answer: "d",
-                    explanation: "The relationship is K_a &lt; K_0 &lt; K_p. For most soils, K_0 is greater than K_a."
+                    explanation: "The three coefficients rank as Ka less than K0 less than Kp. At rest the soil has not moved at all, so none of its shear strength has been called on to relieve the horizontal stress, and the pressure sits above the active value but well below the passive one."
                 },
                 {
                     id: "cm25q036",
@@ -562,7 +562,7 @@ const CIVIL_MODEL_25 = {
                         { key: "d", text: "0.293" }
                     ],
                     answer: "d",
-                    explanation: "Using Jaky's formula: K₀ = 1 - sinφ = 1 - sin(45°) = 1 - (0.7071) = 0.2929 ≈ 0.293."
+                    explanation: "Jaky's relation gives K0 equal to 1 minus sin phi, and sin 45 degrees is 0.7071, so K0 is 0.293. The trend is worth noting: the stronger the soil, the smaller the horizontal stress it holds at rest, because a higher friction angle lets the grains carry more of the load by arching."
                 },
                 {
                     id: "cm25q040",
@@ -709,12 +709,12 @@ const CIVIL_MODEL_25 = {
                     text: "A cuboidal beaker is half filled with water. By what percent will the hydrostatic force on one side of the beaker change if the water level is doubled?",
                     options: [
                         { key: "a", text: "50% increase" },
-                        { key: "b", text: "200% increase" },
-                        { key: "c", text: "100% increase" },
-                        { key: "d", text: "300% increase" }
+                        { key: "b", text: "100% increase" },
+                        { key: "c", text: "300% increase" },
+                        { key: "d", text: "200% increase" }
                     ],
                     answer: "c",
-                    explanation: "Hydrostatic force on a plane surface is F = ρg h_c A, where h_c is the depth of the centroid. If the beaker is cuboidal, the side is rectangular. If water level is doubled, the area A doubles and the centroid depth h_c doubles. Thus, F new = ρg (2h_c)(2A) = 4 ρg h_c A = 4F_original. This is a 300% increase. However, the question is cut off. Assuming it asks for the change when level is doubled, the answer should be 300% increase, but it's not listed. The question is incomplete in the provided text."
+                    explanation: "The force on a vertical side is F equal to rho g times the depth of the centroid times the wetted area. Doubling the water level doubles the centroid depth and doubles the wetted area, so the force becomes four times what it was. Going from F to 4F is a rise of 3F, that is a 300 percent increase; in general the force on a side varies with the square of the depth. The key has been corrected from the printed 100 percent."
                 },
                 {
                     id: "cm25q051",

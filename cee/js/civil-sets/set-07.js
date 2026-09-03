@@ -275,7 +275,7 @@ const CIVIL_MODEL_7 = {
                         { key: "d", text: "3" }
                     ],
                     answer: "a",
-                    explanation: "m=2j−3 m=2*8−3=16−3=13 The truss currently has 11 members, so the additional members needed are: 13−11=2"
+                    explanation: "A plane truss is just stiff when m equals 2j minus 3, so with 8 joints it needs 2 times 8 minus 3, that is 13 members. It has only 11, so it is a mechanism and two more members are required. Had it carried more than 13 it would have been statically indeterminate instead, and the extra members would be redundant."
                 },
                 {
                     id: "cm7q019",

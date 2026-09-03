@@ -532,7 +532,7 @@ const CIVIL_MODEL_29 = {
                 {
                     id: "cm29q037",
                     src: "SOIL136-00375",
-                    text: "erzaghi’s bearing capacity equation is not applicable for ______",
+                    text: "Terzaghi&#39;s bearing capacity equation is not applicable for ______",
                     options: [
                         { key: "a", text: "Narrow slope" },
                         { key: "b", text: "Depth effect and inclination factor" },
@@ -540,7 +540,7 @@ const CIVIL_MODEL_29 = {
                         { key: "d", text: "All of the mentioned" }
                     ],
                     answer: "b",
-                    explanation: "Terzaghi's original equation does not explicitly include factors to account for the depth of the foundation (beyond D_f in the surcharge term) or for inclined loads. Later modifications by other authors (e.g., Meyerhof, Hansen, Vesic) introduced depth, shape, and inclination factors."
+                    explanation: "Terzaghi derived his equation for a shallow, continuous footing with a rough base, on homogeneous soil, carrying a vertical concentric load, with the depth of embedment no greater than the width. Loads that are inclined or eccentric, deep foundations and layered ground all fall outside those assumptions and need a different treatment. The stem is repaired here; the bank printed it with its first letter missing."
                 },
                 {
                     id: "cm29q038",

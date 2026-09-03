@@ -45,7 +45,7 @@ const CIVIL_MODEL_11 = {
                         { key: "d", text: "Winter" }
                     ],
                     answer: "d",
-                    explanation: "Bitumen is a thermoplastic material that becomes hard and brittle at low temperatures, which are typical in winter."
+                    explanation: "Bitumen is thermoplastic: it softens and flows when warm and stiffens as it cools. In winter the binder becomes hard and brittle, so the pavement loses flexibility and is prone to cracking, while in summer the same material softens and can rut or bleed. That is why grades are chosen to suit the local temperature range."
                 },
                 {
                     id: "cm11q002",
@@ -110,7 +110,7 @@ const CIVIL_MODEL_11 = {
                         { key: "d", text: "NS 84/2035" }
                     ],
                     answer: "a",
-                    explanation: "Nepal Standard NS 49:2041 specifies the requirements for burnt clay bricks used in construction in Nepal."
+                    explanation: "Nepal Standard NS 49:2041 specifies burnt clay bricks, covering dimensions, compressive strength, water absorption and efflorescence. Meeting it is what allows a brick to be graded first, second or third class, and the class in turn decides where in the structure it may be used."
                 },
                 {
                     id: "cm11q007",
@@ -540,7 +540,7 @@ const CIVIL_MODEL_11 = {
                         { key: "d", text: "Liquid Limit" }
                     ],
                     answer: "d",
-                    explanation: "The Liquid Limit (LL or w_l) is the water content at which a soil changes from a liquid state to a plastic state."
+                    explanation: "The liquid limit is the water content at the boundary between the liquid and plastic states, measured in the Casagrande apparatus as the content at which the groove closes over 13 mm in 25 blows. Together with the plastic limit it gives the plasticity index, which is the single most useful index for classifying a fine-grained soil."
                 },
                 {
                     id: "cm11q038",
@@ -553,7 +553,7 @@ const CIVIL_MODEL_11 = {
                         { key: "d", text: "None" }
                     ],
                     answer: "a",
-                    explanation: "The Plastic Limit (PL or w_p) is the water content at which a soil changes from a plastic state to a semi-solid state."
+                    explanation: "The plastic limit is the water content at which the soil stops behaving plastically and begins to crumble, found by rolling a thread until it breaks up at 3 mm diameter. The gap between the liquid and plastic limits is the plasticity index, so a soil with a wide gap stays workable over a large range of moisture."
                 },
                 {
                     id: "cm11q039",
@@ -692,7 +692,7 @@ const CIVIL_MODEL_11 = {
                         { key: "d", text: "2.4m" }
                     ],
                     answer: "c",
-                    explanation: "\\(E_L = \\frac{(y_2 - y_1)^3}{4 y_1 y_2}\\) \\(E_L = \\frac{(5 - 1)^3}{4 \\times 1 \\times 5}\\) \\(E_L = 3.2 \\text{ m}\\)"
+                    explanation: "The head lost across a hydraulic jump is (y2 minus y1) cubed over 4 y1 y2. With 1 m and 5 m that is 4 cubed over 20, which is 3.2 m. The jump is deliberately created in a stilling basin precisely because it destroys energy in a short, controlled length instead of letting the fast flow scour the channel downstream."
                 },
                 {
                     id: "cm11q049",
@@ -770,7 +770,7 @@ const CIVIL_MODEL_11 = {
                         { key: "d", text: "Cannot be determined due to insufficient information" }
                     ],
                     answer: "a",
-                    explanation: "Specific volume (v) is the reciprocal of mass density (ρ), v = 1/ρ. Therefore, if ρ1 &gt; ρ2, then v1 &lt; v2."
+                    explanation: "Specific volume is the volume occupied by unit mass, so it is the reciprocal of density. If fluid 1 is the denser of the two, its specific volume must be the smaller, so v1 is less than v2. The same reciprocal relationship is why specific volume is convenient in thermodynamics, where density varies widely."
                 },
                 {
                     id: "cm11q055",
@@ -909,7 +909,7 @@ const CIVIL_MODEL_11 = {
                         { key: "d", text: "420mm" }
                     ],
                     answer: "c",
-                    explanation: "The width of Pelton wheel buckets is typically 5 times the jet diameter. Calculation: 5 * 85 mm = 425 mm."
+                    explanation: "Pelton bucket proportions are set as multiples of the jet diameter: the width is about 5 times the jet, the depth about 1.2 times and the length about 2.5 times. With an 85 mm jet the width is therefore 5 times 85, that is 425 mm. The runner diameter enters a different rule, the jet ratio, which fixes the number of buckets."
                 },
                 {
                     id: "cm11q065",

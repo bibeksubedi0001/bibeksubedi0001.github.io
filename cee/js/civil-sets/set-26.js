@@ -273,7 +273,7 @@ const CIVIL_MODEL_26 = {
                         { key: "d", text: "2.5" }
                     ],
                     answer: "d",
-                    explanation: "E = 2G(1+ν). So, E/G = 2(1+ν) = 2(1.25) = 2.5."
+                    explanation: "The elastic constants are linked by E equal to 2G times (1 plus mu), so the ratio E over G is simply 2 times 1.25, which is 2.5. For most metals, with Poisson's ratio near 0.3, that ratio comes out around 2.6, which is why the shear modulus is roughly 40 percent of Young's modulus."
                 },
                 {
                     id: "cm26q019",
@@ -286,7 +286,7 @@ const CIVIL_MODEL_26 = {
                         { key: "d", text: "0.6" }
                     ],
                     answer: "a",
-                    explanation: "E = 3K(1-2ν). So, E/K = 3(1-2ν) = 3(1-0.6) = 3(0.4) = 1.2."
+                    explanation: "The bulk modulus is related to Young's modulus by E equal to 3K times (1 minus 2 mu), so E over K is 3 times (1 minus 0.6), which is 1.2. Notice that as Poisson's ratio approaches 0.5 the bracket goes to zero and K becomes enormous, which is exactly the incompressible limit that rubber and saturated clay approach."
                 },
                 {
                     id: "cm26q020",
@@ -761,13 +761,13 @@ const CIVIL_MODEL_26 = {
                     src: "WATE701-00296",
                     text: "A water drop of diameter 1 cm breaks into 1000 similar droplets of same diameter. What will be the gain or loss in the surface energy? (Take surface tension as 0.075 N/m)",
                     options: [
-                        { key: "a", text: "gain of 0.212 mJ" },
+                        { key: "a", text: "gain of 0.424 mJ" },
                         { key: "b", text: "loss of 0.212 mJ" },
                         { key: "c", text: "loss of 0.424 mJ" },
-                        { key: "d", text: "gain of 0.424 mJ" }
+                        { key: "d", text: "gain of 0.212 mJ" }
                     ],
                     answer: "d",
-                    explanation: "Surface energy E = σ * A. Initial area A_i = πD² = π(0.01)^2 = 0.0001π m². Final area A_f = 1000 * πd². Since volume is conserved, 1000 * (4/3)π(d/2)³ = (4/3)π(0.005)³. So, d = 0.01 / 10 = 0.001 m. A_f = 1000 * π(0.001)^2 = 1000 * 1e-6 π = 0.001π m². Change in area ΔA = A_f - A_i = 0.001π - 0.0001π = 0.0009π m². Change in energy ΔE = σ ΔA = 0.075 * 0.0009 * 3.1416 ≈ 2.12e-4 J = 0.212 mJ. This is a gain in surface energy. the option \"gain of 0.212 mJ\" is gain of 0.212 mJ."
+                    explanation: "Volume is conserved, so 1000 droplets each have one tenth the diameter of the parent drop, 1 mm against 1 cm. The surface area rises from pi times 0.01 squared, that is 3.14 times 10 to the minus 4, to 1000 times pi times 0.001 squared, which is 3.14 times 10 to the minus 3 square metres. The gain is 2.83 times 10 to the minus 3, and multiplying by the surface tension of 0.075 gives 0.212 mJ of extra surface energy. Breaking a drop up always costs energy. The key has been corrected from the printed 0.424 mJ."
                 },
                 {
                     id: "cm26q055",

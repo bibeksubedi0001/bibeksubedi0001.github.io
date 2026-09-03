@@ -10,7 +10,7 @@
     /* ---------- constants ---------- */
     const STORAGE_KEY = "cee_dashboard_prakriti";
     const LEGACY_KEYS = ["cee_dashboard_prakriti_v3", "cee_dashboard_prakriti_v2", "cee_dashboard_prakriti_v1"];
-    const PLANNED_DAYS = 30;
+    const PLANNED_DAYS = 31;
     const TEST_DURATION_MS = 36 * 60 * 1000; // default 36 minutes per test
     // Per-day override via day.durationMinutes (e.g. Day 14 mock test = 180 min).
     const dayDurationMs = (day) => (day && day.durationMinutes ? day.durationMinutes : 36) * 60 * 1000;
@@ -28,6 +28,9 @@
     const CIVIL_ICON = '<path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-5h6v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
     ["Basic Civil", "Structural Mech", "Design of Str", "Soil Mechanics", "Water Resources",
         "Hydropower", "Irrigation", "Transportation", "Water Supply"].forEach(n => { SUBJECT_ICON[n] = CIVIL_ICON; });
+
+    // The Day 31 reasoning paper has no subject of its own, so its four sections share the MAT icon.
+    ["Logical", "Quantitative", "Analytical", "Non-verbal"].forEach(n => { SUBJECT_ICON[n] = SUBJECT_ICON.MAT; });
 
     // "Day 7" for plan days, the set title for standalone model papers.
     const dayTag = (day) => day.kind === "model" ? day.title : "Day " + day.day;

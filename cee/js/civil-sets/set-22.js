@@ -440,7 +440,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "1.25" }
                     ],
                     answer: "d",
-                    explanation: "As per IS 800:2007, the partial safety factor for shop welds (γmw) is 1.25."
+                    explanation: "IS 800:2007 sets the partial safety factor for weld material at 1.25 for shop welding and 1.50 for site welding. The site value is higher because welding in position, in the open and under less supervision, gives a less reliable weld than one made under controlled shop conditions."
                 },
                 {
                     id: "cm22q031",
@@ -744,7 +744,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "None of these" }
                     ],
                     answer: "a",
-                    explanation: "On a mild slope, the normal depth (y_n) is greater than the critical depth (y_c)."
+                    explanation: "A slope is classed as mild when the normal depth it produces is greater than the critical depth, so uniform flow on it is subcritical with a Froude number below one. On a steep slope the normal depth falls below critical and the flow is supercritical, and it is this comparison, not the numerical gradient, that defines the class."
                 },
                 {
                     id: "cm22q053",

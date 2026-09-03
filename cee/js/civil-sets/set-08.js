@@ -578,7 +578,7 @@ const CIVIL_MODEL_8 = {
                         { key: "d", text: "1-n = 1/(1+e)" }
                     ],
                     answer: "d",
-                    explanation: "Derive from porosity, void ratio and their Relationship formula"
+                    explanation: "Porosity is the void volume over the total volume and void ratio is the void volume over the solid volume, so n equals e over (1 plus e). Subtracting from one gives 1 minus n equal to 1 over (1 plus e), which is just the solid fraction. The pair of conversions, n equal to e over (1 plus e) and e equal to n over (1 minus n), is worth memorising because phase problems switch between them constantly."
                 },
                 {
                     id: "cm8q041",
@@ -1106,13 +1106,13 @@ const CIVIL_MODEL_8 = {
                     src: "IRRI951-00078",
                     text: "In a Sarda type fall, the rectangular crest, may be used for discharge upto",
                     options: [
-                        { key: "a", text: "10 ounces" },
-                        { key: "b", text: "14 ounces" },
-                        { key: "c", text: "6 ounces" },
+                        { key: "a", text: "6 ounces" },
+                        { key: "b", text: "10 ounces" },
+                        { key: "c", text: "14 ounces" },
                         { key: "d", text: "20 ounces" }
                     ],
                     answer: "c",
-                    explanation: "A Sarda type fall uses a rectangular crest for the smaller discharges, up to about 14 cumecs, and a trapezoidal crest above that, where the greater flow needs the extra stability and the better discharge coefficient."
+                    explanation: "A Sarda type fall uses a rectangular crest for discharges up to about 14 cumecs and a trapezoidal crest above that, where the larger flow needs the extra base width for stability and gives a better coefficient of discharge. The crest width is set from the head over it, and the fall is built with a cistern below to dissipate the energy. The key has been corrected from the printed 6."
                 }
             ]
         },

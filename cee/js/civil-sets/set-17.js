@@ -275,7 +275,7 @@ const CIVIL_MODEL_17 = {
                         { key: "d", text: "Tenacity" }
                     ],
                     answer: "c",
-                    explanation: "Resilience is the ability to absorb energy elastically, which is stored as strain energy."
+                    explanation: "Resilience is the energy a material absorbs while deforming elastically and gives back completely on unloading, so it is simply the strain energy stored up to the elastic limit. Per unit volume it is the area under the elastic part of the stress-strain curve, and its maximum value is called the modulus of resilience."
                 },
                 {
                     id: "cm17q019",
@@ -288,7 +288,7 @@ const CIVIL_MODEL_17 = {
                         { key: "d", text: "displacement" }
                     ],
                     answer: "d",
-                    explanation: "In the virtual work method, the virtual quantity is a small, imaginary displacement."
+                    explanation: "In the virtual work method the structure already in equilibrium is given an imaginary, infinitesimally small displacement that violates no support condition, and the work done by the real forces through it is set to zero. The displacement is the virtual quantity; in the companion unit load method it is a dummy force that is virtual instead."
                 },
                 {
                     id: "cm17q020",

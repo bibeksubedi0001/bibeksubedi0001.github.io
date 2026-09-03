@@ -249,7 +249,7 @@ const CIVIL_MODEL_19 = {
                         { key: "d", text: "9/10" }
                     ],
                     answer: "c",
-                    explanation: "For a circular cross-section, the shear factor k is 10/9."
+                    explanation: "The shear strain energy is written as the integral of k V squared over 2AG, where k corrects for the fact that shear stress is not uniform over the section. The factor is 6/5 for a rectangle and 10/9 for a circle, both greater than one because the peak shear at the neutral axis exceeds the average."
                 },
                 {
                     id: "cm19q017",
@@ -262,7 +262,7 @@ const CIVIL_MODEL_19 = {
                         { key: "d", text: "Maximum" }
                     ],
                     answer: "d",
-                    explanation: "In simply supported beams, the slope is maximum at the supports and zero at the center."
+                    explanation: "For a symmetrically loaded simply supported beam the elastic curve is flattest at mid-span, where the slope passes through zero, and tilts most sharply where it meets the supports. Deflection is the other way round, zero at the supports and greatest at mid-span, which is why slope and deflection limits control different sections."
                 },
                 {
                     id: "cm19q018",
@@ -1199,7 +1199,7 @@ const CIVIL_MODEL_19 = {
                         { key: "d", text: "Tanθ" }
                     ],
                     answer: "d",
-                    explanation: "Superelevation (e) is the tangent of the angle of banking (θ). Therefore, e = tanθ."
+                    explanation: "Superelevation is defined as the rise across the carriageway divided by its width, which is the tangent of the angle of banking. Because that angle is small in practice, tan theta, sin theta and the angle in radians are almost equal, and the standard design equation e plus f equal to v squared over 127R relies on that approximation."
                 },
                 {
                     id: "cm19q086",

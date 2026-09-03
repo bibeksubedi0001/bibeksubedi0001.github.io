@@ -175,7 +175,7 @@ const CIVIL_MODEL_13 = {
                         { key: "d", text: "12.5, 10" }
                     ],
                     answer: "d",
-                    explanation: "The standard aggregate crushing value test (IS: 2386-Part IV) uses aggregates sized between 12.5mm and 10.0mm."
+                    explanation: "The aggregate crushing value test uses the fraction passing the 12.5 mm sieve and retained on the 10 mm sieve, so that every particle is of comparable size and the result reflects the material rather than the grading. The sample is compacted in a 15 cm cylinder and loaded to 40 tonnes over 10 minutes, and the fines passing 2.36 mm are then weighed."
                 },
                 {
                     id: "cm13q012",
@@ -288,7 +288,7 @@ const CIVIL_MODEL_13 = {
                         { key: "d", text: "4EI/L" }
                     ],
                     answer: "d",
-                    explanation: "For a prismatic beam element, the rotational stiffness at end A with end B fixed is 4EI/L."
+                    explanation: "With the far end fully fixed, the moment needed at A for unit rotation there is 4EI over L, and half of it, 2EI over L, carries over to the far end. That carry-over factor of one half is what makes moment distribution work, and the stiffness falls to 3EI over L if the far end is pinned instead."
                 },
                 {
                     id: "cm13q020",
@@ -301,7 +301,7 @@ const CIVIL_MODEL_13 = {
                         { key: "d", text: "4EI/L" }
                     ],
                     answer: "a",
-                    explanation: "For a prismatic beam element, the rotational stiffness at end A with end B hinged is 3EI/L."
+                    explanation: "When the far end is pinned it can rotate freely, so it offers less restraint and the stiffness at A drops to 3EI over L, three quarters of the fixed-end value. Nothing carries over to a pinned end, which is why modified stiffness is used to shorten moment distribution on beams with simply supported ends."
                 },
                 {
                     id: "cm13q021",
@@ -353,7 +353,7 @@ const CIVIL_MODEL_13 = {
                         { key: "d", text: "Depends upon loading" }
                     ],
                     answer: "a",
-                    explanation: "In the slope deflection method, moments acting clockwise on the member end are considered positive."
+                    explanation: "The slope deflection method takes clockwise moments acting on the member ends as positive, along with clockwise joint rotations. The sign convention is arbitrary but must be applied consistently, because the fixed-end moments, the rotation terms and the sway terms in the equation all depend on it."
                 }
             ]
         },
@@ -388,7 +388,7 @@ const CIVIL_MODEL_13 = {
                         { key: "d", text: "0.61" }
                     ],
                     answer: "c",
-                    explanation: "For Fe 415 steel, the maximum neutral axis depth ratio (x_u/d) for balanced section is 0.48. For Fe 250, it is 0.53."
+                    explanation: "The limiting neutral axis depth follows from strain compatibility, and for Fe 415 it is 0.48d. For Fe 250 the steel yields at a lower strain so the limit rises to 0.53d, and for Fe 500 it falls to 0.46d. Keeping the neutral axis above the limit forces the steel to yield before the concrete crushes, which is what makes the failure ductile."
                 },
                 {
                     id: "cm13q027",
@@ -667,7 +667,7 @@ const CIVIL_MODEL_13 = {
                         { key: "d", text: "two phase system with soil and water" }
                     ],
                     answer: "d",
-                    explanation: "A fully saturated soil has no air pores. Therefore, it consists of only two phases: solid soil particles and water."
+                    explanation: "A fully saturated soil has water filling every void, so the air phase disappears and only solids and water remain, making it a two-phase system. A completely dry soil is the other two-phase case, solids and air, while partially saturated soil in the field is the general three-phase system."
                 }
             ]
         },
@@ -689,7 +689,7 @@ const CIVIL_MODEL_13 = {
                         { key: "d", text: "Agonic line" }
                     ],
                     answer: "a",
-                    explanation: "Isohyets are lines on a map connecting points that receive equal amounts of rainfall during a specific period."
+                    explanation: "Isohyets are contours of equal rainfall depth over a given period, drawn by interpolating between gauge readings with knowledge of the terrain. The isohyetal method then computes catchment average rainfall by weighting each depth band by the area between successive lines, which is why it handles orographic rainfall better than Thiessen polygons."
                 },
                 {
                     id: "cm13q049",
@@ -728,7 +728,7 @@ const CIVIL_MODEL_13 = {
                         { key: "d", text: "Hyetograph" }
                     ],
                     answer: "d",
-                    explanation: "A hyetograph is a graphical representation of the distribution of rainfall intensity over time during a storm event."
+                    explanation: "A hyetograph is a bar or line plot of rainfall intensity against time through a storm, so its area is the total depth. It is the input to a unit hydrograph analysis, whereas a hydrograph plots discharge against time and a mass curve plots accumulated depth."
                 },
                 {
                     id: "cm13q052",

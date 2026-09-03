@@ -188,7 +188,7 @@ const CIVIL_MODEL_10 = {
                         { key: "d", text: "Kerosene" }
                     ],
                     answer: "b",
-                    explanation: "Bitumen is a viscous, black material derived as a residue from the distillation of petroleum."
+                    explanation: "Bitumen is the heavy residue left at the bottom of the fractional distillation column when crude petroleum is refined, after the lighter fractions have been drawn off. Coal yields tar, which is chemically different and more brittle, and kerosene is one of the light fractions rather than a source."
                 },
                 {
                     id: "cm10q013",
@@ -201,7 +201,7 @@ const CIVIL_MODEL_10 = {
                         { key: "d", text: "Carbon sulfide" }
                     ],
                     answer: "c",
-                    explanation: "Carbon disulfide is a common organic solvent used to dissolve bitumen for various tests and applications."
+                    explanation: "Bitumen is completely soluble in carbon disulphide, and that property is the basis of the solubility test: anything left undissolved is inert mineral matter or carbon, which indicates contamination or overheating during manufacture. Trichloroethylene is now often used instead because carbon disulphide is dangerously flammable."
                 }
             ]
         },
@@ -275,7 +275,7 @@ const CIVIL_MODEL_10 = {
                         { key: "d", text: "Crown" }
                     ],
                     answer: "d",
-                    explanation: "The highest point of an arch is termed the 'crown'. The 'abutments' are the supports at the ends of the arch."
+                    explanation: "The crown is the highest point of an arch, at mid-span. The springings are where the arch meets its supports, the abutments are the masses that resist the thrust there, and the haunch is the region between crown and springing. In a three-hinged arch the crown carries the third hinge, which is why the bending moment is zero there."
                 },
                 {
                     id: "cm10q019",
@@ -427,7 +427,7 @@ const CIVIL_MODEL_10 = {
                         { key: "d", text: "None" }
                     ],
                     answer: "c",
-                    explanation: "As per IS 456:2000, Clause 26.5.3.1, the minimum number of longitudinal bars in a rectangular column is 4."
+                    explanation: "IS 456 requires at least four longitudinal bars in a rectangular column, one in each corner, so that the ties can hold the cage square and the section can resist bending about either axis. The steel must also lie between 0.8 and 6 percent of the gross area."
                 },
                 {
                     id: "cm10q030",
@@ -440,7 +440,7 @@ const CIVIL_MODEL_10 = {
                         { key: "d", text: "6" }
                     ],
                     answer: "d",
-                    explanation: "As per IS 456:2000, Clause 26.5.3.1, the minimum number of longitudinal bars in a circular column is 6."
+                    explanation: "A circular column needs a minimum of six longitudinal bars, spaced evenly round the helix or the circular ties. Six is the smallest number that keeps the bars close enough together for the lateral reinforcement to restrain each one against buckling outward."
                 },
                 {
                     id: "cm10q031",
@@ -453,7 +453,7 @@ const CIVIL_MODEL_10 = {
                         { key: "d", text: "None" }
                     ],
                     answer: "a",
-                    explanation: "As per IS 456:2000, Clause 26.5.3.1, the minimum number of longitudinal bars in a circular column is 6."
+                    explanation: "IS 456 sets six as the minimum number of longitudinal bars in a circular column, against four in a rectangular one. The reason is restraint: every bar must be held by a bend or a corner of the ties, and evenly spacing six bars around the circumference achieves that while keeping the spacing within limits."
                 },
                 {
                     id: "cm10q032",
@@ -894,7 +894,7 @@ const CIVIL_MODEL_10 = {
                         { key: "d", text: "1.5 m" }
                     ],
                     answer: "a",
-                    explanation: "The peripheral speed u = (πDN)/60. The speed ratio φ = u / √(2gH). Therefore, D = (60 φ √(2gH)) / (πN)."
+                    explanation: "The peripheral speed is u equal to pi D N over 60, and the speed ratio is phi equal to u divided by the root of 2gH. Rearranging gives D equal to 60 phi times the root of 2gH, all over pi N. Substituting the given ratio, head and speed produces a runner about 1.3 m across."
                 },
                 {
                     id: "cm10q064",
@@ -933,7 +933,7 @@ const CIVIL_MODEL_10 = {
                         { key: "d", text: "2098 rpm" }
                     ],
                     answer: "d",
-                    explanation: "Power per turbine = Total Power / 2. Convert power to HP. Use the formula for specific speed: N_s = N√P / H^(5/4)."
+                    explanation: "Specific speed is Ns equal to N times the root of P, divided by H to the power five quarters, with P the output of a single runner. Here the 5 MW is shared by two turbines, so 2.5 MW converted to metric horsepower goes into the formula along with the 6000 rpm and the 20 m head, giving roughly 2098. Specific speed is what decides whether a Pelton, Francis or Kaplan runner suits the site."
                 },
                 {
                     id: "cm10q067",

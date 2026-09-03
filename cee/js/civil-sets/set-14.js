@@ -45,7 +45,7 @@ const CIVIL_MODEL_14 = {
                         { key: "d", text: "520, 700" }
                     ],
                     answer: "c",
-                    explanation: "The Los Angeles abrasion test machine has a drum with an internal diameter of 700 mm and an internal length of 520 mm."
+                    explanation: "The Los Angeles abrasion drum has an internal diameter of 700 mm and an internal length of 520 mm, with a removable shelf that lifts the charge and drops it as the drum turns at 30 to 33 rpm. The combination of steel spheres, impact from the drop and rubbing between particles is what makes the test represent real wear."
                 },
                 {
                     id: "cm14q002",
@@ -110,7 +110,7 @@ const CIVIL_MODEL_14 = {
                         { key: "d", text: "Tensile stress" }
                     ],
                     answer: "d",
-                    explanation: "Tensile stress is induced by forces that pull and try to elongate a material."
+                    explanation: "Tensile stress arises when equal and opposite forces pull on a body and try to stretch it, so the internal resistance acts to hold the fibres together. Compressive stress is the reverse and shortens the member, while shear stress comes from forces acting tangentially, along the plane rather than normal to it."
                 },
                 {
                     id: "cm14q007",
@@ -149,7 +149,7 @@ const CIVIL_MODEL_14 = {
                         { key: "d", text: "0.00047" }
                     ],
                     answer: "c",
-                    explanation: "Hooke's Law: Stress = E * Strain. Therefore, Strain = Stress / E = 70 N/mm² / (2 × 10^5 N/mm²) = 3.5 × 10^-4 = 0.00035."
+                    explanation: "Within the elastic range Hooke's law gives strain as stress over Young's modulus, that is 70 divided by 200,000, which is 0.00035 or 350 microstrain. Strain is a pure ratio with no units, and the tiny magnitudes involved are why extensometers and strain gauges are needed to measure it."
                 },
                 {
                     id: "cm14q010",
@@ -223,7 +223,7 @@ const CIVIL_MODEL_14 = {
                         { key: "d", text: "3" }
                     ],
                     answer: "d",
-                    explanation: "A beam with 4 supports has 3 spans. The slope deflection method analyzes each span between supports as a separate part."
+                    explanation: "Four supports create three spans, and the slope deflection method writes a pair of end-moment equations for each span in terms of the joint rotations and any sway. The rotations are then found from joint equilibrium, so the number of spans directly sets how many member equations must be written."
                 },
                 {
                     id: "cm14q015",
@@ -799,11 +799,11 @@ const CIVIL_MODEL_14 = {
                     options: [
                         { key: "a", text: "139.44" },
                         { key: "b", text: "149.44" },
-                        { key: "c", text: "159.44" },
-                        { key: "d", text: "169.44" }
+                        { key: "c", text: "169.44" },
+                        { key: "d", text: "159.44" }
                     ],
                     answer: "c",
-                    explanation: "Section factor Z = A√D, where D is hydraulic depth. For side slope 1H:2V, z = 1/2 = 0.5. Area A = (b + zy)y = (5 + 0.5*8)*8 = (5+4)*8 = 9*8 = 72 m². Top width T = b + 2zy = 5 + 2*0.5*8 = 5 + 8 = 13m. Hydraulic depth D = A/T = 72/13 ≈ 5.538m. Section factor Z = A√D = 72 * √5.538 ≈ 72 * 2.353 = 169.44. the option 169.44 is correct."
+                    explanation: "A side slope of 1H:2V means z equals one half. The area is (b plus zy) times y, that is (5 plus 4) times 8, or 72 square metres, and the top width is b plus 2zy, which is 5 plus 8, or 13 m. The hydraulic depth is therefore 72 over 13, that is 5.538 m, and the section factor Z equal to A times the root of D comes out at 72 times 2.353, or about 169.44. The key has been corrected from the printed 159.44."
                 },
                 {
                     id: "cm14q058",
@@ -1094,7 +1094,7 @@ const CIVIL_MODEL_14 = {
                         { key: "d", text: "Merging" }
                     ],
                     answer: "d",
-                    explanation: "The point where two streams meet and combine their flow is called their confluence or merging point."
+                    explanation: "The point at which two streams meet and combine is their confluence, the junction of the two flows. It is an important location in river engineering because the sediment loads, water levels and flow directions of the two channels interact there, often causing local scour and shifting bars."
                 },
                 {
                     id: "cm14q079",

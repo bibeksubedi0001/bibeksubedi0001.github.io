@@ -174,7 +174,7 @@ const CIVIL_MODEL_4 = {
                         { key: "d", text: "9,375 cm<sup>4</sup>" }
                     ],
                     answer: "c",
-                    explanation: "$$I = \\frac{\\pi}{64} (D^4 - d^4)$$ $$I = \\frac{\\pi}{64} (160,000 - 10,000)$$ $$I \\approx 7363.11\\text{ cm}^4$$"
+                    explanation: "A hollow circular section is the solid outer circle minus the hole, so I equals pi over 64 times (D to the fourth minus d to the fourth). That is pi over 64 times (160,000 minus 10,000), which gives about 7363 cm to the fourth. Because the fourth power dominates, the small central hole removes only about six percent of the stiffness while saving a quarter of the material."
                 },
                 {
                     id: "cm4q012",

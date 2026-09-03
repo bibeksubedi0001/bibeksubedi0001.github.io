@@ -339,7 +339,7 @@ const CIVIL_MODEL_15 = {
                         { key: "d", text: "6" }
                     ],
                     answer: "b",
-                    explanation: "For a plane structure, static equilibrium requires satisfying three equations: ΣFx = 0, ΣFy = 0, and ΣM = 0."
+                    explanation: "A plane structure has three independent equilibrium equations, the sum of horizontal forces, the sum of vertical forces and the sum of moments, all equal to zero. If the unknown reactions number more than three the structure is statically indeterminate, and in three dimensions the count rises to six equations."
                 },
                 {
                     id: "cm15q024",
@@ -452,7 +452,7 @@ const CIVIL_MODEL_15 = {
                         { key: "d", text: "1.41" }
                     ],
                     answer: "b",
-                    explanation: "The form factor accounts for the shape of the cross-section. For a solid circular beam, the form factor is 1.18."
+                    explanation: "The form factor, or shape factor, is the ratio of the plastic to the elastic section modulus, and for a solid circular section it is about 1.7; the figure of 1.18 quoted here is the value used for a circular member in the code being followed. Whatever the exact figure, it expresses how much moment the section can still take after the extreme fibre first yields."
                 },
                 {
                     id: "cm15q032",
@@ -478,7 +478,7 @@ const CIVIL_MODEL_15 = {
                         { key: "d", text: "NBC 111" }
                     ],
                     answer: "d",
-                    explanation: "The Nepal Building Code (NBC) 111 is the specific code governing the design and construction of timber structures."
+                    explanation: "Nepal Building Code NBC 111 covers the design of timber structures, setting the permissible stresses for the local species groups, the rules for joints and fasteners, and the durability and preservative treatment requirements. NBC 110 covers plain and reinforced concrete and NBC 112 steel."
                 }
             ]
         },
@@ -685,13 +685,13 @@ const CIVIL_MODEL_15 = {
                     src: "WATE701-00160",
                     text: "The product Z_y in a trapezoidal channel is 2 and the side slope is 1/2. Calculate the wetted perimeter of the channel section if the wetted area is 32m².",
                     options: [
-                        { key: "a", text: "14.94m" },
+                        { key: "a", text: "13.94m" },
                         { key: "b", text: "15.94m" },
-                        { key: "c", text: "13.94m" },
+                        { key: "c", text: "14.94m" },
                         { key: "d", text: "16.94m" }
                     ],
                     answer: "c",
-                    explanation: "Z_y probably refers to z*y = 2. Given side slope z=1/2=0.5, so 0.5*y=2, thus y=4m. Area A = (b + zy)y = (b + 2)*4 = 32, so b+2=8, b=6m. Wetted perimeter P = b + 2y√(1+z²) = 6 + 2*4*√(1+0.25) = 6 + 8*√1.25 = 6 + 8*1.118 = 6 + 8.944 = 14.944m. the option 14.94m is correct."
+                    explanation: "With z equal to 0.5 and zy equal to 2, the depth is 4 m. The area (b plus zy) times y equals 32, so (b plus 2) times 4 is 32 and the bed width is 6 m. The wetted perimeter is b plus 2y times the root of (1 plus z squared), that is 6 plus 8 times 1.118, which is 14.94 m. The key has been corrected from the printed 13.94 m."
                 },
                 {
                     id: "cm15q049",
@@ -725,12 +725,12 @@ const CIVIL_MODEL_15 = {
                     text: "The ratio of section factor and hydraulic depth in a trapezoidal section is 324/25, calculate the top width if the total wetted area of the channel is 24m².",
                     options: [
                         { key: "a", text: "4m" },
-                        { key: "b", text: "6m" },
+                        { key: "b", text: "7m" },
                         { key: "c", text: "5m" },
-                        { key: "d", text: "7m" }
+                        { key: "d", text: "6m" }
                     ],
                     answer: "b",
-                    explanation: "Z/D = 324/25. But Z = A√D, so (A√D)/D = A/√D = 324/25. Given A=24, so 24/√D = 324/25, thus √D = (24*25)/324 = 600/324 = 50/27 ≈1.851. D = (50/27)^2 = 2500/729 ≈3.429. Also D = A/T, so T = A/D = 24/3.429 ≈7m. the option 7m is correct."
+                    explanation: "Since Z equals A times the root of D, the ratio Z over D reduces to A over the root of D. Setting that equal to 324 over 25 with an area of 24 gives the root of D as 1.852, so D is 3.43 m. The hydraulic depth is A over T, so the top width is 24 divided by 3.43, which is about 7 m. The key has been corrected from the printed 6 m."
                 },
                 {
                     id: "cm15q052",
@@ -789,13 +789,13 @@ const CIVIL_MODEL_15 = {
                     src: "WATE701-00168",
                     text: "Calculate the maximum discharge through a rectangular channel having depth 3m, bed slope of 1 in 1000.",
                     options: [
-                        { key: "a", text: "34.85 m³/s" },
+                        { key: "a", text: "33.85 m³/s" },
                         { key: "b", text: "35.85 m³/s" },
-                        { key: "c", text: "33.85 m³/s" },
+                        { key: "c", text: "34.85 m³/s" },
                         { key: "d", text: "36.85 m³/s" }
                     ],
                     answer: "c",
-                    explanation: "For maximum discharge in a rectangular channel, width B=2y=6m. Using Manning's or Chezy's formula. Assuming Chezy's C=50 (common), Q = A * C * √(R*S). A = B*y = 6*3=18 m². R = y/2=1.5m (for economical). S=1/1000=0.001. Q = 18 * 50 * √(1.5*0.001) = 900 * √0.0015 = 900 * 0.03873 = 34.86 m³/s. Close to 34.85. the option 34.85 m³/s is correct."
+                    explanation: "The most economical rectangular section has a width of twice the depth, so B is 6 m, the area is 18 square metres and the hydraulic radius is half the depth, 1.5 m. Using Chezy with C equal to 50 and a slope of 1 in 1000, Q equals A times C times the root of RS, that is 18 times 50 times the root of 0.0015, which is about 34.85 cubic metres per second. The key has been corrected from the printed 33.85."
                 },
                 {
                     id: "cm15q057",

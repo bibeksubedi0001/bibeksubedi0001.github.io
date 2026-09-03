@@ -71,7 +71,7 @@ const CIVIL_MODEL_1 = {
                         { key: "d", text: "All of the above" }
                     ],
                     answer: "c",
-                    explanation: "NS 49:2041 is the Nepal Standard for ordinary Portland cement, which governs its specifications within Nepal."
+                    explanation: "Cement in Nepal is covered by Nepal Standard NS 49:2041, which sets the chemical composition, fineness, setting times, soundness and strength that ordinary Portland cement must meet. IS codes are the Indian equivalents and NS 269:1976 covers a different material, so only the Nepal cement standard applies here."
                 },
                 {
                     id: "cm1q004",
@@ -262,7 +262,7 @@ const CIVIL_MODEL_1 = {
                         { key: "d", text: "m" }
                     ],
                     answer: "b",
-                    explanation: "Stiffness (k) is defined as force per unit displacement. Its SI unit is therefore Newton per meter (N/m)."
+                    explanation: "Stiffness is the force needed to produce unit displacement, k = P/δ, so its SI unit is newtons per metre. Its reciprocal is flexibility, in m/N, and the same idea extends to rotational stiffness, measured in N·m per radian — which is why beam stiffness appears as 4EI/L rather than a plain force."
                 },
                 {
                     id: "cm1q018",
@@ -288,7 +288,7 @@ const CIVIL_MODEL_1 = {
                         { key: "d", text: "Internally Unstable" }
                     ],
                     answer: "a",
-                    explanation: "A beam with two roller supports is geometrically unstable as it can undergo horizontal movement."
+                    explanation: "Two roller supports each supply only a vertical reaction, so nothing resists horizontal movement and the beam can slide bodily sideways. That is geometric instability: equilibrium cannot be satisfied for any horizontal load, however strong the member is. One support must be a hinge, or the beam must be braced."
                 },
                 {
                     id: "cm1q020",
@@ -327,7 +327,7 @@ const CIVIL_MODEL_1 = {
                         { key: "d", text: "Coincides" }
                     ],
                     answer: "c",
-                    explanation: "The radius of curvature (R) is inversely proportional to the bending moment (M), as R = EI/M."
+                    explanation: "From the bending equation M/I = E/R, the radius of curvature is R = EI/M, so radius and bending moment are inversely proportional. A larger moment bends the beam into a tighter curve, and where the moment falls to zero the radius becomes infinite — that is, the beam is locally straight."
                 },
                 {
                     id: "cm1q023",
@@ -539,8 +539,8 @@ const CIVIL_MODEL_1 = {
                         { key: "c", text: "0.432" },
                         { key: "d", text: "0.279" }
                     ],
-                    answer: "d",
-                    explanation: "Volume of air, V_a = V/7. Volume of water, V_w = V/8. Volume of voids, V_v = V_a + V_w = V/7 + V/8 = (15/56)V = 0.2679V ≈ 0.268. The ratio V_v/V is therefore 0.268."
+                    answer: "b",
+                    explanation: "Air fills one seventh of the total volume and water one eighth, and together they make up the voids. Adding the fractions, 1/7 plus 1/8 is 15/56, which is 0.268, so the voids occupy 26.8 percent of the total volume. That ratio is the porosity n; the void ratio e, measured against the solid volume instead, would be n/(1 minus n), that is 0.366. The key has been corrected from the printed 0.279."
                 },
                 {
                     id: "cm1q038",
@@ -605,7 +605,7 @@ const CIVIL_MODEL_1 = {
                         { key: "d", text: "Principal planes" }
                     ],
                     answer: "b",
-                    explanation: "Principal stresses (σ₁, σ₂, σ₃) are the normal stresses acting on the principal planes where the shear stress is zero."
+                    explanation: "Principal stresses are the normal stresses acting on the principal planes — the particular planes on which the shear stress vanishes. In three dimensions there are three of them, ordered σ₁ to σ₃; the major and minor principal stresses are simply the largest and smallest of that set, not a separate quantity."
                 },
                 {
                     id: "cm1q043",
@@ -618,7 +618,7 @@ const CIVIL_MODEL_1 = {
                         { key: "d", text: "27 KN/m³" }
                     ],
                     answer: "c",
-                    explanation: "Pa = Ka * γ * H. Ka=(1-sin30)/(1+sin30)=1/3. Pa=(1/3)*18*6=36 kN/m²."
+                    explanation: "The active coefficient is Ka = (1 − sinφ)/(1 + sinφ), and with φ = 30° the sine is 0.5, so Ka = 0.5/1.5 = 1/3. The pressure intensity at the base is Ka × γ × H = (1/3) × 18 × 6 = 36 kN/m². Note this is the intensity at the bottom of the wall, not the total thrust: the pressure grows linearly from zero at the surface, so the resultant is ½ × 36 × 6 = 108 kN per metre run, acting at H/3 above the base."
                 },
                 {
                     id: "cm1q044",
@@ -756,8 +756,8 @@ const CIVIL_MODEL_1 = {
                         { key: "c", text: "20m³/s" },
                         { key: "d", text: "25m³/s" }
                     ],
-                    answer: "a",
-                    explanation: "E_min = 1.5 y_c, so 1.3=1.5 y_c, y_c=0.8667m. For rectangular, y_c = (q²/g)^(1/3), so 0.8667³ = q²/9.81, 0.651 = q²/9.81, q²=6.386, q=2.527 m²/s. Q = q*B = 2.527*10=25.27 m³/s. Not matching; perhaps E_min=1.3 means y_c=1.3/1.5=0.8667, then q=√(g y_c³)=√(9.81*0.651)=√6.386=2.527, Q=25.27. But options include 25. Alternatively, if E_min is for critical flow, and discharge is maximum? Perhaps the channel is flowing with critical depth. Recheck: E_min = 1.5 y_c =1.3, so y_c=0.8667. Then q = √(g y_c³)=√(9.81*0.651)=2.527, Q=25.27. So (d) 25 m³/s is correct."
+                    answer: "d",
+                    explanation: "Minimum specific energy occurs at critical depth, where E_min = 1.5 y_c, so y_c = 1.3/1.5 = 0.867 m. For a rectangular channel the critical condition gives q = √(g y_c³) = √(9.81 × 0.651) = 2.53 m²/s per metre width. Multiplying by the 10 m base width gives Q ≈ 25.3 m³/s, so the nearest option is 25 m³/s. The key has been corrected from the printed 15 m³/s."
                 },
                 {
                     id: "cm1q054",
@@ -1239,7 +1239,7 @@ const CIVIL_MODEL_1 = {
                         { key: "d", text: "3040" }
                     ],
                     answer: "c",
-                    explanation: "In the R-value design method, the EWL constant for a vehicle with 4 axles is 330."
+                    explanation: "The R-value method converts mixed traffic into equivalent wheel loads, giving each axle configuration a fixed EWL constant. A four-axle vehicle carries a constant of 330, so the design EWL is that figure multiplied by the number of such vehicles expected over the design life. Heavier configurations carry much larger constants, which is why a few multi-axle trucks can dominate the pavement design."
                 },
                 {
                     id: "cm1q089",
@@ -1265,7 +1265,7 @@ const CIVIL_MODEL_1 = {
                         { key: "d", text: "Test" }
                     ],
                     answer: "b",
-                    explanation: "Bleeding is caused by excessive asphalt, high heat, or traffic loads pushing binder to the surface."
+                    explanation: "Bleeding is the upward migration of binder to the surface, leaving a shiny, slippery film. It occurs when the mix carries more bitumen than the aggregate voids can hold, and traffic loading in hot weather squeezes the excess up. The remedy is to blot the surface with sand or chippings and correct the binder content in the mix design."
                 }
             ]
         },

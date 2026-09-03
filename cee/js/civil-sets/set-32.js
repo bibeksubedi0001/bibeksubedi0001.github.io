@@ -1344,13 +1344,13 @@ const CIVIL_MODEL_32 = {
                     src: "WATE813-00327",
                     text: "Psychophilic bacteria survive in between the temperature of ... degree Celsius",
                     options: [
-                        { key: "a", text: "-20 to 20°C" },
+                        { key: "a", text: "-5 to 10 °C" },
                         { key: "b", text: "0-20°C" },
                         { key: "c", text: "5 to 15°C" },
-                        { key: "d", text: "-5 to 10 °C" }
+                        { key: "d", text: "-20 to 20°C" }
                     ],
                     answer: "d",
-                    explanation: "Psychrophiles /ˈsaɪkroʊˌfaɪl/ or cryophiles (adj. psychrophilic or cryophilic) are extremophilic organisms that are capable of growth and reproduction in low temperatures, ranging from −20 °C (−4 °F)[2] to 20 °C (68 °F)"
+                    explanation: "Psychrophiles, or cryophiles, are the cold-loving extremophiles that grow and reproduce roughly between minus 20 and plus 20 degrees Celsius, which is why they spoil refrigerated food and why they dominate treatment ponds in winter. Mesophiles occupy the 20 to 40 degree band and thermophiles 40 to 70. The key has been corrected to the range the explanation itself gives."
                 },
                 {
                     id: "cm32q097",

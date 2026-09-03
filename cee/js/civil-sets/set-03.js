@@ -1035,7 +1035,7 @@ const CIVIL_MODEL_3 = {
                         { key: "d", text: "25 cm" }
                     ],
                     answer: "d",
-                    explanation: "80% =0.8, actual depth=16 overall efficiency=0.8*.08=0.64 Depth water required at canal outlet= 16/0.64=25cm"
+                    explanation: "The overall efficiency is the product of the application and conveyance efficiencies, that is 0.8 times 0.8, which is 0.64. The depth to be released at the canal outlet is the depth actually stored in the root zone divided by that figure, so 16 divided by 0.64 gives 25 cm. In other words 9 cm of every 25 is lost before it reaches the crop."
                 },
                 {
                     id: "cm3q074",

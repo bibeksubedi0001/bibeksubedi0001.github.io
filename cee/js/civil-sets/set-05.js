@@ -1181,13 +1181,13 @@ const CIVIL_MODEL_5 = {
                     src: "TRAN808-00038",
                     text: "If the penetration grade is 62, the penetration value is ...",
                     options: [
-                        { key: "a", text: "0.62mm" },
+                        { key: "a", text: "6.2mm" },
                         { key: "b", text: "62mm" },
-                        { key: "c", text: "6.2mm" },
+                        { key: "c", text: "0.62mm" },
                         { key: "d", text: "620mm" }
                     ],
                     answer: "a",
-                    explanation: "Penetration is reported in tenths of a millimetre, so a grade of 62 means the needle penetrated 6.2 mm under the standard 100 g load for 5 seconds at 25 degrees Celsius. A higher number means a softer bitumen."
+                    explanation: "Penetration is reported in units of one tenth of a millimetre, so a grade of 62 means the standard needle sank 6.2 mm into the sample under a 100 g load for 5 seconds at 25 degrees Celsius. A higher penetration number means a softer, more fluid bitumen, which is why 80/100 grade is used in cold regions and 30/40 in hot ones. The key has been corrected from the printed 0.62 mm, which is a factor of ten out."
                 },
                 {
                     id: "cm5q085",

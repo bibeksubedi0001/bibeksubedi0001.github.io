@@ -1112,7 +1112,7 @@ const CIVIL_MODEL_20 = {
                         { key: "d", text: "Distribution" }
                     ],
                     answer: "c",
-                    explanation: "The outlet discharge factor is defined as the duty of water at the head of a watercourse."
+                    explanation: "The outlet discharge factor is the duty of water at the head of the watercourse, that is the area in hectares that one cumec will irrigate at that point. Duty quoted further up the system, at a distributary or main canal head, is smaller because more conveyance losses have to be covered on the way down."
                 }
             ]
         },

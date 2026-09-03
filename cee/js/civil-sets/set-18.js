@@ -236,7 +236,7 @@ const CIVIL_MODEL_18 = {
                         { key: "d", text: "1/2 NL/AE" }
                     ],
                     answer: "a",
-                    explanation: "The elongation Δ for a linear elastic bar under axial load is Δ = NL/AE."
+                    explanation: "Under a gradually applied axial force the stress is N over A and the strain is that divided by E, so over a length L the extension is NL over AE. The product AE is the axial rigidity, so a stiffer material or a fatter bar stretches proportionally less, and the extension grows directly with length."
                 },
                 {
                     id: "cm18q016",
@@ -340,7 +340,7 @@ const CIVIL_MODEL_18 = {
                         { key: "d", text: "Stress law" }
                     ],
                     answer: "a",
-                    explanation: "Maxwell's reciprocal theorem is a special case of Castigliano's second theorem."
+                    explanation: "Castigliano's second theorem states that the deflection at a point equals the partial derivative of the strain energy with respect to the load there. Applying it to two loads in turn shows that the deflection at A due to a load at B equals the deflection at B due to the same load at A, which is Maxwell's reciprocal theorem."
                 },
                 {
                     id: "cm18q024",

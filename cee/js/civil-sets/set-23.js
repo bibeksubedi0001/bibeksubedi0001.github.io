@@ -388,7 +388,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "0.23" }
                     ],
                     answer: "a",
-                    explanation: "As per IS 800:2007, Table 7, the imperfection factor (α) for buckling class a is 0.21."
+                    explanation: "IS 800:2007 assigns each section an imperfection factor according to its buckling class: 0.21 for class a, 0.34 for b, 0.49 for c and 0.76 for d. The factor allows for initial crookedness and residual stresses, so a higher value gives a lower design compressive strength for the same slenderness."
                 },
                 {
                     id: "cm23q027",
@@ -512,7 +512,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "5, 1/5" }
                     ],
                     answer: "b",
-                    explanation: "For φ=30°, Ka=(1-sinφ)/(1+sinφ)=1/3, Kp=(1+sinφ)/(1-sinφ)=3."
+                    explanation: "With phi equal to 30 degrees the sine is one half, so Ka equal to (1 minus sin phi) over (1 plus sin phi) is 0.5 over 1.5, that is one third, and Kp is its reciprocal, 3. The two are always reciprocals in Rankine's theory, and the factor of nine between them is why passive resistance is so much larger than active thrust."
                 },
                 {
                     id: "cm23q036",
@@ -525,7 +525,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "476 KN/m³" }
                     ],
                     answer: "c",
-                    explanation: "Kp = 1/Ka = 3. Pp = Kp * γ * H = 3 * 18 * 6 = 324 kN/m²."
+                    explanation: "The passive coefficient is the reciprocal of the active one, so Kp is 3. The pressure at the base is Kp times gamma times H, that is 3 times 18 times 6, which is 324 kN per square metre. Note that reaching full passive pressure needs far more wall movement than the active case does, which is why designers rarely rely on all of it."
                 },
                 {
                     id: "cm23q037",
@@ -590,7 +590,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "0.6" }
                     ],
                     answer: "d",
-                    explanation: "A typical empirical value for K₀ in loose sand is approximately 0.6."
+                    explanation: "For a normally consolidated sand Jaky's relation gives K0 equal to 1 minus sin phi, which for a loose sand with a friction angle near 24 degrees comes out around 0.6. Dense sands, with their higher friction angle, give values nearer 0.4, and over-consolidated soils can exceed one because of the locked-in horizontal stress."
                 },
                 {
                     id: "cm23q042",
@@ -616,7 +616,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "0.7383" }
                     ],
                     answer: "b",
-                    explanation: "Using Jaky's formula: K₀ = 1 - sin(26°) = 1 - 0.4384 = 0.5616."
+                    explanation: "Jaky's formula gives the at-rest coefficient as K0 equal to 1 minus sin phi. With phi of 26 degrees the sine is 0.4384, so K0 is 0.5616. At-rest conditions apply where the wall cannot move at all, such as a basement wall braced by the floor slabs, and the pressure lies between the active and passive values."
                 },
                 {
                     id: "cm23q044",

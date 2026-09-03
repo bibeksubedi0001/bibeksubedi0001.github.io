@@ -514,7 +514,7 @@ const CIVIL_MODEL_2 = {
                         { key: "d", text: "All of above" }
                     ],
                     answer: "d",
-                    explanation: "All of them are the formula to compute dry density of soil"
+                    explanation: "All three expressions are valid routes to the same quantity. Dividing the bulk unit weight by (1 plus w) removes the water; G gamma w over (1 plus e) works from the void ratio; and the form with the air voids fraction, (1 minus na) G gamma w over (1 plus wG), is the one used in compaction work because it lets you plot the zero-air-void line. Which one you use is decided purely by which data you happen to have."
                 },
                 {
                     id: "cm2q036",

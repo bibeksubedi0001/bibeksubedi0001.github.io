@@ -301,7 +301,7 @@ const CIVIL_MODEL_12 = {
                         { key: "d", text: "WL/8" }
                     ],
                     answer: "d",
-                    explanation: "$$M_p = \\frac{WL}{8}$$"
+                    explanation: "A fixed beam needs three hinges to become a mechanism: one at each support and one under the load. Equating external work to internal work, W times L over 4 equals Mp times 4 theta, which gives a plastic moment capacity of WL over 8. Note that the elastic fixed-end moment is also WL over 8, so for this particular case the two happen to coincide."
                 },
                 {
                     id: "cm12q021",
@@ -592,7 +592,7 @@ const CIVIL_MODEL_12 = {
                         { key: "d", text: "Silt and clay" }
                     ],
                     answer: "a",
-                    explanation: "Coarse-grained soils are subdivided based on the predominant particle size: gravels (G) and sands (S)."
+                    explanation: "Coarse-grained soils are those with more than half the material retained on the 75 micron sieve, and they split into gravels and sands at the 4.75 mm sieve. Silts and clays are the fine-grained groups, separated from each other by plasticity rather than by particle size."
                 },
                 {
                     id: "cm12q042",
@@ -783,7 +783,7 @@ const CIVIL_MODEL_12 = {
                         { key: "d", text: "1170 mm" }
                     ],
                     answer: "c",
-                    explanation: "This is a specific geographical fact. The average annual rainfall for Nepal is approximately 1890 mm."
+                    explanation: "Nepal averages about 1890 mm of rainfall a year, but the figure hides an extreme distribution: roughly 80 percent falls in the four monsoon months, and totals range from under 300 mm in the rain shadow of Mustang to over 5000 mm at Lumle. Design work therefore uses local records rather than the national average."
                 },
                 {
                     id: "cm12q056",

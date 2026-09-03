@@ -71,7 +71,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "in between 2.5 to 3.5 m" }
                     ],
                     answer: "c",
-                    explanation: "The floor to floor height of the building is in between 2 to 3 m. Reference: <a href=\"https://plgsp.gov.np/sites/default/files/2023-09/Resource_Book_on_Building_Bylaws%20and%20Building%20Permit%20System%20in_Nepal.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">reference</a>"
+                    explanation: "Building bylaws set the floor to floor height between about 2 and 3 m. The lower bound protects headroom and ventilation once the floor finish and any false ceiling are deducted, and the upper bound keeps the storey height, and so the overall building height and cost, within the limits the bylaw allows."
                 },
                 {
                     id: "cm24q004",
@@ -587,7 +587,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "All of the mentioned" }
                     ],
                     answer: "a",
-                    explanation: "Backfill is the term for the soil material placed behind a retaining wall."
+                    explanation: "The backfill is the soil retained behind the wall, and its unit weight, friction angle and drainage decide the pressure the wall must carry. A surcharge is any extra load carried on top of that backfill, such as a road or a stack of material, and it adds a uniform pressure over the full height."
                 },
                 {
                     id: "cm24q042",
@@ -652,7 +652,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "Darcy" }
                     ],
                     answer: "b",
-                    explanation: "Rankine developed the theory of plastic stress states (active and passive) in soils."
+                    explanation: "Rankine analysed the two limiting plastic states of a soil mass, the active state reached when it is allowed to stretch and the passive state when it is compressed, and derived the earth pressure coefficients from them. Coulomb's earlier wedge theory took a different route through force equilibrium and can include wall friction."
                 },
                 {
                     id: "cm24q047",
@@ -713,7 +713,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "150" }
                     ],
                     answer: "b",
-                    explanation: "1 bar = 100,000 Pa. Therefore, 15 bar = 15 * 100,000 = 1,500,000 Pa."
+                    explanation: "One bar is 100,000 pascals, so 15 bar is 1.5 million pascals, that is 1.5 MPa. The bar is convenient because it is very close to atmospheric pressure, 101,325 Pa, and because 10 m of water produces almost exactly 1 bar."
                 },
                 {
                     id: "cm24q051",
