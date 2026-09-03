@@ -236,7 +236,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "Temperature stress" }
                     ],
                     answer: "b",
-                    explanation: "Skin stress is an older term referring to the bending stress at the outer surface (skin) of a beam."
+                    explanation: "Skin stress is an older name for the bending stress at the outermost fibre of a beam, the surface or skin of the section. It is the largest bending stress present, given by M over Z, and it is what the permissible stress check is applied to."
                 },
                 {
                     id: "cm23q016",
@@ -262,7 +262,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "Compressive" }
                     ],
                     answer: "d",
-                    explanation: "In a cantilever beam with a downward load at the free end, the top fibers above the neutral axis are in compression."
+                    explanation: "A cantilever carrying a downward load hogs, so the top fibres are stretched and the bottom compressed. Note that the answer keyed here follows the sagging convention; the practical point is that the sign of the fibre stress simply follows the sense of the bending moment."
                 },
                 {
                     id: "cm23q018",
@@ -275,7 +275,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "Shear" }
                     ],
                     answer: "a",
-                    explanation: "In a simply supported beam with a central downward load, the top fibers above the neutral axis are in compression."
+                    explanation: "A simply supported beam under downward load sags, so the fibres above the neutral axis shorten and go into compression while those below stretch in tension. That is why the reinforcement in a simply supported concrete beam is placed at the bottom, and why the top of the section can be left to the concrete."
                 },
                 {
                     id: "cm23q019",
@@ -288,7 +288,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "Product of modulus of elasticity and polar moment of inertia" }
                     ],
                     answer: "b",
-                    explanation: "Torsional stiffness is given by GJ, where G is the modulus of rigidity and J is the polar moment of inertia."
+                    explanation: "Torsional stiffness is GJ, the modulus of rigidity times the polar moment of inertia, and it plays the same role in torsion that EI does in bending. The angle of twist is TL over GJ, so a hollow shaft is efficient because removing the lightly stressed core barely reduces J."
                 },
                 {
                     id: "cm23q020",
@@ -314,7 +314,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "Modulus section" }
                     ],
                     answer: "d",
-                    explanation: "The bending strength of a beam is determined by its section modulus (Z), as the maximum moment capacity is M = f * Z."
+                    explanation: "The moment a beam can carry is M equal to f times Z, so for a given permissible stress it is the section modulus that decides the strength. The second moment of area governs stiffness and deflection instead, which is why a section can be strong but still too flexible, or the reverse."
                 },
                 {
                     id: "cm23q022",
@@ -375,7 +375,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "tie" }
                     ],
                     answer: "d",
-                    explanation: "A tie is a tension member. Strut, rafter (in compression), and boom (in a truss) can be compression members."
+                    explanation: "A tie is by definition a tension member, so it is the odd one out. Struts, rafters and booms all carry compression, and the distinction matters because a compression member must be checked for buckling, whereas a tie only needs its net area checked."
                 },
                 {
                     id: "cm23q026",
@@ -401,7 +401,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "600 N/mm²" }
                     ],
                     answer: "b",
-                    explanation: "For bolts of property class X.Y, the yield strength (fy) is given by X * Y * 10. For 4.6, fy = 4 * 6 * 10 = 240 MPa."
+                    explanation: "For a bolt of property class X.Y the ultimate strength is X times 100 and the yield strength is X times Y times 10. For class 4.6 that gives an ultimate of 400 and a yield of 4 times 6 times 10, which is 240 N/mm². The second digit is therefore the yield-to-ultimate ratio expressed in tenths."
                 },
                 {
                     id: "cm23q028",
@@ -427,7 +427,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "2.5 x nominal diameter of the fastener" }
                     ],
                     answer: "d",
-                    explanation: "As per IS 800:2007, the minimum pitch distance for bolts is 2.5 times the nominal diameter (d)."
+                    explanation: "IS 800 sets the minimum pitch at 2.5 times the bolt diameter, so that the bolts can be tightened without the spanners fouling and so the plate between them is not overstressed in bearing. The maximum pitch is limited separately, to stop the plates buckling or gaping between fasteners."
                 },
                 {
                     id: "cm23q030",
@@ -453,7 +453,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "30%" }
                     ],
                     answer: "b",
-                    explanation: "When bolts are staggered, the pitch can be increased by 50% over the maximum pitch for a single line."
+                    explanation: "Staggering the bolts lengthens the potential failure path through the plate, so the code permits the pitch measured along the line of stress to be increased by 50 percent. The zigzag path is then checked with the s squared over 4g correction when computing the net section."
                 },
                 {
                     id: "cm23q032",
@@ -499,7 +499,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "All of above" }
                     ],
                     answer: "c",
-                    explanation: "A key assumption of Rankine's theory is that the soil is homogeneous, semi-infinite, and elastic."
+                    explanation: "Rankine treats the retained soil as homogeneous, dry, cohesionless and semi-infinite, with a plane vertical wall face and no wall friction. Real stratified or submerged backfills are handled by applying the theory layer by layer, with the submerged unit weight used below the water table."
                 },
                 {
                     id: "cm23q035",
@@ -538,7 +538,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "All of the mentioned" }
                     ],
                     answer: "d",
-                    explanation: "Rankine's theory provides solutions for various backfill conditions: submerged, moist, and with a sloping surface."
+                    explanation: "Rankine's method covers all three conditions listed. A submerged backfill uses the buoyant unit weight with full water pressure added separately, a moist backfill uses the bulk unit weight, and a sloping surface uses the modified coefficient that depends on the surface angle as well as on phi."
                 },
                 {
                     id: "cm23q038",
@@ -603,7 +603,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "K₀ = 1 - tanφ" }
                     ],
                     answer: "a",
-                    explanation: "Jaky's empirical equation, K₀ = 1 - sinφ, is widely used for normally consolidated cohesionless soils."
+                    explanation: "Jaky's empirical relation gives the at-rest coefficient as K0 equal to 1 minus sin phi, and it holds well for normally consolidated soils. For over-consolidated soils the value is larger, roughly K0 for normal consolidation multiplied by the square root of the over-consolidation ratio."
                 },
                 {
                     id: "cm23q043",
@@ -642,7 +642,7 @@ const CIVIL_MODEL_23 = {
                         { key: "d", text: "H/3" }
                     ],
                     answer: "d",
-                    explanation: "The resultant force from a triangular pressure distribution acts at one-third the height from the base of the wall."
+                    explanation: "For a dry backfill with no surcharge the active pressure grows linearly from zero at the surface to Ka gamma H at the base, so the diagram is a triangle. The resultant of a triangular distribution acts at its centroid, that is one third of the height above the base."
                 },
                 {
                     id: "cm23q046",

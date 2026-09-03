@@ -223,7 +223,7 @@ const CIVIL_MODEL_26 = {
                         { key: "d", text: "Creeping" }
                     ],
                     answer: "d",
-                    explanation: "Creep is the slow, progressive deformation of a material under a constant stress over time."
+                    explanation: "Creep is the slow, continuing deformation of a material held under constant stress, and it matters most at high temperature or over long periods. In concrete it can add one to three times the immediate elastic deflection over years, which is why long-term deflection is checked separately."
                 },
                 {
                     id: "cm26q015",
@@ -299,7 +299,7 @@ const CIVIL_MODEL_26 = {
                         { key: "d", text: "The ratio of direct stress to volumetric strain" }
                     ],
                     answer: "b",
-                    explanation: "Bulk modulus (K) is defined as the ratio of volumetric stress (hydrostatic pressure) to volumetric strain."
+                    explanation: "The bulk modulus is the ratio of volumetric stress, that is uniform hydrostatic pressure, to the resulting volumetric strain. It is linked to the other constants by E equal to 3K times (1 minus 2 mu), and it becomes very large as Poisson's ratio approaches 0.5, the incompressible case."
                 },
                 {
                     id: "cm26q021",
@@ -1249,7 +1249,7 @@ const CIVIL_MODEL_26 = {
                         { key: "d", text: "Not specified in options" }
                     ],
                     answer: "c",
-                    explanation: "The binder course, an intermediate layer in flexible pavements, typically has a thickness ranging from 100 to 150 mm."
+                    explanation: "The binder or intermediate course sits between the base and the wearing course and is typically 100 to 150 mm thick. Its job is to spread wheel loads and to correct the shape of the base so that the thin wearing course can be laid to an even profile."
                 },
                 {
                     id: "cm26q090",
@@ -1401,7 +1401,7 @@ const CIVIL_MODEL_26 = {
                         { key: "d", text: "Disinfection" }
                     ],
                     answer: "b",
-                    explanation: "Plain sedimentation relies solely on gravity to remove settleable solids without the use of coagulants."
+                    explanation: "Plain sedimentation removes settleable solids by gravity alone, with no chemicals added, so it takes out sand and coarse silt but leaves the fine colloidal matter that causes most of the turbidity. Adding a coagulant first flocculates those colloids into particles heavy enough to settle."
                 }
             ]
         }

@@ -71,7 +71,7 @@ const CIVIL_MODEL_31 = {
                         { key: "d", text: "10.0 sq m" }
                     ],
                     answer: "b",
-                    explanation: "The expected output for a mason plastering a 12mm thick coat is typically 8.0 square meters per day."
+                    explanation: "The standard out-turn for 12 mm cement plaster is about 8 square metres per mason per day. Out-turn figures like this are what convert a quantity into labour days when a rate is being analysed, and they vary with the thickness, the height above floor and the surface being plastered."
                 },
                 {
                     id: "cm31q004",
@@ -1122,7 +1122,7 @@ const CIVIL_MODEL_31 = {
                         { key: "d", text: "Longitudinal joints" }
                     ],
                     answer: "b",
-                    explanation: "Dowel bars are placed across contraction joints to allow for horizontal movement while transferring load between slabs."
+                    explanation: "Dowel bars, plain and greased at one end, are set across contraction joints so that load transfers from one slab to the next while the slabs can still shorten freely as the concrete shrinks. Tie bars, which are deformed and fully bonded, are used at longitudinal joints instead, where movement must be prevented."
                 },
                 {
                     id: "cm31q080",
@@ -1161,7 +1161,7 @@ const CIVIL_MODEL_31 = {
                         { key: "d", text: "Direct tensile stresses" }
                     ],
                     answer: "a",
-                    explanation: "Temperature warping causes bending stresses that reverse between day (tension at bottom) and night (tension at top)."
+                    explanation: "Warping comes from the temperature difference between the top and bottom of a slab. During the day the top is hotter and tries to expand, putting the bottom in tension; at night the gradient reverses. The stresses therefore alternate in sign twice a day, and it is that reversal which fatigues the concrete."
                 },
                 {
                     id: "cm31q083",
@@ -1200,7 +1200,7 @@ const CIVIL_MODEL_31 = {
                         { key: "d", text: "None of the above" }
                     ],
                     answer: "b",
-                    explanation: "The Indian Road Congress recommends the California Bearing Ratio method for the design of flexible pavements."
+                    explanation: "IRC recommends the CBR method for flexible pavements, in which the subgrade strength expressed as a CBR percentage and the cumulative standard axles decide the total thickness from the design curves. Westergaard's analysis belongs to rigid pavements and the group index method is now obsolete."
                 },
                 {
                     id: "cm31q086",
@@ -1211,7 +1211,7 @@ const CIVIL_MODEL_31 = {
                         { key: "b", text: "Load + warping - frictional" }
                     ],
                     answer: "a",
-                    explanation: "In winter, the critical edge stress is the sum of load stress minus warping stress and minus frictional stress."
+                    explanation: "In winter at midday the slab top is warmer than the bottom, so the warping stress at the edge relieves rather than adds to the load stress, and the frictional stress from contraction also acts to relieve it. The critical combination at the edge is therefore load minus warping minus friction."
                 },
                 {
                     id: "cm31q087",
@@ -1224,7 +1224,7 @@ const CIVIL_MODEL_31 = {
                         { key: "d", text: "Resisting shear stresses" }
                     ],
                     answer: "b",
-                    explanation: "Dowel bars primarily function to transfer load from one slab to another while allowing for horizontal movement."
+                    explanation: "Dowel bars transfer wheel load across a transverse joint so that the approaching slab shares the load with the one being left, which prevents faulting and rocking at the joint. They are deliberately smooth and greased on one side so they do not restrain the longitudinal movement of the slabs."
                 },
                 {
                     id: "cm31q088",
@@ -1237,7 +1237,7 @@ const CIVIL_MODEL_31 = {
                         { key: "d", text: "CBR machine" }
                     ],
                     answer: "c",
-                    explanation: "The modulus of subgrade reaction is determined using a plate load test with plate-bearing equipment."
+                    explanation: "The modulus of subgrade reaction k is measured by a plate bearing test, loading a 750 mm plate and recording the pressure needed to produce a settlement of 1.25 mm. The value feeds directly into Westergaard's rigid pavement equations, and it is corrected for plate size and for soaking."
                 },
                 {
                     id: "cm31q089",

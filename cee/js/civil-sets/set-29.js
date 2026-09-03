@@ -58,7 +58,7 @@ const CIVIL_MODEL_29 = {
                         { key: "d", text: "Cubic meter for volume" }
                     ],
                     answer: "c",
-                    explanation: "The standard metric units are: meter (m) for length, square meter (m²) for area, cubic meter (m³) for volume."
+                    explanation: "Estimating uses the metric units consistently: length in metres, area in square metres and volume in cubic metres, with mass in kilogrammes or quintals. Getting the unit right matters because the rate in the schedule is quoted per that unit, and mixing them is one of the commonest sources of error in a bill of quantities."
                 },
                 {
                     id: "cm29q003",
@@ -744,7 +744,7 @@ const CIVIL_MODEL_29 = {
                         { key: "d", text: "only 3" }
                     ],
                     answer: "a",
-                    explanation: "For pipe flow, Re &lt; 2300 is laminar. So Re=100 and 1000 are laminar, Re=10000 is turbulent."
+                    explanation: "Pipe flow is laminar up to a Reynolds number of about 2000, transitional to roughly 4000, and turbulent above that. Flows 1 and 2, at 100 and 1000, are therefore laminar, while flow 3 at 10,000 is fully turbulent, with a much flatter velocity profile and losses that rise with the square of velocity."
                 },
                 {
                     id: "cm29q053",

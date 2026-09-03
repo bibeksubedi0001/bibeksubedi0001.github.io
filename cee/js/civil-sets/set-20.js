@@ -135,7 +135,7 @@ const CIVIL_MODEL_20 = {
                         { key: "d", text: "150" }
                     ],
                     answer: "d",
-                    explanation: "A standard 30m metric chain is divided into 150 links, with each link being 0.2m (20cm) long."
+                    explanation: "A 30 m metric chain has 150 links, each 200 mm long, with brass tags at every 5 m to make counting quick. The older 20 m chain has 100 links of the same length, so the link count follows directly from the chain length."
                 },
                 {
                     id: "cm20q009",
@@ -274,7 +274,7 @@ const CIVIL_MODEL_20 = {
                         { key: "d", text: "P = πEI / (2L)" }
                     ],
                     answer: "b",
-                    explanation: "Euler's crippling load formula for a column with both ends pinned is P = π²EI / L², where L is the effective length."
+                    explanation: "Euler's critical load is pi squared EI over L squared, with L the effective length, which equals the actual length only for a pin-ended column. The squared term is why slenderness dominates: doubling the length quarters the buckling load, whatever the strength of the material."
                 },
                 {
                     id: "cm20q019",
@@ -326,7 +326,7 @@ const CIVIL_MODEL_20 = {
                         { key: "d", text: "Hinge" }
                     ],
                     answer: "b",
-                    explanation: "A fixed support restrains both translation and rotation, resulting in zero slope (angular deflection) at that point."
+                    explanation: "A fixed support restrains rotation as well as translation, so the slope of the elastic curve is zero there and the beam leaves the support horizontally. Pins, rollers and internal hinges all allow rotation, so their angular deflection is generally not zero."
                 },
                 {
                     id: "cm20q023",
@@ -1021,7 +1021,7 @@ const CIVIL_MODEL_20 = {
                         { key: "d", text: "Crop period" }
                     ],
                     answer: "d",
-                    explanation: "The crop period is the total time that elapses from the sowing of a crop to its harvesting."
+                    explanation: "The crop period runs from sowing to harvesting, whereas the base period runs from the first watering before sowing to the last watering before harvest. The two are close in length and are often taken as equal, and the base period is the one used in the duty and delta relationship."
                 },
                 {
                     id: "cm20q073",
@@ -1310,7 +1310,7 @@ const CIVIL_MODEL_20 = {
                         { key: "d", text: "100 cm" }
                     ],
                     answer: "a",
-                    explanation: "The minimum diameter for the opening of a manhole cover is typically 50-55 cm to allow a person to enter."
+                    explanation: "A manhole cover opening is kept at least about 50 cm across so that a worker with a harness and equipment can pass through it. The chamber below is made wider, and depth decides whether steps or a ladder are required."
                 },
                 {
                     id: "cm20q094",

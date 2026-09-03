@@ -340,7 +340,7 @@ const CIVIL_MODEL_17 = {
                         { key: "d", text: "Straight line with constant slope" }
                     ],
                     answer: "d",
-                    explanation: "For a linear elastic material, the load-deformation curve is a straight line with a constant slope (Hooke's law)."
+                    explanation: "A linear elastic member obeys Hooke's law, so load and deformation stay in fixed proportion and the plot is a straight line whose slope is the stiffness. Once the material yields the line curves over, and the area under the straight portion is the elastic strain energy that is recovered on unloading."
                 },
                 {
                     id: "cm17q024",
@@ -717,7 +717,7 @@ const CIVIL_MODEL_17 = {
                         { key: "d", text: "1.4m" }
                     ],
                     answer: "c",
-                    explanation: "E = y + V²/(2g) = 1.01. V²/(2g)=0.25/(19.62)=0.01274m. So y = 1.01 - 0.01274 = 0.997m ≈1.0m."
+                    explanation: "Rearranging E equal to y plus V squared over 2g gives y equal to E minus the velocity head. The velocity head is 0.25 over 19.62, that is 0.0127 m, so the depth is 1.01 minus 0.013, which is almost exactly 1.0 m. At such low velocity nearly all the specific energy is depth."
                 },
                 {
                     id: "cm17q051",
@@ -756,7 +756,7 @@ const CIVIL_MODEL_17 = {
                         { key: "d", text: "0.8m/s" }
                     ],
                     answer: "b",
-                    explanation: "E = y + V²/(2g)=1.24. So V²/(2g)=1.24-1.2=0.04, V=√(0.04*19.62)=√0.7848=0.885 m/s ≈0.9m/s."
+                    explanation: "From E equal to y plus V squared over 2g, the velocity head is 1.24 minus 1.2, that is 0.04 m. The velocity is then the root of 2g times that head, the root of 0.7848, which is 0.885, so about 0.9 m per second."
                 },
                 {
                     id: "cm17q054",
@@ -1251,7 +1251,7 @@ const CIVIL_MODEL_17 = {
                         { key: "d", text: "&gt; 60%" }
                     ],
                     answer: "b",
-                    explanation: "As per standard terrain classification, Rolling terrain is characterized by cross slopes between 10% and 25%."
+                    explanation: "Terrain is classified by cross slope: plain up to 10 percent, rolling 10 to 25, mountainous 25 to 60 and steep above 60. The class governs the design speed, the gradients and the sight distances allowed, so terrain classification is the first step in fixing the geometric standards for a road."
                 }
             ]
         },

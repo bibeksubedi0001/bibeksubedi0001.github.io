@@ -566,7 +566,7 @@ const CIVIL_MODEL_30 = {
                         { key: "d", text: "5" }
                     ],
                     answer: "a",
-                    explanation: "The main types of combined footings are rectangular, trapezoidal, and strap (or cantilever) footings."
+                    explanation: "Combined footings come in three usual forms: rectangular, where the two column loads are equal; trapezoidal, where they differ so the base is widened under the heavier column; and the strap or cantilever footing, where two separate bases are tied by a beam. In each case the aim is to make the base centroid coincide with the load resultant."
                 },
                 {
                     id: "cm30q040",
@@ -631,7 +631,7 @@ const CIVIL_MODEL_30 = {
                         { key: "d", text: "Both (a) and (b)" }
                     ],
                     answer: "a",
-                    explanation: "A foundation is generally considered shallow if its depth (Df) is less than or equal to its width (B)."
+                    explanation: "A foundation is classed as shallow when its depth of embedment is no greater than its width, which is the range over which Terzaghi's bearing capacity theory applies and the soil above the base can be treated simply as a surcharge. Deeper than that and the shaft friction must be accounted for, which is the domain of piles and wells."
                 },
                 {
                     id: "cm30q045",
@@ -644,7 +644,7 @@ const CIVIL_MODEL_30 = {
                         { key: "d", text: "Well foundation" }
                     ],
                     answer: "c",
-                    explanation: "Spread footings (or isolated footings) are the most common type of shallow foundation, used to support a single column."
+                    explanation: "A spread or isolated footing is the simplest shallow foundation, a pad that spreads a single column load over enough area for the soil to carry it. Piles, piers and wells are all deep foundations that carry load down to a firmer stratum well below the surface."
                 },
                 {
                     id: "cm30q046",

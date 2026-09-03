@@ -175,7 +175,7 @@ const CIVIL_MODEL_16 = {
                         { key: "d", text: "Stretcher" }
                     ],
                     answer: "c",
-                    explanation: "A 'course' is a continuous horizontal layer of masonry units (stones or bricks) in a wall."
+                    explanation: "A course is one continuous horizontal layer of stones or bricks together with its bed joint, and the whole wall is built up course by course. The bed is only the lower surface on which a unit rests, a stretcher is a unit laid with its length along the wall, and bond describes the pattern in which the units overlap."
                 },
                 {
                     id: "cm16q012",
@@ -275,7 +275,7 @@ const CIVIL_MODEL_16 = {
                         { key: "d", text: "Unrestricted" }
                     ],
                     answer: "b",
-                    explanation: "The column analogy method is typically used for structures with degree of static indeterminacy up to 3."
+                    explanation: "The column analogy treats the bending moment diagram as a load on an analogous column section, and the method is practical only up to a third degree of static indeterminacy, which covers the fixed beam and the single-bay portal. Beyond that the analogous section becomes unwieldy and moment distribution or matrix methods are used."
                 },
                 {
                     id: "cm16q019",
@@ -314,7 +314,7 @@ const CIVIL_MODEL_16 = {
                         { key: "d", text: "Inclined direction" }
                     ],
                     answer: "a",
-                    explanation: "To find deflection at a point in a specific direction, a unit load is applied at that point in the same direction."
+                    explanation: "In the unit load method a dummy load of unity is applied at the point where the deflection is wanted, acting in the very direction in which it is to be measured. The internal forces from that dummy load then weight the real member deformations, so a horizontal unit load returns horizontal movement and a vertical one vertical movement."
                 },
                 {
                     id: "cm16q022",
@@ -375,7 +375,7 @@ const CIVIL_MODEL_16 = {
                         { key: "d", text: "IS 456" }
                     ],
                     answer: "a",
-                    explanation: "IS 883: Code of Practice for Design of Structural Timber in Buildings is the relevant Indian Standard."
+                    explanation: "IS 883 is the Indian code of practice for the design of structural timber in buildings. It groups species by strength, sets permissible stresses for inside, outside and wet locations, and covers joints and fasteners. IS 1905 covers masonry, IS 800 steel and IS 456 concrete."
                 },
                 {
                     id: "cm16q026",
@@ -479,7 +479,7 @@ const CIVIL_MODEL_16 = {
                         { key: "d", text: "IS 803" }
                     ],
                     answer: "a",
-                    explanation: "IS 800 is the fundamental Indian Standard code of practice for general construction in steel."
+                    explanation: "IS 800 is the general construction in steel code, covering limit state design, member and connection capacities, stability and serviceability. IS 801 deals with cold-formed light gauge sections and IS 802 with transmission line towers, so IS 800 is the one that governs ordinary building steelwork."
                 },
                 {
                     id: "cm16q034",
@@ -770,7 +770,7 @@ const CIVIL_MODEL_16 = {
                         { key: "d", text: "Datum head" }
                     ],
                     answer: "b",
-                    explanation: "Specific energy is defined as the energy per unit weight of water measured with respect to the channel bottom."
+                    explanation: "Specific energy is the energy per unit weight of water measured above the channel bed, E equal to y plus V squared over 2g. Because it is referred to the bed rather than to a fixed datum, it is the quantity that stays useful when the bed rises or falls, and its minimum defines critical flow."
                 },
                 {
                     id: "cm16q055",
@@ -822,7 +822,7 @@ const CIVIL_MODEL_16 = {
                         { key: "d", text: "5.11m" }
                     ],
                     answer: "b",
-                    explanation: "Specific energy E = y + V²/(2g) = 3 + (1.5²)/(2*9.81) = 3 + (2.25/19.62) = 3 + 0.1147 = 3.1147m ≈3.11m."
+                    explanation: "Specific energy is E equal to y plus V squared over 2g, that is 3 plus 2.25 over 19.62, which is 3 plus 0.115, or 3.11 m. Note how small the velocity head is at this speed: at 1.5 m/s it adds barely a tenth of a metre, so in slow deep flow the depth dominates the energy."
                 },
                 {
                     id: "cm16q059",
@@ -848,7 +848,7 @@ const CIVIL_MODEL_16 = {
                         { key: "d", text: "Q²/g = A³/T" }
                     ],
                     answer: "d",
-                    explanation: "The condition for critical flow is that the Froude number is 1, which leads to Q²/g = A³/T."
+                    explanation: "Critical flow is the state of minimum specific energy, where the Froude number is one. Setting dE/dy to zero gives Q squared over g equal to A cubed over T, with T the top width. That single relation defines the critical depth for any channel shape, and reduces to y_c equal to the cube root of q squared over g for a rectangle."
                 }
             ]
         },

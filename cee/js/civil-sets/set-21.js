@@ -149,7 +149,7 @@ const CIVIL_MODEL_21 = {
                         { key: "d", text: "Length of the vapor bubble increased." }
                     ],
                     answer: "b",
-                    explanation: "Fluid-property factors (viscosity, surface tension) resist bubble movement → more sluggish → less sensitive."
+                    explanation: "Sensitivity depends on how freely the bubble can move for a small tilt. Higher viscosity resists that movement and higher surface tension holds the bubble in shape, so increasing either makes the bubble sluggish and the level less sensitive. A larger radius of curvature or a longer bubble does the opposite."
                 },
                 {
                     id: "cm21q010",
@@ -388,7 +388,7 @@ const CIVIL_MODEL_21 = {
                         { key: "d", text: "1.4" }
                     ],
                     answer: "c",
-                    explanation: "As per IS 800:2007, for sheared or hand-flame cut edges, the minimum edge distance is 1.7 times the hole diameter."
+                    explanation: "IS 800 sets the minimum edge and end distance at 1.7 times the hole diameter for a sheared or hand-flame cut edge, against 1.5 times for a rolled, machine-flame cut or sawn edge. The rougher edge needs more material because it carries micro-cracks that could tear out under bearing."
                 },
                 {
                     id: "cm21q027",
@@ -553,7 +553,7 @@ const CIVIL_MODEL_21 = {
                         { key: "d", text: "All of above" }
                     ],
                     answer: "d",
-                    explanation: "All these features provide valuable geological and geotechnical information about a site's history and conditions."
+                    explanation: "A site walkover yields evidence from all of these: old excavations expose the strata directly, escarpments reveal bedding, jointing and past instability, and flood marks record the levels that water has reached. Together they guide where boreholes should be put down."
                 },
                 {
                     id: "cm21q039",
@@ -1074,7 +1074,7 @@ const CIVIL_MODEL_21 = {
                         { key: "d", text: "Delta" }
                     ],
                     answer: "a",
-                    explanation: "In direct irrigation using a weir or a dam, the duty is sometimes specifically referred to as 'Flow Duty'."
+                    explanation: "In direct or flow irrigation, water is diverted straight from the river by a weir and the duty is expressed as flow duty, the area irrigated per cumec of continuous discharge. In storage irrigation it is quoted instead as quantity duty, the area per unit volume of water released."
                 },
                 {
                     id: "cm21q077",

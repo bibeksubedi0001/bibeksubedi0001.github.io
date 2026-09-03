@@ -1146,7 +1146,7 @@ const CIVIL_MODEL_32 = {
                         { key: "d", text: "Time for down payment" }
                     ],
                     answer: "a",
-                    explanation: "Downtime refers to when equipment is non-functional or broken down and cannot be used for its intended purpose."
+                    explanation: "Downtime is the period during which equipment is unavailable because it has broken down or is being repaired or serviced. It is distinct from idle time, when the machine is fit to work but has nothing to do, and the distinction matters because downtime is charged against the machine's own reliability."
                 },
                 {
                     id: "cm32q082",
@@ -1172,7 +1172,7 @@ const CIVIL_MODEL_32 = {
                         { key: "d", text: "Hoisting" }
                     ],
                     answer: "c",
-                    explanation: "Conveying refers to continuous movement of materials over a fixed path using mechanical means like belt conveyors."
+                    explanation: "Conveying is the continuous movement of material along a fixed installation such as a belt, screw or bucket elevator, so the structure stays still and only the material travels. Hauling moves material in a vehicle over a route, and hoisting raises it vertically."
                 },
                 {
                     id: "cm32q084",
@@ -1185,7 +1185,7 @@ const CIVIL_MODEL_32 = {
                         { key: "d", text: "Vertical shaft impactor" }
                     ],
                     answer: "d",
-                    explanation: "Vertical Shaft Impactor crushers are ideal for aggregate shaping as they produce a well-shaped, cubical product."
+                    explanation: "A vertical shaft impactor throws the feed against a wall of rock or steel, so the particles break along their natural planes and the flaky and elongated pieces are knocked into a cubical shape. Jaw and cone crushers reduce size by compression and tend to produce more flaky particles."
                 },
                 {
                     id: "cm32q085",
@@ -1224,7 +1224,7 @@ const CIVIL_MODEL_32 = {
                         { key: "d", text: "Excessive bitumen" }
                     ],
                     answer: "c",
-                    explanation: "Alligator cracking is a structural fatigue failure caused by repetitive bending of the pavement under traffic loads."
+                    explanation: "Alligator or fatigue cracking is a structural failure: repeated wheel loads flex the bituminous layer over a subgrade that is too weak or too thin, and the tensile strain at the underside of the layer eventually starts cracks that work their way up into an interconnected pattern."
                 },
                 {
                     id: "cm32q088",
@@ -1250,7 +1250,7 @@ const CIVIL_MODEL_32 = {
                         { key: "d", text: "Gravel roads" }
                     ],
                     answer: "a",
-                    explanation: "Alligator cracking is the classic fatigue failure mode of bituminous surfaces in flexible pavements."
+                    explanation: "Alligator or map cracking is the characteristic fatigue failure of bituminous surfacing on a flexible pavement, appearing in the wheel paths where the loading is concentrated. It signals that the pavement structure itself is inadequate, so a surface patch alone will not cure it."
                 },
                 {
                     id: "cm32q090",
@@ -1263,7 +1263,7 @@ const CIVIL_MODEL_32 = {
                         { key: "d", text: "Rigid overlay" }
                     ],
                     answer: "b",
-                    explanation: "Reflection cracking occurs when cracks from an old pavement propagate up through a new bituminous overlay."
+                    explanation: "Reflection cracking appears when a bituminous overlay is laid over an existing cracked or jointed pavement, typically concrete. Movement at the joint below concentrates strain in the new layer directly above it, so the old crack pattern reappears at the surface within a season or two."
                 }
             ]
         },
@@ -1363,7 +1363,7 @@ const CIVIL_MODEL_32 = {
                         { key: "d", text: "1.00 to 2.00 mm" }
                     ],
                     answer: "a",
-                    explanation: "Slow sand filters use finer sand (0.2-0.35 mm) compared to rapid sand filters to ensure biological filtration."
+                    explanation: "Slow sand filters use sand with an effective size of about 0.2 to 0.35 mm, considerably finer than the 0.45 to 0.7 mm of a rapid filter. The fine pores are what allow the biological layer, the schmutzdecke, to form and do the purifying, at the cost of a filtration rate some thirty times lower."
                 },
                 {
                     id: "cm32q098",
@@ -1376,7 +1376,7 @@ const CIVIL_MODEL_32 = {
                         { key: "d", text: "Near the intake only" }
                     ],
                     answer: "b",
-                    explanation: "Blow-off or scour valves are placed at the lowest points of a pipeline to drain the pipe or remove sediment."
+                    explanation: "Blow-off or scour valves go at the low points of a main, where silt settles and where the pipe must be drained from for repair. Air valves do the complementary job at the summits, releasing accumulated air that would otherwise throttle the flow."
                 },
                 {
                     id: "cm32q099",
@@ -1389,7 +1389,7 @@ const CIVIL_MODEL_32 = {
                         { key: "d", text: "Min demand / Average demand" }
                     ],
                     answer: "c",
-                    explanation: "The demand factor is the ratio of the maximum demand to the total connected load on the system."
+                    explanation: "The demand factor is the maximum demand divided by the total connected load, and it is always less than one because not every fitting is used at once. It is what lets a distribution system be sized for realistic peak use rather than for the theoretical sum of every connection."
                 },
                 {
                     id: "cm32q100",
@@ -1402,7 +1402,7 @@ const CIVIL_MODEL_32 = {
                         { key: "d", text: "2.5 to 3.0 m/s" }
                     ],
                     answer: "d",
-                    explanation: "Maximum velocity is kept around 2.5 to 3.0 m/s to prevent scouring (erosion) of the sewer pipe material."
+                    explanation: "Sewers are limited to about 2.5 to 3 m per second so that grit carried in the flow does not scour the invert. The lower limit, the self-cleansing velocity of around 0.6 to 0.8 m per second, must also be met at minimum flow, so the gradient has to satisfy both ends of the range."
                 }
             ]
         }

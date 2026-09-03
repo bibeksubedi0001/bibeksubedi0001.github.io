@@ -188,7 +188,7 @@ const CIVIL_MODEL_25 = {
                         { key: "d", text: "3cm" }
                     ],
                     answer: "a",
-                    explanation: "This is a repeat of question 21. The answer remains k = d/4 = 10/4 = 2.5 cm for the moment of inertia about a diameter."
+                    explanation: "The radius of gyration about a diameter of a circular section is k equal to the root of I over A, which reduces to d over 4. For a 10 cm plate that is 2.5 cm. Radius of gyration is what converts a slenderness ratio into an effective length, so it is central to column design."
                 },
                 {
                     id: "cm25q013",
@@ -260,7 +260,7 @@ const CIVIL_MODEL_25 = {
                         { key: "d", text: "None of these" }
                     ],
                     answer: "c",
-                    explanation: "The angle between the resultant stress and the normal to the plane on which it acts is called the angle of obliquity."
+                    explanation: "The angle of obliquity is the angle between the resultant stress on a plane and the normal to that plane. It is zero on a principal plane, where no shear acts, and reaches its maximum on the plane of failure, which is why the failure criterion is often stated as a limiting obliquity."
                 },
                 {
                     id: "cm25q018",
@@ -312,7 +312,7 @@ const CIVIL_MODEL_25 = {
                         { key: "d", text: "Brittle" }
                     ],
                     answer: "b",
-                    explanation: "Ductile materials undergo significant plastic deformation before fracture (e.g., mild steel)."
+                    explanation: "A ductile material undergoes large plastic deformation before it ruptures, so it necks visibly and gives warning. Mild steel, copper and aluminium behave this way, while brittle materials such as cast iron and concrete fail suddenly at small strain, which is why codes force ductile modes of failure."
                 },
                 {
                     id: "cm25q022",
@@ -338,7 +338,7 @@ const CIVIL_MODEL_25 = {
                         { key: "d", text: "Orthotropic" }
                     ],
                     answer: "d",
-                    explanation: "Orthotropic materials have different elastic properties in three mutually perpendicular directions (e.g., wood)."
+                    explanation: "An orthotropic material has different elastic properties along three mutually perpendicular axes. Timber is the classic example, being far stiffer along the grain than across it, and rolled steel and reinforced concrete slabs spanning in one direction behave orthotropically too."
                 },
                 {
                     id: "cm25q024",
@@ -1283,7 +1283,7 @@ const CIVIL_MODEL_25 = {
                         { key: "d", text: "Settling ponds" }
                     ],
                     answer: "d",
-                    explanation: "Settling ponds or sedimentation ponds are designed to allow entrained solids to settle out from water by gravity."
+                    explanation: "Settling or sedimentation ponds are simple earthen basins in which the flow is slowed enough for entrained solids to fall out under gravity. They have no mechanical parts, so the accumulated sludge has to be dug out periodically rather than scraped away continuously."
                 },
                 {
                     id: "cm25q092",
@@ -1296,7 +1296,7 @@ const CIVIL_MODEL_25 = {
                         { key: "d", text: "Eco-ponds" }
                     ],
                     answer: "a",
-                    explanation: "Clarifiers are sedimentation tanks equipped with mechanical scrapers for the continuous removal of settled sludge."
+                    explanation: "A clarifier is a sedimentation tank fitted with a slowly rotating or travelling scraper that pushes settled sludge to a hopper for continuous withdrawal, and usually a surface skimmer for floating matter. The mechanism is what lets it run without being taken out of service."
                 },
                 {
                     id: "cm25q093",
@@ -1309,7 +1309,7 @@ const CIVIL_MODEL_25 = {
                         { key: "d", text: "Sewage" }
                     ],
                     answer: "b",
-                    explanation: "The concentrated mixture of solids settled at the bottom of a sedimentation tank or clarifier is called sludge."
+                    explanation: "The settled solids that accumulate at the bottom of a sedimentation tank or clarifier are called sludge, and they have to be withdrawn regularly before they turn septic. Flocs are the individual aggregated particles that make it up, before they reach the floor."
                 },
                 {
                     id: "cm25q094",

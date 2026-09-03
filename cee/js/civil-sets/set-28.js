@@ -162,7 +162,7 @@ const CIVIL_MODEL_28 = {
                         { key: "d", text: "All of the above" }
                     ],
                     answer: "d",
-                    explanation: "All three statements are standard definitions in construction project management and estimating terminology."
+                    explanation: "All three statements are standard definitions in estimating and contract practice: the estimate is the anticipated cost prepared before the work, the actual expenditure is what the work finally cost, and formal acceptance by the competent authority is what turns a proposal into a sanctioned project."
                 },
                 {
                     id: "cm28q011",
@@ -883,7 +883,7 @@ const CIVIL_MODEL_28 = {
                         { key: "d", text: "Barrage" }
                     ],
                     answer: "b",
-                    explanation: "A silt extractor is a device used to remove silt after it has already entered the canal system."
+                    explanation: "A silt excluder works in the river upstream of the head regulator, keeping the sediment out of the canal in the first place. A silt extractor works inside the canal, downstream of the regulator, and removes the silt that has already entered by trapping it in tunnels or vanes and flushing it away."
                 },
                 {
                     id: "cm28q063",
@@ -1287,7 +1287,7 @@ const CIVIL_MODEL_28 = {
                         { key: "d", text: "Mean velocity" }
                     ],
                     answer: "c",
-                    explanation: "The grading of filter sand is described by two parameters: Effective Size (D10) and Uniformity Coefficient (D60/D10)."
+                    explanation: "Filter sand is specified by two numbers together. The effective size D10 is the sieve opening that 10 percent of the sand passes, and it fixes how fine the pores are; the uniformity coefficient D60 over D10 says how spread the grading is, and a low value near 1.3 to 1.7 keeps the bed from segregating when it is backwashed."
                 },
                 {
                     id: "cm28q092",

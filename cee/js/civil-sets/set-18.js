@@ -71,7 +71,7 @@ const CIVIL_MODEL_18 = {
                         { key: "d", text: "Topographical surveying" }
                     ],
                     answer: "a",
-                    explanation: "Cadastral surveying is specifically for marking property boundaries, land ownership, and property lines."
+                    explanation: "Cadastral survey establishes and records property boundaries, ownership and areas, and its plans form the legal record of land parcels. Topographical survey maps the natural and built features of the ground surface, and city survey covers the detail of streets and services within a town."
                 },
                 {
                     id: "cm18q004",
@@ -262,7 +262,7 @@ const CIVIL_MODEL_18 = {
                         { key: "d", text: "Strain energy" }
                     ],
                     answer: "c",
-                    explanation: "Proof resilience is the maximum strain energy that can be stored in a body without permanent deformation."
+                    explanation: "Proof resilience is the total strain energy a member can absorb up to its elastic limit and give back completely on unloading. Divided by the volume it becomes the modulus of resilience, so proof resilience depends on the size of the member while the modulus is a property of the material alone."
                 },
                 {
                     id: "cm18q018",
@@ -275,7 +275,7 @@ const CIVIL_MODEL_18 = {
                         { key: "d", text: "Modulus of resilience" }
                     ],
                     answer: "d",
-                    explanation: "Modulus of resilience is the proof resilience per unit volume, i.e., the maximum strain energy per unit volume."
+                    explanation: "The modulus of resilience is the proof resilience per unit volume, that is the area under the stress-strain curve up to the elastic limit. It equals sigma squared over 2E, so a material with a high yield stress and a low modulus, such as spring steel, stores the most energy elastically."
                 },
                 {
                     id: "cm18q019",
@@ -288,7 +288,7 @@ const CIVIL_MODEL_18 = {
                         { key: "d", text: "Resilience" }
                     ],
                     answer: "a",
-                    explanation: "Strain energy is the total energy absorbed by a material when subjected to load within the elastic limit."
+                    explanation: "Strain energy is the work done by the load in deforming the member, stored in it while the deformation is elastic and recovered when the load is removed. For an axially loaded bar it is P squared L over 2AE, and for a beam it is the integral of M squared over 2EI along the span."
                 },
                 {
                     id: "cm18q020",
@@ -353,7 +353,7 @@ const CIVIL_MODEL_18 = {
                         { key: "d", text: "None" }
                     ],
                     answer: "b",
-                    explanation: "Castigliano's first theorem is used to find displacements (deflections) at points where forces are applied."
+                    explanation: "Castigliano's first theorem states that the partial derivative of the strain energy with respect to a displacement gives the force at that point, so it is used the other way round from the second theorem, which differentiates with respect to a load to give the deflection. Both are energy methods for indeterminate structures."
                 }
             ]
         },
@@ -414,7 +414,7 @@ const CIVIL_MODEL_18 = {
                         { key: "d", text: "22 to 32 mm in diameter" }
                     ],
                     answer: "b",
-                    explanation: "Cold-driven rivets are typically used for smaller diameters, commonly in the range of 12 to 22 mm."
+                    explanation: "Rivets from about 12 to 22 mm are driven cold, since the smith can still upset the head without heating. Larger rivets need to be driven hot so that they can be formed and then shrink on cooling to clamp the plates, which is why hot driving was standard for heavy structural work."
                 },
                 {
                     id: "cm18q029",
@@ -1008,7 +1008,7 @@ const CIVIL_MODEL_18 = {
                         { key: "d", text: "Full supply co-efficient" }
                     ],
                     answer: "a",
-                    explanation: "The duty of water calculated at the outlet of a watercourse is specifically called the outlet factor."
+                    explanation: "The duty measured at the head of the watercourse, that is at the outlet, is called the outlet factor or outlet discharge factor. Duty quoted higher up the system is lower, because the discharge there must also cover the conveyance losses down to the outlet."
                 },
                 {
                     id: "cm18q072",
@@ -1134,7 +1134,7 @@ const CIVIL_MODEL_18 = {
                         { key: "d", text: "80 kmph" }
                     ],
                     answer: "b",
-                    explanation: "NRS-2070 (Nepal Road Standard) specifies the design speed for a Class III road in Rolling terrain as 60 kmph."
+                    explanation: "Nepal Road Standard 2070 sets 60 km/h as the design speed for a Class III road in rolling terrain, against 80 in plain terrain and 40 in mountainous. The design speed then fixes the minimum radii, superelevation, sight distances and gradients for the alignment."
                 },
                 {
                     id: "cm18q081",
@@ -1364,7 +1364,7 @@ const CIVIL_MODEL_18 = {
                         { key: "d", text: "None" }
                     ],
                     answer: "c",
-                    explanation: "The standard BOD test is defined as the 5-day biochemical oxygen demand measured at 20°C (BOD₅ at 20°C)."
+                    explanation: "The standard biochemical oxygen demand is measured over 5 days at 20 degrees Celsius, written BOD5. Five days is used because the incubation captures most of the carbonaceous demand without the nitrifying bacteria taking over, and 20 degrees represents a typical stream temperature."
                 },
                 {
                     id: "cm18q098",

@@ -756,7 +756,7 @@ const CIVIL_MODEL_15 = {
                         { key: "d", text: "2y²" }
                     ],
                     answer: "d",
-                    explanation: "For a rectangular channel, the most economical section has B=2y. Then area A = B*y = 2y*y = 2y²."
+                    explanation: "The most economical rectangular section is the one with the least wetted perimeter for a given area, and that condition works out at B equal to 2y. The area is then B times y, that is 2y squared, and the same proportions give a hydraulic radius of exactly half the depth."
                 },
                 {
                     id: "cm15q054",
@@ -769,7 +769,7 @@ const CIVIL_MODEL_15 = {
                         { key: "d", text: "y" }
                     ],
                     answer: "a",
-                    explanation: "For most economical rectangular section, B=2y. Then wetted perimeter P = B + 2y = 2y + 2y = 4y."
+                    explanation: "With the economical proportion B equal to 2y, the wetted perimeter is B plus 2y, that is 2y plus 2y, or 4y. Since the area is 2y squared, the hydraulic radius R equal to A over P comes out at y over 2, which is the signature of every most-efficient channel section."
                 },
                 {
                     id: "cm15q055",
@@ -1363,7 +1363,7 @@ const CIVIL_MODEL_15 = {
                         { key: "d", text: "Absence of oxygen" }
                     ],
                     answer: "d",
-                    explanation: "Anaerobic decomposition is the breakdown of organic matter by microorganisms in an oxygen-free environment."
+                    explanation: "Anaerobic decomposition proceeds without free oxygen, the bacteria drawing their oxygen from sulphates and other compounds instead. It is slower than aerobic breakdown and produces methane, carbon dioxide and hydrogen sulphide, which is why septic tanks and digesters smell and why the gas can be collected as fuel."
                 },
                 {
                     id: "cm15q098",

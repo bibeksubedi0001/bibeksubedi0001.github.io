@@ -97,7 +97,7 @@ const CIVIL_MODEL_19 = {
                         { key: "d", text: "Magnetic bearing" }
                     ],
                     answer: "d",
-                    explanation: "A magnetic bearing is the horizontal angle measured clockwise from the magnetic north direction to the line."
+                    explanation: "A magnetic bearing is the horizontal angle a line makes with the magnetic meridian, measured clockwise from magnetic north. It differs from the true bearing by the magnetic declination at that place and date, and local attraction from iron or power lines can distort it further."
                 },
                 {
                     id: "cm19q006",
@@ -223,7 +223,7 @@ const CIVIL_MODEL_19 = {
                         { key: "d", text: "None" }
                     ],
                     answer: "a",
-                    explanation: "Castigliano's second theorem is used to find deflections by differentiating the strain energy with respect to a load."
+                    explanation: "Castigliano's second theorem states that the partial derivative of the total strain energy with respect to a load gives the deflection at that load, in its own direction. Where no load acts at the point of interest, a dummy load is applied and set to zero after differentiating."
                 },
                 {
                     id: "cm19q015",
@@ -236,7 +236,7 @@ const CIVIL_MODEL_19 = {
                         { key: "d", text: "strain energy due to torsion" }
                     ],
                     answer: "b",
-                    explanation: "For beams, deflection is primarily computed using strain energy due to bending, as bending is the dominant action."
+                    explanation: "In a beam the strain energy stored in bending is far greater than that from shear or axial force, so deflection calculations use the bending term, the integral of M squared over 2EI, and neglect the rest. Shear deformation only becomes significant in deep beams, where the span to depth ratio is small."
                 },
                 {
                     id: "cm19q016",
@@ -465,7 +465,7 @@ const CIVIL_MODEL_19 = {
                         { key: "d", text: "300 mm" }
                     ],
                     answer: "c",
-                    explanation: "As per IS 456:2000, the minimum thickness at the edge of an isolated footing should not be less than 150 mm."
+                    explanation: "IS 456 requires at least 150 mm of thickness at the edge of a footing on soil, so that there is room to cover the reinforcement and the thin edge still has enough concrete to resist the shear and bending there. On piles the minimum rises to 300 mm."
                 },
                 {
                     id: "cm19q033",

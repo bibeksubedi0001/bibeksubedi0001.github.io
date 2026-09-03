@@ -222,7 +222,7 @@ const CIVIL_MODEL_24 = {
                         { key: "c", text: "Infinity" }
                     ],
                     answer: "b",
-                    explanation: "By definition, principal planes are those on which the shear stress is zero, and only normal (principal) stresses act."
+                    explanation: "A principal plane is defined as one carrying no shear stress, which is exactly why the normal stress on it reaches an extreme value. On Mohr's circle these are the two points where the circle crosses the horizontal axis."
                 },
                 {
                     id: "cm24q015",
@@ -260,7 +260,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "Equal to 180" }
                     ],
                     answer: "a",
-                    explanation: "Principal planes are always orthogonal to each other; the angle between them is 90 degrees."
+                    explanation: "The two principal planes are always at right angles to each other. On Mohr's circle they are the two ends of a diameter, 180 degrees apart on the circle, and since angles on the circle are twice the physical angles, that corresponds to 90 degrees in the material."
                 },
                 {
                     id: "cm24q018",
@@ -298,7 +298,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "Hardness test" }
                     ],
                     answer: "d",
-                    explanation: "A hardness test measures a material's resistance to permanent deformation (e.g., indentation, scratching)."
+                    explanation: "A hardness test measures resistance to localised plastic deformation, and the Brinell, Vickers and Rockwell methods all press an indenter in and measure the impression. Hardness correlates roughly with tensile strength, which is why it is such a convenient non-destructive site check."
                 },
                 {
                     id: "cm24q021",
@@ -350,7 +350,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "lateral strain to longitudinal strain" }
                     ],
                     answer: "d",
-                    explanation: "Poisson’s ratio (ν) is defined as the negative ratio of lateral strain to longitudinal strain under axial stress."
+                    explanation: "Poisson's ratio is the ratio of lateral strain to longitudinal strain under axial load, taken as positive by convention even though the two strains have opposite signs. It lies between 0 and 0.5 for real materials, about 0.3 for steel, and 0.5 is the incompressible limit approached by rubber."
                 }
             ]
         },
@@ -574,7 +574,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "All of the above" }
                     ],
                     answer: "c",
-                    explanation: "The primary function of a retaining wall is to resist the lateral pressure imposed by the retained soil mass."
+                    explanation: "A retaining wall exists to resist the lateral earth pressure from the soil behind it, and that pressure is what governs its stability against sliding, overturning and bearing failure. Surcharge and water pressure simply add to that lateral push, and erosion is a separate durability concern."
                 },
                 {
                     id: "cm24q041",
@@ -665,7 +665,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "Slip lines" }
                     ],
                     answer: "c",
-                    explanation: "Any load applied on the top of the backfill, beyond its own weight, is termed as surcharge."
+                    explanation: "A surcharge is any load carried on the backfill above the level of the top of the wall, whether a uniform load such as a road or stacked material, or the extra soil where the ground slopes up behind. A uniform surcharge q adds Ka times q to the pressure over the full height of the wall."
                 },
                 {
                     id: "cm24q048",
@@ -804,7 +804,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "0.081" }
                     ],
                     answer: "a",
-                    explanation: "The dynamic viscosity of water at 30°C is approximately 0.801 centipoise (cP) or 0.000801 Pa·s."
+                    explanation: "Water at 30 degrees Celsius has a dynamic viscosity of about 0.801 centipoise, that is 0.000801 pascal seconds. Viscosity falls steeply with temperature, roughly halving between 10 and 40 degrees, which is why temperature must be recorded whenever viscosity or permeability is measured."
                 },
                 {
                     id: "cm24q058",
@@ -969,7 +969,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "None of above" }
                     ],
                     answer: "c",
-                    explanation: "\\(h = 1805 - 1450 = 355\\\\ y_{cp} = \\frac{2}{3} \\times 355 = 236.67\\\\ \\text{Elevation} = 1805 - 236.67 = 1568.33\\)"
+                    explanation: "The resultant of a triangular hydrostatic pressure distribution acts at one third of the water depth above the base. With 355 m of water the centre of pressure is 236.67 m above the base, that is at an elevation of 1805 minus 236.67, which is 1568.33."
                 }
             ]
         },
@@ -1386,7 +1386,7 @@ const CIVIL_MODEL_24 = {
                         { key: "d", text: "calcium chloride" }
                     ],
                     answer: "c",
-                    explanation: "Copper sulfate (CuSO₄) is a common algicide used in reservoirs and ponds to control algal growth."
+                    explanation: "Copper sulphate is the standard algicide for reservoirs and open basins, dosed at a fraction of a milligram per litre. It is cheap and effective, but the dose must be controlled because copper is toxic to fish and because killing a heavy bloom all at once releases taste and odour compounds."
                 },
                 {
                     id: "cm24q100",

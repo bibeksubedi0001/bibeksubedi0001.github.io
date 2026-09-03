@@ -45,7 +45,7 @@ const CIVIL_MODEL_27 = {
                         { key: "d", text: "100" }
                     ],
                     answer: "d",
-                    explanation: "A Gunter's chain is 66 feet long and is divided into 100 links. Each link is thus 0.66 feet long."
+                    explanation: "Gunter's chain is 66 feet long and made up of 100 links, so each link is 0.66 feet. The length was chosen for land measurement: 10 square chains make exactly one acre, and 80 chains make a mile, which made area computation easy before decimal units."
                 },
                 {
                     id: "cm27q002",
@@ -84,7 +84,7 @@ const CIVIL_MODEL_27 = {
                         { key: "d", text: "Spirit Level" }
                     ],
                     answer: "c",
-                    explanation: "A compass is a sighting instrument used to determine the direction or bearing of a line by aligning it with an object."
+                    explanation: "A prismatic compass is sighted at the object through its slit and prism, and the bearing is read off the graduated ring at the same instant. The U-frame and plumbing fork belong to plane table equipment and a spirit level only establishes horizontality."
                 },
                 {
                     id: "cm27q005",
@@ -249,7 +249,7 @@ const CIVIL_MODEL_27 = {
                         { key: "d", text: "6" }
                     ],
                     answer: "c",
-                    explanation: "Plane stress (e.g., in a thin plate) has three independent stress components: σ_x, σ_y, and τ_xy."
+                    explanation: "Plane stress, as in a thin plate loaded in its own plane, has three independent components: the two direct stresses sigma x and sigma y and the shear stress tau xy, with the out-of-plane components all zero. The general three-dimensional state needs six."
                 },
                 {
                     id: "cm27q017",
@@ -288,7 +288,7 @@ const CIVIL_MODEL_27 = {
                         { key: "d", text: "Shear strain" }
                     ],
                     answer: "b",
-                    explanation: "Shear stress is caused by forces acting tangentially to a surface, tending to cause sliding or shearing."
+                    explanation: "Shear stress arises when equal and opposite forces act tangentially across a section, tending to make one part slide over the other. It is calculated as the force divided by the area resisting it, and it is what governs the design of bolts, welds and the webs of beams."
                 },
                 {
                     id: "cm27q020",
@@ -426,7 +426,7 @@ const CIVIL_MODEL_27 = {
                         { key: "d", text: "7 N/mm²" }
                     ],
                     answer: "d",
-                    explanation: "As per IS 456:2000, Table 21, the permissible stress in bending compression (σ_cbc) for M20 grade concrete is 7 N/mm²."
+                    explanation: "IS 456 gives the permissible compressive stress in bending as 7 N/mm² for M20 concrete in working stress design, against 5 for M15 and 8.5 for M25. Roughly it is a third of the characteristic cube strength, the balance being the factor of safety."
                 },
                 {
                     id: "cm27q030",
@@ -1310,7 +1310,7 @@ const CIVIL_MODEL_27 = {
                         { key: "d", text: "Al₂(SO₄)₃·18H₂O" }
                     ],
                     answer: "d",
-                    explanation: "The common formula for alum (aluminum sulfate) used in water treatment is Al₂(SO₄)₃·18H₂O."
+                    explanation: "Filter alum is aluminium sulphate with eighteen molecules of water of crystallisation, Al2(SO4)3 with 18H2O. In water it hydrolyses to aluminium hydroxide floc, consuming alkalinity as it does so, which is why lime is sometimes dosed alongside it in soft waters."
                 },
                 {
                     id: "cm27q094",
@@ -1362,7 +1362,7 @@ const CIVIL_MODEL_27 = {
                         { key: "d", text: "phenolic solvent" }
                     ],
                     answer: "c",
-                    explanation: "Chlorination and UV radiation are the two most common methods for disinfecting wastewater effluent."
+                    explanation: "Chlorination and ultraviolet irradiation are the two common disinfection methods for treated effluent. Chlorine leaves a residual but can form chlorinated by-products, whereas UV leaves no residual and no by-products but needs clear water and continuous power."
                 },
                 {
                     id: "cm27q098",

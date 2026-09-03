@@ -703,6 +703,25 @@ h1, h2, h3, h4 {
 
 .q-text { margin: 3px 0 0; font-size: 0.98rem; font-weight: 600; color: var(--ink); }
 
+/* Inline SVG diagrams inside question text, options and explanations. */
+.q-fig {
+    display: block;
+    margin: 12px 0 2px;
+    max-width: 100%;
+    height: auto;
+    color: var(--ink-soft);
+}
+
+.opt-fig {
+    display: block;
+    height: 60px;
+    width: auto;
+    margin-bottom: 5px;
+    color: var(--ink-soft);
+}
+
+.q-fig text, .opt-fig text { font-family: inherit; font-weight: 600; }
+
 .options {
     display: grid;
     gap: 10px;

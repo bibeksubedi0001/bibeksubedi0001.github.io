@@ -223,7 +223,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "Bending moment" }
                     ],
                     answer: "d",
-                    explanation: "Pure or simple bending refers to a beam segment where the bending moment is constant and the shear force is zero."
+                    explanation: "Simple or pure bending describes a length of beam over which the bending moment is constant, which means the shear force, being the derivative of the moment, is zero. The two-point loading arrangement creates such a zone between the loads, which is why it is used for flexure testing."
                 },
                 {
                     id: "cm22q015",
@@ -249,7 +249,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "Modulus of section" }
                     ],
                     answer: "b",
-                    explanation: "In simple bending, it is assumed that the material has the same modulus of elasticity (E) in tension and compression."
+                    explanation: "The simple bending theory assumes the material has the same modulus of elasticity in tension and compression, so the stress distribution is linear and the neutral axis passes through the centroid. Where that is not true, as in cast iron or concrete, the neutral axis shifts towards the stiffer side."
                 },
                 {
                     id: "cm22q017",
@@ -301,7 +301,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "Coincides" }
                     ],
                     answer: "b",
-                    explanation: "Curvature (1/R) is directly proportional to the bending moment (M), as given by the relation 1/R = M/(EI)."
+                    explanation: "The bending equation gives 1 over R equal to M over EI, so curvature is directly proportional to bending moment while the radius is inversely proportional. Because curvature is the second derivative of deflection, integrating it twice is exactly how the deflected shape is obtained."
                 },
                 {
                     id: "cm22q021",
@@ -314,7 +314,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "m/N³" }
                     ],
                     answer: "c",
-                    explanation: "Flexural rigidity is the product EI (modulus of elasticity × moment of inertia). Its units are Nm² (or Pa·m⁴)."
+                    explanation: "Flexural rigidity is the product EI, so its units are those of stress times length to the fourth, that is N per square metre times metre to the fourth, which reduces to newton metre squared. It measures resistance to bending, and doubling the depth of a rectangular section multiplies it by eight."
                 },
                 {
                     id: "cm22q022",
@@ -340,7 +340,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "Shear" }
                     ],
                     answer: "a",
-                    explanation: "Bending stresses are maximum at the extreme fibers of a beam cross-section, as per the flexure formula σ = My/I."
+                    explanation: "From the flexure formula sigma equal to My over I, the bending stress grows linearly with distance from the neutral axis, so it peaks at the extreme fibres. Shear stress does the opposite, vanishing at the extreme fibres and peaking at the neutral axis, which is why the two are checked at different points."
                 },
                 {
                     id: "cm22q024",
@@ -466,7 +466,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "Sulphur" }
                     ],
                     answer: "b",
-                    explanation: "Adding copper (Cu) to steel (e.g., in weathering steels) improves its atmospheric corrosion resistance."
+                    explanation: "Copper in small amounts, around 0.2 to 0.5 percent, greatly improves resistance to atmospheric corrosion, because it helps form a tight adherent oxide film that seals the surface. That is the basis of weathering steels, which are left unpainted and allowed to develop a stable rust patina."
                 },
                 {
                     id: "cm22q033",
@@ -670,7 +670,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "Coarse grained soil" }
                     ],
                     answer: "a",
-                    explanation: "The original Rankine theory was developed for cohesionless soils (c=0) with a horizontal backfill surface."
+                    explanation: "Rankine's original theory was derived for a dry, cohesionless backfill with a horizontal surface and a smooth vertical wall face, so it applies strictly to sands and gravels. It was later extended to cohesive soils by adding the 2c times the root of Ka term, which produces the tension crack near the surface."
                 },
                 {
                     id: "cm22q048",
@@ -683,7 +683,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "All of the mentioned" }
                     ],
                     answer: "b",
-                    explanation: "Resal and Bell are credited with extending Rankine's principles to include cohesive soils (c &gt; 0)."
+                    explanation: "Rankine derived his theory for cohesionless soil, and Resal and Bell later extended it to cohesive backfill by adding the 2c times the root of Ka term. That term reduces the active pressure near the surface, and can make it negative, which is why a cohesive backfill opens a tension crack down to a depth of 2c over gamma times the root of Ka."
                 }
             ]
         },
@@ -783,7 +783,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "none of these" }
                     ],
                     answer: "c",
-                    explanation: "An adverse slope is one where the channel bottom rises in the direction of flow, opposing the flow."
+                    explanation: "An adverse slope rises in the direction of flow, so gravity opposes the motion instead of driving it. Uniform flow is impossible on it, since there is no normal depth, and the water surface profiles that form on it are labelled A2 and A3 in the classification of gradually varied flow."
                 },
                 {
                     id: "cm22q056",
@@ -1048,7 +1048,7 @@ const CIVIL_MODEL_22 = {
                         { key: "d", text: "None of these" }
                     ],
                     answer: "b",
-                    explanation: "A regulator is equipped with gates to control the flow of water and regulate the discharge entering the canal."
+                    explanation: "A regulator carries gates so that the discharge and the upstream level can be adjusted at will, which is the whole point of it: a head regulator meters water into the offtaking canal, and a cross regulator holds the level up in the parent channel. A weir with a raised crest passes whatever arrives and controls nothing."
                 },
                 {
                     id: "cm22q075",

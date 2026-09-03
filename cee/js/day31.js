@@ -11,10 +11,9 @@
    deductions, positional letter codes, compound work/speed setups
    and two-conclusion syllogisms.
 
-   Every non-verbal item is written so that it is fully solvable
-   from the text alone — rotations are given as angles, mirror and
-   water images as letter strings, folding and dice as counts — so
-   the paper needs no figures.
+   Non-verbal items carry inline SVG diagrams, and every one of them
+   also states in words what the figure shows, so a question stays
+   answerable if the drawing fails to render.
    ============================================================ */
 const DAY31 = {
     day: 31,
@@ -341,7 +340,7 @@ const DAY31 = {
                 },
                 {
                     id: "d31q26",
-                    text: "The table gives the units sold by four salespersons in three months.<br><b>Jan / Feb / Mar</b><br>A — 120, 150, 180<br>B — 90, 110, 130<br>C — 160, 140, 150<br>D — 100, 130, 170<br>What is C's average monthly sale over the three months?",
+                    text: "The chart shows the units sold by four salespersons in three months. What is C's average monthly sale over the three months?<svg class='q-fig' viewBox='0 0 250 142' width='300' height='170' role='img' aria-label='Grouped bar chart of units sold by salespersons A, B, C and D in January, February and March'><g font-size='7' fill='currentColor'><rect x='30' y='6' width='8' height='8' fill='currentColor' fill-opacity='0.3'/><text x='42' y='13'>Jan</text><rect x='70' y='6' width='8' height='8' fill='currentColor' fill-opacity='0.6'/><text x='82' y='13'>Feb</text><rect x='110' y='6' width='8' height='8' fill='currentColor' fill-opacity='0.9'/><text x='122' y='13'>Mar</text></g><path d='M26 30v82M26 112h210' fill='none' stroke='currentColor' stroke-width='1.2'/><g fill='currentColor'><rect x='34' y='61.6' width='11' height='50.4' fill-opacity='0.3'/><rect x='47' y='49' width='11' height='63' fill-opacity='0.6'/><rect x='60' y='36.4' width='11' height='75.6' fill-opacity='0.9'/><rect x='87' y='74.2' width='11' height='37.8' fill-opacity='0.3'/><rect x='100' y='65.8' width='11' height='46.2' fill-opacity='0.6'/><rect x='113' y='57.4' width='11' height='54.6' fill-opacity='0.9'/><rect x='140' y='44.8' width='11' height='67.2' fill-opacity='0.3'/><rect x='153' y='53.2' width='11' height='58.8' fill-opacity='0.6'/><rect x='166' y='49' width='11' height='63' fill-opacity='0.9'/><rect x='193' y='70' width='11' height='42' fill-opacity='0.3'/><rect x='206' y='57.4' width='11' height='54.6' fill-opacity='0.6'/><rect x='219' y='40.6' width='11' height='71.4' fill-opacity='0.9'/></g><g font-size='6.5' text-anchor='middle' fill='currentColor'><text x='39.5' y='58'>120</text><text x='52.5' y='45'>150</text><text x='65.5' y='33'>180</text><text x='92.5' y='71'>90</text><text x='105.5' y='62'>110</text><text x='118.5' y='54'>130</text><text x='145.5' y='41'>160</text><text x='158.5' y='50'>140</text><text x='171.5' y='45'>150</text><text x='198.5' y='66'>100</text><text x='211.5' y='54'>130</text><text x='224.5' y='37'>170</text></g><g font-size='8.5' text-anchor='middle' fill='currentColor'><text x='52.5' y='124'>A</text><text x='105.5' y='124'>B</text><text x='158.5' y='124'>C</text><text x='211.5' y='124'>D</text></g><text x='131' y='138' text-anchor='middle' font-size='7' fill='currentColor'>units sold</text></svg>",
                     options: [
                         { key: "a", text: "140" },
                         { key: "b", text: "145" },
@@ -482,19 +481,19 @@ const DAY31 = {
                 },
                 {
                     id: "d31c37",
-                    text: "Which of the following best represents the relationship between <b>Doctors, Surgeons</b> and <b>Women</b>?",
+                    text: "Which diagram best represents the relationship between <b>Doctors (D), Surgeons (S)</b> and <b>Women (W)</b>?",
                     options: [
-                        { key: "a", text: "Three circles that do not touch one another" },
-                        { key: "b", text: "Surgeons inside Doctors, with Women overlapping both" },
-                        { key: "c", text: "Doctors inside Surgeons, with Women separate" },
-                        { key: "d", text: "Women inside Doctors, with Surgeons separate" }
+                        { key: "a", text: "<svg class='opt-fig' viewBox='0 0 100 54' role='img' aria-label='Three separate circles that do not touch'><g fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='18' cy='27' r='15'/><circle cx='50' cy='27' r='15'/><circle cx='82' cy='27' r='15'/></g><g font-size='11' text-anchor='middle' fill='currentColor'><text x='18' y='31'>D</text><text x='50' y='31'>S</text><text x='82' y='31'>W</text></g></svg>Three separate circles" },
+                        { key: "b", text: "<svg class='opt-fig' viewBox='0 0 100 54' role='img' aria-label='Surgeons inside Doctors, with Women overlapping both'><g fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='32' cy='27' r='23'/><circle cx='25' cy='27' r='11'/><circle cx='56' cy='27' r='21'/></g><g font-size='11' text-anchor='middle' fill='currentColor'><text x='32' y='12'>D</text><text x='25' y='31'>S</text><text x='68' y='31'>W</text></g></svg>Surgeons inside Doctors, Women overlapping both" },
+                        { key: "c", text: "<svg class='opt-fig' viewBox='0 0 100 54' role='img' aria-label='Doctors inside Surgeons, with Women separate'><g fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='28' cy='27' r='21'/><circle cx='28' cy='27' r='10'/><circle cx='79' cy='27' r='15'/></g><g font-size='11' text-anchor='middle' fill='currentColor'><text x='28' y='14'>S</text><text x='28' y='31'>D</text><text x='79' y='31'>W</text></g></svg>Doctors inside Surgeons, Women separate" },
+                        { key: "d", text: "<svg class='opt-fig' viewBox='0 0 100 54' role='img' aria-label='Women inside Doctors, with Surgeons separate'><g fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='28' cy='27' r='21'/><circle cx='28' cy='27' r='10'/><circle cx='79' cy='27' r='15'/></g><g font-size='11' text-anchor='middle' fill='currentColor'><text x='28' y='14'>D</text><text x='28' y='31'>W</text><text x='79' y='31'>S</text></g></svg>Women inside Doctors, Surgeons separate" }
                     ],
                     answer: "b",
                     explanation: "Every surgeon is a doctor, so the surgeons form a circle wholly inside the doctors. Women form a separate class that partly overlaps both, since some women are doctors and some of those are surgeons, while many women are neither."
                 },
                 {
                     id: "d31c38",
-                    text: "In a group of 100 people, 60 read newspaper A, 45 read newspaper B and 20 read both. How many read neither newspaper?",
+                    text: "In a group of 100 people, 60 read newspaper A, 45 read newspaper B and 20 read both, as the diagram shows. How many read neither newspaper?<svg class='q-fig' viewBox='0 0 152 86' width='196' height='111' role='img' aria-label='Two overlapping circles inside a rectangle representing one hundred people'><g fill='none' stroke='currentColor' stroke-width='1.5'><rect x='4' y='4' width='144' height='78' rx='5'/><circle cx='58' cy='46' r='30'/><circle cx='94' cy='46' r='30'/></g><g font-size='9' fill='currentColor'><text x='11' y='18' font-size='7.5'>100 people</text><text x='40' y='50' text-anchor='middle'>A = 60</text><text x='112' y='50' text-anchor='middle'>B = 45</text><text x='76' y='50' text-anchor='middle'>20</text></g></svg>",
                     options: [
                         { key: "a", text: "5" },
                         { key: "b", text: "10" },
@@ -515,7 +514,7 @@ const DAY31 = {
             questions: [
                 {
                     id: "d31n39",
-                    text: "In a figure series an arrow turns 135° clockwise at every step. If it initially points north, in which direction does it point after the fourth step?",
+                    text: "The arrow below points north and turns 135&deg; clockwise at every step of a figure series. In which direction does it point after the fourth step?<svg class='q-fig' viewBox='0 0 76 76' width='84' height='84' role='img' aria-label='An arrow pointing north inside a compass circle'><g fill='none' stroke='currentColor' stroke-width='1.4'><circle cx='38' cy='40' r='27'/><path d='M38 15v5M38 60v5M13 40h5M58 40h5'/><path d='M38 54V26' stroke-width='2.6' stroke-linecap='round'/><path d='M32 32 38 26 44 32' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/></g><text x='38' y='10' text-anchor='middle' font-size='8' fill='currentColor'>N</text></svg>",
                     options: [
                         { key: "a", text: "North" },
                         { key: "b", text: "East" },
@@ -527,31 +526,31 @@ const DAY31 = {
                 },
                 {
                     id: "d31n40",
-                    text: "A square card carries a dot in its <b>top-left</b> corner. The card is rotated 270° clockwise in its own plane. Where is the dot now?",
+                    text: "The square card below carries a dot in its <b>top-left</b> corner. The card is rotated 270&deg; clockwise in its own plane. Which option shows the card afterwards?<svg class='q-fig' viewBox='0 0 60 60' width='66' height='66' role='img' aria-label='A square card with a dot in its top-left corner'><rect x='6' y='6' width='48' height='48' fill='none' stroke='currentColor' stroke-width='1.8'/><circle cx='16' cy='16' r='4.5' fill='currentColor'/></svg>",
                     options: [
-                        { key: "a", text: "Top-right corner" },
-                        { key: "b", text: "Bottom-right corner" },
-                        { key: "c", text: "Bottom-left corner" },
-                        { key: "d", text: "Top-left corner" }
+                        { key: "a", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='Dot in the top-right corner'><rect x='6' y='6' width='48' height='48' fill='none' stroke='currentColor' stroke-width='1.8'/><circle cx='44' cy='16' r='4.5' fill='currentColor'/></svg>Top-right corner" },
+                        { key: "b", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='Dot in the bottom-right corner'><rect x='6' y='6' width='48' height='48' fill='none' stroke='currentColor' stroke-width='1.8'/><circle cx='44' cy='44' r='4.5' fill='currentColor'/></svg>Bottom-right corner" },
+                        { key: "c", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='Dot in the bottom-left corner'><rect x='6' y='6' width='48' height='48' fill='none' stroke='currentColor' stroke-width='1.8'/><circle cx='16' cy='44' r='4.5' fill='currentColor'/></svg>Bottom-left corner" },
+                        { key: "d", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='Dot in the top-left corner'><rect x='6' y='6' width='48' height='48' fill='none' stroke='currentColor' stroke-width='1.8'/><circle cx='16' cy='16' r='4.5' fill='currentColor'/></svg>Top-left corner" }
                     ],
                     answer: "c",
                     explanation: "Follow the corner step by step: 90° clockwise takes the top-left corner to the top-right, 180° takes it to the bottom-right, and 270° takes it to the bottom-left. A 270° clockwise turn is the same as 90° anticlockwise."
                 },
                 {
                     id: "d31n41",
-                    text: "Which of the following solids has <b>no vertex</b> at all?",
+                    text: "Which of the solids shown below has <b>no vertex</b> at all?",
                     options: [
-                        { key: "a", text: "Cube" },
-                        { key: "b", text: "Cone" },
-                        { key: "c", text: "Square pyramid" },
-                        { key: "d", text: "Cylinder" }
+                        { key: "a", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='A cube'><g fill='none' stroke='currentColor' stroke-width='1.6'><rect x='10' y='20' width='30' height='30'/><path d='M10 20 20 10 50 10 50 40 40 50'/><path d='M40 20 50 10'/></g></svg>Cube" },
+                        { key: "b", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='A cone'><g fill='none' stroke='currentColor' stroke-width='1.6'><path d='M30 10 47 44M30 10 13 44'/><ellipse cx='30' cy='44' rx='17' ry='6'/></g></svg>Cone" },
+                        { key: "c", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='A square pyramid'><g fill='none' stroke='currentColor' stroke-width='1.6'><path d='M10 42 36 50 52 38 26 30Z'/><path d='M30 10 10 42M30 10 36 50M30 10 52 38'/></g></svg>Square pyramid" },
+                        { key: "d", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='A cylinder'><g fill='none' stroke='currentColor' stroke-width='1.6'><ellipse cx='30' cy='16' rx='16' ry='6'/><path d='M14 16v28M46 16v28'/><path d='M14 44a16 6 0 0 0 32 0'/></g></svg>Cylinder" }
                     ],
                     answer: "d",
                     explanation: "A cube has 8 vertices and a square pyramid has 5. A cone has a single vertex at its apex. A cylinder has two circular edges but no point where edges meet, so it has no vertex."
                 },
                 {
                     id: "d31n42",
-                    text: "A mirror is placed vertically to the right of the word <b>PHYSICS</b>. What is its mirror image?",
+                    text: "A mirror is placed vertically along the line to the right of the word, as shown. What is the mirror image of <b>PHYSICS</b>?<svg class='q-fig' viewBox='0 0 152 42' width='196' height='54' role='img' aria-label='The word PHYSICS with a vertical mirror line to its right'><text x='6' y='27' font-size='17' letter-spacing='1.6' fill='currentColor'>PHYSICS</text><path d='M112 5v32' stroke='currentColor' stroke-width='2.6'/><text x='117' y='24' font-size='7' fill='currentColor'>mirror</text></svg>",
                     options: [
                         { key: "a", text: "SCISYHP" },
                         { key: "b", text: "PHYSICS" },
@@ -571,11 +570,11 @@ const DAY31 = {
                         { key: "d", text: "TIDE" }
                     ],
                     answer: "b",
-                    explanation: "A water image flips the word about a horizontal axis, so it is unchanged only if every letter is symmetrical top to bottom. H, I, D and E all are, so HIDE survives. M, N, F, A and T are not symmetrical in that way, which rules out the other three."
+                    explanation: "A water image flips the word about a horizontal axis, so it is unchanged only if every letter is symmetrical top to bottom. H, I, D and E all are, so HIDE survives, as the reflection below shows. M, N, F, A and T are not symmetrical in that way, which rules out the other three.<svg class='q-fig' viewBox='0 0 118 60' width='150' height='76' role='img' aria-label='The word HIDE above its water image, which looks identical'><text x='8' y='25' font-size='16' letter-spacing='2' fill='currentColor'>HIDE</text><path d='M4 31h110' stroke='currentColor' stroke-width='1' stroke-dasharray='3 3'/><g transform='translate(0,62) scale(1,-1)'><text x='8' y='25' font-size='16' letter-spacing='2' fill='currentColor' opacity='0.55'>HIDE</text></g></svg>"
                 },
                 {
                     id: "d31n44",
-                    text: "A wall clock seen in a mirror appears to show <b>8:20</b>. What is the actual time?",
+                    text: "The dial below is a wall clock as it appears in a mirror, showing <b>8:20</b>. What is the actual time?<svg class='q-fig' viewBox='0 0 80 94' width='90' height='106' role='img' aria-label='A clock dial as seen in a mirror, appearing to show twenty past eight'><g fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='40' cy='42' r='31'/><path d='M40 13v5M40 66v5M11 42h5M64 42h5'/><path d='M40 42 27 46' stroke-width='3' stroke-linecap='round'/><path d='M40 42 57 52' stroke-width='2' stroke-linecap='round'/></g><circle cx='40' cy='42' r='2.4' fill='currentColor'/><text x='40' y='88' text-anchor='middle' font-size='7' fill='currentColor'>as seen in the mirror</text></svg>",
                     options: [
                         { key: "a", text: "4:40" },
                         { key: "b", text: "3:20" },
@@ -587,7 +586,7 @@ const DAY31 = {
                 },
                 {
                     id: "d31n45",
-                    text: "A square sheet of paper is folded in half twice, forming a smaller square of four layers. Two holes are then punched through all the layers. How many holes are there when the sheet is unfolded?",
+                    text: "A square sheet of paper is folded in half twice, forming a smaller square of four layers, and two holes are punched through all the layers, as shown. How many holes are there when the sheet is unfolded?<svg class='q-fig' viewBox='0 0 176 74' width='222' height='93' role='img' aria-label='A square sheet folded in half, folded again, then punched twice through all four layers'><g fill='none' stroke='currentColor' stroke-width='1.6'><rect x='6' y='12' width='50' height='50'/><path d='M31 12v50' stroke-dasharray='4 3'/><path d='M64 32 71 37 64 42' stroke-linecap='round' stroke-linejoin='round'/><rect x='86' y='12' width='25' height='50'/><path d='M86 37h25' stroke-dasharray='4 3'/><path d='M119 32 126 37 119 42' stroke-linecap='round' stroke-linejoin='round'/><rect x='141' y='24' width='25' height='25'/></g><circle cx='149' cy='32' r='2.6' fill='currentColor'/><circle cx='158' cy='41' r='2.6' fill='currentColor'/></svg>",
                     options: [
                         { key: "a", text: "4" },
                         { key: "b", text: "6" },
@@ -599,7 +598,7 @@ const DAY31 = {
                 },
                 {
                     id: "d31n46",
-                    text: "A circular sheet is folded twice through its centre, giving a quarter-circle, and one small semicircular notch is cut on the folded arc. How many notches appear along the circumference when the sheet is opened out?",
+                    text: "A circular sheet is folded twice through its centre to give a quarter-circle, and one small semicircular notch is cut on the folded arc, as shown. How many notches appear along the circumference when the sheet is opened out?<svg class='q-fig' viewBox='0 0 146 80' width='184' height='101' role='img' aria-label='A circular sheet folded twice into a quarter, with a notch cut on the folded arc'><g fill='none' stroke='currentColor' stroke-width='1.6'><circle cx='34' cy='40' r='26'/><path d='M8 40h52M34 14v52' stroke-dasharray='4 3'/><path d='M70 35 77 40 70 45' stroke-linecap='round' stroke-linejoin='round'/><path d='M96 66V40a26 26 0 0 1 26 26z'/><circle cx='115' cy='47' r='5' stroke-dasharray='2 2'/></g><text x='115' y='76' text-anchor='middle' font-size='7' fill='currentColor'>notch</text></svg>",
                     options: [
                         { key: "a", text: "2" },
                         { key: "b", text: "3" },
@@ -611,7 +610,7 @@ const DAY31 = {
                 },
                 {
                     id: "d31n47",
-                    text: "How many rectangles of all sizes are there in a <b>3 × 3</b> grid of squares?",
+                    text: "How many rectangles of all sizes are there in the <b>3 &times; 3</b> grid of squares shown below?<svg class='q-fig' viewBox='0 0 92 92' width='104' height='104' role='img' aria-label='A three by three grid of squares'><g fill='none' stroke='currentColor' stroke-width='1.8'><rect x='6' y='6' width='80' height='80'/><path d='M32.67 6v80M59.33 6v80M6 32.67h80M6 59.33h80'/></g></svg>",
                     options: [
                         { key: "a", text: "9" },
                         { key: "b", text: "14" },
@@ -623,7 +622,7 @@ const DAY31 = {
                 },
                 {
                     id: "d31n48",
-                    text: "A cube is painted red on all its faces and then cut into 64 identical smaller cubes. How many of the small cubes have <b>exactly two</b> faces painted?",
+                    text: "The cube below is painted red on all its faces and then cut into 64 identical smaller cubes. How many of the small cubes have <b>exactly two</b> faces painted?<svg class='q-fig' viewBox='0 0 112 112' width='128' height='128' role='img' aria-label='A cube cut into four by four by four smaller cubes'><g fill='none' stroke='currentColor' stroke-width='1.3'><path d='M10 30h70v70H10z'/><path d='M27.5 30v70M45 30v70M62.5 30v70M10 47.5h70M10 65h70M10 82.5h70'/><path d='M10 30 30 10 100 10 100 80 80 100'/><path d='M80 30 100 10'/><path d='M27.5 30 47.5 10M45 30 65 10M62.5 30 82.5 10'/><path d='M15 25h70M20 20h70M25 15h70'/><path d='M85 25v70M90 20v70M95 15v70'/><path d='M80 47.5 100 27.5M80 65 100 45M80 82.5 100 62.5'/></g></svg>",
                     options: [
                         { key: "a", text: "8" },
                         { key: "b", text: "16" },
@@ -635,7 +634,7 @@ const DAY31 = {
                 },
                 {
                     id: "d31n49",
-                    text: "A cube is painted red on all its faces and then cut into 64 identical smaller cubes. How many of the small cubes have <b>no</b> face painted?",
+                    text: "The cube below is painted red on all its faces and then cut into 64 identical smaller cubes. How many of the small cubes have <b>no</b> face painted?<svg class='q-fig' viewBox='0 0 112 112' width='128' height='128' role='img' aria-label='A cube cut into four by four by four smaller cubes'><g fill='none' stroke='currentColor' stroke-width='1.3'><path d='M10 30h70v70H10z'/><path d='M27.5 30v70M45 30v70M62.5 30v70M10 47.5h70M10 65h70M10 82.5h70'/><path d='M10 30 30 10 100 10 100 80 80 100'/><path d='M80 30 100 10'/><path d='M27.5 30 47.5 10M45 30 65 10M62.5 30 82.5 10'/><path d='M15 25h70M20 20h70M25 15h70'/><path d='M85 25v70M90 20v70M95 15v70'/><path d='M80 47.5 100 27.5M80 65 100 45M80 82.5 100 62.5'/></g></svg>",
                     options: [
                         { key: "a", text: "8" },
                         { key: "b", text: "12" },
@@ -647,7 +646,7 @@ const DAY31 = {
                 },
                 {
                     id: "d31n50",
-                    text: "A pattern has rotational symmetry of order 4. Through what smallest angle must it be turned about its centre before it first coincides with itself?",
+                    text: "The pinwheel below has rotational symmetry of order 4. Through what smallest angle must it be turned about its centre before it first coincides with itself?<svg class='q-fig' viewBox='0 0 80 80' width='88' height='88' role='img' aria-label='A pinwheel of four identical blades, having rotational symmetry of order four'><g fill='currentColor' fill-opacity='0.45' stroke='currentColor' stroke-width='1.4' stroke-linejoin='round'><path d='M40 40 40 10 62 18Z'/><path d='M40 40 40 10 62 18Z' transform='rotate(90 40 40)'/><path d='M40 40 40 10 62 18Z' transform='rotate(180 40 40)'/><path d='M40 40 40 10 62 18Z' transform='rotate(270 40 40)'/></g></svg>",
                     options: [
                         { key: "a", text: "90°" },
                         { key: "b", text: "60°" },

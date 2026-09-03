@@ -84,7 +84,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "Cupping Test" }
                     ],
                     answer: "a",
-                    explanation: "Hardness is measured using tests like Brinell, Rockwell, or Vickers, which involve indenting the material surface."
+                    explanation: "The Brinell test presses a hardened steel or carbide ball into the surface under a known load and derives hardness from the diameter of the impression. Rockwell and Vickers work on the same indentation principle with different indenters, while tensile, impact and cupping tests measure quite different properties."
                 },
                 {
                     id: "cm33q005",
@@ -666,7 +666,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "100" }
                     ],
                     answer: "c",
-                    explanation: "1 Poise = 0.1 Pa-s = 0.1 N-s/m². Therefore, to convert Poise to N-s/m², you multiply by 0.1."
+                    explanation: "One poise is one dyne second per square centimetre, which works out at 0.1 pascal seconds, that is 0.1 N s per square metre. So a viscosity in poise is multiplied by 0.1 to convert it, and the centipoise, one hundredth of a poise, is convenient because water at 20 degrees is almost exactly 1 cP."
                 },
                 {
                     id: "cm33q047",
@@ -1108,7 +1108,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "Consolidation" }
                     ],
                     answer: "c",
-                    explanation: "Reflection cracking is directly caused by horizontal or vertical movement of an underlying cracked layer."
+                    explanation: "Reflection cracking is caused by movement in the layer beneath, whether the horizontal opening and closing of a joint or a vertical step across a crack. The overlay above cannot accommodate that concentrated movement, so the crack reproduces itself at the surface."
                 },
                 {
                     id: "cm33q079",
@@ -1121,7 +1121,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "Low bitumen content" }
                     ],
                     answer: "d",
-                    explanation: "Raveling is caused by lack of binder making the mix dry and brittle, or inadequate compaction."
+                    explanation: "Ravelling is the progressive loss of aggregate from the surface, and it starts when there is too little binder to coat and hold the particles, or when the mix was laid cold or compacted poorly so the film never bonded. Excess binder causes the opposite defect, bleeding."
                 },
                 {
                     id: "cm33q080",
@@ -1134,7 +1134,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "Prime coat" }
                     ],
                     answer: "a",
-                    explanation: "A tack coat is essential for bonding a new asphalt layer to an existing impervious surface."
+                    explanation: "A tack coat is a light spray of bitumen or emulsion applied to an existing bituminous or concrete surface immediately before the new layer, so that the two bond into a single structural unit. A prime coat is different: it is sprayed on a granular base to penetrate and seal it."
                 },
                 {
                     id: "cm33q081",
@@ -1160,7 +1160,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "Pot hole formation" }
                     ],
                     answer: "c",
-                    explanation: "Mud pumping is a distress specific to rigid pavements where water ejects subgrade soil through joints/cracks."
+                    explanation: "Mud pumping is a rigid pavement distress, in which water trapped under a slab is ejected through a joint or crack under passing wheels, bringing subgrade fines with it and leaving a void. Alligator cracking, ravelling and potholes are all flexible pavement distresses."
                 },
                 {
                     id: "cm33q083",
@@ -1173,7 +1173,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "Moisture damage" }
                     ],
                     answer: "d",
-                    explanation: "Stripping is the loss of adhesion between binder and aggregate primarily caused by water infiltration."
+                    explanation: "Stripping is the loss of adhesion between the binder and the aggregate in the presence of water, so the film peels away and the mix loses cohesion from within. Hydrophilic aggregates such as quartzite are the most susceptible, and anti-stripping agents or hydrated lime are used to counter it."
                 },
                 {
                     id: "cm33q084",
@@ -1186,7 +1186,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "Rutting" }
                     ],
                     answer: "a",
-                    explanation: "Raveling is the progressive loss of aggregate particles from the surface, making it rough and uneven."
+                    explanation: "Ravelling is disintegration by the progressive loss of aggregate particles from the surface downwards, leaving the road rough and eventually pitted. It differs from a pothole, which is a localised loss of the full layer, and from rutting, which is deformation rather than loss of material."
                 },
                 {
                     id: "cm33q085",
@@ -1199,7 +1199,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "None of these" }
                     ],
                     answer: "c",
-                    explanation: "WBM derives strength from aggregate interlock and lacks rigid behavior, making it a flexible pavement."
+                    explanation: "Water bound macadam is a flexible pavement: it carries load by aggregate interlock and distributes it to the layers below by grain-to-grain contact, deflecting with the subgrade. A rigid pavement, by contrast, has enough flexural strength to bridge over a soft spot."
                 },
                 {
                     id: "cm33q086",
@@ -1212,7 +1212,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "None of these" }
                     ],
                     answer: "a",
-                    explanation: "Sight distance is the length of roadway ahead visible to the driver, crucial for safe stopping and maneuvering."
+                    explanation: "Sight distance is the length of road ahead that is visible to the driver from a given position, and the various forms of it, stopping, intermediate and overtaking, are what control vertical curve lengths and clearance on the inside of horizontal curves."
                 },
                 {
                     id: "cm33q087",
@@ -1238,7 +1238,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "Direct shear" }
                     ],
                     answer: "a",
-                    explanation: "The California Bearing Ratio test can be performed both in the laboratory and in-situ on the prepared subgrade."
+                    explanation: "The California Bearing Ratio test can be run both in the laboratory, on a remoulded and soaked sample, and in situ on the prepared subgrade, which is why it became the standard for pavement design. Triaxial, unconfined compression and direct shear tests are laboratory procedures."
                 },
                 {
                     id: "cm33q089",
@@ -1286,7 +1286,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "Measles" }
                     ],
                     answer: "d",
-                    explanation: "Measles is an airborne viral disease, whereas Cholera, Typhoid, and Dysentery are spread via contaminated water."
+                    explanation: "Cholera, typhoid and dysentery are all faecal-oral diseases carried by contaminated water. Measles is a viral infection spread through respiratory droplets in the air, so improving the water supply does nothing to control it."
                 },
                 {
                     id: "cm33q092",
@@ -1377,7 +1377,7 @@ const CIVIL_MODEL_33 = {
                         { key: "d", text: "Stormwater runoff" }
                     ],
                     answer: "c",
-                    explanation: "Night soil is a euphemism for human excrement collected from privies or latrines, historically used as a fertilizer."
+                    explanation: "Night soil is the traditional term for human excreta collected from privies and latrines, historically removed at night by hand and often used as fertiliser. The practice has been progressively replaced by sewerage and on-site sanitation because of the disease risk to the workers handling it."
                 },
                 {
                     id: "cm33q099",
