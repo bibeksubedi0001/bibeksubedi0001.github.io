@@ -15,7 +15,7 @@
 
 /* Typography stops at portal views and non-question result containers. */
 #civilEntry,
-#civilSection :is(#cvGate, #cvSidebar, #cvWorkspaceTop, #cvDash, #cvPractice, #cvChapters, #cvSets, .cs-workspace-note),
+#civilSection :is(#cvGate, #cvTopbar, #cvWorkspaceTop, #cvDash, #cvPractice, #cvChapters, #cvSets),
 #civilSection :is(#cvResult, #cvLearning[data-learning-view="result"]) > :is(.cv-res-head, .cv-res-stats, .cv-sec-head, .cv-subj-table, .cv-panel, .cv-viewer-top, .cv-page-intro, .cv-breadcrumb, .cv-review-filters) {
     font-family: var(--cs-font);
     font-size: 14px;
@@ -24,7 +24,7 @@
     word-break: normal;
     overflow-wrap: break-word;
 }
-#civilSection :is(#cvGate, #cvSidebar, #cvDash, #cvPractice, #cvChapters, #cvSets) :is(button, input, select, textarea) { font-family: var(--cs-font); overflow-wrap: break-word; }
+#civilSection :is(#cvGate, #cvTopbar, #cvDash, #cvPractice, #cvChapters, #cvSets) :is(button, input, select, textarea) { font-family: var(--cs-font); overflow-wrap: break-word; }
 #civilEntry h3,
 #civilSection :is(#cvGate, #cvDash, #cvPractice, #cvChapters, #cvSets) :is(h2, h3, h4),
 #civilSection :is(#cvResult, #cvLearning[data-learning-view="result"]) > :is(.cv-res-head, .cv-sec-head, .cv-panel, .cv-page-intro) :is(h2, h3, h4) {
@@ -37,7 +37,7 @@
 #civilEntry[hidden], #civilSection[hidden], #civilSection [hidden] { display: none !important; }
 #civilSection .cs-kicker { display: block; color: var(--cs-teal); font: 700 10px/1.7 var(--cs-font); letter-spacing: .13em; }
 #civilEntry :focus-visible,
-#civilSection :is(#cvGate, #cvSidebar, #cvDash, #cvPractice, #cvChapters, #cvSets) :focus-visible,
+#civilSection :is(#cvGate, #cvTopbar, #cvDash, #cvPractice, #cvChapters, #cvSets) :focus-visible,
 #civilSection :is(#cvResult, #cvLearning[data-learning-view="result"]) > :is(.cv-panel, .cv-sec-head, .cv-viewer-top, .cv-review-filters) :focus-visible {
     outline: 3px solid var(--cs-teal);
     outline-offset: 3px;
@@ -111,11 +111,7 @@
 #civilEntry .cs-entry-mark { display: grid; place-items: center; width: 68px; height: 68px; border: 1px solid var(--cs-line); border-radius: 16px; background: var(--cs-mint); color: var(--cs-teal); }
 #civilEntry .cs-entry-mark svg { width: 42px; height: 42px; }
 #civilEntry .cs-entry-copy { min-width: 0; }
-#civilEntry .cs-entry-copy > span { display: block; margin-bottom: 8px; color: var(--cs-teal); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
 #civilEntry h3 { margin: 0; font-size: clamp(23px, 2.5vw, 29px); }
-#civilEntry p { margin: 8px 0; color: var(--cs-muted); font-size: 14px; }
-#civilEntry small { display: block; color: var(--cs-muted); font-size: 11.5px; }
-#civilEntry small i { margin-inline: 6px; font-style: normal; }
 #civilEntry .cs-entry-button {
     display: inline-flex; align-items: center; justify-content: center; gap: 20px;
     min-width: 0; min-height: 48px; padding: 13px 19px; border: 1px solid var(--cs-teal);
@@ -133,89 +129,76 @@
     box-shadow: 0 16px 48px rgba(23, 61, 49, .06);
 }
 #civilSection #cvGate .cs-welcome-story { min-width: 0; padding: clamp(32px, 4.5vw, 60px); background: var(--cs-forest); color: #f5faf5; }
-#civilSection #cvGate .cs-welcome-story .cs-kicker { color: #b5d4c2; }
-#civilSection #cvGate .cs-welcome-story h2 { margin: 26px 0 20px; color: #fff; font-size: clamp(32px, 3.4vw, 46px); line-height: 1.2; letter-spacing: -.05em; }
-#civilSection #cvGate .cs-welcome-story > p { max-width: 42ch; margin: 0; color: #c4d8c9; font-size: 14px; line-height: 1.85; }
-#civilSection #cvGate .cs-structure { display: block; width: 100%; height: auto; margin: 34px 0 24px; color: #91b7a0; }
-#civilSection #cvGate .cs-welcome-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding-top: 24px; border-top: 1px solid #426354; }
-#civilSection #cvGate .cs-welcome-facts > span { color: #c4d8c9; font-size: 11.5px; }
-#civilSection #cvGate .cs-welcome-facts b { display: block; margin-bottom: 5px; color: #fff; font: 500 26px/1.4 var(--cs-display); font-variant-numeric: tabular-nums; }
+#civilSection #cvGate .cs-welcome-story h2 { margin: 0; color: #fff; font-size: clamp(32px, 3.4vw, 46px); line-height: 1.2; letter-spacing: -.05em; }
+#civilSection #cvGate .cs-structure { display: block; width: 100%; height: auto; margin: 28px 0 0; color: #91b7a0; }
 #civilSection #cvGate .cv-gate.cs-welcome-form {
     display: flex; flex-direction: column; justify-content: center; min-width: 0; width: 100%; max-width: none;
     margin: 0; padding: clamp(30px, 4.5vw, 60px); border: 0; border-radius: 0; background: #fff; box-shadow: none; text-align: left;
 }
-#civilSection #cvGate .cv-gate-lock { width: 48px; height: 48px; margin: 0 0 28px; border-radius: 12px; background: var(--cs-mint); color: var(--cs-teal); }
+#civilSection #cvGate .cv-gate-lock { width: 48px; height: 48px; margin: 0 0 20px; border-radius: 12px; background: var(--cs-mint); color: var(--cs-teal); }
 #civilSection #cvGate .cv-gate-lock svg { width: 23px; height: 23px; stroke-width: 1.7; }
-#civilSection #cvGate .cs-welcome-form h2 { margin: 12px 0; font-size: 30px; color: var(--cs-ink); }
-#civilSection #cvGate .cs-welcome-form > p:not(.cv-gate-err):not(.cv-gate-back) { margin: 0 0 28px; max-width: 34ch; color: var(--cs-muted); font-size: 14px; }
+#civilSection #cvGate .cs-welcome-form h2 { margin: 0 0 20px; font-size: 30px; color: var(--cs-ink); }
 #civilSection #cvGate .cv-gate-form { display: grid; gap: 12px; }
 #civilSection #cvGate .cv-gate-form input { width: 100%; min-height: 52px; padding: 14px 16px; border: 1px solid var(--cs-control-line); border-radius: 9px; color: var(--cs-ink); font: 16px/1.5 var(--cs-font); letter-spacing: .08em; }
 #civilSection #cvGate .cv-gate-form input::placeholder { color: var(--cs-muted); letter-spacing: 0; }
 #civilSection #cvGate .cv-gate-form input:focus { border-color: var(--cs-teal); box-shadow: 0 0 0 3px var(--cs-mint); }
 #civilSection #cvGate .cv-gate-form .cv-btn { min-height: 48px; }
 #civilSection #cvGate .cv-gate-err { margin-top: 12px; border-color: #e6c5bd; background: #fff3ef; color: #943f32; }
-#civilSection #cvGate .cv-gate-back { margin: 16px 0 12px; }
+#civilSection #cvGate .cv-gate-back { margin: 16px 0 0; }
 #civilSection #cvGate .cv-gate-back button { min-height: 44px; padding: 8px 0; color: var(--cs-teal); font: 600 12px/1.5 var(--cs-font); text-underline-offset: 4px; }
-#civilSection #cvGate .cs-device-note { display: block; padding-top: 20px; border-top: 1px solid var(--cs-line); color: var(--cs-muted); font-size: 11.5px; }
 
-/* The page scrolls naturally; only the desktop sidebar is sticky. */
+/* Horizontal navigation stays above a full-width, naturally scrolling workspace. */
+html:has(body.civil-open:not(.civil-session)) { scrollbar-gutter: stable; }
 body.civil-open:not(.civil-session) { background: #f6f7f3; }
 body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; padding: 24px 24px 56px; }
-#civilSection .cs-app { display: grid; grid-template-columns: 216px minmax(0, 1fr); align-items: start; gap: 28px; }
-#civilSection .cs-workspace { min-width: 0; width: 100%; max-width: 1208px; }
-#civilSection .cs-content { min-width: 0; padding: 30px 0 0; }
-#civilSection #cvSidebar {
-    position: sticky; top: 24px; display: flex; flex-direction: column; gap: 24px;
-    min-width: 0; min-height: calc(100svh - 48px); padding: 24px 14px 14px;
+#civilSection .cs-app { display: block; min-width: 0; }
+#civilSection .cs-workspace { min-width: 0; width: 100%; }
+#civilSection .cs-content { min-width: 0; padding: 24px 0 0; }
+#civilSection #cvTopbar {
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 12px 18px;
+    min-width: 0; width: 100%; margin-bottom: 24px; padding: 14px 18px;
     border: 1px solid var(--cs-line); border-radius: 16px; background: #fff;
 }
-#civilSection .cs-brand { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 0 6px 10px; }
+#civilSection .cs-brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
 #civilSection .cs-brand > span { display: grid; place-items: center; flex: none; width: 36px; height: 40px; border-radius: 9px; background: var(--cs-mint); color: var(--cs-teal); }
 #civilSection .cs-brand svg { width: 27px; height: 27px; }
 #civilSection .cs-brand > div { min-width: 0; }
 #civilSection .cs-brand b { display: block; font: 600 16px/1.5 var(--cs-display); letter-spacing: -.04em; }
 #civilSection .cs-brand small { display: block; margin-top: 2px; color: var(--cs-muted); font-size: 8px; letter-spacing: .12em; }
-#civilSection .cs-nav-label { padding-inline: 10px; margin-bottom: -14px; color: var(--cs-muted); font-size: 9px; font-weight: 700; letter-spacing: .12em; }
-#civilSection #cvNav { display: grid; gap: 5px; min-width: 0; max-width: 100%; }
+#civilSection #cvNav {
+    display: flex; align-items: center; gap: 5px; min-width: 0; max-width: 100%; padding: 6px;
+    overflow-x: auto; overscroll-behavior-inline: contain; scroll-padding-inline: 6px;
+    scrollbar-width: thin; scrollbar-color: #a3b9a7 transparent;
+}
 #civilSection #cvNav > button {
-    display: flex; align-items: center; gap: 10px; min-width: 0; min-height: 46px; padding: 11px 10px;
+    display: flex; flex: 0 0 auto; align-items: center; gap: 8px; min-width: 0; min-height: 46px; padding: 11px 12px;
     border: 1px solid transparent; border-radius: 9px; background: transparent; color: var(--cs-muted);
-    font: 500 12px/1.5 var(--cs-font); text-align: left; cursor: pointer; transition: background-color .16s, color .16s;
+    font: 500 12px/1.5 var(--cs-font); text-align: left; white-space: nowrap; cursor: pointer; transition: background-color .16s, color .16s;
 }
 #civilSection #cvNav > button > span { min-width: 0; }
 #civilSection #cvNav > button:hover { background: #f5f8f3; color: var(--cs-teal); }
-#civilSection #cvNav > button:is(.active, [aria-current="page"], [aria-current="true"]) { border-color: #d2e3d5; background: var(--cs-mint); color: var(--cs-teal); font-weight: 700; box-shadow: inset 3px 0 var(--cs-teal); }
-#civilSection #cvNav #cvSavedCount { margin-inline-start: auto; min-width: 23px; padding: 2px 6px; border: 1px solid var(--cs-line); border-radius: 6px; background: #fff; color: var(--cs-teal); font-size: 10px; }
+#civilSection #cvNav > button:is(.active, [aria-current="page"], [aria-current="true"]) { border-color: #d2e3d5; background: var(--cs-mint); color: var(--cs-teal); font-weight: 700; box-shadow: inset 0 -2px var(--cs-teal); }
+#civilSection #cvNav #cvSavedCount { min-width: 23px; padding: 2px 6px; border: 1px solid var(--cs-line); border-radius: 6px; background: #fff; color: var(--cs-teal); font-size: 10px; }
 #civilSection .cs-status-dot { display: inline-block; flex: none; width: 6px; height: 6px; border-radius: 50%; background: #4b8763; }
-#civilSection .cs-sidebar-note { display: flex; align-items: baseline; gap: 8px; margin: 8px 5px 24px; padding-top: 22px; border-top: 1px solid var(--cs-line); }
-#civilSection .cs-sidebar-note b { font-size: 10px; font-weight: 600; }
-#civilSection .cs-sidebar-note p { margin: 7px 0 0; color: var(--cs-muted); font-size: 11px; line-height: 1.8; }
-#civilSection .cs-sidebar-footer { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--cs-line); }
-#civilSection .cs-profile { display: flex; align-items: center; gap: 10px; padding: 0 6px 16px; }
+#civilSection .cs-profile { display: flex; align-items: center; gap: 8px; min-width: 0; }
 #civilSection .cs-profile > span { display: grid; place-items: center; width: 34px; height: 34px; flex: none; border-radius: 50%; background: #edf0e9; color: var(--cs-forest); font-weight: 600; }
 #civilSection .cs-profile b { display: block; font-size: 12px; }
-#civilSection .cs-profile small { display: block; color: var(--cs-muted); font-size: 10px; }
-#civilSection .cs-exit-actions { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
-#civilSection .cs-exit-actions button { min-width: 0; min-height: 44px; padding: 8px 6px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: var(--cs-muted); font: 500 10.5px/1.5 var(--cs-font); cursor: pointer; }
+#civilSection .cs-exit-actions { display: flex; align-items: center; gap: 6px; padding-left: 12px; border-left: 1px solid var(--cs-line); }
+#civilSection .cs-exit-actions button { flex: 0 0 auto; min-width: 0; min-height: 44px; padding: 8px 10px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: var(--cs-muted); font: 500 11px/1.5 var(--cs-font); white-space: nowrap; cursor: pointer; }
 #civilSection .cs-exit-actions button:hover { background: var(--cs-mint); color: var(--cs-teal); }
 #civilSection #cvLock { padding-inline: 10px; border-color: var(--cs-line); }
-#civilSection #cvWorkspaceTop { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; min-height: 78px; padding: 4px 0 22px; border-bottom: 1px solid var(--cs-line); }
+#civilSection #cvWorkspaceTop { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; min-height: 54px; padding: 0 0 16px; border-bottom: 1px solid var(--cs-line); }
 #civilSection #cvWorkspaceTop > div { flex: 1 1 240px; min-width: 0; }
-#civilSection #cvWorkspaceTitle { display: block; margin-top: 6px; font-size: 14px; font-weight: 500; }
+#civilSection #cvWorkspaceTitle { display: block; margin: 0; font-size: 14px; font-weight: 500; }
 #civilSection .cs-save-indicator { display: inline-flex; align-items: center; gap: 8px; color: var(--cs-muted); font-size: 11px; }
-#civilSection .cs-workspace-note { margin: 36px 0 0; padding: 18px 0 0; border-color: var(--cs-line); color: var(--cs-muted); font-size: 11px; }
 
 /* Overview: a calm welcome, two clear modes, then measurable progress. */
-#civilSection #cvDash .cs-dashboard-hero { display: grid; grid-template-columns: minmax(0, 1fr) 260px; align-items: center; gap: 32px; padding: 12px 0 30px; }
+#civilSection #cvDash .cs-dashboard-hero { display: grid; grid-template-columns: minmax(0, 1fr) 220px; align-items: center; gap: 24px; padding: 0 0 24px; }
 #civilSection #cvDash .cs-dashboard-hero > div { min-width: 0; }
-#civilSection #cvDash .cs-dashboard-hero h2 { margin: 14px 0; font-size: clamp(30px, 3vw, 42px); font-weight: 600; letter-spacing: -.05em; }
-#civilSection #cvDash .cs-dashboard-hero p { margin: 0; color: var(--cs-muted); font-size: 15px; line-height: 1.85; }
-#civilSection #cvDash .cs-hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
-#civilSection #cvDash .cs-hero-chips { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 20px; }
-#civilSection #cvDash .cs-hero-chips > span { padding: 0; border: 0; background: transparent; color: var(--cs-muted); font-size: 11px; }
-#civilSection #cvDash .cs-blueprint { color: #709c80; padding: 18px 0 12px 22px; border-left: 1px solid var(--cs-line); text-align: center; }
+#civilSection #cvDash .cs-dashboard-hero h2 { margin: 0; font-size: clamp(30px, 3vw, 42px); font-weight: 600; letter-spacing: -.05em; }
+#civilSection #cvDash .cs-hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+#civilSection #cvDash .cs-blueprint { color: #709c80; padding: 0 0 0 22px; border-left: 1px solid var(--cs-line); text-align: center; }
 #civilSection #cvDash .cs-blueprint svg { display: block; width: 100%; height: auto; }
-#civilSection #cvDash .cs-blueprint > span { display: block; margin-top: 8px; color: var(--cs-muted); font-size: 7.5px; letter-spacing: .13em; }
 #civilSection #cvDash .cv-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 26px; }
 #civilSection #cvDash .cv-kpi { flex-direction: row; align-items: center; gap: 12px; padding: 21px 18px; border-color: var(--cs-line); border-radius: 12px; box-shadow: none; transform: none; }
 #civilSection #cvDash .cv-kpi-ic { width: 36px; height: 36px; border-radius: 9px; background: var(--cs-mint); color: var(--cs-teal); }
@@ -223,21 +206,15 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
 #civilSection #cvDash .cv-kpi-v { color: var(--cs-ink); font: 600 27px/1.2 var(--cs-display); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
 #civilSection #cvDash .cv-kpi-k { margin-top: 5px; color: var(--cs-muted); font-size: 11px; }
 #civilSection #cvDash .cs-mode-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 24px; }
-#civilSection #cvDash .cs-mode-card { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; min-height: 44px; padding: 28px; border: 1px solid var(--cs-line); border-radius: 16px; background: #fff; color: var(--cs-ink); text-align: left; cursor: pointer; transition: border-color .16s, box-shadow .16s; }
+#civilSection #cvDash .cs-mode-card { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; min-height: 44px; padding: 24px; border: 1px solid var(--cs-line); border-radius: 16px; background: #fff; color: var(--cs-ink); text-align: left; cursor: pointer; transition: border-color .16s, box-shadow .16s; }
 #civilSection #cvDash .cs-learn-card { background: #edf5ec; border-color: #c4d8c6; }
-#civilSection #cvDash .cs-mode-number { color: var(--cs-muted); font-size: 10px; font-weight: 700; letter-spacing: .12em; }
-#civilSection #cvDash .cs-mode-card h3 { margin: 16px 0 10px; font-size: 22px; }
-#civilSection #cvDash .cs-mode-card p { margin: 0; color: var(--cs-muted); font-size: 13px; line-height: 1.7; }
-#civilSection #cvDash .cs-mode-card ul { margin: 18px 0 24px; padding-left: 18px; color: var(--cs-muted); font-size: 12px; line-height: 1.8; }
-#civilSection #cvDash .cs-mode-card li { padding-left: 3px; margin-block: 5px; }
-#civilSection #cvDash .cs-mode-card li::marker { color: var(--cs-teal); }
+#civilSection #cvDash .cs-mode-card h3 { margin: 0 0 18px; font-size: 22px; }
 #civilSection #cvDash .cs-mode-card > b { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; margin-top: auto; padding-top: 18px; border-top: 1px solid var(--cs-line); font-size: 12px; font-weight: 600; }
 #civilSection #cvDash .cs-learn-card > b { color: var(--cs-teal); border-color: #cfdfcf; }
 #civilSection #cvDash .cs-mode-card > b > span { font-size: 20px; }
 #civilSection #cvDash .cs-bank-shortcut { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px 24px; margin-bottom: 28px; }
 #civilSection #cvDash .cs-bank-shortcut > div { flex: 1 1 330px; min-width: 0; }
-#civilSection #cvDash .cs-bank-shortcut h3 { margin: 8px 0; font-size: 20px; }
-#civilSection #cvDash .cs-bank-shortcut p { max-width: 58ch; margin: 0; color: var(--cs-muted); font-size: 12px; }
+#civilSection #cvDash .cs-bank-shortcut h3 { margin: 0; font-size: 20px; }
 #civilSection #cvDash .cv-home-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 20px; margin: 0; }
 #civilSection #cvDash .cv-history-list { gap: 0; }
 #civilSection #cvDash .cv-history-row { min-height: 76px; padding: 16px 0; border: 0; border-bottom: 1px solid var(--cs-line); border-radius: 0; background: transparent; color: var(--cs-ink); }
@@ -264,9 +241,8 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
 #civilSection :is(#cvDash, #cvChapters, #cvSets) .cv-empty { min-width: 0; border-color: #cbdace; background: #f7f9f4; }
 #civilSection :is(#cvDash, #cvChapters, #cvSets) .cv-empty b { font: 600 16px/1.5 var(--cs-display); color: var(--cs-ink); }
 #civilSection :is(#cvDash, #cvChapters, #cvSets) .cv-empty p { color: var(--cs-muted); }
-#civilSection .cs-page-heading { padding: 5px 0 0; margin-bottom: 28px; }
-#civilSection .cs-page-heading h2 { max-width: 30ch; margin: 12px 0 0; font-size: clamp(27px, 2.8vw, 36px); font-weight: 600; }
-#civilSection .cs-page-heading p { max-width: 76ch; margin: 12px 0 0; color: var(--cs-muted); font-size: 13px; }
+#civilSection .cs-page-heading { margin-bottom: 20px; }
+#civilSection .cs-page-heading h2 { max-width: 30ch; margin: 0; font-size: clamp(27px, 2.8vw, 36px); font-weight: 600; }
 #civilSection :is(#cvChapters, #cvSets) .cv-toolbar { margin-bottom: 28px; padding: 18px; gap: 16px; border-color: var(--cs-line); border-radius: 12px; }
 #civilSection :is(#cvPractice, #cvChapters, #cvSets) :is(.cv-field, .cv-search) > span { color: var(--cs-ink); font-size: 11px; font-weight: 600; }
 #civilSection :is(#cvPractice, #cvChapters, #cvSets) :is(.cv-field, .cv-search) :is(input, select) { min-height: 48px; padding: 11px 12px; border-color: var(--cs-control-line); border-radius: 9px; background: #fff; color: var(--cs-ink); }
@@ -287,13 +263,13 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
 #civilSection #cvPractice .cv-step-no { border-radius: 9px; background: var(--cs-mint); color: var(--cs-teal); font-family: var(--cs-display); }
 #civilSection #cvPractice .cs-session-mode { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; min-width: 0; margin: 0; padding: 0; border: 0; }
 #civilSection #cvPractice .cs-session-mode legend { width: 100%; margin-bottom: 10px; padding: 0; color: var(--cs-ink); font-size: 12px; font-weight: 600; }
-#civilSection #cvPractice .cs-session-mode label { display: flex; align-items: flex-start; gap: 9px; min-width: 0; min-height: 44px; padding: 14px 11px; border: 1px solid var(--cs-control-line); border-radius: 10px; background: #fff; cursor: pointer; }
+#civilSection #cvPractice .cs-session-mode label { display: flex; align-items: center; gap: 9px; min-width: 0; min-height: 44px; padding: 14px 11px; border: 1px solid var(--cs-control-line); border-radius: 10px; background: #fff; cursor: pointer; }
 #civilSection #cvPractice .cs-session-mode label > div { min-width: 0; }
 #civilSection #cvPractice .cs-session-mode label b { display: block; font-size: 12px; font-weight: 600; }
-#civilSection #cvPractice .cs-session-mode label span { display: block; margin-top: 5px; color: var(--cs-muted); font-size: 11px; line-height: 1.65; }
+#civilSection #cvPractice .cs-session-mode label span { display: block; color: var(--cs-ink); font-size: 11px; line-height: 1.65; }
 #civilSection #cvPractice .cs-session-mode label:is(.is-active, :has(input:checked)) { border-color: var(--cs-teal); background: var(--cs-mint); box-shadow: inset 0 0 0 1px var(--cs-teal); }
 #civilSection #cvPractice .cs-session-mode label:has(input:focus-visible) { outline: 2px solid var(--cs-teal); outline-offset: 3px; }
-#civilSection #cvPractice .cs-session-mode input { margin-top: 2px; }
+#civilSection #cvPractice .cs-session-mode input { margin: 0; }
 #civilSection #cvPractice :is(input[type="checkbox"], input[type="radio"]) { accent-color: var(--cs-teal); }
 #civilSection #cvPractice .cv-selection-list { gap: 10px; margin-top: 20px; }
 #civilSection #cvPractice .cv-builder-chapter-body { padding: 14px; border-color: var(--cs-line); }
@@ -317,10 +293,12 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
 #civilSection #cvPractice .cv-builder-summary > span.cv-builder-hint { padding: 0; border: 0; background: transparent; color: var(--cs-ink); font-weight: 600; }
 #civilSection #cvPractice .cv-builder-actions button { min-height: 48px; }
 
-/* Syllabus hierarchy uses outlines, readable labels and unabridged source notes. */
-#civilSection #cvChapters .cv-syllabus-source { gap: 6px 18px; margin: -8px 0 18px; color: var(--cs-muted); }
+/* Keep syllabus content and mapping provenance without header blurbs. */
+#civilSection #cvChapters .cv-syllabus-source { margin: 0 0 18px; color: var(--cs-muted); }
 #civilSection #cvChapters .cv-syllabus-source a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--cs-teal); }
-#civilSection #cvChapters .cv-notice-info { padding: 14px 18px; border: 1px solid #d1e1d2; background: var(--cs-mint); color: #43604b; }
+#civilSection #cvChapters .cv-source-details { margin-top: 24px; border-top: 1px solid var(--cs-line); color: var(--cs-muted); font-size: 11px; }
+#civilSection #cvChapters .cv-source-details > summary { min-height: 44px; padding-block: 14px; color: var(--cs-teal); cursor: pointer; }
+#civilSection #cvChapters .cv-source-details > p { margin: 0; max-width: 90ch; line-height: 1.8; }
 #civilSection :is(#cvPractice, #cvChapters) :is(.cv-builder-chapter, .cv-chapter) { border-color: var(--cs-line); border-radius: 12px; box-shadow: none; }
 #civilSection :is(#cvPractice, #cvChapters) :is(.cv-builder-chapter, .cv-chapter)[open] { border-color: #86ad91; box-shadow: none; }
 #civilSection :is(#cvPractice, #cvChapters) :is(.cv-builder-chapter, .cv-chapter)[open] > summary { background: #f0f6ed; border-radius: 11px 11px 0 0; }
@@ -336,7 +314,6 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
 #civilSection #cvChapters .cv-chapter-tree { gap: 14px; }
 #civilSection #cvChapters .cv-chapter > summary { padding: 20px; }
 #civilSection #cvChapters .cv-chapter-body { padding: 20px 24px 24px; border-color: var(--cs-line); }
-#civilSection #cvChapters .cv-chapter-body > p { color: var(--cs-muted); font-size: 12px; }
 #civilSection #cvChapters .cv-chapter-progress { color: var(--cs-muted); font-size: 11px; }
 #civilSection #cvChapters .cv-subchapter-list { gap: 14px; margin-top: 24px; padding-left: 16px; border-left: 1px solid #cddfd0; }
 #civilSection #cvChapters .cv-subchapter { padding: 20px; border-color: var(--cs-line); border-radius: 10px; }
@@ -345,12 +322,8 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
 #civilSection #cvChapters .cv-subchapter-detail { max-width: 90ch; color: var(--cs-muted); font-size: 12px; line-height: 1.8; }
 #civilSection #cvChapters .cv-subchapter-progress { color: var(--cs-teal); font-size: 11px; }
 #civilSection #cvChapters .cv-subchapter .cv-head-actions { gap: 8px; margin-top: 18px; }
-#civilSection #cvChapters .cv-local-note { border-color: var(--cs-line); color: var(--cs-muted); font-size: 11px; }
 
 /* Model papers remain distinct from both the builder and the exam renderer. */
-#civilSection #cvSets .cs-mode-explainer { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-bottom: 24px; padding: 18px 22px; border: 1px solid var(--cs-line); border-radius: 12px; background: var(--cs-mint); }
-#civilSection #cvSets .cs-mode-explainer > span { min-width: 0; color: var(--cs-muted); font-size: 12px; }
-#civilSection #cvSets .cs-mode-explainer b { display: block; margin-bottom: 4px; color: var(--cs-ink); font-weight: 600; }
 #civilSection #cvSets .cv-legend { color: var(--cs-muted); font-size: 10.5px; }
 #civilSection #cvSetList.cs-paper-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 20px; margin-bottom: 28px; }
 #civilSection #cvSetList > .cv-empty { grid-column: 1 / -1; }
@@ -414,6 +387,13 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
 #civilSection :is(#cvResult, #cvLearning[data-learning-view="result"]) > .cv-review-filters .cv-fpill.active { border-color: var(--cs-teal); background: var(--cs-teal); color: #fff; }
 
 /* Compact layouts preserve document scrolling and native disclosures. */
+@media (max-width: 1470px) {
+    #civilSection #cvTopbar { grid-template-columns: minmax(0, 1fr) auto auto; }
+    #civilSection #cvTopbar .cs-brand { grid-column: 1; grid-row: 1; }
+    #civilSection #cvTopbar .cs-profile { grid-column: 2; grid-row: 1; }
+    #civilSection #cvTopbar .cs-exit-actions { grid-column: 3; grid-row: 1; }
+    #civilSection #cvNav { grid-column: 1 / -1; grid-row: 2; padding: 10px 4px 4px; border-top: 1px solid var(--cs-line); }
+}
 @media (max-width: 1100px) {
     #civilSection #cvPractice .cv-builder-layout { grid-template-columns: minmax(0, 1fr); }
     #civilSection #cvDash .cv-home-columns { grid-template-columns: minmax(0, 1fr); }
@@ -425,16 +405,7 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
 }
 @media (max-width: 900px) {
     body.civil-open:not(.civil-session) .shell { padding: 18px 20px 48px; }
-    #civilSection .cs-app { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-    #civilSection #cvSidebar { position: static; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; min-height: 0; padding: 16px; }
-    #civilSection .cs-brand { padding: 0; }
-    #civilSection :is(.cs-nav-label, .cs-sidebar-note, .cs-profile) { display: none; }
-    #civilSection .cs-sidebar-footer { grid-column: 2; grid-row: 1; margin: 0; padding: 0; border: 0; align-self: center; }
-    #civilSection #cvNav { grid-column: 1 / -1; grid-row: 2; display: flex; gap: 5px; padding: 6px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-padding-inline: 6px; scrollbar-width: thin; scrollbar-color: #a3b9a7 transparent; }
-    #civilSection #cvNav > button { flex: 0 0 auto; padding-inline: 12px; white-space: nowrap; }
-    #civilSection #cvNav > button:is(.active, [aria-current="page"], [aria-current="true"]) { box-shadow: inset 0 -2px var(--cs-teal); }
-    #civilSection .cs-exit-actions { gap: 8px; }
-    #civilSection .cs-exit-actions button { padding-inline: 10px; font-size: 11px; }
+    #civilSection #cvTopbar { padding: 14px 16px; }
     #civilSection #cvGate .cs-welcome { grid-template-columns: minmax(0, 1fr); max-width: 680px; margin-block: 12px; }
     #civilSection #cvGate .cs-structure { max-width: 410px; margin-block: 20px; }
     #civilSection #cvGate .cs-welcome-form { min-height: 0; }
@@ -445,16 +416,13 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
     #civilEntry .cs-entry-mark { width: 48px; height: 48px; border-radius: 12px; }
     #civilEntry .cs-entry-mark svg { width: 32px; height: 32px; }
     #civilEntry .cs-entry-button { grid-column: 1; width: 100%; margin-top: 4px; }
-    #civilSection #cvSidebar { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 14px; }
-    #civilSection .cs-sidebar-footer { grid-column: 1; grid-row: 3; padding-top: 8px; border-top: 1px solid var(--cs-line); }
-    #civilSection .cs-exit-actions { justify-content: space-between; }
+    #civilSection #cvTopbar { grid-template-columns: minmax(0, 1fr) auto; gap: 10px 12px; padding: 14px; }
+    #civilSection #cvTopbar .cs-exit-actions { grid-column: 1 / -1; grid-row: 3; justify-content: flex-end; padding: 8px 0 0; border-left: 0; border-top: 1px solid var(--cs-line); }
     #civilSection #cvWorkspaceTop { min-height: 0; gap: 12px; padding: 0 2px 20px; }
     #civilSection .cs-content { padding-top: 24px; }
     #civilSection #cvGate .cs-welcome { border-radius: 16px; }
     #civilSection #cvGate .cs-welcome-story, #civilSection #cvGate .cv-gate.cs-welcome-form { padding: 28px 22px; }
     #civilSection #cvGate .cs-welcome-story h2 { font-size: 31px; }
-    #civilSection #cvGate .cs-welcome-facts { gap: 10px; }
-    #civilSection #cvGate .cs-welcome-facts b { font-size: 22px; }
     #civilSection #cvDash .cs-dashboard-hero { grid-template-columns: minmax(0, 1fr); padding-top: 0; }
     #civilSection #cvDash .cs-blueprint { display: none; }
     #civilSection #cvDash .cs-hero-actions > .cv-btn { flex: 1 1 170px; }
@@ -469,7 +437,6 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
     #civilSection #cvChapters .cv-chapter-body { padding: 16px; }
     #civilSection #cvChapters .cv-subchapter-list { padding-left: 10px; }
     #civilSection #cvChapters .cv-subchapter { padding: 16px 14px; }
-    #civilSection #cvSets .cs-mode-explainer { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 18px; }
     #civilSection #cvSets .cs-paper { padding: 22px; }
     #civilSection #cvSets .cv-break-row { grid-template-columns: minmax(0, 1fr) 52px; }
     #civilSection #cvSets .cv-break-bar { display: none; }
@@ -487,9 +454,6 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
     #civilSection #cvDash .cv-kpi { padding: 16px; }
     #civilSection #cvSets .cs-paper { padding: 20px; }
 }
-@media (min-width: 901px) and (max-height: 720px) {
-    #civilSection #cvSidebar { position: static; }
-}
 @media (hover: hover) {
     #civilSection #cvDash .cs-mode-card:hover, #civilSection #cvSets .cs-paper:hover { border-color: #87aa91; box-shadow: 0 5px 18px rgba(23, 61, 49, .055); }
     #civilSection #cvDash .cv-history-row:hover { background: #f5f8f1; }
@@ -499,9 +463,8 @@ body.civil-open:not(.civil-session) .shell { width: 100%; max-width: 1500px; pad
 }
 
 /* Session isolation changes only the surrounding chrome, never the question UI. */
-#civilSection[data-session-mode] #cvSidebar,
-#civilSection[data-session-mode] #cvWorkspaceTop,
-#civilSection[data-session-mode] .cs-workspace-note { display: none !important; }
+#civilSection[data-session-mode] #cvTopbar,
+#civilSection[data-session-mode] #cvWorkspaceTop { display: none !important; }
 #civilSection[data-session-mode] .cs-app { display: block; }
 #civilSection[data-session-mode] .cs-content { padding: 0; }
 #civilSection[data-session-mode] .cs-workspace { max-width: none; }
@@ -513,7 +476,7 @@ body.civil-open.civil-session .shell { width: 100%; max-width: 1360px; padding: 
 /* Motion and high-contrast preferences remain local to the portal. */
 @media (prefers-reduced-motion: reduce) {
     #civilEntry, #civilEntry *,
-    #civilSection :is(#cvGate, #cvSidebar, #cvDash, #cvPractice, #cvChapters, #cvSets) * {
+    #civilSection :is(#cvGate, #cvTopbar, #cvDash, #cvPractice, #cvChapters, #cvSets) * {
         transition: none !important; animation: none !important; scroll-behavior: auto !important;
     }
 }

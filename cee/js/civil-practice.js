@@ -372,19 +372,19 @@
 
         function renderBuilder() {
             $("cvBuilder").innerHTML = draftCard() + `<div class="cv-builder-layout">
-                <section class="cv-panel"><div class="cv-step-head"><span class="cv-step-no">1</span><div><h3>Select chapters &amp; subchapters</h3><p>Pick a whole chapter or individual syllabus topics. Parent and child selections never duplicate questions.</p></div></div>
+                <section class="cv-panel"><div class="cv-step-head"><span class="cv-step-no">1</span><div><h3>Select chapters &amp; subchapters</h3></div></div>
                     <div class="cv-head-actions"><button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" data-cp-action="select-all">Select all</button><button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" data-cp-action="clear-selection">Clear</button></div>
                     <div class="cv-selection-list">${chapters.map(builderChapter).join("")}</div>
                 </section>
                 <section class="cv-panel cv-builder-summary"><div class="cv-step-head"><span class="cv-step-no">2</span><div><h3>Choose how to learn</h3><p>One mark per correct answer. No negative marking.</p></div></div>
-                    <fieldset class="cs-session-mode"><legend>Session mode</legend><label><input type="radio" name="cpMode" value="practice" ${selectedMode === "practice" ? "checked" : ""} /><span><b>Practice</b><small>Instant answers · Focus Pro</small></span></label><label><input type="radio" name="cpMode" value="exam" ${selectedMode === "exam" ? "checked" : ""} /><span><b>Exam</b><small>Radio layout · results after submit</small></span></label></fieldset>
+                    <fieldset class="cs-session-mode"><legend>Session mode</legend><label><input type="radio" name="cpMode" value="practice" ${selectedMode === "practice" ? "checked" : ""} /><span><b>Practice</b></span></label><label><input type="radio" name="cpMode" value="exam" ${selectedMode === "exam" ? "checked" : ""} /><span><b>Exam</b></span></label></fieldset>
                     <label class="cv-field"><span>Question pool</span><select id="cpPool"><option value="all">All questions</option><option value="unseen">Not yet attempted in practice</option><option value="wrong">Incorrect in practice</option><option value="saved">Saved questions</option></select></label>
                     <span class="cv-builder-hint">Number of questions</span><div class="cv-count-presets">${[10, 20, 30, 50, 100].map((n) => `<button type="button" class="cv-count-chip" data-cp-action="count" data-count="${n}">${n}</button>`).join("")}</div>
                     <label class="cv-field"><span>Custom count (1–100)</span><input type="number" id="cpCount" min="1" max="100" step="1" value="${desiredCount}" inputmode="numeric" /></label>
                     <label class="cv-switch-line" id="cpTimedLine"><input type="checkbox" id="cpTimed" ${timed ? "checked" : ""} /><span>Use a countdown timer</span></label>
                     <label class="cv-field" id="cpMinutesField"><span>Time limit (minutes)</span><input type="number" id="cpMinutes" min="1" max="720" step="1" inputmode="numeric" /></label>
                     <div class="cv-build-total" aria-live="polite" id="cpBuildTotal"></div><div class="cv-selected-chips" id="cpSelectedChips"></div>
-                    <p class="cv-builder-hint" id="cpBuilderHint"></p><p class="cv-notice cv-notice-warn" id="cpBuilderError" role="alert" hidden></p>
+                    <p class="cv-builder-hint" id="cpBuilderHint" hidden></p><p class="cv-notice cv-notice-warn" id="cpBuilderError" role="alert" hidden></p>
                     <div class="cv-builder-actions"><button type="button" class="cv-btn cv-btn-blue" data-cp-action="start-custom" id="cpBuildStart">Start practice</button></div>
                 </section></div>`;
             $("cpPool").value = poolFilter;
@@ -421,7 +421,8 @@
             $("cpBuildStart").textContent = count ? `Start ${count}-question ${selectedMode}` : "Start " + selectedMode;
             $("cpBuilderHint").textContent = !selected.size ? "Choose at least one chapter or subchapter to begin."
                 : !available ? "No questions match this pool. Try All questions, or save and answer some questions first."
-                : `Randomly draws ${count} unique questions. ${selectedMode === "practice" ? "Answers and explanations appear immediately after your first choice. No timer." : timed ? "Marks stay hidden until submission. The timer continues if you leave." : "Untimed exam. Marks stay hidden until submission."}`;
+                : selectedMode === "exam" && timed ? "The timer continues if you leave." : "";
+            $("cpBuilderHint").hidden = !$("cpBuilderHint").textContent;
             $("cvBuilder").querySelectorAll("[data-count]").forEach((button) => {
                 button.disabled = +button.dataset.count > max;
                 button.classList.toggle("active", +button.dataset.count === count);
@@ -430,30 +431,25 @@
         }
 
         function renderChapters() {
-            const officialCount = taxonomy.official.length || chapters.length;
-            const topicCount = taxonomy.official.reduce((sum, chapter) => sum + chapter.subchapters.length, 0);
-            $("cvChapterMeta").textContent = `${officialCount} official chapters · ${topicCount} subchapters · ${number(total)} questions. Practice for instant explanations, or choose Exam to reveal results only after submission.`;
             const query = $("cvChapterSearch").value.trim().toLowerCase();
             const matchesChapter = (chapter) => `${chapter.number || ""} ${chapter.code || ""} ${chapter.name}`.toLowerCase().includes(query);
             const matchesTopic = (topic) => `${topic.number} ${topic.code} ${topic.name} ${topic.detail}`.toLowerCase().includes(query);
             const matching = chapters.filter((chapter) => matchesChapter(chapter) || leafNodes(chapter).some(matchesTopic));
-            const extra = chapters.find((chapter) => chapter.additional);
-            $("cvSyllabusCoverage").textContent = `${number(total - (extra ? extra.count : 0))} questions mapped to the official subchapters${extra ? "; " + extra.count + " additional bank questions kept separately" : ""}. Topic placement is based on question content, not NEC-provided question tags.`;
             $("cvChapterList").innerHTML = matching.length ? matching.map((chapter) => {
                 const stats = counts([chapter.id]);
                 const leaves = matchesChapter(chapter) ? leafNodes(chapter) : leafNodes(chapter).filter(matchesTopic);
                 return `<details class="cv-chapter${chapter.additional ? " cv-additional" : ""}" data-chapter-group="${chapter.id}"${query || chapterOpen.has(chapter.id) ? " open" : ""}><summary><span class="cv-chevron">${chevron}</span>${icon(chapter)}
                     <span class="cv-chapter-name"><b>${chapter.number ? chapter.number + ". " : ""}${esc(chapter.name)}</b><small>${chapter.additional ? "Kept outside the official topic counts" : leafNodes(chapter).length + " subchapters · " + chapter.code}${stats.attempted ? " · " + stats.attempted + " practised" : ""}</small></span><span class="cv-count">${chapter.count} Q</span></summary>
-                    <div class="cv-chapter-body"><p>${chapter.additional ? "These questions remain in their original model sets but lack a clear match to the supplied syllabus. Their grouping is by original bank subject." : "Practise this chapter with instant feedback, or sit a traditional exam. You can also choose an individual subchapter below."}</p>
+                    <div class="cv-chapter-body">
                     <div class="cv-chapter-progress"><div class="cv-progress-track"><span style="width:${chapter.count ? Math.min(100, stats.attempted / chapter.count * 100) : 0}%"></span></div><span>${stats.attempted} / ${chapter.count} practised</span></div>
                     <div class="cv-head-actions"><button type="button" class="cv-btn cv-btn-blue" data-cp-action="practice-chapter" data-chapter="${chapter.id}"${chapter.count ? "" : " disabled"}>Practice ${chapter.additional ? "additional questions" : "chapter"}</button>
                     <button type="button" class="cv-btn cv-btn-ghost" data-cp-action="exam-chapter" data-chapter="${chapter.id}"${chapter.count ? "" : " disabled"}>Exam mode</button>
-                    <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" data-cp-action="build-chapter" data-chapter="${chapter.id}"${chapter.count ? "" : " disabled"}>Build a shorter set</button></div>
+                    <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" data-cp-action="build-chapter" data-chapter="${chapter.id}"${chapter.count ? "" : " disabled"}>Build a shorter set</button>${window.CIVIL_NOTES && window.CIVIL_NOTES.hasChapter(chapter.id) ? `<button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" data-cv-nav="notes" data-note-topic="${window.CIVIL_NOTES.chapterCodes(chapter.id)[0]}">Read chapter notes</button>` : ""}</div>
                     <div class="cv-subchapter-list">${leaves.map((topic) => {
                         const progress = counts([topic.id]);
                         return `<article class="cv-subchapter${topic.count ? "" : " cv-topic-empty"}" data-subchapter="${topic.id}"><div class="cv-subchapter-head"><div><h4>${esc(topicTitle(topic))}</h4>${topic.code ? `<span class="cv-topic-code">${topic.code}</span>` : ""}</div><span class="cv-count">${topic.count} Q</span></div>
                             <p class="cv-subchapter-detail">${esc(topic.detail)}</p><p class="cv-subchapter-progress">${topic.count ? `${progress.attempted} practised · ${progress.correct} last answered correctly` : "No matching questions in the current bank. This official syllabus topic is not yet covered."}</p>
-                            <div class="cv-head-actions"><button type="button" class="cv-btn cv-btn-blue cv-btn-sm" data-cp-action="practice-subchapter" data-topic="${topic.id}"${topic.count ? "" : " disabled"}>Practice</button><button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" data-cp-action="exam-subchapter" data-topic="${topic.id}"${topic.count ? "" : " disabled"}>Exam</button><button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" data-cp-action="build-subchapter" data-topic="${topic.id}"${topic.count ? "" : " disabled"}>Add to session</button></div></article>`;
+                            <div class="cv-head-actions"><button type="button" class="cv-btn cv-btn-blue cv-btn-sm" data-cp-action="practice-subchapter" data-topic="${topic.id}"${topic.count ? "" : " disabled"}>Practice</button><button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" data-cp-action="exam-subchapter" data-topic="${topic.id}"${topic.count ? "" : " disabled"}>Exam</button><button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" data-cp-action="build-subchapter" data-topic="${topic.id}"${topic.count ? "" : " disabled"}>Add to session</button>${window.CIVIL_NOTES && window.CIVIL_NOTES.hasTopic(topic.id) ? `<button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" data-cv-nav="notes" data-note-topic="${topic.id}">Read notes</button>` : ""}</div></article>`;
                     }).join("")}</div></div></details>`;
             }).join("") : '<div class="cv-empty"><b>No matching syllabus topics</b><p>Try a chapter name, subchapter number, official code or syllabus keyword.</p></div>';
         }
@@ -465,7 +461,7 @@
             retryLoad = () => loadFor(config, callback);
             show("learning", config.origin || "chapters");
             replace($("cvLearning"), `<div class="cv-viewer-top"><button type="button" class="cv-btn cv-btn-ghost" data-cv-nav="${config.origin || "chapters"}">${uiIcon("arrow-left")} Back</button></div>
-                <div class="cv-panel cv-loading" role="status"><h3>Preparing your question bank</h3><p>Question files load only when you open a collection or start a session.</p><progress id="cpLoadProgress" value="0" max="${entries.length}"></progress><p id="cpLoadText">Loading…</p></div>`);
+                <div class="cv-panel cv-loading" role="status"><h3>Preparing your question bank</h3><progress id="cpLoadProgress" value="0" max="${entries.length}"></progress><p id="cpLoadText">Loading…</p></div>`);
             try {
                 const records = await bank.load((done, count) => {
                     if (token !== serial || !isOpen()) return;
@@ -776,8 +772,8 @@
             const libraryActions = mode === "library" && filtered.length ? `<div class="cv-head-actions"><button type="button" class="cv-btn cv-btn-blue" data-cp-action="practice-saved">Practise saved questions</button><button type="button" class="cv-btn cv-btn-ghost" data-cp-action="exam-saved">Exam on saved questions</button></div>` : "";
             const topic = config.scope && config.scope.length === 1 ? topics.get(config.scope[0]) : null;
             const parent = topic && chapterMap.get(topic.chapterId);
-            replace($("cvLearning"), `<div class="cv-viewer-top"><button type="button" class="cv-btn cv-btn-ghost" ${practice ? 'data-cp-action="leave-session"' : `data-cv-nav="${config.origin === "saved" ? "dash" : config.origin || "chapters"}"`}>${uiIcon("arrow-left")} ${practice ? "Leave exam" : config.origin === "practice" ? "Session builder" : config.origin === "saved" ? "Overview" : "Question bank"}</button>${libraryActions}</div>
-                ${practice ? "" : `<div class="cv-breadcrumb">Civil Engineering ${chevron} ${parent ? esc(parent.name) + " " + chevron + " " : ""}${esc(config.title)}</div><div class="cv-page-intro"><h2>${esc(config.title)}</h2><p class="cv-session-status">${screen.records.length} questions &middot; ${mode === "result" ? "Session completed · model-exam progress unchanged" : "Your saved collection · choose Practice or Exam to answer"}</p></div>`}
+            replace($("cvLearning"), `<div class="cv-viewer-top"><button type="button" class="cv-btn cv-btn-ghost" ${practice ? 'data-cp-action="leave-session"' : `data-cv-nav="${config.origin === "saved" ? "dash" : config.origin || "chapters"}"`}>${uiIcon("arrow-left")} ${practice ? "Leave exam" : config.origin === "practice" ? "Session builder" : config.origin === "notes" ? "Chapter notes" : config.origin === "saved" ? "Overview" : "Question bank"}</button>${libraryActions}</div>
+                ${practice ? "" : `<div class="cv-breadcrumb">Civil Engineering ${chevron} ${parent ? esc(parent.name) + " " + chevron + " " : ""}${esc(config.title)}</div><div class="cv-page-intro"><h2>${esc(config.title)}</h2></div>`}
                 ${topic && !practice ? `<p class="cv-notice cv-notice-info"><b>${esc(topic.code || "Additional bank questions")}</b> &middot; ${esc(topic.detail)}</p>` : ""}
                 ${result ? resultHtml() : ""}
                 <div class="cv-exam">${practice ? `<div class="cv-infobox"><div><div class="cv-ei-name">${esc(deps.candidate)} · ${esc(config.title)} · Exam</div><div class="cv-ei-timer">${screen.run.endsAt ? "Time remaining" : "Your pace"}: <b id="cpTimer"></b></div><div class="cv-ei-answered" id="cpAnswered"></div><button type="button" class="cv-ei-link" data-cp-action="show-unanswered">View unanswered questions</button><p id="cpUnanswered" hidden></p></div><span class="cv-ei-photo" aria-hidden="true">${esc(deps.candidate[0])}</span></div>` : ""}
@@ -958,6 +954,10 @@
         readStore(); refreshSavedCount();
         return { renderDashboard, renderBuilder, renderChapters, suspend, toggleBookmark, bookmarkButton,
             setBuilderMode: (mode) => { selectedMode = mode === "exam" ? "exam" : "practice"; },
+            practiceTopic: (code, mode) => {
+                const topic = topics.get(code);
+                if (topic && topic.count) startPractice({ title: topicTitle(topic), origin: "notes", scope: [code], mode: mode === "exam" ? "exam" : "practice" });
+            },
             practiceModel: (key) => {
                 const entry = entries.find((item) => item.key === key);
                 if (entry) startPractice({ title: entry.meta.title, origin: "sets", setKey: key, mode: "practice" });

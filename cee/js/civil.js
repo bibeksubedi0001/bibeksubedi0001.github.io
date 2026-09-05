@@ -67,6 +67,7 @@
     let ticker = null;
     let armedSubmit = false;    // true while the confirm modal is open
     let practice = null;
+    let notes = null;
     let loadToken = 0;
     let modelLoading = false;
     let currentView = "gate";
@@ -131,16 +132,17 @@
     }
 
     function show(view, tab) {
+        if (view !== "notes" && notes) notes.suspend();
         currentView = view;
         setSessionMode(view === "exam" ? "exam" : null);
         $("cvGate").hidden = view !== "gate";
         $("cvApp").hidden = view === "gate";
-        const views = { dash: "cvDash", sets: "cvSets", practice: "cvPractice", chapters: "cvChapters", learning: "cvLearning", exam: "cvExam", result: "cvResult" };
+        const views = { dash: "cvDash", sets: "cvSets", practice: "cvPractice", chapters: "cvChapters", notes: "cvNotes", learning: "cvLearning", exam: "cvExam", result: "cvResult" };
         Object.entries(views).forEach(([name, id]) => { $(id).hidden = name !== view; });
         $("cvGoTop").hidden = !["exam", "result", "learning"].includes(view);
         const activeTab = tab || (["exam", "result"].includes(view) ? "sets" : view);
-        const titles = { dash: "Your preparation, at a glance.", chapters: "Find a topic. Build understanding.", practice: "A session shaped around you.", sets: "Your next exam starts here.", saved: "Keep the useful questions close." };
-        $("cvWorkspaceTitle").textContent = titles[activeTab] || "Your preparation, your pace.";
+        const titles = { dash: "Overview", chapters: "Question bank", notes: "Chapter notes", practice: "Build a session", sets: "Model papers", saved: "Saved questions" };
+        $("cvWorkspaceTitle").textContent = titles[activeTab] || "Civil Engineering";
         $("cvNav").querySelectorAll("[data-cv-nav]").forEach((button) => {
             const active = button.dataset.cvNav === activeTab;
             button.classList.toggle("active", active);
@@ -162,6 +164,7 @@
         practice.suspend();
         modelLoading = false;
         if (view === "saved") { practice.openSaved(); return; }
+        if (view === "notes") { show("notes"); notes.render(); return; }
         if (view === "practice") practice.renderBuilder();
         else if (view === "chapters") practice.renderChapters();
         else if (view === "dash" || view === "sets") renderDash();
@@ -228,12 +231,7 @@
         const avgPct = done.length ? Math.round(done.reduce((s, r) => s + r.st.summary.pct, 0) / done.length) : null;
         const allQ = SETS.reduce((n, e) => n + e.meta.total, 0);
 
-        $("cvHeroName").textContent = "Make today count, " + CANDIDATE + ".";
-        $("cvHeroChips").innerHTML =
-            `<span class="cv-chip">${allQ.toLocaleString("en-US")} questions</span>` +
-            `<span class="cv-chip">${window.CIVIL_SYLLABUS ? window.CIVIL_SYLLABUS.chapters.length : SETS[0] ? SETS[0].meta.chapters.length : 0} chapters</span>` +
-            (window.CIVIL_SYLLABUS ? `<span class="cv-chip">${window.CIVIL_SYLLABUS.chapters.reduce((sum, chapter) => sum + chapter.subchapters.length, 0)} official subchapters</span>` : "") +
-            `<span class="cv-chip">${SETS.length} model sets</span>`;
+        $("cvHeroName").textContent = "Welcome, " + CANDIDATE + ".";
 
         $("cvKpis").innerHTML =
             kpi("sets", ICON.sets, SETS.length, "Model papers") +
@@ -241,7 +239,6 @@
             kpi("best", ICON.best, bestPct == null ? "\u2014" : bestPct + "%", "Best exam score") +
             kpi("avg", ICON.avg, avgPct == null ? "\u2014" : avgPct + "%", "Average exam score");
 
-        $("cvModelSummary").textContent = `${SETS.length} full papers · ${allQ.toLocaleString("en-US")} questions · ${done.length} sets completed. Your original model-exam progress is preserved.`;
         const unfinished = rows.find((row) => !row.st.submitted && (row.st.endsAt || Object.keys(row.st.answers).length));
         $("cvModelResume").innerHTML = unfinished ? `<div class="cv-resume-card"><div class="cv-resume-copy"><b>Continue your model exam</b><span>${esc(unfinished.e.meta.title)} &middot; ${Object.keys(unfinished.st.answers).length} of ${unfinished.e.meta.total} answered</span></div><button type="button" class="cv-btn cv-btn-ghost" data-open="${unfinished.e.key}">Resume model exam</button></div>` : "";
         const query = $("cvSetSearch").value.trim().toLowerCase();
@@ -257,7 +254,7 @@
                 const cls = st.submitted ? "is-done" : live ? "is-live" : "";
                 return `<article class="cs-paper ${cls}"><div class="cs-paper-top"><span class="cs-paper-number">PAPER ${String(meta.n).padStart(2, "0")}</span><span class="cv-pill ${st.submitted ? "done" : live ? "live" : "new"}">${st.submitted ? "Exam completed" : live ? "Exam in progress" : "Ready to begin"}</span></div>
                     <h3>${esc(meta.title)}</h3><div class="cs-paper-meta"><span>${meta.total} questions</span><span>${meta.durationMinutes} min exam</span><span>${meta.chapters.length} subjects</span></div>
-                    <div class="cs-paper-progress"><div><span style="width:${Math.min(100, answered / meta.total * 100)}%"></span></div><span>${st.submitted ? "Exam submitted" : live ? answered + " answers saved" : "Practice to learn. Exam to test."}</span></div>
+                    <div class="cs-paper-progress" role="progressbar" aria-label="Model exam answered" aria-valuemin="0" aria-valuemax="${meta.total}" aria-valuenow="${answered}"><span style="width:${Math.min(100, answered / meta.total * 100)}%"></span></div>
                     <div class="cs-paper-score"><small>Personal best · exam</small><b>${st.best ? st.best.pct + "%" : "—"}</b></div>
                     <div class="cs-paper-actions"><button type="button" class="cv-btn" data-open="${meta.key}">${st.submitted ? "Review exam" : live ? "Resume exam" : "Start exam"}</button><button type="button" class="cv-btn cv-btn-ghost" data-model-practice="${meta.key}">Practice</button></div></article>`;
             }).join("") + (!visibleRows.length ? '<div class="cv-empty"><b>No matching model sets</b><p>Clear the search or choose another status.</p></div>' : "");
@@ -622,13 +619,20 @@
         practice = window.CIVIL_PRACTICE.create({ $, esc, entries: SETS, loadSet: loadSetData, show,
             navigate, setSessionMode, confirm: requestModal, closeModal, typeset, candidate: CANDIDATE,
             isOpen: () => unlocked && !$("civilSection").hidden });
+        notes = window.CIVIL_NOTES.create({ $, esc, syllabus: window.CIVIL_SYLLABUS, entries: SETS, loadSet: loadSetData, typeset,
+            isOpen: () => unlocked && currentView === "notes" && !$("civilSection").hidden,
+            startTopic: (code, mode) => practice.practiceTopic(code, mode) });
         $("civilSection").addEventListener("click", (event) => {
             if (!unlocked) return;
             const nav = event.target.closest("[data-cv-nav]");
             const model = event.target.closest("[data-open]");
             const modelPractice = event.target.closest("[data-model-practice]");
             const bookmark = event.target.closest('[data-cv-action="bookmark"]');
-            if (nav) { if (nav.dataset.cvMode) practice.setBuilderMode(nav.dataset.cvMode); navigate(nav.dataset.cvNav); }
+            if (nav) {
+                if (nav.dataset.cvMode) practice.setBuilderMode(nav.dataset.cvMode);
+                if (nav.dataset.noteTopic) notes.selectTopic(nav.dataset.noteTopic);
+                navigate(nav.dataset.cvNav);
+            }
             else if (model && !model.disabled) openSet(model.dataset.open);
             else if (modelPractice && !modelPractice.disabled) { loadToken++; stopTicker(); closeModal(); practice.suspend(); practice.practiceModel(modelPractice.dataset.modelPractice); }
             else if (bookmark) {
@@ -648,7 +652,7 @@
         $("cvGateBack").addEventListener("click", () => { if (window.CEE_APP) window.CEE_APP.closeCivil(); });
         $("cvLock").addEventListener("click", lock);
         $("cvExit").addEventListener("click", () => {
-            loadToken++; stopTicker(); practice.suspend(); closeModal();
+            loadToken++; stopTicker(); practice.suspend(); notes.suspend(); closeModal();
             setSessionMode(null);
             if (window.CEE_APP) window.CEE_APP.closeCivil();
         });
