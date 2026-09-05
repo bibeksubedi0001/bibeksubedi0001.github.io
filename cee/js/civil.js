@@ -1,21 +1,4 @@
-/* ============================================================
-   Civil Engineering model sets — self-contained, access-gated
-   section with its own dashboard, exam interface and result.
-
-   The interface follows the IOE Entrance examination portal
-   (D:\IOE Entrance\New folder\4\website): teal candidate info
-   box, 20-questions-per-page pager, radio option rows, flag for
-   review, confirm-before-submit modal, result stat badges.
-
-   Questions come from the per-set files listed in js/civil-sets.js.
-   Only that small catalogue loads with the page; a set's questions are
-   fetched on demand the first time it is opened. Progress is kept in
-   its own localStorage key so it never touches the CEE day-plan state.
-
-   NOTE ON THE ACCESS KEY: this gate only hides the section in
-   the UI. Everything ships in the page source, so it is a
-   convenience lock, not a security control.
-   ============================================================ */
+/* The access key is a convenience gate, not a security boundary; question data is public. */
 (function () {
     "use strict";
 
@@ -45,13 +28,23 @@
         if (pending[entry.key]) return pending[entry.key];
         pending[entry.key] = new Promise((resolve, reject) => {
             const tag = document.createElement("script");
+            const timeout = setTimeout(() => fail("Loading timed out. Please retry."), 25000);
+            function fail(message) {
+                clearTimeout(timeout);
+                tag.onload = null;
+                tag.onerror = null;
+                tag.remove();
+                reject(new Error(message));
+            }
             tag.src = entry.meta.file + VER;
-            tag.onload = () => cache[entry.key]
-                ? resolve(cache[entry.key])
-                : reject(new Error(entry.meta.file + " did not register " + entry.key));
-            tag.onerror = () => reject(new Error("Could not load " + entry.meta.file));
+            tag.onload = () => {
+                clearTimeout(timeout);
+                if (cache[entry.key]) resolve(cache[entry.key]);
+                else fail("The question file did not finish loading. Please retry.");
+            };
+            tag.onerror = () => fail("Could not load questions. Check your connection and retry.");
             document.head.appendChild(tag);
-        });
+        }).catch((error) => { delete pending[entry.key]; throw error; });
         return pending[entry.key];
     }
 
@@ -73,6 +66,12 @@
     let reviewFilter = "all";
     let ticker = null;
     let armedSubmit = false;    // true while the confirm modal is open
+    let practice = null;
+    let loadToken = 0;
+    let modelLoading = false;
+    let currentView = "gate";
+    let modalAction = null;
+    let modalFocus = null;
 
     function freshSet() {
         return { answers: {}, flags: {}, endsAt: null, submitted: false, autoSubmitted: false, best: null, summary: null };
@@ -124,26 +123,65 @@
     }
 
     /* ---------- views ---------- */
-    function show(view) {
+    function setSessionMode(mode) {
+        if (mode) $("civilSection").dataset.sessionMode = mode;
+        else delete $("civilSection").dataset.sessionMode;
+        document.body.classList.toggle("civil-session", !!mode);
+        $("cvGoTop").hidden = mode === "practice" || !["exam", "result", "learning"].includes(currentView);
+    }
+
+    function show(view, tab) {
+        currentView = view;
+        setSessionMode(view === "exam" ? "exam" : null);
         $("cvGate").hidden = view !== "gate";
         $("cvApp").hidden = view === "gate";
-        $("cvDash").hidden = view !== "dash";
-        $("cvExam").hidden = view !== "exam";
-        $("cvResult").hidden = view !== "result";
-        $("cvGoTop").hidden = view !== "exam" && view !== "result";
+        const views = { dash: "cvDash", sets: "cvSets", practice: "cvPractice", chapters: "cvChapters", learning: "cvLearning", exam: "cvExam", result: "cvResult" };
+        Object.entries(views).forEach(([name, id]) => { $(id).hidden = name !== view; });
+        $("cvGoTop").hidden = !["exam", "result", "learning"].includes(view);
+        const activeTab = tab || (["exam", "result"].includes(view) ? "sets" : view);
+        const titles = { dash: "Your preparation, at a glance.", chapters: "Find a topic. Build understanding.", practice: "A session shaped around you.", sets: "Your next exam starts here.", saved: "Keep the useful questions close." };
+        $("cvWorkspaceTitle").textContent = titles[activeTab] || "Your preparation, your pace.";
+        $("cvNav").querySelectorAll("[data-cv-nav]").forEach((button) => {
+            const active = button.dataset.cvNav === activeTab;
+            button.classList.toggle("active", active);
+            if (active) button.setAttribute("aria-current", "page"); else button.removeAttribute("aria-current");
+            if (active && $("cvNav").clientWidth) {
+                const navBox = $("cvNav").getBoundingClientRect(), buttonBox = button.getBoundingClientRect();
+                if (buttonBox.right > navBox.right) $("cvNav").scrollLeft += buttonBox.right - navBox.right + 8;
+                else if (buttonBox.left < navBox.left) $("cvNav").scrollLeft += buttonBox.left - navBox.left - 8;
+            }
+        });
         window.scrollTo({ top: 0, behavior: "auto" });
+    }
+
+    function navigate(view) {
+        if (!unlocked) return;
+        loadToken++;
+        stopTicker();
+        closeModal();
+        practice.suspend();
+        modelLoading = false;
+        if (view === "saved") { practice.openSaved(); return; }
+        if (view === "practice") practice.renderBuilder();
+        else if (view === "chapters") practice.renderChapters();
+        else if (view === "dash" || view === "sets") renderDash();
+        else return;
+        show(view);
     }
 
     function openSection() {
         load();
         if (window.CEE_APP && window.CEE_APP.openCivil) window.CEE_APP.openCivil();
-        if (unlocked) { renderDash(); show("dash"); }
+        if (unlocked) navigate("dash");
         else { $("cvPass").value = ""; $("cvGateErr").hidden = true; show("gate"); $("cvPass").focus(); }
     }
 
     function lock() {
         unlocked = false;
         try { sessionStorage.removeItem(UNLOCK_KEY); } catch (e) { /* ignore */ }
+        loadToken++;
+        practice.suspend();
+        closeModal();
         stopTicker();
         $("cvPass").value = "";
         $("cvGateErr").hidden = true;
@@ -159,8 +197,7 @@
         unlocked = true;
         try { sessionStorage.setItem(UNLOCK_KEY, "1"); } catch (e) { /* ignore */ }
         $("cvGateErr").hidden = true;
-        renderDash();
-        show("dash");
+        navigate("dash");
     }
 
     /* ---------- dashboard ---------- */
@@ -186,57 +223,44 @@
         // built from the catalogue + saved state only, so no set file has to be loaded here
         const rows = SETS.map((e) => ({ e: e, st: stateOf(e.key) }));
         const done = rows.filter((r) => r.st.submitted && r.st.summary);
-        const bestPct = done.length ? Math.max.apply(null, done.map((r) => r.st.best ? r.st.best.pct : r.st.summary.pct)) : null;
+        const personalBests = rows.filter((r) => r.st.best || r.st.submitted && r.st.summary);
+        const bestPct = personalBests.length ? Math.max.apply(null, personalBests.map((r) => r.st.best ? r.st.best.pct : r.st.summary.pct)) : null;
         const avgPct = done.length ? Math.round(done.reduce((s, r) => s + r.st.summary.pct, 0) / done.length) : null;
         const allQ = SETS.reduce((n, e) => n + e.meta.total, 0);
 
-        $("cvHeroName").textContent = "Welcome, " + CANDIDATE;
+        $("cvHeroName").textContent = "Make today count, " + CANDIDATE + ".";
         $("cvHeroChips").innerHTML =
-            `<span class="cv-chip">${SETS.length} model set${SETS.length === 1 ? "" : "s"}</span>` +
             `<span class="cv-chip">${allQ.toLocaleString("en-US")} questions</span>` +
-            `<span class="cv-chip">Every bank question used once</span>`;
+            `<span class="cv-chip">${window.CIVIL_SYLLABUS ? window.CIVIL_SYLLABUS.chapters.length : SETS[0] ? SETS[0].meta.chapters.length : 0} chapters</span>` +
+            (window.CIVIL_SYLLABUS ? `<span class="cv-chip">${window.CIVIL_SYLLABUS.chapters.reduce((sum, chapter) => sum + chapter.subchapters.length, 0)} official subchapters</span>` : "") +
+            `<span class="cv-chip">${SETS.length} model sets</span>`;
 
         $("cvKpis").innerHTML =
-            kpi("sets", ICON.sets, SETS.length, "Model sets available") +
+            kpi("sets", ICON.sets, SETS.length, "Model papers") +
             kpi("tests", ICON.tests, done.length + "<small style=\"font-size:15px;opacity:.6\">/" + SETS.length + "</small>", "Sets completed") +
-            kpi("best", ICON.best, bestPct == null ? "\u2014" : bestPct + "%", "Best score") +
-            kpi("avg", ICON.avg, avgPct == null ? "\u2014" : avgPct + "%", "Average score");
+            kpi("best", ICON.best, bestPct == null ? "\u2014" : bestPct + "%", "Best exam score") +
+            kpi("avg", ICON.avg, avgPct == null ? "\u2014" : avgPct + "%", "Average exam score");
 
-        $("cvSetList").innerHTML =
-            `<div class="cv-set-row cv-set-head">
-                <div>SN.</div><div>Set</div><div class="cv-best">Best score</div>
-                <div class="cv-status">Status</div><div>Action</div>
-             </div>` +
-            rows.map((r) => {
+        $("cvModelSummary").textContent = `${SETS.length} full papers · ${allQ.toLocaleString("en-US")} questions · ${done.length} sets completed. Your original model-exam progress is preserved.`;
+        const unfinished = rows.find((row) => !row.st.submitted && (row.st.endsAt || Object.keys(row.st.answers).length));
+        $("cvModelResume").innerHTML = unfinished ? `<div class="cv-resume-card"><div class="cv-resume-copy"><b>Continue your model exam</b><span>${esc(unfinished.e.meta.title)} &middot; ${Object.keys(unfinished.st.answers).length} of ${unfinished.e.meta.total} answered</span></div><button type="button" class="cv-btn cv-btn-ghost" data-open="${unfinished.e.key}">Resume model exam</button></div>` : "";
+        const query = $("cvSetSearch").value.trim().toLowerCase();
+        const statusFilter = $("cvSetStatus").value;
+        const visibleRows = rows.filter((row) => {
+            const status = row.st.submitted ? "done" : row.st.endsAt || Object.keys(row.st.answers).length ? "live" : "new";
+            return (statusFilter === "all" || statusFilter === status) && (row.e.meta.title.toLowerCase().includes(query) || String(row.e.no) === query);
+        });
+        $("cvSetList").innerHTML = visibleRows.map((r) => {
                 const meta = r.e.meta, st = r.st;
                 const answered = Object.keys(st.answers).length;
                 const live = !st.submitted && (st.endsAt || answered > 0);
                 const cls = st.submitted ? "is-done" : live ? "is-live" : "";
-                const act = st.submitted
-                    ? { c: "cv-act-review", i: ICON.review, t: "Review" }
-                    : live
-                        ? { c: "cv-act-resume", i: ICON.resume, t: "Resume" }
-                        : { c: "cv-act-start", i: ICON.play, t: "Start" };
-                const sub = live
-                    ? `${meta.durationMinutes} min &bull; ${meta.total} questions &bull; ${answered} answered so far`
-                    : `${meta.durationMinutes} min &bull; ${meta.total} questions &bull; ${meta.chapters.length} subjects`;
-                return `<div class="cv-set-row ${cls}">
-                    <div class="cv-sn">${meta.n}</div>
-                    <div>
-                        <div class="cv-set-name">${esc(meta.title)}<span class="cv-set-tag">Model</span></div>
-                        <div class="cv-set-sub">${sub}</div>
-                    </div>
-                    <div class="cv-best${st.best ? "" : " none"}">${st.best ? st.best.pct + "%" : "-"}</div>
-                    <div class="cv-status"><span class="cv-pill ${st.submitted ? "done" : live ? "live" : "new"}">${st.submitted ? "Completed" : live ? "In progress" : "Not attempted"}</span></div>
-                    <div>
-                        <button type="button" class="cv-act ${act.c}" data-open="${meta.key}">
-                            <span class="cv-act-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">${act.i}</svg></span>
-                            <span>${act.t}</span>
-                        </button>
-                    </div>
-                </div>`;
-            }).join("");
+                return `<article class="cs-paper ${cls}"><div class="cs-paper-top"><span class="cs-paper-number">PAPER ${String(meta.n).padStart(2, "0")}</span><span class="cv-pill ${st.submitted ? "done" : live ? "live" : "new"}">${st.submitted ? "Exam completed" : live ? "Exam in progress" : "Ready to begin"}</span></div>
+                    <h3>${esc(meta.title)}</h3><div class="cs-paper-meta"><span>${meta.total} questions</span><span>${meta.durationMinutes} min exam</span><span>${meta.chapters.length} subjects</span></div>
+                    <div class="cs-paper-progress"><div><span style="width:${Math.min(100, answered / meta.total * 100)}%"></span></div><span>${st.submitted ? "Exam submitted" : live ? answered + " answers saved" : "Practice to learn. Exam to test."}</span></div>
+                    <div class="cs-paper-score"><small>Personal best · exam</small><b>${st.best ? st.best.pct + "%" : "—"}</b></div>
+                    <div class="cs-paper-actions"><button type="button" class="cv-btn" data-open="${meta.key}">${st.submitted ? "Review exam" : live ? "Resume exam" : "Start exam"}</button><button type="button" class="cv-btn cv-btn-ghost" data-model-practice="${meta.key}">Practice</button></div></article>`;
+            }).join("") + (!visibleRows.length ? '<div class="cv-empty"><b>No matching model sets</b><p>Clear the search or choose another status.</p></div>' : "");
 
         const bank = {};
         SETS.forEach((e) => e.meta.chapters.forEach((c) => { bank[c.name] = (bank[c.name] || 0) + c.count; }));
@@ -253,14 +277,25 @@
                 <b>${bank[n]}</b>
             </div>`).join("") + `</div>`;
 
-        $("cvSetList").querySelectorAll("[data-open]").forEach((b) =>
-            b.addEventListener("click", () => openSet(b.dataset.open)));
+        practice.renderDashboard();
     }
 
     /* ---------- exam ---------- */
     function openSet(key) {
+        if (!unlocked) return;
         const entry = SETS.find((s) => s.key === key);
         if (!entry) return;
+        const token = ++loadToken;
+        stopTicker();
+        practice.suspend();
+        closeModal();
+        active = null;
+        modelLoading = true;
+        $("cvExam").querySelectorAll("button:not(#cvBackToSets)").forEach((button) => { button.disabled = true; });
+        $("cvEiName").textContent = "Preparing your model exam";
+        $("cvTimer").textContent = "--:--";
+        $("cvEiAnswered").textContent = "The timer starts after questions are ready.";
+        $("cvEiPopup").hidden = true;
         const st = stateOf(key);
         $("cvExamTitle").textContent = entry.meta.title;
         $("cvExamSub").textContent = "Loading questions\u2026";
@@ -268,6 +303,9 @@
         $("cvPagerNums").innerHTML = "";
         show("exam");
         loadSetData(entry).then((data) => {
+            if (token !== loadToken || !unlocked || $("civilSection").hidden) return;
+            modelLoading = false;
+            $("cvExam").querySelectorAll("button").forEach((button) => { button.disabled = false; });
             entry.set = data;
             active = entry;
             items = flatten(data);
@@ -275,12 +313,15 @@
             showUnanswered = false;
             if (st.submitted) { reviewFilter = "all"; renderResult(); show("result"); return; }
             if (!st.endsAt) { st.endsAt = Date.now() + (data.durationMinutes || entry.meta.durationMinutes) * 60 * 1000; save(); }
+            if (st.endsAt <= Date.now()) { st.autoSubmitted = true; submitSet(); return; }
             renderExam();
             show("exam");
             startTicker();
         }).catch((err) => {
+            if (token !== loadToken || !unlocked || $("civilSection").hidden) return;
+            modelLoading = false;
             $("cvExamSub").textContent = "";
-            $("cvQuestions").innerHTML = '<p class="cv-muted" style="padding:22px 4px">' + esc(err.message) + '</p>';
+            $("cvQuestions").innerHTML = `<div class="cv-empty" role="alert"><b>Questions could not be loaded</b><p>${esc(err.message)}</p><button type="button" class="cv-btn" data-open="${entry.key}">Retry loading</button></div>`;
         });
     }
 
@@ -334,16 +375,16 @@
                 <div class="cv-q-meta">
                     <span>(1 mark)</span>
                     <button type="button" class="cv-flag${st.flags[q.id] ? " on" : ""}" data-flag="${q.id}"
-                        title="${st.flags[q.id] ? "Flagged for review" : "Flag for review"}" aria-label="Flag for review">
+                        title="${st.flags[q.id] ? "Flagged for review" : "Flag for review"}" aria-label="Flag for review" aria-pressed="${!!st.flags[q.id]}">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V4s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>
                         </svg>
                     </button>
                 </div>
                 <ul class="cv-opts">${q.options.map((o) => `
-                    <li class="cv-opt${chosen === o.key ? " selected" : ""}" data-pick="${q.id}" data-key="${o.key}">
-                        <input type="radio" name="cvq-${q.id}" ${chosen === o.key ? "checked" : ""} tabindex="-1">
-                        <span class="cv-ltr">${o.key})</span><span>${o.text}</span>
+                    <li class="cv-opt cv-option-row${chosen === o.key ? " selected" : ""}" data-pick="${q.id}" data-key="${o.key}">
+                        <label class="cv-option-label"><input type="radio" name="cvq-${q.id}" data-model-pick="${q.id}" value="${o.key}" ${chosen === o.key ? "checked" : ""}>
+                        <span class="cv-ltr">${o.key})</span><span class="cv-option-text">${o.text}</span></label>
                     </li>`).join("")}</ul>
             </div>`;
         }).join("");
@@ -353,14 +394,19 @@
 
         $("cvPagerNums").querySelectorAll("[data-page]").forEach((b) =>
             b.addEventListener("click", () => { page = +b.dataset.page; renderExam(); window.scrollTo({ top: $("cvExam").offsetTop - 20, behavior: "smooth" }); }));
-        $("cvQuestions").querySelectorAll("[data-pick]").forEach((li) =>
-            li.addEventListener("click", () => pick(li.dataset.pick, li.dataset.key)));
+        $("cvQuestions").querySelectorAll("[data-model-pick]").forEach((input) =>
+            input.addEventListener("change", () => pick(input.dataset.modelPick, input.value)));
         $("cvQuestions").querySelectorAll("[data-flag]").forEach((b) =>
             b.addEventListener("click", () => toggleFlag(b.dataset.flag)));
     }
 
     function pick(qid, key) {
+        if (!active || modelLoading || currentView !== "exam") return;
         const st = stateOf(active.key);
+        if (st.submitted) return;
+        if (st.endsAt && st.endsAt <= Date.now()) { st.autoSubmitted = true; submitSet(); return; }
+        const item = items.find((item) => item.q.id === qid);
+        if (!item || !item.q.options.some((option) => option.key === key)) return;
         st.answers[qid] = key;
         save();
         $("cvQuestions").querySelectorAll(`[data-pick="${qid}"]`).forEach((li) => {
@@ -373,7 +419,9 @@
     }
 
     function toggleFlag(qid) {
+        if (!active || modelLoading || currentView !== "exam") return;
         const st = stateOf(active.key);
+        if (st.submitted) return;
         if (st.flags[qid]) delete st.flags[qid]; else st.flags[qid] = true;
         save();
         renderExam();
@@ -440,19 +488,34 @@
 
     /* ---------- submit ---------- */
     function askSubmit() {
+        if (!active || modelLoading || currentView !== "exam" || stateOf(active.key).submitted) return;
         const done = answeredCount(), total = items.length;
+        requestModal({ title: "Submit model exam?", label: "Submit exam", html:
+            "You have attempted <b>" + done + "</b> out of <b>" + total + "</b> questions. Submit your answers?" +
+            (done < total ? '<br><span class="cv-muted">Unanswered questions score 0 (no penalty).</span>' : ""), action: submitSet });
+    }
+
+    function requestModal({ title, html, label, action }) {
         armedSubmit = true;
-        $("cvModalBody").innerHTML = "You have attempted <b>" + done + "</b> out of <b>" + total + "</b> questions. Do you want to submit it anyway?" +
-            (done < total ? '<br><span class="cv-muted">Unanswered questions score 0 (no penalty).</span>' : "");
+        modalFocus = document.activeElement;
+        modalAction = action;
+        $("cvModalTitle").textContent = title;
+        $("cvModalBody").innerHTML = html;
+        $("cvModalOk").textContent = label;
         $("cvModalBack").hidden = false;
+        $("cvModalCancel").focus();
     }
 
     function closeModal() {
         armedSubmit = false;
+        modalAction = null;
         $("cvModalBack").hidden = true;
+        if (modalFocus && modalFocus.isConnected) modalFocus.focus();
+        modalFocus = null;
     }
 
     function submitSet() {
+        if (!active || stateOf(active.key).submitted) return;
         const st = stateOf(active.key);
         st.submitted = true;
         st.endsAt = null;
@@ -468,12 +531,16 @@
     }
 
     function retake() {
+        if (!active) return;
+        requestModal({ title: "Retake this model set?", label: "Retake set", html:
+            "Your latest answers in this set will be reset. Your personal best, practice results and saved questions will stay saved.", action: () => {
         const st = stateOf(active.key);
         const best = st.best;
         store.sets[active.key] = freshSet();
         store.sets[active.key].best = best;      // keep the personal best across retakes
         save();
         openSet(active.key);
+        } });
     }
 
     /* ---------- result ---------- */
@@ -527,7 +594,7 @@
             lastCh = it.ch;
             return band + `<div class="cv-q">
                 <div class="cv-q-head"><span class="cv-q-num">${it.no}.</span><span class="cv-q-body">${q.text}</span></div>
-                <div class="cv-q-meta"><span>${a == null ? "Not answered" : a === q.answer ? "Correct" : "Incorrect"}</span></div>
+                <div class="cv-q-meta"><span>${a == null ? "Not answered" : a === q.answer ? "Correct" : "Incorrect"}</span>${practice.bookmarkButton(it).replace("data-cp-action", "data-cv-action")}</div>
                 <ul class="cv-opts">${q.options.map((o) => {
                     const cls = o.key === q.answer ? " correct" : (a === o.key ? " wrong" : "");
                     return `<li class="cv-opt${cls}" style="cursor:default">
@@ -543,7 +610,8 @@
 
     function typeset(node) {
         if (window.MathJax && window.MathJax.typesetPromise) {
-            window.MathJax.typesetPromise([node]).catch(() => { /* rendering is best-effort */ });
+            const ready = window.MathJax.startup && window.MathJax.startup.promise || Promise.resolve();
+            ready.then(() => window.MathJax.typesetPromise([node])).catch(() => { /* rendering is best-effort */ });
         }
     }
 
@@ -551,15 +619,45 @@
     function wire() {
         if (!$("civilSection")) return;
 
+        practice = window.CIVIL_PRACTICE.create({ $, esc, entries: SETS, loadSet: loadSetData, show,
+            navigate, setSessionMode, confirm: requestModal, closeModal, typeset, candidate: CANDIDATE,
+            isOpen: () => unlocked && !$("civilSection").hidden });
+        $("civilSection").addEventListener("click", (event) => {
+            if (!unlocked) return;
+            const nav = event.target.closest("[data-cv-nav]");
+            const model = event.target.closest("[data-open]");
+            const modelPractice = event.target.closest("[data-model-practice]");
+            const bookmark = event.target.closest('[data-cv-action="bookmark"]');
+            if (nav) { if (nav.dataset.cvMode) practice.setBuilderMode(nav.dataset.cvMode); navigate(nav.dataset.cvNav); }
+            else if (model && !model.disabled) openSet(model.dataset.open);
+            else if (modelPractice && !modelPractice.disabled) { loadToken++; stopTicker(); closeModal(); practice.suspend(); practice.practiceModel(modelPractice.dataset.modelPractice); }
+            else if (bookmark) {
+                const item = items.find((item) => (item.q.src || item.q.id) === bookmark.dataset.id);
+                if (item) {
+                    practice.toggleBookmark(item);
+                    bookmark.outerHTML = practice.bookmarkButton(item).replace("data-cp-action", "data-cv-action");
+                }
+            }
+        });
+        $("cvSetSearch").addEventListener("input", renderDash);
+        $("cvSetStatus").addEventListener("change", renderDash);
+
         $("civilOpenBtn").addEventListener("click", openSection);
         $("cvUnlock").addEventListener("click", tryUnlock);
         $("cvPass").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); tryUnlock(); } });
         $("cvGateBack").addEventListener("click", () => { if (window.CEE_APP) window.CEE_APP.closeCivil(); });
         $("cvLock").addEventListener("click", lock);
-        $("cvExit").addEventListener("click", () => { if (window.CEE_APP) window.CEE_APP.closeCivil(); });
+        $("cvExit").addEventListener("click", () => {
+            loadToken++; stopTicker(); practice.suspend(); closeModal();
+            setSessionMode(null);
+            if (window.CEE_APP) window.CEE_APP.closeCivil();
+        });
 
-        $("cvBackToSets").addEventListener("click", () => { stopTicker(); renderDash(); show("dash"); });
-        $("cvResBack").addEventListener("click", () => { renderDash(); show("dash"); });
+        $("cvBackToSets").addEventListener("click", () => {
+            if (!active || modelLoading) { navigate("sets"); return; }
+            requestModal({ title: "Leave this exam?", label: "Save & leave", html: "Your answers stay saved and the exam timer continues while you are away. Resume this paper from Model papers.", action: () => navigate("sets") });
+        });
+        $("cvResBack").addEventListener("click", () => navigate("sets"));
         $("cvRetake").addEventListener("click", retake);
 
         $("cvEiLink").addEventListener("click", () => { showUnanswered = !showUnanswered; updateInfobox(); });
@@ -570,9 +668,21 @@
         $("cvSubmit").addEventListener("click", askSubmit);
         $("cvSubmitBottom").addEventListener("click", askSubmit);
         $("cvModalCancel").addEventListener("click", closeModal);
-        $("cvModalOk").addEventListener("click", submitSet);
+        $("cvModalOk").addEventListener("click", () => {
+            const action = modalAction;
+            closeModal();
+            if (action) action();
+        });
         $("cvGoTop").addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-        document.addEventListener("keydown", (e) => { if (e.key === "Escape" && armedSubmit) closeModal(); });
+        document.addEventListener("keydown", (e) => {
+            if (!armedSubmit) return;
+            if (e.key === "Escape") closeModal();
+            if (e.key === "Tab") {
+                const first = $("cvModalCancel"), last = $("cvModalOk");
+                if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+            }
+        });
 
         $("cvReviewFilters").querySelectorAll("[data-filter]").forEach((b) =>
             b.addEventListener("click", () => { reviewFilter = b.dataset.filter; renderReview(); }));

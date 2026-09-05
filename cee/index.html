@@ -28,11 +28,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/styles.css?v=53" />
-    <link rel="stylesheet" href="css/civil.css?v=53" />
+    <link rel="stylesheet" href="css/styles.css?v=57" />
+    <link rel="stylesheet" href="css/civil.css?v=57" />
+    <link rel="stylesheet" href="css/civil-portal.css?v=57" />
+    <link rel="stylesheet" href="css/civil-focus.css?v=57" />
 </head>
 
 <body>
@@ -280,35 +282,23 @@
         </section>
 
         <!-- ---------- Civil Engineering model sets · locked entry card ---------- -->
-        <section class="card omr-entry civil-entry" id="civilEntry">
-            <span class="omr-entry-ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="4" y="11" width="16" height="10" rx="2" />
-                    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-                </svg>
-            </span>
-            <div class="omr-entry-txt">
-                <h3>Civil Engineering · Model Sets</h3>
-                <p>A separate, access-key protected section holding the licence-style civil model papers, arranged
-                    set by set. Its own dashboard, exam interface and result sheet live inside.</p>
-            </div>
-            <button type="button" class="btn-primary" id="civilOpenBtn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="4" y="11" width="16" height="10" rx="2" />
-                    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-                </svg>
-                Enter Section
-            </button>
+        <section class="cs-entry" id="civilEntry">
+            <div class="cs-entry-mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 40h38M10 40V19L24 8l14 11v21M18 40V26h12v14M18 19h12M24 8v11" /></svg></div>
+            <div class="cs-entry-copy"><span>NEC REGISTRATION · YOUR PERSONAL WORKSPACE</span><h3>Civil Engineering</h3><p>Learn with instant answers. Test yourself when you’re ready.</p><small>3,300 questions <i>·</i> 60 syllabus subchapters <i>·</i> 33 model papers</small></div>
+            <button type="button" class="cs-entry-button" id="civilOpenBtn">Enter workspace <span aria-hidden="true">&nearr;</span></button>
         </section>
 
         <!-- ---------- Civil Engineering section (gated) ---------- -->
-        <section id="civilSection" aria-label="Civil Engineering model sets" hidden>
+        <section id="civilSection" aria-label="Civil Engineering exam and practice workspace" hidden>
 
             <!-- password gate -->
             <div id="cvGate">
-                <div class="cv-gate">
+                <div class="cs-welcome">
+                    <div class="cs-welcome-story"><span class="cs-kicker">CIVIL STUDIO / NEC PREPARATION</span><h2>Build knowledge.<br />Build confidence.</h2><p>A quieter place to prepare. Work through the syllabus with immediate feedback, then sit a full exam without distractions.</p>
+                        <svg class="cs-structure" viewBox="0 0 440 190" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M20 160h400M50 155V90h340v65M50 90l56-60 57 60 57-60 57 60 57-60 56 60M106 30h228M50 90h340M106 30v125M163 90v65M220 30v125M277 90v65M334 30v125M30 165l16-10m22 10 16-10m272 10 16-10m22 10 16-10"/><circle cx="106" cy="30" r="4"/><circle cx="220" cy="30" r="4"/><circle cx="334" cy="30" r="4"/></svg>
+                        <div class="cs-welcome-facts"><span><b>3,300</b>questions</span><span><b>60</b>subchapters</span><span><b>2</b>ways to learn</span></div>
+                    </div>
+                    <div class="cv-gate cs-welcome-form">
                     <span class="cv-gate-lock" aria-hidden="true">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -317,9 +307,9 @@
                             <circle cx="12" cy="16" r="1.4" fill="currentColor" stroke="none" />
                         </svg>
                     </span>
-                    <h2>Protected section</h2>
-                    <p>The Civil Engineering model sets, exam interface and result dashboard are behind an access
-                        key. Enter it to continue.</p>
+                    <span class="cs-kicker">YOUR WORKSPACE AWAITS</span>
+                    <h2>Welcome back.</h2>
+                    <p>Enter your access key to continue your preparation.</p>
                     <div class="cv-gate-form">
                         <input type="password" id="cvPass" placeholder="Access key" autocomplete="off"
                             aria-label="Access key" />
@@ -327,44 +317,93 @@
                     </div>
                     <p class="cv-gate-err" id="cvGateErr" hidden>Incorrect access key. Try again.</p>
                     <p class="cv-gate-back"><button type="button" id="cvGateBack">Back to CEE dashboard</button></p>
+                    <small class="cs-device-note">Your progress is saved on this device.</small>
+                    </div>
                 </div>
             </div>
 
             <!-- unlocked portal -->
-            <div id="cvApp" hidden>
-                <div class="cv-head">
-                    <span class="cv-logo" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-5h6v5" />
-                        </svg>
-                    </span>
-                    <div class="cv-head-text">
-                        <div class="l1">Civil Engineering — Examination Portal</div>
-                        <div class="l2">Licence-style model papers · set-wise practice</div>
-                    </div>
-                    <div class="cv-head-actions">
-                        <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" id="cvExit">CEE dashboard</button>
-                        <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" id="cvLock">Lock</button>
-                    </div>
-                </div>
+            <div id="cvApp" class="cs-app" hidden>
+                <aside class="cs-sidebar" id="cvSidebar">
+                    <div class="cs-brand"><span aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 27h24M7 27V13l9-7 9 7v14M12 27v-9h8v9" /></svg></span><div><b>Civil Studio</b><small>NEC REGISTRATION</small></div></div>
+                    <span class="cs-nav-label">YOUR PREPARATION</span>
+                    <nav class="cs-nav" id="cvNav" aria-label="Civil Engineering navigation">
+                        <button type="button" data-cv-nav="dash" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Overview</span></button>
+                        <button type="button" data-cv-nav="chapters"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5C9 3 6 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1zm0 0v15"/></svg><span>Question bank</span></button>
+                        <button type="button" data-cv-nav="practice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16M9 3v6M15 9v6M8 15v6"/></svg><span>Build a session</span></button>
+                        <button type="button" data-cv-nav="sets"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 12h6M9 17h4"/></svg><span>Model papers</span></button>
+                        <button type="button" data-cv-nav="saved"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span>Saved questions</span><b id="cvSavedCount">0</b></button>
+                    </nav>
+                    <div class="cs-sidebar-note"><span class="cs-status-dot" aria-hidden="true"></span><div><b>A little progress, every day.</b><p>Practice to understand.<br />Exams to measure.</p></div></div>
+                    <div class="cs-sidebar-footer"><div class="cs-profile"><span aria-hidden="true">B</span><div><b>Bibek</b><small>Personal study space</small></div></div><div class="cs-exit-actions"><button type="button" id="cvExit">CEE dashboard &nearr;</button><button type="button" id="cvLock">Lock</button></div></div>
+                </aside>
+                <div class="cs-workspace">
+                    <header class="cs-workspace-top" id="cvWorkspaceTop"><div><span class="cs-kicker">CIVIL ENGINEERING</span><b id="cvWorkspaceTitle">Your preparation, at a glance.</b></div><span class="cs-save-indicator"><i class="cs-status-dot" aria-hidden="true"></i> Saved on this device</span></header>
+                    <div class="cs-content">
+                <p class="cv-notice cv-notice-warn" id="cvSaveNotice" role="status" hidden></p>
 
                 <!-- civil dashboard -->
                 <div id="cvDash" hidden>
-                    <div class="cv-hero">
-                        <span class="cv-eyebrow">Civil Engineering · Model Set Portal</span>
+                    <div class="cs-dashboard-hero">
+                        <div><span class="cs-kicker">MAKE ROOM FOR PROGRESS</span>
                         <h2 id="cvHeroName">Welcome</h2>
-                        <p>Every civil question in this workspace, arranged set by set. Open a set to sit the paper in
-                            the examination interface, then review it question by question with solutions.</p>
-                        <div class="cv-chips" id="cvHeroChips"></div>
+                        <p>Build understanding one question at a time.<br />Then put it to the test.</p><div class="cs-hero-actions"><button type="button" class="cv-btn cs-primary" data-cv-nav="practice" data-cv-mode="practice">Start practising <span aria-hidden="true">&rarr;</span></button><button type="button" class="cv-btn cv-btn-ghost" data-cv-nav="sets">Take a mock exam</button></div>
+                        <div class="cs-hero-chips" id="cvHeroChips"></div></div>
+                        <div class="cs-blueprint" aria-hidden="true"><svg viewBox="0 0 300 210" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M20 172h260M46 161V73l104-44 104 44v88M46 73h208M81 58v103M115 43v118M150 29v132M185 44v117M219 58v103M46 117h208M46 161l69-118 70 118 69-88M24 185h252M24 182v6m252-6v6"/><circle cx="150" cy="29" r="4"/><circle cx="46" cy="73" r="4"/><circle cx="254" cy="73" r="4"/></svg><span>STRONG FOUNDATIONS. STEADY PROGRESS.</span></div>
                     </div>
 
                     <div class="cv-kpis" id="cvKpis"></div>
+                    <div id="cvHomeResume"></div>
+                    <div id="cvModelResume"></div>
 
+                    <div class="cs-mode-cards">
+                        <button type="button" class="cs-mode-card cs-learn-card" data-cv-nav="practice" data-cv-mode="practice"><span class="cs-mode-number">01 / LEARN</span><h3>Practice mode</h3><p>Choose an answer. Understand it immediately.</p><ul><li>Instant correct-answer feedback</li><li>Worked explanations, one question at a time</li><li>Focus Pro layout · no countdown</li></ul><b>Build understanding <span aria-hidden="true">&nearr;</span></b></button>
+                        <button type="button" class="cs-mode-card" data-cv-nav="sets"><span class="cs-mode-number">02 / TEST</span><h3>Exam mode</h3><p>A familiar paper. An honest measure of progress.</p><ul><li>Original radio-button exam interface</li><li>Answers hidden until submission</li><li>Timed model papers and custom exams</li></ul><b>Test your preparation <span aria-hidden="true">&nearr;</span></b></button>
+                    </div>
+                    <section class="cv-panel cs-bank-shortcut"><div><span class="cs-kicker">FOLLOW THE OFFICIAL SYLLABUS</span><h3>Find your next chapter.</h3><p>10 chapters. 60 subchapters. Practice or take an exam on exactly what you need.</p></div><button type="button" class="cv-btn cv-btn-ghost" data-cv-nav="chapters">Explore the question bank &rarr;</button></section>
+
+                    <div class="cv-home-columns">
+                        <section class="cv-panel">
+                            <div class="cv-sec-head"><div><h3>Recent sessions</h3><p>Your practice rounds and custom exams.</p></div></div>
+                            <div id="cvActivity"></div>
+                        </section>
+                        <section class="cv-panel">
+                            <div class="cv-sec-head"><div><h3>Your learning progress</h3><p>Your latest answers across practice rounds and submitted custom exams.</p></div></div>
+                            <div id="cvPracticeSummary"></div>
+                        </section>
+                    </div>
+                </div>
+
+                <div id="cvPractice" hidden>
+                    <div class="cs-page-heading"><span class="cs-kicker">MAKE IT YOUR SESSION</span><h2>What will you work on today?</h2><p>Pick your topics. Choose instant-feedback practice or a traditional exam.</p></div>
+                    <div id="cvBuilder"></div>
+                </div>
+
+                <div id="cvChapters" hidden>
+                    <div class="cs-page-heading"><span class="cs-kicker">YOUR SYLLABUS, ORGANIZED</span><h2>The question bank</h2><p id="cvChapterMeta"></p></div>
+                    <p class="cv-syllabus-source"><a href="civil-engineering-registration-examination-syllabus_compressed.pdf" target="_blank" rel="noopener">Open the official syllabus PDF <span aria-hidden="true">&nearr;</span></a><span>10 chapters &middot; 60 numbered subchapters</span></p>
+                    <p class="cv-notice cv-notice-info" id="cvSyllabusCoverage"></p>
+                    <div class="cv-toolbar">
+                        <label class="cv-search"><span>Find a chapter or subchapter</span><input type="search" id="cvChapterSearch" placeholder="e.g. 2.3, shear strength, ACiE0503…" /></label>
+                        <button type="button" class="cv-btn cv-btn-ghost" data-cp-action="practice-all">Practise the whole bank</button>
+                    </div>
+                    <div id="cvChapterList" class="cv-chapter-tree"></div>
+                    <p class="cv-local-note">Headings and codes follow the supplied Nepal Engineering Council syllabus. Question placements are content-based classifications; zero-count subchapters show gaps in the current bank, not missing parts of the syllabus. Original model sets remain unchanged.</p>
+                </div>
+
+                <div id="cvLearning" hidden></div>
+
+                <div id="cvSets" hidden>
+                    <div class="cs-page-heading"><span class="cs-kicker">BRING IT ALL TOGETHER</span><h2>Model papers</h2><p id="cvModelSummary">Full papers with a timer, saved answers and subject-wise results.</p></div>
+                    <div class="cs-mode-explainer"><span><b>Exam</b> Original radio layout. Marks after submission.</span><span><b>Practice</b> Focus Pro. Instant answers and explanations.</span></div>
+                    <div class="cv-toolbar">
+                        <label class="cv-search"><span>Find a model set</span><input type="search" id="cvSetSearch" placeholder="Search by set name or number…" /></label>
+                        <label class="cv-field"><span>Status</span><select id="cvSetStatus"><option value="all">All sets</option><option value="new">Not attempted</option><option value="live">In progress</option><option value="done">Completed</option></select></label>
+                    </div>
                     <div class="cv-sec-head">
                         <div>
-                            <h3>Model sets</h3>
-                            <p>Each set is a full paper. Progress is saved as you go.</p>
+                            <h3>Choose your paper</h3>
+                            <p>Each paper keeps its original questions, marking and saved progress.</p>
                         </div>
                         <div class="cv-legend">
                             <span><i style="background:#2e9e5b"></i>Completed</span>
@@ -372,15 +411,9 @@
                             <span><i style="background:#c3ccda"></i>Not attempted</span>
                         </div>
                     </div>
-                    <div class="cv-set-list" id="cvSetList"></div>
+                    <div class="cs-paper-grid" id="cvSetList"></div>
 
-                    <div class="cv-sec-head">
-                        <div>
-                            <h3>Set-wise question distribution</h3>
-                            <p>How each set splits across the civil subjects.</p>
-                        </div>
-                    </div>
-                    <div id="cvBreakdown"></div>
+                    <details class="cv-panel cv-bank-details"><summary>Question-bank distribution across all model sets</summary><div id="cvBreakdown"></div></details>
                 </div>
 
                 <!-- civil exam interface -->
@@ -390,7 +423,7 @@
                             <h3 id="cvExamTitle">Civil Model Set</h3>
                             <p id="cvExamSub"></p>
                         </div>
-                        <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" id="cvBackToSets">Back to sets</button>
+                        <button type="button" class="cv-btn cv-btn-ghost cv-btn-sm" id="cvBackToSets">Leave exam</button>
                     </div>
 
                     <div class="cv-exam">
@@ -464,6 +497,9 @@
                         <button type="button" class="cv-fpill" data-filter="flagged">Flagged</button>
                     </div>
                     <div id="cvReview"></div>
+                </div>
+                <p class="cv-local-note cs-workspace-note">Your progress stays on this device. Practice, model exams and the CEE day plan keep separate records.</p>
+                    </div>
                 </div>
             </div>
 
@@ -745,27 +781,30 @@
         <p class="foot">Built for <b>Prakriti Subedi</b> · CEE 2026 preparation · Progress is saved on this device.</p>
     </main>
 
-    <script src="js/day18.js?v=53"></script>
-    <script src="js/day19.js?v=53"></script>
-    <script src="js/day20.js?v=53"></script>
-    <script src="js/day21.js?v=53"></script>
-    <script src="js/day22.js?v=53"></script>
-    <script src="js/day23.js?v=53"></script>
-    <script src="js/day24.js?v=53"></script>
-    <script src="js/day25.js?v=53"></script>
-    <script src="js/day26.js?v=53"></script>
-    <script src="js/day27.js?v=53"></script>
-    <script src="js/day28.js?v=53"></script>
-    <script src="js/day29.js?v=53"></script>
-    <script src="js/day30.js?v=53"></script>
-    <script src="js/day31.js?v=53"></script>
-    <script src="js/day32.js?v=53"></script>
-    <script src="js/civil-sets.js?v=53"></script>
-    <script src="js/syllabus.js?v=53"></script>
-    <script src="js/questions.js?v=53"></script>
-    <script src="js/app.js?v=53"></script>
-    <script src="js/omr.js?v=53"></script>
-    <script src="js/civil.js?v=53"></script>
+    <script src="js/day18.js?v=57"></script>
+    <script src="js/day19.js?v=57"></script>
+    <script src="js/day20.js?v=57"></script>
+    <script src="js/day21.js?v=57"></script>
+    <script src="js/day22.js?v=57"></script>
+    <script src="js/day23.js?v=57"></script>
+    <script src="js/day24.js?v=57"></script>
+    <script src="js/day25.js?v=57"></script>
+    <script src="js/day26.js?v=57"></script>
+    <script src="js/day27.js?v=57"></script>
+    <script src="js/day28.js?v=57"></script>
+    <script src="js/day29.js?v=57"></script>
+    <script src="js/day30.js?v=57"></script>
+    <script src="js/day31.js?v=57"></script>
+    <script src="js/day32.js?v=57"></script>
+    <script src="js/civil-sets.js?v=57"></script>
+    <script src="js/syllabus.js?v=57"></script>
+    <script src="js/questions.js?v=57"></script>
+    <script src="js/app.js?v=57"></script>
+    <script src="js/omr.js?v=57"></script>
+    <script src="js/civil-syllabus.js?v=57"></script>
+    <script src="js/civil-topic-map.js?v=57"></script>
+    <script src="js/civil-practice.js?v=57"></script>
+    <script src="js/civil.js?v=57"></script>
 </body>
 
 </html>
