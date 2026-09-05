@@ -5,10 +5,10 @@
     const DURATION = 120 * 60 * 1000;
     const DESIGNS = ["focus", "console", "midnight"];
     const script = document.currentScript;
-    const dataUrl = script ? new URL("civil-model-1.js" + new URL(script.src).search, script.src).href : "js/civil-model-1.js?v=56";
+    const dataUrl = script ? new URL("civil-model-1.js" + new URL(script.src).search, script.src).href : "js/civil-model-1.js?v=58";
     const $ = (id) => document.getElementById(id);
     const esc = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
-    const checkIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>';
+    const uiIcon = window.CEE_UI_ICONS.svg;
     const sectionLabels = ["Basic Civil", "Structures", "Design", "Soil & Foundations", "Water Resources", "Hydropower", "Irrigation", "Transportation", "Water & Environment"];
 
     function freshState() {
@@ -159,7 +159,7 @@
         $("edResumeNotice").hidden = !(saved && saved.startedAt);
         if (saved && saved.startedAt) {
             const count = Object.keys(saved.answers || {}).length;
-            $("edResumeNotice").innerHTML = `<div><b>${saved.submitted ? "Your demo result is ready" : "Your preview is right where you left it"}</b><p>${count} demo answers retained. ${saved.submitted ? "Open any design to compare its review screen." : "The demo timer continues while you compare. Real exam progress is unchanged."}</p></div><a class="ed-button" href="#focus">${saved.submitted ? "View preview result" : "Continue preview"} &rarr;</a>`;
+            $("edResumeNotice").innerHTML = `<div><b>${saved.submitted ? "Your demo result is ready" : "Your preview is right where you left it"}</b><p>${count} demo answers retained. ${saved.submitted ? "Open any design to compare its review screen." : "The demo timer continues while you compare. Real exam progress is unchanged."}</p></div><a class="ed-button" href="#focus">${saved.submitted ? "View preview result" : "Continue preview"} ${uiIcon("arrow-right")}</a>`;
         }
         window.scrollTo({ top: 0, behavior: "instant" });
     }
@@ -223,7 +223,7 @@
             const on = selected === option.key;
             const correct = state.submitted && option.key === q.answer;
             const wrong = state.submitted && on && !correct;
-            return `<label class="ed-option${on ? " is-selected" : ""}${correct ? " is-correct" : ""}${wrong ? " is-wrong" : ""}"><input class="ed-radio" type="radio" name="ed-answer" value="${option.key}"${on ? " checked" : ""}${state.submitted ? " disabled" : ""} /><span class="ed-option-key">${option.key.toUpperCase()}</span><span class="ed-option-copy">${option.text}</span><span class="ed-option-indicator" aria-hidden="true">${on || correct ? checkIcon : ""}</span>${correct || wrong ? `<span class="ed-option-status">${correct ? "Correct answer" : "Your answer"}</span>` : ""}</label>`;
+            return `<label class="ed-option${on ? " is-selected" : ""}${correct ? " is-correct" : ""}${wrong ? " is-wrong" : ""}"><input class="ed-radio" type="radio" name="ed-answer" value="${option.key}"${on ? " checked" : ""}${state.submitted ? " disabled" : ""} /><span class="ed-option-key">${option.key.toUpperCase()}</span><span class="ed-option-copy">${option.text}</span><span class="ed-option-indicator" aria-hidden="true">${on || correct ? uiIcon("check") : ""}</span>${correct || wrong ? `<span class="ed-option-status">${correct ? "Correct answer" : "Your answer"}</span>` : ""}</label>`;
         }).join("");
         $("edClear").disabled = selected == null || state.submitted;
         $("edFlag").disabled = state.submitted;
@@ -234,7 +234,7 @@
         $("edNext").hidden = state.index === questions.length - 1;
         $("edNext").querySelector("span").textContent = design === "console" ? "Save & next" : design === "midnight" ? "Continue" : "Next question";
         $("edFinish").hidden = state.index < questions.length - 1;
-        $("edFinish").innerHTML = state.submitted ? 'Compare designs <span aria-hidden="true">&rarr;</span>' : 'Review &amp; submit <span aria-hidden="true">&rarr;</span>';
+        $("edFinish").innerHTML = state.submitted ? `Compare designs <span aria-hidden="true">${uiIcon("arrow-right")}</span>` : `Review &amp; submit <span aria-hidden="true">${uiIcon("arrow-right")}</span>`;
         $("edNotes").hidden = design !== "console" || !notesOpen;
         $("edNotesInput").value = state.notes[q.id] || "";
         $("edNotesInput").readOnly = state.submitted;
@@ -272,10 +272,10 @@
             const on = state.answers[q.id] != null, flagged = state.flags[q.id], current = index === state.index;
             const correct = state.submitted && state.answers[q.id] === q.answer;
             const wrong = state.submitted && on && !correct;
-            return `<button type="button" class="ed-number${on ? " answered" : ""}${flagged ? " flagged" : ""}${current ? " current" : ""}${correct ? " correct" : ""}${wrong ? " wrong" : ""}" data-q="${index}" aria-label="Question ${index + 1}, ${correct ? "correct" : wrong ? "incorrect" : on ? "answered" : "unanswered"}${flagged ? ", flagged" : ""}${current ? ", current" : ""}"${current ? ' aria-current="step"' : ""}>${index + 1}${flagged || on ? `<span class="ed-number-status" aria-hidden="true">${flagged ? "⚑" : wrong ? "×" : "✓"}</span>` : ""}</button>`;
+            return `<button type="button" class="ed-number${on ? " answered" : ""}${flagged ? " flagged" : ""}${current ? " current" : ""}${correct ? " correct" : ""}${wrong ? " wrong" : ""}" data-q="${index}" aria-label="Question ${index + 1}, ${correct ? "correct" : wrong ? "incorrect" : on ? "answered" : "unanswered"}${flagged ? ", flagged" : ""}${current ? ", current" : ""}"${current ? ' aria-current="step"' : ""}>${index + 1}${flagged || on ? `<span class="ed-number-status" aria-hidden="true">${flagged ? uiIcon("flag") : wrong ? uiIcon("close") : uiIcon("check")}</span>` : ""}</button>`;
         }).join("") || '<p class="ed-palette-empty">No questions in this filter.</p>';
         palette.scrollTop = scroll;
-        $("edReviewSubmit").innerHTML = state.submitted ? 'Compare designs <span aria-hidden="true">&rarr;</span>' : 'Review &amp; submit <span aria-hidden="true">&rarr;</span>';
+        $("edReviewSubmit").innerHTML = state.submitted ? `Compare designs <span aria-hidden="true">${uiIcon("arrow-right")}</span>` : `Review &amp; submit <span aria-hidden="true">${uiIcon("arrow-right")}</span>`;
     }
 
     function renderResult() {

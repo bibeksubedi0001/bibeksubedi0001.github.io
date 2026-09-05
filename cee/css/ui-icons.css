@@ -1,0 +1,50 @@
+.ui-icon,
+#civilSection .ui-icon,
+#civilEntry .ui-icon {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    max-width: none;
+    margin: 0;
+    vertical-align: -.16em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+}
+
+#civilSection .cv-chapter-icon .ui-icon { width: 23px; height: 23px; }
+#civilSection .fp-icon-button .ui-icon { width: 20px; height: 20px; }
+#civilSection .fp-number > small { display: inline-flex; align-items: center; justify-content: center; }
+#civilSection .fp-number > small .ui-icon { width: 10px; height: 10px; stroke-width: 2; }
+#civilSection .fp-number.flagged > small .ui-icon { width: 9px; height: 9px; }
+#civilSection .fp-choice-label { display: inline-flex; align-items: center; gap: 5px; }
+#civilSection .fp-choice-label .ui-icon { width: 14px; height: 14px; }
+#civilSection .fp-legend .ui-icon { width: 12px; height: 12px; color: var(--fp-flag); }
+#civilSection .fp-map-paging .ui-icon { width: 13px; height: 13px; }
+#civilSection .cv-history-arrow .ui-icon { width: 17px; height: 17px; }
+#civilSection .cs-exit-actions button { display: inline-flex; align-items: center; gap: 5px; }
+#civilSection .cs-exit-actions .ui-icon { width: 14px; height: 14px; }
+#civilSection .cv-syllabus-source a { display: inline-flex; align-items: center; gap: 6px; }
+#civilSection .cv-syllabus-source .ui-icon { width: 15px; height: 15px; }
+
+.ui-stat { display: inline-flex; align-items: center; gap: 3px; }
+.ui-stat-group { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 9px; }
+.ui-stat .ui-icon, .ai-chip .ui-icon, .syl-sub-counts .ui-icon { width: 12px; height: 12px; }
+.mark .ui-icon { width: 15px; height: 15px; }
+.ai-chip { display: inline-flex; align-items: center; gap: 4px; }
+.syl-head .ui-icon { width: 12px; height: 12px; }
+
+.ed-number-status .ui-icon { width: 10px; height: 10px; stroke-width: 2; }
+.ed-open-design .ui-icon { width: 15px; height: 15px; }
+.ed-mini .ui-icon { width: 9px; height: 9px; stroke-width: 2; }
+.ed-shortcuts kbd .ui-icon { width: 12px; height: 12px; }
+.ed-mini-footer > b, .ed-mini-footer > span { display: inline-flex; align-items: center; gap: 4px; }
+.ed-mini-footer > b .ui-icon { width: 8px; height: 8px; }
+
+@media (max-width: 420px) {
+    #civilSection .fp-footer .fp-button > .ui-icon { width: 14px; height: 14px; }
+}

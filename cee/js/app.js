@@ -14,6 +14,7 @@
     const TEST_DURATION_MS = 36 * 60 * 1000; // default 36 minutes per test
     // Per-day override via day.durationMinutes (e.g. Day 14 mock test = 180 min).
     const dayDurationMs = (day) => (day && day.durationMinutes ? day.durationMinutes : 36) * 60 * 1000;
+    const uiIcon = window.CEE_UI_ICONS.svg;
 
     const SUBJECT_ICON = {
         Physics: '<ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="2"/><ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="2" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="2" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/>',
@@ -573,7 +574,7 @@
                     <span class="a-score">${fmt(marks)}/${t}</span>
                  </div>
                  <div class="a-bar"><span style="width:${pct}%"></span></div>
-                 <div class="a-foot"><span>&#10003; ${correct} &nbsp;&#10007; ${wrong} &nbsp;&#8211; ${skipped}</span><span>${pct}% marks</span></div>`;
+                 <div class="a-foot"><span class="ui-stat-group"><span class="ui-stat" aria-label="${correct} correct">${uiIcon("check")} ${correct}</span><span class="ui-stat" aria-label="${wrong} incorrect">${uiIcon("close")} ${wrong}</span><span class="ui-stat" aria-label="${skipped} skipped">${uiIcon("minus")} ${skipped}</span></span><span>${pct}% marks</span></div>`;
             grid.appendChild(cardEl);
         });
         if (day.syllabus) renderSyllabusTree(day, st, grid);
@@ -600,7 +601,7 @@
         const pctOf = (m, t) => (t ? Math.max(0, Math.round(m / t * 100)) : 0);
 
         const head = el("div", "syl-head");
-        head.innerHTML = `<b>Syllabus-wise breakdown</b><small>official CEE units &rarr; sub-topics &middot; tap to expand</small>`;
+        head.innerHTML = `<b>Syllabus-wise breakdown</b><small>official CEE units ${uiIcon("chevron-right")} sub-topics &middot; tap to expand</small>`;
         grid.appendChild(head);
 
         const wrap = el("div", "syl-tree");
@@ -636,7 +637,7 @@
                     const x = stats(s.ids);
                     html += `<div class="syl-sub">
                             <span class="syl-sub-name">${s.name}</span>
-                            <span class="syl-sub-counts"><span class="ok">&#10003;${x.correct}</span> <span class="no">&#10007;${x.wrong}</span> <span class="sk">&#8211;${x.skipped}</span></span>
+                            <span class="syl-sub-counts"><span class="ok ui-stat" aria-label="${x.correct} correct">${uiIcon("check")}${x.correct}</span> <span class="no ui-stat" aria-label="${x.wrong} incorrect">${uiIcon("close")}${x.wrong}</span> <span class="sk ui-stat" aria-label="${x.skipped} skipped">${uiIcon("minus")}${x.skipped}</span></span>
                             <span class="syl-mini sm"><span style="width:${pctOf(x.marks, x.total)}%"></span></span>
                             <span class="syl-marks sm">${fmt(x.marks)}<small>/${x.total}</small></span>
                         </div>`;
@@ -668,7 +669,7 @@
                 item.dataset.status = status;
 
                 const chipLabel = status === "ok" ? "Correct" : status === "no" ? "Incorrect" : "Not answered";
-                const chipMark = status === "ok" ? "&#10003;" : status === "no" ? "&#10007;" : "&#8211;";
+                const chipMark = uiIcon(status === "ok" ? "check" : status === "no" ? "close" : "minus");
 
                 const head =
                     `<div class="ai-top">
@@ -682,8 +683,8 @@
                 const optsHtml = q.options.map(opt => {
                     let cls = "option";
                     let mark = "";
-                    if (opt.key === q.answer) { cls += " correct"; mark = "&#10003;"; }
-                    else if (opt.key === chosen) { cls += " incorrect"; mark = "&#10007;"; }
+                    if (opt.key === q.answer) { cls += " correct"; mark = uiIcon("check"); }
+                    else if (opt.key === chosen) { cls += " incorrect"; mark = uiIcon("close"); }
                     else { cls += " dim"; }
                     return `<div class="${cls}"><span class="key">${opt.key}</span><span class="otext">${opt.text}</span><span class="mark">${mark}</span></div>`;
                 }).join("");

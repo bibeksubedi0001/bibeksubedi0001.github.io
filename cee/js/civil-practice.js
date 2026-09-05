@@ -219,10 +219,14 @@
         let customMinutes = null;
         let builderOpen = new Set();
         let chapterOpen = new Set();
-        const flagIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 21V3m0 1c5-3 9 3 14 0v10c-5 3-9-3-14 0"/></svg>';
-        const bookmarkIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h12v18l-6-4-6 4z"/></svg>';
-        const chevron = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 5 7 7-7 7"/></svg>';
-        const shortNames = ["BC", "SM", "DS", "SF", "WR", "HP", "ID", "TR", "WS"];
+        const uiIcon = window.CEE_UI_ICONS.svg;
+        const flagIcon = uiIcon("flag");
+        const bookmarkIcon = uiIcon("bookmark");
+        const chevron = uiIcon("chevron-right");
+        const chapterIcons = { "basic-civil-engineering": "building", "soil-mechanics-and-foundation": "foundation",
+            "basic-water-resources-engineering": "waves", "structural-mechanics": "structure", "design-of-structures": "ruler",
+            "water-supply-sanitation-and-environment": "droplet", "irrigation-and-drainage": "irrigation", hydropower: "turbine",
+            transportation: "road", "project-planning-design-and-implementation": "clipboard", "additional-bank-questions": "library" };
         const number = (n) => n.toLocaleString("en-US");
         const date = (at) => new Date(at).toLocaleDateString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
@@ -283,7 +287,7 @@
         }
 
         function icon(chapter) {
-            return `<span class="cv-chapter-icon" data-tone="${chapter.index}">${esc(chapter.short || shortNames[chapter.index] || "CE")}</span>`;
+            return `<span class="cv-chapter-icon" data-tone="${chapter.index}" aria-hidden="true">${uiIcon(chapterIcons[chapter.id] || "library")}</span>`;
         }
 
         function counts(scope) {
@@ -323,7 +327,7 @@
                 const summary = run.summary || {};
                 return `<button type="button" class="cv-history-row" data-cp-action="history" data-id="${esc(run.id)}">
                     <span class="cv-history-score">${summary.pct || 0}%</span><span class="cv-history-copy"><b>${esc(run.title)}</b>
-                        <small>${modeOf(run) === "practice" ? "Practice" : "Exam"} &middot; ${run.ids.length} questions &middot; ${date(run.finishedAt)}</small></span><span class="cv-history-arrow" aria-hidden="true">&rarr;</span></button>`;
+                        <small>${modeOf(run) === "practice" ? "Practice" : "Exam"} &middot; ${run.ids.length} questions &middot; ${date(run.finishedAt)}</small></span><span class="cv-history-arrow" aria-hidden="true">${uiIcon("arrow-right")}</span></button>`;
                     }).join("")}</div>` : '<div class="cv-empty"><b>Your next session starts here</b><p>Finish a practice round or custom exam to see its summary here. Model-exam scores stay with their model papers.</p></div>';
             const stats = counts([]);
             const accuracy = stats.attempted ? Math.round(stats.correct / stats.attempted * 100) : 0;
@@ -460,7 +464,7 @@
             screen = null;
             retryLoad = () => loadFor(config, callback);
             show("learning", config.origin || "chapters");
-            replace($("cvLearning"), `<div class="cv-viewer-top"><button type="button" class="cv-btn cv-btn-ghost" data-cv-nav="${config.origin || "chapters"}">&larr; Back</button></div>
+            replace($("cvLearning"), `<div class="cv-viewer-top"><button type="button" class="cv-btn cv-btn-ghost" data-cv-nav="${config.origin || "chapters"}">${uiIcon("arrow-left")} Back</button></div>
                 <div class="cv-panel cv-loading" role="status"><h3>Preparing your question bank</h3><p>Question files load only when you open a collection or start a session.</p><progress id="cpLoadProgress" value="0" max="${entries.length}"></progress><p id="cpLoadText">Loading…</p></div>`);
             try {
                 const records = await bank.load((done, count) => {
@@ -697,7 +701,7 @@
             const pages = Math.max(1, Math.ceil(list.length / 100));
             screen.navPage = Math.max(0, Math.min(screen.navPage || 0, pages - 1));
             const start = screen.navPage * 100;
-            return `<div class="fp-nav-heading"><div><span class="fp-eyebrow">YOUR PROGRESS</span><h3>This practice round</h3></div>${mobile ? '<button type="button" class="fp-icon-button" data-cp-action="focus-close-map" aria-label="Close question navigator">&times;</button>' : ""}</div>
+            return `<div class="fp-nav-heading"><div><span class="fp-eyebrow">YOUR PROGRESS</span><h3>This practice round</h3></div>${mobile ? `<button type="button" class="fp-icon-button" data-cp-action="focus-close-map" aria-label="Close question navigator">${uiIcon("close")}</button>` : ""}</div>
                 <div class="fp-stats"><div><b>${result.correct}</b><span>Correct</span></div><div><b>${result.wrong}</b><span>Incorrect</span></div><div><b>${result.skipped}</b><span>Remaining</span></div></div>
                 <div class="fp-progress"><div><span>${result.answered} of ${result.total} answered</span><b>${Math.round(result.answered / result.total * 100)}%</b></div><div><span style="width:${result.answered / result.total * 100}%"></span></div></div>
                 <label class="fp-map-filter">Question map<select data-fp-filter><option value="all"${screen.filter === "all" ? " selected" : ""}>All questions</option><option value="wrong"${screen.filter === "wrong" ? " selected" : ""}>Incorrect first choices</option><option value="unanswered"${screen.filter === "unanswered" ? " selected" : ""}>Unanswered</option><option value="flagged"${screen.filter === "flagged" ? " selected" : ""}>Flagged</option></select></label>
@@ -705,11 +709,11 @@
                     const key = questionKey(item), answer = run.answers[key];
                     const status = answer == null ? "unanswered" : answer === item.q.answer ? "correct" : "wrong";
                     const flag = !!run.flags[key];
-                    return `<button type="button" class="fp-number ${status}${index === run.index ? " current" : ""}${flag ? " flagged" : ""}" data-cp-action="focus-go" data-index="${index}" aria-label="Question ${index + 1}, ${status}${flag ? ", flagged" : ""}"${index === run.index ? ' aria-current="step"' : ""}>${index + 1}${flag || answer != null ? `<small aria-hidden="true">${flag ? "⚑" : status === "correct" ? "✓" : "×"}</small>` : ""}</button>`;
+                    return `<button type="button" class="fp-number ${status}${index === run.index ? " current" : ""}${flag ? " flagged" : ""}" data-cp-action="focus-go" data-index="${index}" aria-label="Question ${index + 1}, ${status}${flag ? ", flagged" : ""}"${index === run.index ? ' aria-current="step"' : ""}>${index + 1}${flag || answer != null ? `<small aria-hidden="true">${uiIcon(flag ? "flag" : status === "correct" ? "check" : "close")}</small>` : ""}</button>`;
                 }).join("") || '<p class="fp-empty">No questions in this filter.</p>'}</div>
-                ${pages > 1 ? `<div class="fp-map-paging"><button type="button" class="fp-text-button" data-cp-action="focus-map-page" data-page="${screen.navPage - 1}"${screen.navPage === 0 ? " disabled" : ""}>&larr; Earlier</button><span>${start + 1}–${Math.min(start + 100, list.length)}</span><button type="button" class="fp-text-button" data-cp-action="focus-map-page" data-page="${screen.navPage + 1}"${screen.navPage === pages - 1 ? " disabled" : ""}>Later &rarr;</button></div>` : ""}
-                <div class="fp-legend"><span><i class="correct" aria-hidden="true"></i>Correct</span><span><i class="wrong" aria-hidden="true"></i>Incorrect</span><span><i class="current" aria-hidden="true"></i>Current</span><span>⚑ Flagged</span></div>
-                <button type="button" class="fp-button fp-primary" data-cp-action="submit">Finish practice <span aria-hidden="true">&rarr;</span></button><p class="fp-nav-note">First choices are recorded once.<br />Retry questions in a fresh round.</p>`;
+                ${pages > 1 ? `<div class="fp-map-paging"><button type="button" class="fp-text-button" data-cp-action="focus-map-page" data-page="${screen.navPage - 1}"${screen.navPage === 0 ? " disabled" : ""}>${uiIcon("arrow-left")} Earlier</button><span>${start + 1}–${Math.min(start + 100, list.length)}</span><button type="button" class="fp-text-button" data-cp-action="focus-map-page" data-page="${screen.navPage + 1}"${screen.navPage === pages - 1 ? " disabled" : ""}>Later ${uiIcon("arrow-right")}</button></div>` : ""}
+                <div class="fp-legend"><span><i class="correct" aria-hidden="true"></i>Correct</span><span><i class="wrong" aria-hidden="true"></i>Incorrect</span><span><i class="current" aria-hidden="true"></i>Current</span><span>${flagIcon} Flagged</span></div>
+                <button type="button" class="fp-button fp-primary" data-cp-action="submit">Finish practice ${uiIcon("arrow-right")}</button><p class="fp-nav-note">First choices are recorded once.<br />Retry questions in a fresh round.</p>`;
         }
 
         function renderFocus() {
@@ -723,7 +727,7 @@
             if (mapWasOpen) $("fpMapDialog").close();
             $("cvLearning").dataset.learningView = "practice";
             deps.setSessionMode("practice");
-            replace($("cvLearning"), `<div class="fp-app"><header class="fp-header"><div class="fp-header-title"><button type="button" class="fp-icon-button" data-cp-action="leave-session" aria-label="Pause practice and return to workspace">&larr;</button><div><span class="fp-eyebrow">PRACTICE MODE · FOCUS PRO</span><b>${esc(screen.config.title)}</b></div></div>
+            replace($("cvLearning"), `<div class="fp-app"><header class="fp-header"><div class="fp-header-title"><button type="button" class="fp-icon-button" data-cp-action="leave-session" aria-label="Pause practice and return to workspace">${uiIcon("arrow-left")}</button><div><span class="fp-eyebrow">PRACTICE MODE · FOCUS PRO</span><b>${esc(screen.config.title)}</b></div></div>
                 <div class="fp-header-meta"><span class="fp-untimed">Your pace. No timer.</span><button type="button" class="fp-button fp-map-toggle" data-cp-action="focus-map" aria-haspopup="dialog">Questions <span>${result.answered}/${result.total}</span></button></div></header>
                 <div class="fp-top-progress" role="progressbar" aria-label="Practice answered" aria-valuemin="0" aria-valuemax="${result.total}" aria-valuenow="${result.answered}"><span style="width:${result.answered / result.total * 100}%"></span></div>
                 <div class="fp-workspace"><section class="fp-question-area"><div class="fp-context"><span>${esc(item.chapterName || item.ch.name)}</span><span>${esc(item.subchapterNumber || "")}</span></div>
@@ -731,13 +735,13 @@
                         <h2 class="fp-question-text" id="fpQuestionText">${q.text}</h2>
                         <div class="fp-options" role="group" aria-labelledby="fpQuestionText">${q.options.map((option) => {
                             const isCorrect = answered && option.key === q.answer, isWrong = answered && option.key === chosen && !isCorrect;
-                            return `<button type="button" class="fp-choice${isCorrect ? " correct" : ""}${isWrong ? " wrong" : ""}${option.key === chosen ? " chosen" : ""}" data-cp-action="feedback-answer" data-id="${esc(key)}" data-answer="${option.key}"${answered ? " disabled" : ""}><span class="fp-letter">${option.key.toUpperCase()}</span><span class="fp-choice-text">${option.text}</span>${isCorrect || isWrong ? `<span class="fp-choice-label">${isCorrect ? "✓ Correct answer" : "× Your answer"}</span>` : '<span class="fp-choice-circle" aria-hidden="true"></span>'}</button>`;
+                            return `<button type="button" class="fp-choice${isCorrect ? " correct" : ""}${isWrong ? " wrong" : ""}${option.key === chosen ? " chosen" : ""}" data-cp-action="feedback-answer" data-id="${esc(key)}" data-answer="${option.key}"${answered ? " disabled" : ""}><span class="fp-letter">${option.key.toUpperCase()}</span><span class="fp-choice-text">${option.text}</span>${isCorrect || isWrong ? `<span class="fp-choice-label">${uiIcon(isCorrect ? "check" : "close")}${isCorrect ? "Correct answer" : "Your answer"}</span>` : '<span class="fp-choice-circle" aria-hidden="true"></span>'}</button>`;
                         }).join("")}</div>
                         ${answered ? `<div class="fp-feedback ${correct ? "correct" : "wrong"}" id="fpFeedback" role="status" tabindex="-1"><b>${correct ? "Correct. Well done." : "Not quite — here’s the answer."}</b><p>The correct option is <strong>${q.answer.toUpperCase()}</strong>. Your first choice has been recorded.</p><div class="fp-explanation"><span>WHY THIS ANSWER</span><div>${q.explanation || "No explanation is available for this question."}</div></div></div>` : '<p class="fp-answer-prompt">Choose an option to reveal the correct answer and explanation.</p>'}
                         <footer class="fp-card-foot"><span>${esc(item.subchapterName || item.ch.name)} · Model ${item.setNo}, Q${item.sourceNo}</span>${bookmarkButton(item)}</footer>
                     </article><p class="fp-help">${answered ? "This answer stays locked for the round. Retry it after finishing." : "No rush. Take your time to work it through."}</p>
                 </section><aside class="fp-sidebar">${focusNavigator()}</aside></div>
-                <footer class="fp-footer"><div><button type="button" class="fp-button" data-cp-action="focus-go" data-index="${run.index - 1}"${run.index === 0 ? " disabled" : ""}>&larr; Previous</button><button type="button" class="fp-button fp-flag${flagged ? " on" : ""}" data-cp-action="flag" data-id="${esc(key)}" aria-pressed="${flagged}">${flagIcon}<span>${flagged ? "Flagged" : "Flag for review"}</span></button>${run.index === screen.records.length - 1 ? '<button type="button" class="fp-button fp-primary" data-cp-action="submit">Finish practice &rarr;</button>' : `<button type="button" class="fp-button fp-primary" data-cp-action="focus-go" data-index="${run.index + 1}">Next question &rarr;</button>`}</div></footer>
+                <footer class="fp-footer"><div><button type="button" class="fp-button" data-cp-action="focus-go" data-index="${run.index - 1}"${run.index === 0 ? " disabled" : ""}>${uiIcon("arrow-left")} Previous</button><button type="button" class="fp-button fp-flag${flagged ? " on" : ""}" data-cp-action="flag" data-id="${esc(key)}" aria-pressed="${flagged}">${flagIcon}<span>${flagged ? "Flagged" : "Flag for review"}</span></button>${run.index === screen.records.length - 1 ? `<button type="button" class="fp-button fp-primary" data-cp-action="submit">Finish practice ${uiIcon("arrow-right")}</button>` : `<button type="button" class="fp-button fp-primary" data-cp-action="focus-go" data-index="${run.index + 1}">Next question ${uiIcon("arrow-right")}</button>`}</div></footer>
                 <dialog class="fp-map-dialog" id="fpMapDialog" aria-label="Practice question navigator">${focusNavigator(true)}</dialog></div>`);
             if (mapWasOpen) $("fpMapDialog").showModal();
         }
@@ -772,8 +776,8 @@
             const libraryActions = mode === "library" && filtered.length ? `<div class="cv-head-actions"><button type="button" class="cv-btn cv-btn-blue" data-cp-action="practice-saved">Practise saved questions</button><button type="button" class="cv-btn cv-btn-ghost" data-cp-action="exam-saved">Exam on saved questions</button></div>` : "";
             const topic = config.scope && config.scope.length === 1 ? topics.get(config.scope[0]) : null;
             const parent = topic && chapterMap.get(topic.chapterId);
-            replace($("cvLearning"), `<div class="cv-viewer-top"><button type="button" class="cv-btn cv-btn-ghost" ${practice ? 'data-cp-action="leave-session"' : `data-cv-nav="${config.origin === "saved" ? "dash" : config.origin || "chapters"}"`}>&larr; ${practice ? "Leave exam" : config.origin === "practice" ? "Session builder" : config.origin === "saved" ? "Overview" : "Question bank"}</button>${libraryActions}</div>
-                ${practice ? "" : `<div class="cv-breadcrumb">Civil Engineering <span aria-hidden="true">›</span> ${parent ? esc(parent.name) + ' <span aria-hidden="true">›</span> ' : ""}${esc(config.title)}</div><div class="cv-page-intro"><h2>${esc(config.title)}</h2><p class="cv-session-status">${screen.records.length} questions &middot; ${mode === "result" ? "Session completed · model-exam progress unchanged" : "Your saved collection · choose Practice or Exam to answer"}</p></div>`}
+            replace($("cvLearning"), `<div class="cv-viewer-top"><button type="button" class="cv-btn cv-btn-ghost" ${practice ? 'data-cp-action="leave-session"' : `data-cv-nav="${config.origin === "saved" ? "dash" : config.origin || "chapters"}"`}>${uiIcon("arrow-left")} ${practice ? "Leave exam" : config.origin === "practice" ? "Session builder" : config.origin === "saved" ? "Overview" : "Question bank"}</button>${libraryActions}</div>
+                ${practice ? "" : `<div class="cv-breadcrumb">Civil Engineering ${chevron} ${parent ? esc(parent.name) + " " + chevron + " " : ""}${esc(config.title)}</div><div class="cv-page-intro"><h2>${esc(config.title)}</h2><p class="cv-session-status">${screen.records.length} questions &middot; ${mode === "result" ? "Session completed · model-exam progress unchanged" : "Your saved collection · choose Practice or Exam to answer"}</p></div>`}
                 ${topic && !practice ? `<p class="cv-notice cv-notice-info"><b>${esc(topic.code || "Additional bank questions")}</b> &middot; ${esc(topic.detail)}</p>` : ""}
                 ${result ? resultHtml() : ""}
                 <div class="cv-exam">${practice ? `<div class="cv-infobox"><div><div class="cv-ei-name">${esc(deps.candidate)} · ${esc(config.title)} · Exam</div><div class="cv-ei-timer">${screen.run.endsAt ? "Time remaining" : "Your pace"}: <b id="cpTimer"></b></div><div class="cv-ei-answered" id="cpAnswered"></div><button type="button" class="cv-ei-link" data-cp-action="show-unanswered">View unanswered questions</button><p id="cpUnanswered" hidden></p></div><span class="cv-ei-photo" aria-hidden="true">${esc(deps.candidate[0])}</span></div>` : ""}
