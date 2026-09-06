@@ -367,7 +367,7 @@
                     html: "<p>For a given arrangement of downward wheel forces on a simple span, the bending-moment diagram is piecewise linear. A maximum can be selected under a wheel; a zero-shear plateau between wheels can share that maximum. It need not be at the span centre or under the heaviest wheel.</p>" +
                         "<p>To find maximum left reaction, use <strong>R<sub>A</sub> = ΣP<sub>i</sub>(L − x<sub>i</sub>)/L</strong> over axles actually on the span. Preserve their spacing and stated travel direction. Compare candidate positions as successive axles enter or leave, especially when an axle is just inside A. A load exactly on the bearing goes directly into its reaction; section shear immediately inside the span is interpreted using the appropriate limiting axle position.</p>" +
                         "<p>For the absolute bending-moment search, try the relevant wheels in turn. While the set of on-span axles is unchanged, a stationary moment under a selected wheel at x<sub>k</sub> satisfies <strong>x<sub>k</sub> + x̄ = L</strong>, where x̄ is the position of the resultant of those axles. Thus that wheel and the on-span resultant straddle midspan equally. Recheck the on-span set and boundary placements before accepting a candidate.</p>" +
-                        "<p>The source's train figure is only an external image reference in the supplied text. Its ordering, spacing and travel arrow are not established here. <em>Leading</em> or <em>trailing</em> alone is therefore not a universal maximum-shear criterion; use influence ordinates and trial positions rather than inventing the missing train.</p>",
+                        "<p>The source figure labels the <strong>trailing load at A</strong>, with middle and leading loads successively farther into the span above a triangular left-reaction influence line. It illustrates the keyed candidate but supplies <strong>no axle-force magnitudes or numerical spacings</strong> with which to compare the weighted sums. A triangle's largest ordinate at A does not prove which axle of an arbitrary unequal train should occupy it. Use the labelled order and compare admissible placements rather than treating leading or trailing as a universal maximum-shear rule.</p>",
                     sources: [
                         { id: "STRU935-00037", set: 5, question: 17 },
                         { id: "STRU935-00054", set: 6, question: 23 }
@@ -486,7 +486,7 @@
                 }
             ],
             gaps: [
-                "The train item supplies an external image reference, not text-accessible axle magnitudes, spacing and travel direction. No image was retrieved. Its unique leading/trailing placement remains unresolved; the notes supply the influence-ordinate and trial-position method instead.",
+                "The supplied wheel-train figure has been checked: it labels trailing, middle and leading loads, with the trailing load at A, but supplies no axle-force magnitudes or numerical spacings. It illustrates a candidate rather than a complete numerical comparison of all placements; the notes give the influence-ordinate and trial-position method.",
                 "The unequal-support item lacks height and crown-location definitions, and the reaction-locus item lacks a precise locus/model definition. Their conditional derivations are explicitly identified and do not invent original givens.",
                 "There is no assigned worked two-hinged-arch dataset with nonuniform EI, axial/shear deformation, temperature or settlement. The displayed compatibility model states its omissions; detailed flexibility, two-hinged parabolic-arch and continuous-beam influence-line methods remain in official 4.6."
             ],
@@ -500,7 +500,7 @@
                     sources: [{ id: "STRU935-00053", set: 6, question: 22 }]
                 },
                 {
-                    html: "<p><strong>Bank check: wheel ordering is not a universal leading/trailing rule.</strong> STRU935-00054's trailing-load key depends on the figure, direction and which axles are on the span. The triangular reaction influence line alone does not settle a whole train's placement. Compare weighted ordinates at admissible trials. STRU935-00037's maximum-under-a-wheel statement allows a zero-shear plateau to share the same maximum.</p>",
+                    html: "<p><strong>Bank check: the labelled candidate is not a universal train rule.</strong> STRU935-00054's figure shows the trailing load at A and the other two farther into the span, but gives no magnitudes or numerical spacings for a weighted comparison. The triangular reaction influence line alone does not establish that this placement governs every unequal train. Compare weighted ordinates at admissible trials. STRU935-00037's maximum-under-a-wheel statement allows a zero-shear plateau to share the same maximum.</p>",
                     sources: [
                         { id: "STRU935-00054", set: 6, question: 23 },
                         { id: "STRU935-00037", set: 5, question: 17 }

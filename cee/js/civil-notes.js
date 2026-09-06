@@ -16,13 +16,55 @@
         "chapter-04-stress.js": ["ACiE0402"],
         "chapter-04-flexure.js": ["ACiE0403"],
         "chapter-04-determinate.js": ["ACiE0404", "ACiE0405"],
-        "chapter-04-indeterminate.js": ["ACiE0406"]
+        "chapter-04-indeterminate.js": ["ACiE0406"],
+        "chapter-05-loads.js": ["ACiE0501"],
+        "chapter-05-concrete.js": ["ACiE0502"],
+        "chapter-05-rcc-beams.js": ["ACiE0503"],
+        "chapter-05-rcc-columns.js": ["ACiE0504"],
+        "chapter-05-steel.js": ["ACiE0505"],
+        "chapter-05-timber-masonry.js": ["ACiE0506"],
+        "chapter-06-sources.js": ["ACiE0601"],
+        "chapter-06-distribution.js": ["ACiE0602"],
+        "chapter-06-treatment.js": ["ACiE0603"],
+        "chapter-06-sewers.js": ["ACiE0604"],
+        "chapter-06-wastewater.js": ["ACiE0605"],
+        "chapter-06-environment.js": ["ACiE0606"],
+        "chapter-07-demand.js": ["ACiE0701"],
+        "chapter-07-canals.js": ["ACiE0702"],
+        "chapter-07-headworks.js": ["ACiE0703"],
+        "chapter-07-river-training.js": ["ACiE0704"],
+        "chapter-07-structures.js": ["ACiE0705"],
+        "chapter-07-drainage.js": ["ACiE0706"],
+        "chapter-08-planning.js": ["ACiE0801"],
+        "chapter-08-power-energy.js": ["ACiE0802"],
+        "chapter-08-storage-headworks.js": ["ACiE0803"],
+        "chapter-08-ror-headworks.js": ["ACiE0804"],
+        "chapter-08-conveyance.js": ["ACiE0805"],
+        "chapter-08-machines.js": ["ACiE0806"],
+        "chapter-09-planning.js": ["ACiE0901"],
+        "chapter-09-geometry.js": ["ACiE0902"],
+        "chapter-09-materials.js": ["ACiE0903"],
+        "chapter-09-traffic.js": ["ACiE0904"],
+        "chapter-09-pavement.js": ["ACiE0905"],
+        "chapter-09-construction.js": ["ACiE0906"],
+        "chapter-10-drawings.js": ["AALL1001"],
+        "chapter-10-economics.js": ["AALL1002"],
+        "chapter-10-scheduling.js": ["AALL1003"],
+        "chapter-10-management.js": ["AALL1004"],
+        "chapter-10-professional.js": ["AALL1005"],
+        "chapter-10-regulatory.js": ["AALL1006"]
     });
     const CHAPTER_FILES = Object.freeze({
         "basic-civil-engineering": ["chapter-01-materials.js", "chapter-01-building.js", "chapter-01-surveying.js"],
         "soil-mechanics-and-foundation": ["chapter-02-properties.js", "chapter-02-strength.js", "chapter-02-foundations.js"],
         "basic-water-resources-engineering": ["chapter-03-fluids.js", "chapter-03-flow.js", "chapter-03-channels.js", "chapter-03-hydrology.js"],
-        "structural-mechanics": ["chapter-04-forces.js", "chapter-04-stress.js", "chapter-04-flexure.js", "chapter-04-determinate.js", "chapter-04-indeterminate.js"]
+        "structural-mechanics": ["chapter-04-forces.js", "chapter-04-stress.js", "chapter-04-flexure.js", "chapter-04-determinate.js", "chapter-04-indeterminate.js"],
+        "design-of-structures": ["chapter-05-loads.js", "chapter-05-concrete.js", "chapter-05-rcc-beams.js", "chapter-05-rcc-columns.js", "chapter-05-steel.js", "chapter-05-timber-masonry.js"],
+        "water-supply-sanitation-and-environment": ["chapter-06-sources.js", "chapter-06-distribution.js", "chapter-06-treatment.js", "chapter-06-sewers.js", "chapter-06-wastewater.js", "chapter-06-environment.js"],
+        "irrigation-and-drainage": ["chapter-07-demand.js", "chapter-07-canals.js", "chapter-07-headworks.js", "chapter-07-river-training.js", "chapter-07-structures.js", "chapter-07-drainage.js"],
+        "hydropower": ["chapter-08-planning.js", "chapter-08-power-energy.js", "chapter-08-storage-headworks.js", "chapter-08-ror-headworks.js", "chapter-08-conveyance.js", "chapter-08-machines.js"],
+        "transportation": ["chapter-09-planning.js", "chapter-09-geometry.js", "chapter-09-materials.js", "chapter-09-traffic.js", "chapter-09-pavement.js", "chapter-09-construction.js"],
+        "project-planning-design-and-implementation": ["chapter-10-drawings.js", "chapter-10-economics.js", "chapter-10-scheduling.js", "chapter-10-management.js", "chapter-10-professional.js", "chapter-10-regulatory.js"]
     });
     const CODES = Object.freeze(Object.values(FILES).flat());
     const hasChapter = (id) => Object.hasOwn(CHAPTER_FILES, id);
@@ -39,7 +81,7 @@
         if (!terms.length) return [];
         return topics.flatMap((topic) => [
             ...topic.blocks.map((block) => ({ ...block, code: topic.code, kind: "note" })),
-            ...topic.cautions.map((item, i) => ({ ...item, id: "caution-" + i, title: "Bank check", code: topic.code, kind: "caution" }))
+            ...topic.cautions.map((item, i) => ({ ...item, id: "caution-" + i, title: topic.questionCount ? "Bank check" : "Reference check", code: topic.code, kind: "caution" }))
         ]).filter((block) => {
             const content = text(block.title + " " + block.html + " " + block.code + " " + block.sources.map((source) => source.id).join(" "));
             return terms.every((term) => content.includes(term));
@@ -124,13 +166,14 @@
         function topicHtml(code) {
             const meta = topicMap.get(code), topic = window.CIVIL_NOTE_TOPICS[code];
             const codes = chapterCodes(meta.chapterId), index = codes.indexOf(code);
+            const sessionDisabled = topic.questionCount ? "" : ' disabled aria-describedby="cnSourceCount"';
             return `<article class="cn-topic" data-note-topic="${code}">
-                <header class="cn-topic-head"><div><span class="cn-code">${code}</span><h3 id="cnTopicTitle" tabindex="-1">${esc(meta.number + " " + meta.name)}</h3><span class="cn-count">${topic.questionCount} source questions</span></div>
-                    <div class="cn-actions"><button type="button" class="cn-button" data-cn-session="practice" data-topic="${code}">Practice topic</button><button type="button" class="cn-button cn-secondary" data-cn-session="exam" data-topic="${code}">Exam</button></div></header>
+                <header class="cn-topic-head"><div><span class="cn-code">${code}</span><h3 id="cnTopicTitle" tabindex="-1">${esc(meta.number + " " + meta.name)}</h3><span class="cn-count" id="cnSourceCount">${topic.questionCount ? topic.questionCount + " source questions" : "Syllabus-only notes · No mapped questions in the current bank"}</span></div>
+                    <div class="cn-actions"><button type="button" class="cn-button" data-cn-session="practice" data-topic="${code}"${sessionDisabled}>Practice topic</button><button type="button" class="cn-button cn-secondary" data-cn-session="exam" data-topic="${code}"${sessionDisabled}>Exam</button></div></header>
                 <details class="cn-scope" open><summary>Syllabus scope</summary><p>${esc(meta.detail)}</p></details>
                 <nav class="cn-contents" aria-label="Contents of ${esc(meta.number)}">${topic.blocks.map((block) => `<a href="#cn-${code}-${block.id}" data-cn-jump="cn-${code}-${block.id}">${esc(block.title)}</a>`).join("")}</nav>
                 ${topic.blocks.map((block) => `<section class="cn-block" id="cn-${code}-${block.id}" tabindex="-1"><h4>${esc(block.title)}</h4><div class="cn-prose">${block.html}</div>${references(block.sources)}</section>`).join("")}
-                <section class="cn-checks" id="cn-${code}-checks"><h4>Bank checks</h4>${topic.cautions.map((item, i) => `<div class="cn-caution" id="cn-${code}-caution-${i}" tabindex="-1"><div class="cn-prose">${item.html}</div>${references(item.sources)}</div>`).join("")}${externalReferences(topic)}</section>
+                <section class="cn-checks" id="cn-${code}-checks"><h4>${topic.questionCount ? "Bank checks" : "Reference checks"}</h4>${topic.cautions.map((item, i) => `<div class="cn-caution" id="cn-${code}-caution-${i}" tabindex="-1"><div class="cn-prose">${item.html}</div>${references(item.sources)}</div>`).join("")}${externalReferences(topic)}</section>
                 <section class="cn-gaps"><h4>Coverage gaps</h4><ul>${topic.gaps.map((gap) => `<li>${esc(gap)}</li>`).join("")}</ul></section>
                 <footer class="cn-pagination"><button type="button" class="cn-button cn-secondary" data-cn-topic="${codes[index - 1] || code}"${index === 0 ? " disabled" : ""}>${uiIcon("arrow-left")} Previous subchapter</button><button type="button" class="cn-button" data-cn-topic="${codes[index + 1] || code}"${index === codes.length - 1 ? " disabled" : ""}>Next subchapter ${uiIcon("arrow-right")}</button></footer>
             </article>`;
