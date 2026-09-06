@@ -9,11 +9,13 @@
 
     var btn = document.getElementById("installAppBtn");
     if (!btn) return;
+    var script = document.currentScript;
+    var workerVersion = script ? new URL(script.src).search : "";
 
     // Register the service worker on secure origins only (skipped on file://).
     if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
         window.addEventListener("load", function () {
-            navigator.serviceWorker.register("service-worker.js").catch(function () { });
+            navigator.serviceWorker.register((btn.dataset.serviceWorker || "service-worker.js") + workerVersion).catch(function () { });
         });
     }
 
@@ -71,9 +73,10 @@
             dlg.className = "install-help";
             dlg.innerHTML =
                 '<div class="ih-head"><span class="ih-ico">' + capSvg() + "</span>" +
-                "<h3>Install CEE Prep</h3></div>" +
+                "<h3></h3></div>" +
                 '<p id="ihSteps"></p>' +
                 '<form method="dialog"><button class="ih-close" type="submit">Got it</button></form>';
+            dlg.querySelector("h3").textContent = "Install " + (btn.dataset.appName || "CEE Prep");
             document.body.appendChild(dlg);
         }
         dlg.querySelector("#ihSteps").innerHTML = steps;

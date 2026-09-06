@@ -4,7 +4,7 @@
    (?v=N) assets simply create new cache entries; old ones are pruned on activate.
    Cross-origin requests (MathJax, Chart.js, Google Fonts) are left untouched. */
 
-const CACHE = "cee-pwa-v1";
+const CACHE = "cee-pwa-v2";
 const CORE = [
     "./",
     "./index.html",
@@ -24,7 +24,7 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
     event.waitUntil(
         caches.keys()
-            .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+            .then((keys) => Promise.all(keys.filter((k) => k.startsWith("cee-pwa-") && k !== CACHE).map((k) => caches.delete(k))))
             .then(() => self.clients.claim())
     );
 });

@@ -176,14 +176,10 @@
         $("modulesGrid").hidden = name !== "dashboard";
         $("omrEntry").hidden = name !== "dashboard";
         $("syllabusEntry").hidden = name !== "dashboard";
-        $("civilEntry").hidden = name !== "dashboard";
         $("testView").hidden = name !== "test";
         $("resultsView").hidden = name !== "results";
         $("omrView").hidden = name !== "omr";
         $("syllabusView").hidden = name !== "syllabus";
-        $("civilSection").hidden = name !== "civil";
-        // the civil section is its own portal: hide the CEE chrome around it
-        document.body.classList.toggle("civil-open", name === "civil");
     }
 
     function openDay(n) {
@@ -935,13 +931,6 @@
             scrollToEl($("omrView"));
         },
         closeOmr() {
-            backToDashboard();
-        },
-        openCivil() {
-            showView("civil");
-            window.scrollTo({ top: 0, behavior: "auto" });
-        },
-        closeCivil() {
             backToDashboard();
         },
         isSubmitted(n) {
