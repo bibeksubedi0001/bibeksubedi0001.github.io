@@ -1,20 +1,21 @@
 /* ============================================================
    DAY 33 — MENTAL AGILITY TEST (MAT)
-    40 questions · 60 minutes · 0.25 negative marking
+        50 questions · 60 minutes · 0.25 negative marking
 
-     Verbal Reasoning ...................... 10   d33v1  – d33v10
-     Numerical Reasoning ................... 10   d33q11 – d33q20
-     Logical Sequencing .................... 10   d33l21 – d33l30
-     Spatial Relation / Abstract Reasoning . 10   d33s31 – d33s40
+         Verbal Reasoning ...................... 12
+         Numerical Reasoning ................... 13
+         Logical Sequencing .................... 13
+         Spatial Relation / Abstract Reasoning . 12
 
-   The four MAT units receive equal practice weight. All questions
-   are new; every answer has a worked explanation. Spatial figures
-   use inline SVG rather than font glyphs, with descriptive labels.
+     Twelve variants revisit Day 32 questions 2, 11, 13, 14, 16, 21,
+     23, 30, 33, 35, 41 and 49. The other 38 questions are retained.
+     New IDs keep replaced questions separate from saved responses.
+     Every answer has a worked explanation; spatial figures use SVG.
    ============================================================ */
 const DAY33 = {
     day: 33,
     title: "Day 33",
-    subtitle: "Mental Agility Test · 40 Questions",
+        subtitle: "Mental Agility Test",
     durationMinutes: 60,
     negativeMarking: 0.25,
     chapters: [
@@ -23,7 +24,7 @@ const DAY33 = {
             name: "Verbal Reasoning",
             subject: "MAT",
             accent: "blue",
-            blurb: "Q1–10 · analogy, classification, coding, letter series, family relations, direction sense, ranking, arrangement and deduction.",
+            blurb: "Q1–12 · analogy, classification, coding, letter series, family relations, direction sense, ranking, arrangement and deduction.",
             questions: [
                 {
                     id: "d33v1",
@@ -38,16 +39,17 @@ const DAY33 = {
                     explanation: "A thermometer measures temperature; a hygrometer measures humidity. The relation is an instrument to the quantity it measures. An altimeter measures altitude, a barometer atmospheric pressure and an anemometer wind speed."
                 },
                 {
-                    id: "d33v2",
-                    text: "In three of these letter groups, the second letter is <b>three places after</b> the first and the third letter is <b>four places after</b> the second. Which group breaks this rule?",
+                    id: "d33v41",
+                    revisionOf: { day: 32, question: 2, id: "d32l2" },
+                    text: "Which item does <b>not</b> belong with the other three when they are classified as rocks or minerals?",
                     options: [
-                        { key: "a", text: "MPU" },
-                        { key: "b", text: "DGK" },
-                        { key: "c", text: "HKO" },
-                        { key: "d", text: "RUY" }
+                        { key: "a", text: "Calcite" },
+                        { key: "b", text: "Quartzite" },
+                        { key: "c", text: "Sandstone" },
+                        { key: "d", text: "Gneiss" }
                     ],
                     answer: "a",
-                    explanation: "DGK has gaps of +3 and +4, as do HKO and RUY. In MPU, M to P is +3 but P to U is +5. The last letter would have to be T for that group to obey the same rule."
+                    explanation: "Calcite is a mineral, with the chemical composition CaCO<sub>3</sub>. Quartzite, sandstone and gneiss are rocks. A rock can consist of one or more minerals, so the distinction is not simply the number of ingredients. In particular, quartz is a mineral but quartzite is a rock; the similar names should not decide the classification."
                 },
                 {
                     id: "d33v3",
@@ -110,6 +112,19 @@ const DAY33 = {
                     explanation: "The directions of travel are north, east, south and east; a left turn while facing south points east. The net displacement is 15 m east and 8 m south. The shortest distance is $\\sqrt{15^2+8^2}=\\sqrt{289}=17$ m, towards the south-east. The total walking distance is not the displacement."
                 },
                 {
+                    id: "d33v42",
+                    revisionOf: { day: 32, question: 11, id: "d32l11" },
+                    text: "At sunrise, taken as due east, Nisha begins walking with the sun on her <b>left</b>. She makes a 90&deg; right turn and later another 90&deg; right turn. In which direction is she facing after the second turn?",
+                    options: [
+                        { key: "a", text: "East" },
+                        { key: "b", text: "South" },
+                        { key: "c", text: "North" },
+                        { key: "d", text: "West" }
+                    ],
+                    answer: "c",
+                    explanation: "With east on her left, Nisha initially faces south. A right turn from south points west; a second right turn points north. Establish the initial heading before applying the turns. The sun's position tells you where east is, not necessarily the direction in which the walker faces."
+                },
+                {
                     id: "d33v8",
                     text: "In a row of 42 students, Asha is 14th from the left and Binod is 19th from the right. How many students stand strictly between Asha and Binod?",
                     options: [
@@ -144,6 +159,19 @@ const DAY33 = {
                     ],
                     answer: "c",
                     explanation: "Being shortlisted requires passing the test, and passing requires submitting an identity document. Prakash lacks that necessary document, so he cannot have passed and cannot have been shortlisted. The statements do not say that submitting a document alone is sufficient for shortlisting."
+                },
+                {
+                    id: "d33v43",
+                    revisionOf: { day: 32, question: 13, id: "d32l13" },
+                    text: "Every candidate who scores above 85 receives a merit certificate. Anil received a merit certificate. Using <b>only</b> these statements, which conclusion is justified?",
+                    options: [
+                        { key: "a", text: "Anil must have scored above 85." },
+                        { key: "b", text: "Anil may or may not have scored above 85." },
+                        { key: "c", text: "Anil must have scored 85 or below." },
+                        { key: "d", text: "Only candidates scoring above 85 received a certificate." }
+                    ],
+                    answer: "b",
+                    explanation: "Scoring above 85 is sufficient for a certificate, but the rule does not say it is necessary. Anil could be a high scorer, or he could have received a certificate on another basis. Both possibilities satisfy the statements. Inferring a high score merely from the certificate would reverse a one-way implication."
                 }
             ]
         },
@@ -152,19 +180,20 @@ const DAY33 = {
             name: "Numerical Reasoning",
             subject: "MAT",
             accent: "amber",
-            blurb: "Q11–20 · number patterns, fractions, percentages, mixtures, ages, averages, work rates, relative speed and data interpretation.",
+            blurb: "Q13–25 · number patterns, fractions, percentages, mixtures, ages, averages, work rates, trains and data interpretation.",
             questions: [
                 {
-                    id: "d33q11",
-                    text: "Find the next term: <b>2, 6, 15, 31, 56, ?</b>",
+                    id: "d33q44",
+                    revisionOf: { day: 32, question: 14, id: "d32q14" },
+                    text: "Find the next term: <b>9, 25, 49, 121, 169, ?</b>",
                     options: [
-                        { key: "a", text: "81" },
-                        { key: "b", text: "86" },
-                        { key: "c", text: "90" },
-                        { key: "d", text: "92" }
+                        { key: "a", text: "196" },
+                        { key: "b", text: "225" },
+                        { key: "c", text: "256" },
+                        { key: "d", text: "289" }
                     ],
                     answer: "d",
-                    explanation: "The successive differences are 4, 9, 16 and 25: the squares of 2, 3, 4 and 5. The next difference is $6^2=36$, giving $56+36=92$."
+                    explanation: "The square roots are 3, 5, 7, 11 and 13: consecutive prime numbers starting at 3. The next prime is 17, giving $17^2=289$. The other choices are the squares of 14, 15 and 16, all composite numbers. Looking only for the next square misses the prime-number condition."
                 },
                 {
                     id: "d33q12",
@@ -177,6 +206,19 @@ const DAY33 = {
                     ],
                     answer: "b",
                     explanation: "Dividing by a fraction means multiplying by its reciprocal: $\\frac{3}{4}\\times\\frac{8}{5}=\\frac{6}{5}=1.2$. Also, $0.35\\times4=1.4$. Adding the two terms gives $1.2+1.4=2.60$."
+                },
+                {
+                    id: "d33q45",
+                    revisionOf: { day: 32, question: 16, id: "d32q16" },
+                    text: "Simplify $\\sqrt{0.0081}\\times10^3\\div0.3$.",
+                    options: [
+                        { key: "a", text: "0.3" },
+                        { key: "b", text: "3" },
+                        { key: "c", text: "30" },
+                        { key: "d", text: "300" }
+                    ],
+                    answer: "d",
+                    explanation: "First, $\\sqrt{0.0081}=0.09$, since $0.09^2=0.0081$. Also, $10^3=1000$, so multiplication gives $0.09\\times1000=90$. Finally, $\\dfrac{90}{0.3}=300$. Dividing by a positive number smaller than one increases the result; it does not shift the decimal in the same direction as multiplication by 0.3."
                 },
                 {
                     id: "d33q13",
@@ -227,6 +269,19 @@ const DAY33 = {
                     explanation: "The original sum is $8\\times24=192$, and the remaining sum is $6\\times21=126$. The removed pair therefore adds to 66. If the larger is $x$, the smaller is $x-10$, so $2x-10=66$ and $x=38$. The other number is 28."
                 },
                 {
+                    id: "d33q46",
+                    revisionOf: { day: 32, question: 21, id: "d32q21" },
+                    text: "The present average age of a family of six members is 27 years, and the youngest is 7 years old. No other member has joined or left during those seven years. What was the average age of the <b>five older members immediately before</b> the youngest was born?",
+                    options: [
+                        { key: "a", text: "24 years" },
+                        { key: "b", text: "20 years" },
+                        { key: "c", text: "27 years" },
+                        { key: "d", text: "31 years" }
+                    ],
+                    answer: "a",
+                    explanation: "The six present ages total $6\\times27=162$ years. Removing the youngest's 7 years leaves 155 for the five older members. Seven years earlier their total was $155-5\\times7=120$. Their average was $120\\div5=24$ years. The divisor is five because the question excludes the newborn; dividing by six would give the average of a different group."
+                },
+                {
                     id: "d33q17",
                     text: "An inlet fills a tank in 12 hours, a second inlet fills it in 18 hours, and an outlet empties a full tank in 36 hours. All operate at constant rates. If all three are opened together, how long will they take to fill an initially empty tank?",
                     options: [
@@ -249,6 +304,19 @@ const DAY33 = {
                     ],
                     answer: "c",
                     explanation: "Their relative speed is $54+36=90$ km/h, or $90\\times5/18=25$ m/s. To pass completely, they must cover their combined length relative to one another: $120+180=300$ m. Hence the time is $300/25=12$ seconds."
+                },
+                {
+                    id: "d33q47",
+                    revisionOf: { day: 32, question: 23, id: "d32q23" },
+                    text: "A train travelling at 72 km/h passes a pole completely in 12 seconds. At the same constant speed, how long does it take to pass a platform 360 m long completely?",
+                    options: [
+                        { key: "a", text: "18 seconds" },
+                        { key: "b", text: "24 seconds" },
+                        { key: "c", text: "30 seconds" },
+                        { key: "d", text: "36 seconds" }
+                    ],
+                    answer: "c",
+                    explanation: "Convert the speed: $72\\times\\dfrac{5}{18}=20$ m/s. Passing the pole covers one train length, so the train is $20\\times12=240$ m long. To clear the platform, its front must travel $240+360=600$ m. The time is $600\\div20=30$ seconds. Using only the platform length gives 18 seconds and leaves the rear of the train on the platform."
                 },
                 {
                     id: "d33q19",
@@ -281,7 +349,7 @@ const DAY33 = {
             name: "Logical Sequencing",
             subject: "MAT",
             accent: "slate",
-            blurb: "Q21–30 · word order, scheduling, syllogisms, assumptions, conclusions, cause and effect, course of action, sets and truth conditions.",
+            blurb: "Q26–38 · word order, scheduling, syllogisms, assumptions, conclusions, cause and effect, course of action, sets and truth conditions.",
             questions: [
                 {
                     id: "d33l21",
@@ -332,6 +400,19 @@ const DAY33 = {
                     explanation: "The lakes that are reservoirs must also be protected sites, so I follows. Protected sites may include places that are neither lakes nor reservoirs. Reversing or extending the given one-way inclusion to 'all protected sites are lakes' is unjustified, so II does not follow."
                 },
                 {
+                    id: "d33l48",
+                    revisionOf: { day: 32, question: 30, id: "d32c30" },
+                    text: "Use only the statements given.<br><b>Statements:</b> All architects are designers. Some designers are not employees.<br><b>Conclusions:</b> I. Some architects are not employees. II. All designers are architects.<br>Which conclusions necessarily follow?",
+                    options: [
+                        { key: "a", text: "Only I" },
+                        { key: "b", text: "Neither I nor II" },
+                        { key: "c", text: "Both I and II" },
+                        { key: "d", text: "Only II" }
+                    ],
+                    answer: "b",
+                    explanation: "The designers who are not employees need not include any architects, so I is not guaranteed. The first statement puts architects within designers but does not make the two groups identical, so II is also not guaranteed. A valid counterexample has every architect employed and some non-architect designers not employed; both statements remain true while both conclusions fail."
+                },
+                {
                     id: "d33l25",
                     text: "A college will use students' college email accounts as the <b>only</b> channel for official notices, intending that every student can receive them. Which assumption is necessary for this plan?",
                     options: [
@@ -342,6 +423,19 @@ const DAY33 = {
                     ],
                     answer: "c",
                     explanation: "If even one student cannot access their college account, email alone cannot make notices accessible to every student. Account access is therefore necessary to the stated plan. Preference for email, error-free notices and improved marks are not requirements for being able to receive a notice."
+                },
+                {
+                    id: "d33l49",
+                    revisionOf: { day: 32, question: 33, id: "d32c33" },
+                    text: "The water office asks households to store drinking water today, intending that this stored water will meet their essential needs during tomorrow's planned supply shutdown.<br><b>Assumptions:</b> I. The households can obtain sufficient drinking water before the shutdown. II. They have suitable means to keep that water until it is needed.<br>Which assumptions are necessary for this plan?",
+                    options: [
+                        { key: "a", text: "Both I and II" },
+                        { key: "b", text: "Only I" },
+                        { key: "c", text: "Only II" },
+                        { key: "d", text: "Neither I nor II" }
+                    ],
+                    answer: "a",
+                    explanation: "The proposed method requires both water to collect beforehand and a suitable way to retain it. If I is false, households cannot obtain the reserve; if II is false, they cannot keep it for the shutdown. Either failure defeats the stated plan. The question asks what this storage plan requires, not whether some different emergency arrangement could be made."
                 },
                 {
                     id: "d33l26",
@@ -366,6 +460,19 @@ const DAY33 = {
                     ],
                     answer: "b",
                     explanation: "The cable break directly interrupted the supply path, and repairing that same path restored power. Both the stated mechanism and the repair outcome support the cable break as the cause of the interruption. Nothing in the account establishes increased demand or the reverse causal direction."
+                },
+                {
+                    id: "d33l50",
+                    revisionOf: { day: 32, question: 35, id: "d32c35" },
+                    text: "<b>Event A:</b> A new tax raises the price of single-use shopping bags.<br><b>Event B:</b> Customers buy more reusable bags afterwards.<br>A follow-up survey confirms that customers switched because of the price rise, with other purchasing conditions unchanged. Which relationship is supported?",
+                    options: [
+                        { key: "a", text: "A and B are unrelated in the account." },
+                        { key: "b", text: "B is the cause of A in the account." },
+                        { key: "c", text: "Both events caused the new tax to be introduced." },
+                        { key: "d", text: "A is a cause of B in the account." }
+                    ],
+                    answer: "d",
+                    explanation: "The tax-induced price rise motivates customers to switch to reusable bags, so A contributes to B. Here the survey supplies the mechanism, not merely the fact that B happened later. Reversing the direction would make the later purchases cause the earlier price change, which is not the sequence described. This account does not establish a universal rule about every tax or purchase."
                 },
                 {
                     id: "d33l28",
@@ -410,7 +517,7 @@ const DAY33 = {
             name: "Spatial Relation / Abstract Reasoning",
             subject: "MAT",
             accent: "emerald",
-            blurb: "Q31–40 · rotations, figure rules, mirror and water images, paper folding, square counting, cube nets, painted cubes and pattern completion.",
+            blurb: "Q39–50 · rotations, figure rules, mirror and water images, paper folding, square counting, cube nets, painted cubes and symmetry.",
             questions: [
                 {
                     id: "d33s31",
@@ -509,6 +616,19 @@ const DAY33 = {
                     explanation: "Each painted outer face supplies one layer of $4\\times4=16$ small cubes. Because the painted faces are opposite and four small cubes fit along the intervening edge, these two layers do not overlap. Every cube in either layer has exactly one painted face, including edge and corner cubes, because the other outer faces were never painted. The total is $2\\times16=32$."
                 },
                 {
+                    id: "d33s52",
+                    revisionOf: { day: 32, question: 49, id: "d32n49" },
+                    text: "All six outer faces of a large cube are painted before it is cut into <b>343 identical smaller cubes</b>. How many small cubes have <b>no painted face</b>?<svg class='q-fig' viewBox='0 0 132 140' width='165' height='175' role='img' aria-label='Cube divided into seven small cubes along each edge, giving 343 small cubes; all six outside faces were painted before cutting'><g fill='currentColor' fill-opacity='0.12' stroke='currentColor' stroke-width='1.2'><path d='M10 32h84v84H10z'/><path d='M10 32 38 4h84L94 32z'/><path d='M94 32 122 4v84l-28 28z'/></g><g fill='none' stroke='currentColor' stroke-width='0.85'><path d='M22 32v84M34 32v84M46 32v84M58 32v84M70 32v84M82 32v84M10 44h84M10 56h84M10 68h84M10 80h84M10 92h84M10 104h84'/><path d='M22 32 50 4M34 32 62 4M46 32 74 4M58 32 86 4M70 32 98 4M82 32 110 4M14 28h84M18 24h84M22 20h84M26 16h84M30 12h84M34 8h84'/><path d='M98 28v84M102 24v84M106 20v84M110 16v84M114 12v84M118 8v84M94 44 122 16M94 56 122 28M94 68 122 40M94 80 122 52M94 92 122 64M94 104 122 76'/></g><text x='66' y='133' text-anchor='middle' font-size='10' fill='currentColor'>343 small cubes</text></svg>",
+                    options: [
+                        { key: "a", text: "125" },
+                        { key: "b", text: "49" },
+                        { key: "c", text: "150" },
+                        { key: "d", text: "218" }
+                    ],
+                    answer: "a",
+                    explanation: "Since $343=7^3$, there are seven small cubes along each edge. Unpainted cubes must avoid both outer layers in all three directions, leaving an inner cube of side $7-2=5$. Its count is $5^3=125$. The complementary $343-125=218$ cubes have at least one painted face; 49 counts only one seven-by-seven layer."
+                },
+                {
                     id: "d33s39",
                     text: "Which of these figures does <b>not</b> look unchanged after a 180&deg; rotation about its centre?",
                     options: [
@@ -519,6 +639,19 @@ const DAY33 = {
                     ],
                     answer: "c",
                     explanation: "A half-turn makes the T upside down: its crossbar moves from the top to the bottom, so it does not coincide with its original position. A rectangle, a square with both diagonals and an equal-armed plus all coincide with themselves after 180&deg;."
+                },
+                {
+                    id: "d33s51",
+                    revisionOf: { day: 32, question: 41, id: "d32n41" },
+                    text: "Which plane figure has <b>no line of reflection symmetry</b>? A symmetry line must divide the figure into two mirror-image halves.",
+                    options: [
+                        { key: "a", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='Non-square rectangle'><rect x='8' y='16' width='44' height='28' fill='none' stroke='currentColor' stroke-width='1.8'/></svg>Non-square rectangle" },
+                        { key: "b", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='Scalene triangle with three unequal sides'><polygon points='10,48 18,12 54,48' fill='none' stroke='currentColor' stroke-width='1.8'/></svg>Scalene triangle" },
+                        { key: "c", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='Non-square rhombus'><polygon points='30,6 50,30 30,54 10,30' fill='none' stroke='currentColor' stroke-width='1.8'/></svg>Non-square rhombus" },
+                        { key: "d", text: "<svg class='opt-fig' viewBox='0 0 60 60' role='img' aria-label='Isosceles trapezium'><polygon points='12,48 48,48 40,16 20,16' fill='none' stroke='currentColor' stroke-width='1.8'/></svg>Isosceles trapezium" }
+                    ],
+                    answer: "b",
+                    explanation: "A scalene triangle has three unequal sides, so no fold can make two halves coincide. A non-square rectangle has two symmetry lines through opposite side midpoints. A rhombus has two, along its diagonals, and an isosceles trapezium has one through the midpoints of its parallel sides. Reflection symmetry must not be confused with merely looking unchanged after a rotation."
                 },
                 {
                     id: "d33s40",
@@ -542,37 +675,37 @@ const DAY33 = {
 const DAY33_SYLLABUS = [
     { subject: "MAT", accent: "slate", topics: [
         { topic: "Verbal Reasoning", subs: [
-            { name: "Analogy and Classification", ids: ["d33v1", "d33v2"] },
+            { name: "Analogy and Classification", ids: ["d33v1", "d33v41"] },
             { name: "Coding and Decoding", ids: ["d33v3", "d33v4"] },
             { name: "Series Completion", ids: ["d33v5"] },
             { name: "Blood Relations", ids: ["d33v6"] },
-            { name: "Direction Sense", ids: ["d33v7"] },
+            { name: "Direction Sense", ids: ["d33v7", "d33v42"] },
             { name: "Ranking and Arrangement", ids: ["d33v8", "d33v9"] },
-            { name: "Logical Deduction from Statements", ids: ["d33v10"] }
+            { name: "Logical Deduction from Statements", ids: ["d33v10", "d33v43"] }
         ] },
         { topic: "Numerical Reasoning", subs: [
-            { name: "Number Series and Analogy", ids: ["d33q11"] },
-            { name: "Simplification and Approximation", ids: ["d33q12"] },
-            { name: "Ratio, Percentage, Average and Age", ids: ["d33q13", "d33q14", "d33q15", "d33q16"] },
-            { name: "Time, Work, Speed and Distance", ids: ["d33q17", "d33q18"] },
+            { name: "Number Series and Analogy", ids: ["d33q44"] },
+            { name: "Simplification and Approximation", ids: ["d33q12", "d33q45"] },
+            { name: "Ratio, Percentage, Average and Age", ids: ["d33q13", "d33q14", "d33q15", "d33q16", "d33q46"] },
+            { name: "Time, Work, Speed and Distance", ids: ["d33q17", "d33q18", "d33q47"] },
             { name: "Data Interpretation from Tables and Charts", ids: ["d33q19", "d33q20"] }
         ] },
         { topic: "Logical Sequencing", subs: [
             { name: "Ordering of Events, Words and Steps", ids: ["d33l21", "d33l22"] },
-            { name: "Syllogism", ids: ["d33l23", "d33l24"] },
-            { name: "Statement and Assumption", ids: ["d33l25"] },
+            { name: "Syllogism", ids: ["d33l23", "d33l24", "d33l48"] },
+            { name: "Statement and Assumption", ids: ["d33l25", "d33l49"] },
             { name: "Statement and Conclusion", ids: ["d33l26", "d33l30"] },
-            { name: "Cause and Effect", ids: ["d33l27"] },
+            { name: "Cause and Effect", ids: ["d33l27", "d33l50"] },
             { name: "Course of Action", ids: ["d33l28"] },
             { name: "Venn Diagram Based Deduction", ids: ["d33l29"] }
         ] },
         { topic: "Spatial Relation / Abstract Reasoning", subs: [
             { name: "Figure Series and Analogy", ids: ["d33s32", "d33s40"] },
-            { name: "Odd One Out", ids: ["d33s39"] },
+            { name: "Odd One Out", ids: ["d33s39", "d33s51"] },
             { name: "Mirror and Water Images", ids: ["d33s33", "d33s34"] },
             { name: "Paper Folding and Cutting", ids: ["d33s35"] },
             { name: "Embedded and Hidden Figures", ids: ["d33s36"] },
-            { name: "Cube and Dice", ids: ["d33s37", "d33s38"] },
+            { name: "Cube and Dice", ids: ["d33s37", "d33s38", "d33s52"] },
             { name: "Pattern Completion and Rotation", ids: ["d33s31"] }
         ] }
     ] }
