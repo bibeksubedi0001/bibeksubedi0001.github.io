@@ -837,17 +837,17 @@ const DAY36 = {
                     explanation: "The familiar mammalian carbonic anhydrases are zinc enzymes. Their zinc-containing active site facilitates the reversible hydration of carbon dioxide, important in gas transport and acid-base balance. Iron belongs to haemoglobin's haem group, but that does not make it the metal of this separate enzyme."
                 },
                 {
-                    id: "d36z14",
+                    id: "d36z22",
                     revisionOf: { paper: "AG-15-SET-B", question: 123 },
-                    text: "Blood travels from intestinal capillaries through a vessel directly to liver sinusoids before returning to the heart. What type of circulation is illustrated?<svg class='q-fig' viewBox='0 0 350 105' width='350' height='105' role='img' aria-label='Intestinal capillary network connected through a portal vein to a liver sinusoidal network before the blood returns to the heart'><g fill='none' stroke='currentColor' stroke-width='1.5'><path d='M20 50h30m0 0 20-22 25 22-25 22-20-22m20-22v44M95 50h64m-8-5 8 5-8 5M159 50h20m0 0 20-22 25 22-25 22-20-22m20-22v44M224 50h98m-8-5 8 5-8 5'/></g><g fill='currentColor' text-anchor='middle' font-size='11'><text x='66' y='92'>Intestine</text><text x='136' y='22'>Vein</text><text x='200' y='92'>Liver</text><text x='286' y='22'>To heart</text></g></svg>",
+                    text: "A water-soluble tracer enters the blood capillaries of a small-intestinal villus and remains in the circulation. Before reaching the inferior vena cava, it normally follows the route shown. Which combination correctly identifies <b>P, X and Q</b>, in that order?<svg class='q-fig' viewBox='0 0 350 148' width='350' height='148' role='img' aria-label='Blood flows from intestinal capillaries through vessel P to a second capillary bed X, then through vessel Q to the inferior vena cava'><g fill='none' stroke='currentColor' stroke-width='1.5'><path d='M12 64h20M32 64 68 38 104 64 68 90 32 64M68 38v52M104 64h56m-8-5 8 5-8 5M160 64h12M172 64 208 38 244 64 208 90 172 64M208 38v52M244 64h74m-8-5 8 5-8 5'/></g><g fill='currentColor' text-anchor='middle' font-size='14'><text x='68' y='110'>Intestinal</text><text x='68' y='125'>capillaries</text><text x='132' y='27' font-size='26'>P</text><text x='208' y='123' font-size='26'>X</text><text x='278' y='27' font-size='26'>Q</text><text x='311' y='110'>To IVC</text></g></svg>",
                     options: [
-                        { key: "a", text: "Portal circulation" },
-                        { key: "b", text: "Coronary circulation" },
-                        { key: "c", text: "Pulmonary circulation" },
-                        { key: "d", text: "Lymphatic circulation" }
+                        { key: "a", text: "Hepatic portal vein; liver sinusoids; hepatic vein" },
+                        { key: "b", text: "Hepatic vein; liver sinusoids; hepatic portal vein" },
+                        { key: "c", text: "Hepatic portal vein; lung capillaries; pulmonary vein" },
+                        { key: "d", text: "Hepatic artery; liver sinusoids; hepatic vein" }
                     ],
                     answer: "a",
-                    explanation: "A portal system connects one capillary bed to another through a portal vessel before blood returns to the heart. The hepatic portal vein connects intestinal capillaries to liver sinusoids, allowing absorbed substances to reach the liver first. This is blood circulation, not lymph flow."
+                    explanation: "Blood from the intestinal capillaries travels through the hepatic portal vein (P) to liver sinusoids (X), then leaves through hepatic veins (Q) for the inferior vena cava and right atrium. The hepatic artery is an arterial supply to the liver, not the vessel draining intestinal capillaries. Lung capillaries are reached later, after the right heart pumps the blood into the pulmonary circulation. Identifying both the liver's portal inflow and its venous outflow is necessary here."
                 },
                 {
                     id: "d36z15",
@@ -1104,7 +1104,7 @@ const DAY36 = {
                 {
                     id: "d36m5",
                     revisionOf: { paper: "AG-15-SET-B", question: 192 },
-                    text: "The same three-letter block repeats four times. Fill the blanks from left to right:<br><b>r _ s &nbsp; r s _ &nbsp; _ s s &nbsp; r _ s</b>",
+                    text: "Fill the blanks from left to right:<br><b>r _ s &nbsp; r s _ &nbsp; _ s s &nbsp; r _ s</b>",
                     options: [
                         { key: "a", text: "s, r, s, s" },
                         { key: "b", text: "r, s, s, r" },
@@ -1115,30 +1115,30 @@ const DAY36 = {
                     explanation: "The visible positions in the blocks identify the repeated block as rss. Completing each block in turn requires s in the first, s in the second, r in the third and s in the fourth. The full sequence is rss rss rss rss, so the missing letters are s, s, r, s."
                 },
                 {
-                    id: "d36m6",
+                    id: "d36m9",
                     revisionOf: { paper: "AG-15-SET-B", question: 193 },
-                    text: "Read the adjacent vertex pairs clockwise, starting at the top: <b>(6, 13), (12, 25), (18, ?)</b>. Each pair follows the same rule. What replaces the question mark?<svg class='q-fig' viewBox='0 0 240 235' width='252' height='247' role='img' aria-label='Six-pointed star with clockwise vertex numbers 6, 13, 12, 25, 18 and a question mark'><g fill='none' stroke='currentColor' stroke-width='1.7'><path d='M120 12 216 168H24ZM24 64h192l-96 156Z'/></g><g fill='currentColor' text-anchor='middle' font-size='16'><text x='120' y='51'>6</text><text x='181' y='84'>13</text><text x='181' y='156'>12</text><text x='120' y='193'>25</text><text x='59' y='156'>18</text><text x='59' y='84'>?</text></g></svg>",
+                    text: "Find the missing number.<svg class='q-fig' viewBox='0 0 240 235' width='252' height='247' role='img' aria-label='Six-pointed star: top 7, upper-right 22, lower-right 5, bottom 16, lower-left 9, upper-left question mark'><g fill='none' stroke='currentColor' stroke-width='1.7'><path d='M120 12 216 168H24ZM24 64h192l-96 156Z'/></g><g fill='currentColor' text-anchor='middle' font-size='16'><text x='120' y='51'>7</text><text x='181' y='84'>22</text><text x='181' y='156'>5</text><text x='120' y='193'>16</text><text x='59' y='156'>9</text><text x='59' y='84'>?</text></g></svg>",
                     options: [
-                        { key: "a", text: "35" },
-                        { key: "b", text: "37" },
-                        { key: "c", text: "36" },
-                        { key: "d", text: "39" }
+                        { key: "a", text: "26" },
+                        { key: "b", text: "28" },
+                        { key: "c", text: "30" },
+                        { key: "d", text: "32" }
                     ],
                     answer: "b",
-                    explanation: "The second number in each pair is twice the first plus one: $2(6)+1=13$ and $2(12)+1=25$. The missing value is therefore $2(18)+1=37$. The stated pairing matters; treating all six vertices as an ordinary consecutive sequence would apply a different rule."
+                    explanation: "Take adjacent vertices in pairs clockwise from the top: (7, 22), (5, 16) and (9, ?). In each pair, multiply the first number by three and add one: $3(7)+1=22$ and $3(5)+1=16$. Applying the same relationship to the last pair gives $3(9)+1=28$."
                 },
                 {
-                    id: "d36m7",
+                    id: "d36m10",
                     revisionOf: { paper: "AG-15-SET-B", question: 194 },
-                    text: "Three numbers below are prime and one is composite. Which is the odd one out?",
+                    text: "Which of these numbers is the odd one out?",
                     options: [
-                        { key: "a", text: "47" },
-                        { key: "b", text: "53" },
-                        { key: "c", text: "71" },
-                        { key: "d", text: "63" }
+                        { key: "a", text: "43" },
+                        { key: "b", text: "59" },
+                        { key: "c", text: "73" },
+                        { key: "d", text: "91" }
                     ],
                     answer: "d",
-                    explanation: "63 has nontrivial factors, for example $63=7\\times9$, so it is composite. The other three numbers are prime. For 47, 53 and 71, testing prime divisors no larger than their square roots establishes primality. Stating the classification makes the numerical odd-one-out criterion definite."
+                    explanation: "91 is composite because $91=7\\times13$. The other three numbers, 43, 59 and 73, are prime. Checking prime divisors up to each number's square root is sufficient. In particular, being odd and not ending in 5 does not establish that a number is prime."
                 },
                 {
                     id: "d36m8",
@@ -1293,17 +1293,17 @@ const DAY36 = {
                     explanation: "The radial, exarch and commonly polyarch arrangement with a prominent pith is characteristic of a typical monocot root. Monocot stems instead have scattered conjoint vascular bundles, and a young dicot stem usually has a ring of conjoint bundles with endarch xylem."
                 },
                 {
-                    id: "d36a11",
+                    id: "d36a16",
                     additionalPractice: true,
-                    text: "The schematic transverse section shows many separate, closed conjoint vascular bundles scattered through ground tissue, with no sharp cortex-pith boundary. Which typical organ is represented?<svg class='q-fig' viewBox='0 0 260 205' width='260' height='205' role='img' aria-label='Circular transverse section with many discrete vascular bundles scattered throughout the ground tissue rather than in one ring'><circle cx='130' cy='97' r='82' fill='#059669' fill-opacity='0.05' stroke='currentColor' stroke-width='1.8'/><g fill='#2563eb' fill-opacity='0.22' stroke='currentColor' stroke-width='1.2'><ellipse cx='102' cy='40' rx='7' ry='10'/><ellipse cx='147' cy='33' rx='7' ry='10'/><ellipse cx='175' cy='60' rx='7' ry='10'/><ellipse cx='192' cy='99' rx='7' ry='10'/><ellipse cx='172' cy='139' rx='7' ry='10'/><ellipse cx='138' cy='158' rx='7' ry='10'/><ellipse cx='96' cy='147' rx='7' ry='10'/><ellipse cx='72' cy='111' rx='7' ry='10'/><ellipse cx='77' cy='68' rx='7' ry='10'/><ellipse cx='117' cy='77' rx='9' ry='12'/><ellipse cx='151' cy='102' rx='9' ry='12'/><ellipse cx='115' cy='121' rx='9' ry='12'/></g><text x='130' y='196' text-anchor='middle' fill='currentColor' font-size='12'>Transverse section</text></svg>",
+                    text: "Which combination of features is expected in a typical vascular bundle from the organ shown?<svg class='q-fig' viewBox='0 0 260 205' width='260' height='205' role='img' aria-label='Circular transverse section with many discrete vascular bundles scattered throughout the ground tissue rather than in one ring'><circle cx='130' cy='97' r='82' fill='#059669' fill-opacity='0.05' stroke='currentColor' stroke-width='1.8'/><g fill='#2563eb' fill-opacity='0.22' stroke='currentColor' stroke-width='1.2'><ellipse cx='102' cy='40' rx='7' ry='10'/><ellipse cx='147' cy='33' rx='7' ry='10'/><ellipse cx='175' cy='60' rx='7' ry='10'/><ellipse cx='192' cy='99' rx='7' ry='10'/><ellipse cx='172' cy='139' rx='7' ry='10'/><ellipse cx='138' cy='158' rx='7' ry='10'/><ellipse cx='96' cy='147' rx='7' ry='10'/><ellipse cx='72' cy='111' rx='7' ry='10'/><ellipse cx='77' cy='68' rx='7' ry='10'/><ellipse cx='117' cy='77' rx='9' ry='12'/><ellipse cx='151' cy='102' rx='9' ry='12'/><ellipse cx='115' cy='121' rx='9' ry='12'/></g><text x='130' y='196' text-anchor='middle' fill='currentColor' font-size='12'>Transverse section</text></svg>",
                     options: [
-                        { key: "a", text: "Dicot root" },
-                        { key: "b", text: "Monocot stem" },
-                        { key: "c", text: "Young dicot stem" },
-                        { key: "d", text: "Monocot root" }
+                        { key: "a", text: "Cambium present; protoxylem endarch" },
+                        { key: "b", text: "Cambium absent; protoxylem endarch" },
+                        { key: "c", text: "Cambium present; protoxylem exarch" },
+                        { key: "d", text: "Cambium absent; protoxylem exarch" }
                     ],
                     answer: "b",
-                    explanation: "A typical monocot stem, such as maize, has numerous closed conjoint bundles scattered through largely undifferentiated ground tissue. A young dicot stem usually arranges open collateral bundles in a ring. Root vascular tissue is radial rather than numerous scattered conjoint bundles."
+                    explanation: "The scattered bundles identify the usual monocot-stem arrangement, as in maize. Its vascular bundles are closed, lacking vascular cambium, and the primary xylem is endarch: protoxylem lies towards the centre of the stem. A typical young dicot stem instead has open bundles in a ring. Roots generally have exarch xylem and a radial vascular arrangement, so neither exarch option fits this stem section."
                 },
                 {
                     id: "d36a12",
@@ -1426,7 +1426,7 @@ const DAY36_SYLLABUS = [
         { topic: "Human Biology and Physiology", subs: [
             { name: "Digestive Enzyme Activation", ids: ["d36z1"] },
             { name: "Respiratory Volumes, Enzymes and Control", ids: ["d36z2", "d36z13", "d36z16"] },
-            { name: "Cardiac Cycle, Output and Portal Circulation", ids: ["d36z3", "d36z4", "d36z14"] },
+            { name: "Cardiac Cycle, Output and Portal Circulation", ids: ["d36z3", "d36z4", "d36z22"] },
             { name: "Nephron Function", ids: ["d36z5"] },
             { name: "Nerve Impulses and Sensory Pathways", ids: ["d36z15", "d36z21"] },
             { name: "Eye and Ear", ids: ["d36z6", "d36z17"] },
@@ -1453,7 +1453,7 @@ const DAY36_SYLLABUS = [
             { name: "Plant Tissues and Conducting Cells", ids: ["d36a1", "d36a2", "d36a3", "d36a4", "d36a5"] },
             { name: "Vascular Bundle Types", ids: ["d36a6", "d36a7"] },
             { name: "Root Internal Structure", ids: ["d36a8", "d36a9", "d36a10", "d36a15"] },
-            { name: "Stem Structure and Lateral Meristems", ids: ["d36a11", "d36a13", "d36a14"] },
+            { name: "Stem Structure and Lateral Meristems", ids: ["d36a16", "d36a13", "d36a14"] },
             { name: "Leaf Internal Structure", ids: ["d36a12"] }
         ] }
     ] },
@@ -1463,11 +1463,11 @@ const DAY36_SYLLABUS = [
             { name: "Letter Completion", ids: ["d36m5"] }
         ] },
         { topic: "Numerical Reasoning", subs: [
-            { name: "Clock Intervals and Number Classification", ids: ["d36m3", "d36m7"] }
+            { name: "Clock Intervals and Number Classification", ids: ["d36m3", "d36m10"] }
         ] },
         { topic: "Spatial Relation / Abstract Reasoning", subs: [
             { name: "Painted Cubes", ids: ["d36m2"] },
-            { name: "Number Figures and Embedded Paths", ids: ["d36m6", "d36m8"] }
+            { name: "Number Figures and Embedded Paths", ids: ["d36m9", "d36m8"] }
         ] }
     ] }
 ];
