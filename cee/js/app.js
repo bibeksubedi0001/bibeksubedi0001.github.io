@@ -172,14 +172,38 @@
     /* ============================================================
        Views
        ============================================================ */
+    let currentView = "dashboard";
+
     function showView(name) {
-        $("modulesGrid").hidden = name !== "dashboard";
-        $("omrEntry").hidden = name !== "dashboard";
-        $("syllabusEntry").hidden = name !== "dashboard";
+        currentView = name;
+        document.body.dataset.view = name;
+        $("dashboardView").hidden = name !== "dashboard";
+        $("papersView").hidden = name !== "papers";
         $("testView").hidden = name !== "test";
         $("resultsView").hidden = name !== "results";
         $("omrView").hidden = name !== "omr";
         $("syllabusView").hidden = name !== "syllabus";
+        const navView = name === "test" || name === "results" ? "papers" : name;
+        document.querySelectorAll("[data-cee-view]").forEach(button => {
+            if (button.dataset.ceeView === navView) button.setAttribute("aria-current", "page");
+            else button.removeAttribute("aria-current");
+        });
+        if (name === "dashboard" && chart) chart.resize();
+    }
+
+    function leaveScanner() {
+        if (currentView === "omr") $("omrBack").click();
+    }
+
+    function openPapers(status) {
+        leaveScanner();
+        if (status) {
+            paperStatus = status;
+            $("ceePaperStatus").querySelector(`input[value="${status}"]`).checked = true;
+        }
+        renderDayCards();
+        showView("papers");
+        scrollToEl($("papersView"));
     }
 
     function openDay(n) {
@@ -209,7 +233,7 @@
         renderDayCards();
         updateDashboard();
         showView("dashboard");
-        scrollToEl($("modulesGrid"));
+        scrollToEl($("dashboardView"));
     }
 
     /* ============================================================
@@ -268,6 +292,7 @@
     }
 
     function openSyllabus() {
+        leaveScanner();
         renderSyllabusRef();
         showView("syllabus");
         scrollToEl($("syllabusView"));
@@ -276,73 +301,97 @@
     /* ============================================================
        Landing — day cards
        ============================================================ */
+    let paperQuery = "";
+    let paperStatus = "all";
+    let paperOrder = "newest";
+    let suggestedDay = null;
+
+    function paperState(day) {
+        const record = state.days[day.day];
+        if (record.submitted) return "done";
+        return dayAnsweredN(day, record.answers) || record.deadline ? "progress" : "new";
+    }
+
+    function paperLabel(status) {
+        return { done: "Completed", progress: "In progress", new: "Not started" }[status];
+    }
+
+    function paperAction(status) {
+        return { done: "Review", progress: "Resume", new: "Start" }[status];
+    }
+
+    function visiblePapers() {
+        const search = paperQuery.toLowerCase().trim();
+        return DAYS.filter(day => {
+            if (paperStatus !== "all" && paperState(day) !== paperStatus) return false;
+            const keywords = [day.title, day.subtitle, String(day.day), ...day.chapters.flatMap(chapter => [chapter.name, chapter.subject])].join(" ").toLowerCase();
+            return !search || keywords.includes(search);
+        }).sort((first, second) => paperOrder === "oldest" ? first.day - second.day : second.day - first.day);
+    }
+
     function renderDayCards() {
         const grid = $("modulesGrid");
-        grid.innerHTML = "";
-        DAYS.forEach(day => {
-            const st = state.days[day.day];
+        grid.replaceChildren();
+        const papers = visiblePapers();
+        $("ceePaperInventory").textContent = `${DAYS.length} papers in your study plan`;
+        $("ceePapersCount").textContent = `${papers.length} of ${DAYS.length} papers`;
+        $("ceePapersEmpty").hidden = papers.length > 0;
+        papers.forEach(day => {
+            const record = state.days[day.day];
             const total = dayTotalN(day);
-            const answered = dayAnsweredN(day, st.answers);
-
-            let statusCls = "day-status", statusTxt = "Not started", cta = "Start Test ";
-            let scoreHidden = true, barW = 0, scoreTxt = "";
-            if (st.submitted) {
-                const marks = dayMarks(day, st.answers);
-                statusCls = "day-status done"; statusTxt = "Completed"; cta = "Review Analysis ";
-                scoreHidden = false;
-                barW = Math.max(0, marks / total * 100);
-                scoreTxt = fmt(marks) + " / " + total;
-            } else if (answered > 0 || st.deadline) {
-                statusCls = "day-status progress"; statusTxt = "In progress"; cta = "Continue Test ";
-            }
-
-            const chapNames = day.chapters.map(c => c.name).join(" \u00B7 ");
-            // Day 15 onward: show the chapter-wise question distribution as normal text.
-            const descHtml = day.day >= 15
-                ? `<p class="dc-desc">` + day.chapters.map(c => `${c.name}: ${c.questions.length}`).join(" \u00B7 ") + `</p>`
-                : `<p class="dc-desc">${chapNames}</p>`;
-
-            const card = el("div", "card day-card");
-            card.dataset.day = day.day;
-            card.dataset.accent = "blue";
-            card.setAttribute("role", "button");
-            card.tabIndex = 0;
+            const answered = dayAnsweredN(day, record.answers);
+            const status = paperState(day);
+            const action = paperAction(status);
+            const subjects = new Map();
+            day.chapters.forEach(chapter => subjects.set(chapter.subject, (subjects.get(chapter.subject) || 0) + chapter.questions.length));
             const badge = day.badge || { top: "Day", main: day.day };
-            card.innerHTML =
-                `<div class="dc-top">
-                    <div class="day-badge"><span>${badge.top}</span><b>${badge.main}</b></div>
-                    <div class="dc-top-right">
-                        <span class="${statusCls}">${statusTxt}</span>
-                        <button type="button" class="dc-scan" title="Scan OMR sheet \u00B7 graded against the ${dayTag(day)} answer key" aria-label="Scan OMR sheet for ${dayTag(day)}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                        </button>
-                    </div>
-                 </div>
-                 <h3>${day.subtitle}</h3>
-                 ${descHtml}
-                 <div class="dc-scoreline"${scoreHidden ? " hidden" : ""}>
-                    <div class="dc-bar"><span style="width:${barW}%"></span></div>
-                    <b>${scoreTxt}</b>
-                 </div>
-                 <div class="dc-foot">
-                    <div class="dc-meta">
-                        <span><b>${total}</b> Questions</span>
-                        <span class="dc-dot"></span>
-                        <span><b>${day.chapters.length}</b> Chapters</span>
-                    </div>
-                    <span class="dc-cta">${cta}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-                 </div>`;
-            card.addEventListener("click", (ev) => {
-                if (ev.target.closest(".dc-scan")) return;
-                openDay(day.day);
-            });
-            card.addEventListener("keydown", (ev) => {
-                if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); openDay(day.day); }
-            });
+            const card = el("article", "card day-card");
+            card.dataset.day = day.day;
+            card.dataset.status = status;
+            card.setAttribute("aria-label", `${dayTag(day)}: ${day.subtitle}`);
+            card.innerHTML = `<div class="dc-top">
+                <div class="day-badge"><span>${badge.top}</span><b>${badge.main}</b></div>
+                <div class="dc-top-right"><span class="day-status ${status}">${paperLabel(status)}</span>
+                    <button type="button" class="dc-scan" title="Scan OMR for ${dayTag(day)}" aria-label="Scan OMR for ${dayTag(day)}">${uiIcon("grid")}</button>
+                </div>
+            </div>
+            <h2>${day.subtitle}</h2>
+            <div class="cee-paper-subjects">${Array.from(subjects, ([name, count]) => `<span data-subject="${name}">${name}<b>${count}</b></span>`).join("")}</div>
+            <div class="cee-paper-progress">${status === "done" ? `<span>Net marks</span><b>${fmt(dayMarks(day, record.answers))}<small> / ${total}</small></b>` : `<span>${answered} / ${total} answered</span><div class="dc-bar" role="progressbar" aria-label="${dayTag(day)} answered" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${answered}"><span style="width:${answered / total * 100}%"></span></div>`}</div>
+            <div class="dc-foot"><div class="dc-meta"><span>${total} questions</span><span>${dayDurationMs(day) / 60000} min</span></div><button type="button" class="cee-open-paper" aria-label="${action} ${dayTag(day)}">${action}${uiIcon("arrow-right")}</button></div>`;
+            card.querySelector(".cee-open-paper").addEventListener("click", () => openDay(day.day));
             card.querySelector(".dc-scan").addEventListener("click", () => {
                 if (window.CEE_OMR) window.CEE_OMR.open(day.day);
             });
             grid.appendChild(card);
+        });
+    }
+
+    function renderDashboardPapers() {
+        const papers = DAYS.slice().sort((first, second) => second.day - first.day);
+        const active = getDayObj(state.activeDay);
+        suggestedDay = active && paperState(active) === "progress" ? active : papers.find(day => paperState(day) === "progress") || papers.find(day => paperState(day) === "new") || papers[0];
+        if (suggestedDay) {
+            const status = paperState(suggestedDay);
+            const answered = dayAnsweredN(suggestedDay, state.days[suggestedDay.day].answers);
+            $("ceeNextStatus").textContent = status === "progress" ? "Continue your paper" : status === "done" ? "Latest result" : "Next paper";
+            $("ceeNextTitle").textContent = `${dayTag(suggestedDay)} \u00b7 ${suggestedDay.subtitle}`;
+            $("ceeNextMeta").textContent = `${dayTotalN(suggestedDay)} questions \u00b7 ${dayDurationMs(suggestedDay) / 60000} min${status === "progress" ? ` \u00b7 ${answered} answered` : ""}`;
+            $("ceeNextLabel").textContent = `${paperAction(status)} ${dayTag(suggestedDay)}`;
+        }
+        const list = $("ceeLatestPapers");
+        list.replaceChildren();
+        papers.slice(0, 4).forEach(day => {
+            const status = paperState(day);
+            const total = dayTotalN(day);
+            const record = state.days[day.day];
+            const row = el("button", "cee-paper-row");
+            row.type = "button";
+            row.dataset.openDay = day.day;
+            row.setAttribute("aria-label", `${paperAction(status)} ${dayTag(day)}: ${day.subtitle}`);
+            row.innerHTML = `<span class="cee-row-day">${dayTag(day)}</span><span class="cee-row-main"><b>${day.subtitle}</b><small>${total} questions \u00b7 ${dayDurationMs(day) / 60000} min</small></span><span class="cee-row-result">${status === "done" ? `<b>${fmt(dayMarks(day, record.answers))}<small> / ${total}</small></b>` : `<span class="day-status ${status}">${paperLabel(status)}</span>`}</span>${uiIcon("arrow-up-right")}`;
+            row.addEventListener("click", () => openDay(day.day));
+            list.appendChild(row);
         });
     }
 
@@ -735,35 +784,27 @@
        ============================================================ */
     function updateDashboard() {
         const allQ = DAYS.reduce((s, d) => s + dayTotalN(d), 0);
-        let marks = 0, correct = 0, answered = 0, anySub = false;
+        let marks = 0, correct = 0, answered = 0, completed = 0, gradedTotal = 0;
         DAYS.forEach(day => {
             const st = state.days[day.day];
             if (!st.submitted) return;
-            anySub = true;
+            completed++;
+            gradedTotal += dayTotalN(day);
             marks += dayMarks(day, st.answers);
             correct += dayCorrect(day, st.answers);
             answered += dayAnsweredN(day, st.answers);
         });
 
-        $("heroTotal").innerHTML = `${fmt(marks)}<small style="opacity:.7">/${allQ}</small>`;
-        $("heroDays").textContent = DAYS.filter(d => d.kind !== "model").length;
-        $("heroChapters").textContent = allQ;
-        $("statScore").innerHTML = `${fmt(marks)}<small>/${allQ}</small>`;
-        $("statAtt").innerHTML = `${answered}<small>/${allQ}</small>`;
-        $("statAcc").innerHTML = (anySub && answered)
-            ? `${Math.round(correct / answered * 100)}<small>%</small>` : `\u2014<small>%</small>`;
-
-        let best = null;
-        DAYS.forEach(day => {
-            const st = state.days[day.day];
-            if (!st.submitted) return;
-            day.chapters.forEach(ch => {
-                const sc = chScore(ch, st.answers);
-                if (sc > 0 && (!best || sc > best.s)) best = { name: ch.name, s: sc };
-            });
-        });
-        $("statBest").textContent = best ? best.name : "\u2014";
-
+        $("ceePlanMeta").textContent = `${DAYS.length} papers \u00b7 ${allQ.toLocaleString()} questions`;
+        $("statDone").innerHTML = `${completed}<small> / ${DAYS.length}</small>`;
+        $("ceeCompletionBar").style.width = `${completed / DAYS.length * 100}%`;
+        $("ceeCompletionTrack").setAttribute("aria-valuenow", Math.round(completed / DAYS.length * 100));
+        $("statScore").innerHTML = completed ? `${fmt(marks)}<small> / ${gradedTotal}</small>` : "\u2014";
+        $("statAtt").textContent = answered.toLocaleString();
+        $("statAcc").innerHTML = answered ? `${Math.round(correct / answered * 100)}<small>%</small>` : "\u2014";
+        $("ceeChartEmpty").hidden = completed > 0 && !!chart;
+        $("ceeChartMessage").textContent = completed ? "Score chart unavailable" : "No completed papers yet";
+        renderDashboardPapers();
         renderSubjectPerformance();
         updateChart();
     }
@@ -791,7 +832,7 @@
             const pct = total ? Math.round(correct / total * 100) : 0;
 
             let val;
-            if (!hasQ) val = `<span class="subj-val soon">Coming soon</span>`;
+            if (!hasQ) return;
             else if (reveal) val = `<span class="subj-val"><b>${correct}/${total}</b> \u00B7 ${pct}%</span>`;
             else val = `<span class="subj-val muted">${plannedTotal} questions</span>`;
 
@@ -810,76 +851,56 @@
     function chartMax() { return 100; }
 
     function chartData() {
-        const arr = new Array(PLANNED_DAYS).fill(0);
+        const arr = new Array(PLANNED_DAYS).fill(null);
         DAYS.forEach(day => {
             const i = day.day - 1;
             if (i < PLANNED_DAYS) {
                 const st = state.days[day.day];
                 if (st.submitted) {
                     const t = dayTotalN(day);
-                    arr[i] = t ? Math.max(0, Math.round(dayMarks(day, st.answers) / t * 100)) : 0;
+                    arr[i] = t ? Math.round(dayMarks(day, st.answers) / t * 100) : 0;
                 }
             }
         });
         return arr;
     }
 
-    function makeGrad(ctx) {
-        const grad = ctx.createLinearGradient(0, 0, 0, 280);
-        grad.addColorStop(0, "rgba(90,134,201,0.34)");
-        grad.addColorStop(1, "rgba(90,134,201,0.02)");
-        return grad;
-    }
-
-    function chartColors() {
-        const colors = new Array(PLANNED_DAYS).fill("#c3ccda");
-        DAYS.forEach(day => {
-            const i = day.day - 1;
-            if (i < PLANNED_DAYS && state.days[day.day].submitted) colors[i] = "#5a86c9";
-        });
-        return colors;
-    }
-
     function buildChart() {
+        if (typeof Chart === "undefined") return;
         const ctx = $("progressChart").getContext("2d");
         const labels = [];
         for (let i = 1; i <= PLANNED_DAYS; i++) labels.push("Day " + i);
-        const grad = makeGrad(ctx);
 
         chart = new Chart(ctx, {
-            type: "line",
+            type: "bar",
             data: {
                 labels,
                 datasets: [{
                     label: "Daily score (%)",
                     data: chartData(),
-                    borderColor: "#5a86c9",
-                    backgroundColor: grad,
-                    fill: true,
-                    tension: 0.35,
-                    borderWidth: 3,
-                    pointBackgroundColor: chartColors(),
-                    pointBorderColor: "#e4e9f0",
-                    pointBorderWidth: 2,
-                    pointRadius: 5,
-                    pointHoverRadius: 7
+                    borderColor: "#2467ac",
+                    backgroundColor: "#5288ba",
+                    borderRadius: 3,
+                    maxBarThickness: 18,
+                    borderWidth: 0
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                animation: { duration: 600, easing: "easeOutQuart" },
+                animation: { duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 350 },
                 scales: {
                     y: {
                         beginAtZero: true,
                         max: chartMax(),
-                        ticks: { stepSize: 20, color: "#94a3b8", font: { family: "Plus Jakarta Sans", size: 12 }, callback: (v) => v + "%" },
+                        min: chartData().some(value => value < 0) ? -25 : 0,
+                        ticks: { stepSize: 25, color: "#677884", font: { family: "Plus Jakarta Sans", size: 11 }, callback: (v) => v + "%" },
                         grid: { color: "rgba(148,163,184,0.16)", drawTicks: false },
                         border: { display: false },
-                        title: { display: true, text: "Score (%)", color: "#94a3b8", font: { family: "Plus Jakarta Sans", size: 11, weight: "600" } }
+                        title: { display: false }
                     },
                     x: {
-                        ticks: { color: "#94a3b8", font: { family: "Plus Jakarta Sans", size: 12, weight: "600" } },
+                        ticks: { color: "#677884", maxRotation: 0, autoSkip: true, maxTicksLimit: 8, font: { family: "Plus Jakarta Sans", size: 11 } },
                         grid: { display: false },
                         border: { display: false }
                     }
@@ -889,8 +910,8 @@
                     tooltip: {
                         backgroundColor: "#0f172a",
                         padding: 12,
-                        cornerRadius: 10,
-                        titleFont: { family: "Space Grotesk", size: 13 },
+                        cornerRadius: 6,
+                        titleFont: { family: "Plus Jakarta Sans", size: 13 },
                         bodyFont: { family: "Plus Jakarta Sans", size: 12 },
                         callbacks: {
                             label: (item) => {
@@ -913,12 +934,13 @@
     }
 
     function updateChart() {
+        const values = chartData();
+        $("progressChart").setAttribute("aria-label", `Daily net scores: ${DAYS.filter(day => state.days[day.day].submitted).map(day => `${dayTag(day)} ${values[day.day - 1]}%`).join(", ") || "no completed papers"}`);
         if (!chart) return;
-        const grad = makeGrad($("progressChart").getContext("2d"));
-        chart.data.datasets[0].data = chartData();
-        chart.data.datasets[0].backgroundColor = grad;
-        chart.data.datasets[0].pointBackgroundColor = chartColors();
+        chart.data.datasets[0].data = values;
+        chart.data.datasets[0].backgroundColor = "#5288ba";
         chart.options.scales.y.max = chartMax();
+        chart.options.scales.y.min = values.some(value => value < 0) ? -25 : 0;
         chart.update();
     }
 
@@ -962,6 +984,7 @@
        ============================================================ */
     function init() {
         load();
+        document.querySelectorAll("[data-cee-icon]").forEach(element => { element.innerHTML = uiIcon(element.dataset.ceeIcon); });
         renderIdentity();
         buildChart();
         renderDayCards();
@@ -978,13 +1001,30 @@
         });
         if (DAYS.some(d => !state.days[d.day].submitted && state.days[d.day].deadline)) startTicker();
 
-        $("backFromTest").addEventListener("click", backToDashboard);
-        $("backFromResults").addEventListener("click", backToDashboard);
+        $("backFromTest").addEventListener("click", () => openPapers());
+        $("backFromResults").addEventListener("click", () => openPapers());
         $("toDashboardBtn").addEventListener("click", backToDashboard);
         $("submitBtn").addEventListener("click", attemptSubmit);
         $("retakeBtn").addEventListener("click", retake);
         $("syllabusOpenBtn").addEventListener("click", openSyllabus);
         $("syllabusBack").addEventListener("click", backToDashboard);
+        const openDashboard = () => { leaveScanner(); backToDashboard(); };
+        $("ceeHomeBtn").addEventListener("click", openDashboard);
+        $("ceeDashboardBtn").addEventListener("click", openDashboard);
+        $("ceePapersBtn").addEventListener("click", () => openPapers());
+        $("ceeBrowseBtn").addEventListener("click", () => openPapers());
+        $("ceeResultsBtn").addEventListener("click", () => openPapers("done"));
+        $("ceeNextBtn").addEventListener("click", () => { if (suggestedDay) openDay(suggestedDay.day); });
+        $("ceePaperSearch").addEventListener("input", event => { paperQuery = event.target.value; renderDayCards(); });
+        $("ceePaperOrder").addEventListener("change", event => { paperOrder = event.target.value; renderDayCards(); });
+        $("ceePaperStatus").addEventListener("change", event => { paperStatus = event.target.value; renderDayCards(); });
+        $("ceeClearFilters").addEventListener("click", () => {
+            paperQuery = "";
+            paperStatus = "all";
+            $("ceePaperSearch").value = "";
+            $("ceePaperStatus").querySelector("input[value='all']").checked = true;
+            renderDayCards();
+        });
         document.querySelectorAll("#filterPills .pill").forEach(p =>
             p.addEventListener("click", () => applyFilter(p.dataset.f)));
     }

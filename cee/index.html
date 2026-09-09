@@ -31,16 +31,17 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/styles.css?v=67" />
+    <link rel="stylesheet" href="css/styles.css?v=68" />
     
     
     
     
-    <link rel="stylesheet" href="css/ui-icons.css?v=67" />
+    <link rel="stylesheet" href="css/ui-icons.css?v=68" />
+    <link rel="stylesheet" href="css/cee.css?v=68" />
 
     <!-- PWA: installable app -->
     <link rel="manifest" href="manifest.webmanifest" />
-    <meta name="theme-color" content="#e4e9f0" />
+    <meta name="theme-color" content="#f5f7fa" />
     <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
     <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
@@ -50,23 +51,26 @@
     <meta name="mobile-web-app-capable" content="yes" />
 </head>
 
-<body>
+<body data-app="cee">
 
     <!-- ===================== TOP BAR ===================== -->
     <header class="topbar">
         <div class="topbar-inner">
-            <div class="brand">
+            <button type="button" class="brand cee-brand" id="ceeHomeBtn" aria-label="CEE Prep dashboard">
                 <span class="mark" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-                        <path d="M6 12v5c3 3 9 3 12 0v-5" />
-                    </svg>
+                    <img src="icons/icon.svg" width="38" height="38" alt="" />
                 </span>
-                <span class="title">CEE Prep Dashboard
-                    <small>Common Entrance Examination · 2026</small>
+                <span class="title">CEE Prep
+                    <small>MECEE-BL · 2026</small>
                 </span>
-            </div>
+            </button>
+
+            <nav class="cee-nav" aria-label="Main navigation">
+                <button type="button" id="ceeDashboardBtn" data-cee-view="dashboard" aria-current="page"><span data-cee-icon="grid"></span><span>Dashboard</span></button>
+                <button type="button" id="ceePapersBtn" data-cee-view="papers"><span data-cee-icon="clipboard"></span><span>Papers</span></button>
+                <button type="button" id="syllabusOpenBtn" data-cee-view="syllabus"><span data-cee-icon="library"></span><span>Syllabus</span></button>
+                <button type="button" id="omrOpenBtn" data-cee-view="omr"><span data-cee-icon="grid"></span><span>Scanner</span></button>
+            </nav>
 
             <div class="top-actions">
                 <button id="installAppBtn" class="install-btn" type="button" title="Install app"
@@ -79,7 +83,7 @@
                     <span class="install-btn-label">Install app</span>
                 </button>
 
-                <div class="profile-chip" title="Signed in">
+                <div class="profile-chip">
                     <span class="avatar" id="navAvatar">PS</span>
                     <span class="who">
                         <b id="navName">Prakriti Subedi</b>
@@ -90,233 +94,63 @@
         </div>
     </header>
 
-    <main class="shell">
-
-        <!-- ===================== OVERVIEW ===================== -->
-        <section class="overview" aria-label="Student overview">
-            <!-- profile hero -->
-            <div class="card hero">
-                <span class="eyebrow">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21l2.3-7.4-6-4.6h7.6z" />
-                    </svg>
-                    Personalized Study Space
-                </span>
-                <h1 id="heroName">Hello, Prakriti</h1>
-                <p class="sub">Let's make today count. Finish Day 1 to chart your first data point.</p>
-
-                <div class="hero-meta">
-                    <div class="m">
-                        <b id="heroTotal">0<small style="opacity:.7">/80</small></b>
-                        <span>Total Marks</span>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="m">
-                        <b id="heroDays">2</b>
-                        <span>Days</span>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="m">
-                        <b id="heroChapters">80</b>
-                        <span>Questions</span>
-                    </div>
-                </div>
+    <main class="shell" id="ceeMain">
+        <section id="dashboardView" class="cee-dashboard" aria-label="Dashboard">
+            <div class="cee-page-heading">
+                <div><h1 id="heroName">Hello, Prakriti</h1><p id="ceePlanMeta"></p></div>
+                <span class="cee-session-label"><span class="cee-status-dot"></span>CEE 2026</span>
             </div>
-
-            <!-- stat cards -->
-            <div class="stats">
-                <div class="card stat" data-tone="score">
-                    <div class="ico">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 3v18h18" />
-                            <path d="M7 14l3-3 3 3 4-5" />
-                        </svg>
+            <dl class="cee-stats" aria-label="Study statistics">
+                <div><dt>Completed papers</dt><dd id="statDone">0</dd><span class="cee-stat-track" id="ceeCompletionTrack" role="progressbar" aria-label="Papers completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="ceeCompletionBar"></span></span></div>
+                <div><dt>Answer accuracy</dt><dd id="statAcc">&mdash;</dd><span class="cee-stat-detail">Submitted answers</span></div>
+                <div><dt>Net marks</dt><dd id="statScore">&mdash;</dd><span class="cee-stat-detail">After negative marking</span></div>
+                <div><dt>Questions answered</dt><dd id="statAtt">0</dd><span class="cee-stat-detail">Completed papers</span></div>
+            </dl>
+            <section class="cee-next" aria-labelledby="ceeNextTitle">
+                <span class="cee-next-mark" data-cee-icon="clipboard"></span>
+                <div class="cee-next-copy"><span class="cee-overline" id="ceeNextStatus">Latest paper</span><h2 id="ceeNextTitle"></h2><p id="ceeNextMeta"></p></div>
+                <button type="button" class="btn-primary" id="ceeNextBtn"><span id="ceeNextLabel">Open paper</span><span data-cee-icon="arrow-right"></span></button>
+            </section>
+            <div class="cee-performance">
+                <section class="cee-panel cee-trend" aria-labelledby="ceeProgressTitle">
+                    <div class="cee-section-heading"><h2 id="ceeProgressTitle">Score trend</h2><span class="cee-legend"><span></span>Net score (%)</span></div>
+                    <div class="chart-wrap">
+                        <canvas id="progressChart" aria-label="Daily net scores as a percentage" role="img"></canvas>
+                        <div id="ceeChartEmpty" class="cee-chart-empty"><span data-cee-icon="clipboard"></span><span id="ceeChartMessage">No completed papers yet</span></div>
                     </div>
-                    <div>
-                        <div class="value" id="statScore">0<small>/40</small></div>
-                        <div class="label">Total Score</div>
-                    </div>
-                </div>
-
-                <div class="card stat" data-tone="acc">
-                    <div class="ico">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="9" />
-                            <circle cx="12" cy="12" r="4" />
-                            <circle cx="12" cy="12" r="0.6" fill="currentColor" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="value" id="statAcc">—<small>%</small></div>
-                        <div class="label">Accuracy</div>
-                    </div>
-                </div>
-
-                <div class="card stat" data-tone="att">
-                    <div class="ico">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 11l3 3L22 4" />
-                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="value" id="statAtt">0<small>/40</small></div>
-                        <div class="label">Attempted</div>
-                    </div>
-                </div>
-
-                <div class="card stat" data-tone="best">
-                    <div class="ico">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2" />
-                            <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2" />
-                            <path d="M6 3h12v6a6 6 0 0 1-12 0z" />
-                            <path d="M9 21h6M12 15v6" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="value" id="statBest" style="font-size:1.15rem">—</div>
-                        <div class="label">Top Chapter</div>
-                    </div>
-                </div>
+                    <button type="button" class="cee-text-action" id="ceeResultsBtn">View completed papers<span data-cee-icon="arrow-up-right"></span></button>
+                </section>
+                <section class="cee-panel cee-subjects" aria-labelledby="ceeSubjectTitle">
+                    <div class="cee-section-heading"><h2 id="ceeSubjectTitle">By subject</h2><span>Correct / Total</span></div>
+                    <div class="subj-list" id="subjectList"></div>
+                </section>
             </div>
+            <section class="cee-latest" aria-labelledby="ceeLatestTitle">
+                <div class="cee-section-heading"><h2 id="ceeLatestTitle">Latest papers</h2><button type="button" class="cee-text-action" id="ceeBrowseBtn">All papers<span data-cee-icon="arrow-right"></span></button></div>
+                <div id="ceeLatestPapers" class="cee-paper-list"></div>
+            </section>
         </section>
-
-        <!-- ===================== PROGRESS CHART ===================== -->
-        <div class="section-head">
-            <div>
-                <h2>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 3v18h18" />
-                        <rect x="7" y="11" width="3" height="7" rx="1" />
-                        <rect x="12" y="7" width="3" height="11" rx="1" />
-                        <rect x="17" y="13" width="3" height="5" rx="1" />
-                    </svg>
-                    Aggregate Progress
-                </h2>
-                <p>Daily score across your CEE preparation journey (as a percentage).</p>
+        <section id="papersView" class="cee-papers" aria-label="Papers" hidden>
+            <div class="cee-page-heading"><div><h1>Papers</h1><p id="ceePaperInventory"></p></div></div>
+            <div class="cee-paper-toolbar">
+                <fieldset class="cee-segments" id="ceePaperStatus"><legend class="sr-only">Paper status</legend>
+                    <label><input type="radio" name="ceePaperStatus" value="all" checked /><span>All</span></label>
+                    <label><input type="radio" name="ceePaperStatus" value="progress" /><span>In progress</span></label>
+                    <label><input type="radio" name="ceePaperStatus" value="new" /><span>Not started</span></label>
+                    <label><input type="radio" name="ceePaperStatus" value="done" /><span>Completed</span></label>
+                </fieldset>
+                <div class="cee-paper-tools"><label class="cee-search"><span class="sr-only">Search papers by day, subject or topic</span><input id="ceePaperSearch" type="search" placeholder="Search papers" autocomplete="off" /></label><label><span class="sr-only">Paper order</span><select id="ceePaperOrder"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label></div>
             </div>
-            <div class="chart-legend">
-                <span class="lg"><span class="dot done"></span> Completed</span>
-                <span class="lg"><span class="dot up"></span> Upcoming</span>
-            </div>
-        </div>
-
-        <div class="card chart-card">
-            <div class="chart-wrap">
-                <canvas id="progressChart" aria-label="Aggregate daily marks chart" role="img"></canvas>
-            </div>
-        </div>
-
-        <!-- ===================== SUBJECT PERFORMANCE ===================== -->
-        <div class="section-head">
-            <div>
-                <h2>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 3v18h18" />
-                        <path d="M7 15l3-4 3 2 4-6" />
-                    </svg>
-                    Subject Performance
-                </h2>
-                <p>Your accuracy across the five CEE subjects. Marks appear after you submit a test.</p>
-            </div>
-        </div>
-        <div class="card subj-card">
-            <div class="subj-list" id="subjectList"></div>
-        </div>
-
-        <!-- ===================== DAILY MODULES ===================== -->
-        <div class="section-head">
-            <div>
-                <h2>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2" />
-                        <path d="M16 2v4M8 2v4M3 10h18" />
-                    </svg>
-                    Daily Modules
-                </h2>
-                <p>Open a day to begin the test. Answer all questions, then submit to see your analysis.</p>
-            </div>
-            <button class="btn" id="addDayBtn" title="More days unlock after Day 1" disabled>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 5v14M5 12h14" />
-                </svg>
-                Add Day
-            </button>
-        </div>
-
-        <!-- ---------- VIEW 1 · landing cards (rendered by JS) ---------- -->
-        <section class="modules-grid" id="modulesGrid" aria-label="Available days"></section>
-
-        <!-- ---------- OMR scanner · entry card ---------- -->
-        <section class="card omr-entry" id="omrEntry">
-            <span class="omr-entry-ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                    <circle cx="12" cy="13" r="4" />
-                </svg>
-            </span>
-            <div class="omr-entry-txt">
-                <h3>OMR Sheet Scanner</h3>
-                <p>Solved a test on paper? Point the camera at your filled OMR sheet — the black-marked bubbles are
-                    read automatically and graded against the day's answer key.</p>
-            </div>
-            <button type="button" class="btn-primary" id="omrOpenBtn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                    <circle cx="12" cy="13" r="4" />
-                </svg>
-                Open Scanner
-            </button>
+            <p id="ceePapersCount" class="cee-filter-count" role="status" aria-live="polite"></p>
+            <div class="modules-grid" id="modulesGrid" aria-label="Available papers"></div>
+            <div class="cee-empty" id="ceePapersEmpty" hidden><h2>No matching papers</h2><button type="button" class="btn" id="ceeClearFilters">Clear filters</button></div>
         </section>
-
-        <!-- ---------- Official syllabus · entry card ---------- -->
-        <section class="card omr-entry syllabus-entry" id="syllabusEntry">
-            <span class="omr-entry-ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                    <path d="M9 7h7M9 11h7" />
-                </svg>
-            </span>
-            <div class="omr-entry-txt">
-                <h3>Official CEE Syllabus</h3>
-                <p>The complete MECEE-BL course as published by the Medical Education Commission — every subject,
-                    unit and topic, with the exact number of questions each unit carries in the real paper.</p>
-            </div>
-            <button type="button" class="btn-primary" id="syllabusOpenBtn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                </svg>
-                View Syllabus
-            </button>
-        </section>
-
-        
-        
-
-        
-        
 
         <!-- ---------- VIEW 2 · exam (single scroll, jumbled) ---------- -->
         <section class="card test-view" id="testView" data-accent="blue" hidden>
             <div class="exam-bar">
                 <div class="exam-bar-row">
-                    <button type="button" class="icon-back" id="backFromTest" aria-label="Back to modules">
+                    <button type="button" class="icon-back" id="backFromTest" aria-label="Back to papers">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M19 12H5M11 18l-6-6 6-6" />
@@ -451,8 +285,7 @@
                     </svg>
                 </button>
                 <div class="omr-head-info">
-                    <h3>OMR Sheet Scanner</h3>
-                    <p>Fill bubbles solid black · scan · the sheet is graded instantly.</p>
+                    <h3>OMR Scanner</h3>
                 </div>
                 <label class="omr-day">
                     <span>Answer key</span>
@@ -469,8 +302,7 @@
                             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                             <circle cx="12" cy="13" r="4" />
                         </svg>
-                        <p>Start the camera and align the bubble table roughly inside the guide — it is detected
-                            automatically after capture.<br />Or upload a photo of the sheet.</p>
+                        <p>No sheet selected</p>
                     </div>
                     <div class="omr-frame omr-live" id="omrLive" hidden>
                         <video id="omrVideo" playsinline muted autoplay></video>
@@ -570,45 +402,45 @@
             <div class="syl-tree" id="syllabusBody"></div>
             <p class="syl-ref-foot">Source: Medical Education Commission, <i>Syllabus for Bachelor Level Common
                     Entrance Examination (2020, revised 2026)</i> &mdash; weightage table and unit/topic-wise
-                contents. Tap a subject, then a unit, to read its prescribed topics.</p>
+                    contents.</p>
         </section>
 
-        <p class="foot">Built for <b>Prakriti Subedi</b> · CEE 2026 preparation · Progress is saved on this device.</p>
+        <p class="foot">Prakriti Subedi · CEE 2026 <span>Progress saved on this device</span></p>
     </main>
 
-    <script src="js/day18.js?v=67"></script>
-    <script src="js/day19.js?v=67"></script>
-    <script src="js/day20.js?v=67"></script>
-    <script src="js/day21.js?v=67"></script>
-    <script src="js/day22.js?v=67"></script>
-    <script src="js/day23.js?v=67"></script>
-    <script src="js/day24.js?v=67"></script>
-    <script src="js/day25.js?v=67"></script>
-    <script src="js/day26.js?v=67"></script>
-    <script src="js/day27.js?v=67"></script>
-    <script src="js/day28.js?v=67"></script>
-    <script src="js/day29.js?v=67"></script>
-    <script src="js/day30.js?v=67"></script>
-    <script src="js/day31.js?v=67"></script>
-    <script src="js/day32.js?v=67"></script>
-    <script src="js/day33.js?v=67"></script>
-    <script src="js/day34.js?v=67"></script>
-    <script src="js/day35.js?v=67"></script>
-    <script src="js/day36.js?v=67"></script>
+    <script src="js/day18.js?v=68"></script>
+    <script src="js/day19.js?v=68"></script>
+    <script src="js/day20.js?v=68"></script>
+    <script src="js/day21.js?v=68"></script>
+    <script src="js/day22.js?v=68"></script>
+    <script src="js/day23.js?v=68"></script>
+    <script src="js/day24.js?v=68"></script>
+    <script src="js/day25.js?v=68"></script>
+    <script src="js/day26.js?v=68"></script>
+    <script src="js/day27.js?v=68"></script>
+    <script src="js/day28.js?v=68"></script>
+    <script src="js/day29.js?v=68"></script>
+    <script src="js/day30.js?v=68"></script>
+    <script src="js/day31.js?v=68"></script>
+    <script src="js/day32.js?v=68"></script>
+    <script src="js/day33.js?v=68"></script>
+    <script src="js/day34.js?v=68"></script>
+    <script src="js/day35.js?v=68"></script>
+    <script src="js/day36.js?v=68"></script>
     
-    <script src="js/syllabus.js?v=67"></script>
-    <script src="js/questions.js?v=67"></script>
-    <script src="js/ui-icons.js?v=67"></script>
-    <script src="js/app.js?v=67"></script>
-    <script src="js/omr.js?v=67"></script>
-    
-    
+    <script src="js/syllabus.js?v=68"></script>
+    <script src="js/questions.js?v=68"></script>
+    <script src="js/ui-icons.js?v=68"></script>
+    <script src="js/app.js?v=68"></script>
+    <script src="js/omr.js?v=68"></script>
     
     
     
     
     
-    <script src="js/install-app.js?v=67"></script>
+    
+    
+    <script src="js/install-app.js?v=68"></script>
 </body>
 
 </html>
