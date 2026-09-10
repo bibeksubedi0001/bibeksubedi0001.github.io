@@ -31,13 +31,14 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/styles.css?v=68" />
+    <link rel="stylesheet" href="css/styles.css?v=69" />
     
     
     
     
-    <link rel="stylesheet" href="css/ui-icons.css?v=68" />
-    <link rel="stylesheet" href="css/cee.css?v=68" />
+    <link rel="stylesheet" href="css/ui-icons.css?v=69" />
+    <link rel="stylesheet" href="css/cee.css?v=69" />
+    <link rel="stylesheet" href="css/cee-study.css?v=69" />
 
     <!-- PWA: installable app -->
     <link rel="manifest" href="manifest.webmanifest" />
@@ -66,8 +67,10 @@
             </button>
 
             <nav class="cee-nav" aria-label="Main navigation">
-                <button type="button" id="ceeDashboardBtn" data-cee-view="dashboard" aria-current="page"><span data-cee-icon="grid"></span><span>Dashboard</span></button>
+                <button type="button" id="ceeDashboardBtn" data-cee-view="dashboard" aria-current="page" aria-label="Dashboard"><span data-cee-icon="grid"></span><span class="cee-nav-home-full">Dashboard</span><span class="cee-nav-home-short">Home</span></button>
                 <button type="button" id="ceePapersBtn" data-cee-view="papers"><span data-cee-icon="clipboard"></span><span>Papers</span></button>
+                <button type="button" id="ceeNotesBtn" data-cee-view="notes"><span data-cee-icon="library"></span><span>Notes</span></button>
+                <button type="button" id="ceePracticeBtn" data-cee-view="practice"><span data-cee-icon="check"></span><span>Practice</span></button>
                 <button type="button" id="syllabusOpenBtn" data-cee-view="syllabus"><span data-cee-icon="library"></span><span>Syllabus</span></button>
                 <button type="button" id="omrOpenBtn" data-cee-view="omr"><span data-cee-icon="grid"></span><span>Scanner</span></button>
             </nav>
@@ -111,6 +114,7 @@
                 <div class="cee-next-copy"><span class="cee-overline" id="ceeNextStatus">Latest paper</span><h2 id="ceeNextTitle"></h2><p id="ceeNextMeta"></p></div>
                 <button type="button" class="btn-primary" id="ceeNextBtn"><span id="ceeNextLabel">Open paper</span><span data-cee-icon="arrow-right"></span></button>
             </section>
+            <div class="cee-study-launch"><button type="button" class="btn" id="ceeReadNotesBtn"><span data-cee-icon="library"></span>Read notes</button><button type="button" class="btn" id="ceeStartPracticeBtn"><span data-cee-icon="check"></span>Topic practice</button></div>
             <div class="cee-performance">
                 <section class="cee-panel cee-trend" aria-labelledby="ceeProgressTitle">
                     <div class="cee-section-heading"><h2 id="ceeProgressTitle">Score trend</h2><span class="cee-legend"><span></span>Net score (%)</span></div>
@@ -145,6 +149,9 @@
             <div class="modules-grid" id="modulesGrid" aria-label="Available papers"></div>
             <div class="cee-empty" id="ceePapersEmpty" hidden><h2>No matching papers</h2><button type="button" class="btn" id="ceeClearFilters">Clear filters</button></div>
         </section>
+
+        <section id="ceeNotesView" class="cee-study-view" aria-label="Study notes" hidden></section>
+        <section id="ceePracticeView" class="cee-practice-view" aria-label="Topic practice" hidden></section>
 
         <!-- ---------- VIEW 2 · exam (single scroll, jumbled) ---------- -->
         <section class="card test-view" id="testView" data-accent="blue" hidden>
@@ -408,31 +415,35 @@
         <p class="foot">Prakriti Subedi · CEE 2026 <span>Progress saved on this device</span></p>
     </main>
 
-    <script src="js/day18.js?v=68"></script>
-    <script src="js/day19.js?v=68"></script>
-    <script src="js/day20.js?v=68"></script>
-    <script src="js/day21.js?v=68"></script>
-    <script src="js/day22.js?v=68"></script>
-    <script src="js/day23.js?v=68"></script>
-    <script src="js/day24.js?v=68"></script>
-    <script src="js/day25.js?v=68"></script>
-    <script src="js/day26.js?v=68"></script>
-    <script src="js/day27.js?v=68"></script>
-    <script src="js/day28.js?v=68"></script>
-    <script src="js/day29.js?v=68"></script>
-    <script src="js/day30.js?v=68"></script>
-    <script src="js/day31.js?v=68"></script>
-    <script src="js/day32.js?v=68"></script>
-    <script src="js/day33.js?v=68"></script>
-    <script src="js/day34.js?v=68"></script>
-    <script src="js/day35.js?v=68"></script>
-    <script src="js/day36.js?v=68"></script>
+    <script src="js/day18.js?v=69"></script>
+    <script src="js/day19.js?v=69"></script>
+    <script src="js/day20.js?v=69"></script>
+    <script src="js/day21.js?v=69"></script>
+    <script src="js/day22.js?v=69"></script>
+    <script src="js/day23.js?v=69"></script>
+    <script src="js/day24.js?v=69"></script>
+    <script src="js/day25.js?v=69"></script>
+    <script src="js/day26.js?v=69"></script>
+    <script src="js/day27.js?v=69"></script>
+    <script src="js/day28.js?v=69"></script>
+    <script src="js/day29.js?v=69"></script>
+    <script src="js/day30.js?v=69"></script>
+    <script src="js/day31.js?v=69"></script>
+    <script src="js/day32.js?v=69"></script>
+    <script src="js/day33.js?v=69"></script>
+    <script src="js/day34.js?v=69"></script>
+    <script src="js/day35.js?v=69"></script>
+    <script src="js/day36.js?v=69"></script>
     
-    <script src="js/syllabus.js?v=68"></script>
-    <script src="js/questions.js?v=68"></script>
-    <script src="js/ui-icons.js?v=68"></script>
-    <script src="js/app.js?v=68"></script>
-    <script src="js/omr.js?v=68"></script>
+    <script src="js/syllabus.js?v=69"></script>
+    <script src="js/questions.js?v=69"></script>
+    <script src="js/ui-icons.js?v=69"></script>
+    <script src="js/cee-study-catalog.js?v=69"></script>
+    <script src="js/cee-study-core.js?v=69"></script>
+    <script src="js/cee-study.js?v=69"></script>
+    <script src="js/cee-practice.js?v=69"></script>
+    <script src="js/app.js?v=69"></script>
+    <script src="js/omr.js?v=69"></script>
     
     
     
@@ -440,7 +451,7 @@
     
     
     
-    <script src="js/install-app.js?v=68"></script>
+    <script src="js/install-app.js?v=69"></script>
 </body>
 
 </html>

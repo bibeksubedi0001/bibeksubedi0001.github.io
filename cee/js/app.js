@@ -175,10 +175,14 @@
     let currentView = "dashboard";
 
     function showView(name) {
+        if (name !== "notes") window.CEE_STUDY?.suspend();
+        if (name !== "practice") window.CEE_PRACTICE?.suspend();
         currentView = name;
         document.body.dataset.view = name;
         $("dashboardView").hidden = name !== "dashboard";
         $("papersView").hidden = name !== "papers";
+        $("ceeNotesView").hidden = name !== "notes";
+        $("ceePracticeView").hidden = name !== "practice";
         $("testView").hidden = name !== "test";
         $("resultsView").hidden = name !== "results";
         $("omrView").hidden = name !== "omr";
@@ -193,6 +197,15 @@
 
     function leaveScanner() {
         if (currentView === "omr") $("omrBack").click();
+    }
+
+    function openStudy(name, topicId) {
+        if (name !== "notes" && name !== "practice") return;
+        leaveScanner();
+        showView(name);
+        if (name === "notes") window.CEE_STUDY.open(topicId);
+        else window.CEE_PRACTICE.open(topicId);
+        scrollToEl($(name === "notes" ? "ceeNotesView" : "ceePracticeView"));
     }
 
     function openPapers(status) {
@@ -948,6 +961,7 @@
        OMR scanner bridge (used by js/omr.js)
        ============================================================ */
     window.CEE_APP = {
+        openStudy,
         openOmr() {
             showView("omr");
             scrollToEl($("omrView"));
@@ -1012,6 +1026,10 @@
         $("ceeHomeBtn").addEventListener("click", openDashboard);
         $("ceeDashboardBtn").addEventListener("click", openDashboard);
         $("ceePapersBtn").addEventListener("click", () => openPapers());
+        $("ceeNotesBtn").addEventListener("click", () => openStudy("notes"));
+        $("ceeReadNotesBtn").addEventListener("click", () => openStudy("notes"));
+        $("ceePracticeBtn").addEventListener("click", () => openStudy("practice"));
+        $("ceeStartPracticeBtn").addEventListener("click", () => openStudy("practice"));
         $("ceeBrowseBtn").addEventListener("click", () => openPapers());
         $("ceeResultsBtn").addEventListener("click", () => openPapers("done"));
         $("ceeNextBtn").addEventListener("click", () => { if (suggestedDay) openDay(suggestedDay.day); });
