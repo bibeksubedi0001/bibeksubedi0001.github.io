@@ -16,7 +16,7 @@
         }, 0);
     }
 
-    function createBank(days, imported, catalog) {
+    function createBank(days, imported, catalog, digital = {}) {
         const topics = catalog.topics.filter(topic => topic.subject !== "Reference").map(topic => ({ ...topic }));
         const records = [];
         const aliases = { Logical: "MAT", Quantitative: "MAT", Analytical: "MAT", "Non-verbal": "MAT" };
@@ -61,6 +61,20 @@
             records.push({ id: question.id, q: question, subject: question.subject, topicId: topic.id,
                 topicTitle: topic.title, origin: "pdf", sourceLabel: `Biology p.${question.source.page}, ${setName} Q${question.source.number}`,
                 source: question.source, mapping: "source" });
+        }
+        for (const data of Object.values(digital)) {
+            const topic = topics.find(item => item.id === data.id);
+            if (!topic || data.subject !== topic.subject) throw new Error("Unknown digital topic: " + data.id);
+            for (const question of data.questions) {
+                const section = data.sections.find(item => item.id === question.sectionId);
+                const source = catalog.sources.find(item => item.id === question.source.document);
+                if (!source || !section?.sources.some(item => item.document === question.source.document && item.page === question.source.page)) {
+                    throw new Error("Missing digital question source: " + question.id);
+                }
+                records.push({ id: question.id, q: question, subject: topic.subject, topicId: topic.id,
+                    topicTitle: topic.title, origin: "notes", sourceLabel: `From notes: ${source.title} p.${question.source.page}`,
+                    source: question.source, sectionId: question.sectionId, mapping: "source" });
+            }
         }
         if (new Set(records.map(item => item.id)).size !== records.length) throw new Error("Duplicate practice question identity");
         topics.forEach(topic => { topic.count = records.filter(item => item.topicId === topic.id).length; });
