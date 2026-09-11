@@ -807,41 +807,57 @@
             correct += dayCorrect(day, st.answers);
             answered += dayAnsweredN(day, st.answers);
         });
+        const practice = window.CEE_PRACTICE.getSummary();
+        const totalAnswered = answered + practice.attempted;
+        const totalCorrect = correct + practice.correct;
+        const totalWrong = answered - correct + practice.wrong;
 
         $("ceePlanMeta").textContent = `${DAYS.length} papers \u00b7 ${allQ.toLocaleString()} questions`;
         $("statDone").innerHTML = `${completed}<small> / ${DAYS.length}</small>`;
         $("ceeCompletionBar").style.width = `${completed / DAYS.length * 100}%`;
         $("ceeCompletionTrack").setAttribute("aria-valuenow", Math.round(completed / DAYS.length * 100));
         $("statScore").innerHTML = completed ? `${fmt(marks)}<small> / ${gradedTotal}</small>` : "\u2014";
-        $("statAtt").textContent = answered.toLocaleString();
-        $("statAcc").innerHTML = answered ? `${Math.round(correct / answered * 100)}<small>%</small>` : "\u2014";
+        $("statAtt").textContent = totalAnswered.toLocaleString();
+        $("statCorrect").textContent = totalCorrect.toLocaleString();
+        $("statWrong").textContent = totalWrong.toLocaleString();
+        $("statAcc").innerHTML = totalAnswered ? `${Math.round(totalCorrect / totalAnswered * 100)}<small>%</small>` : "\u2014";
+        $("ceePaperAttempted").textContent = answered.toLocaleString();
+        $("ceePaperCorrect").textContent = correct.toLocaleString();
+        $("ceePaperWrong").textContent = (answered - correct).toLocaleString();
+        $("ceePracticeAttempted").textContent = practice.available ? practice.attempted.toLocaleString() : "\u2014";
+        $("ceePracticeCorrect").textContent = practice.available ? practice.correct.toLocaleString() : "\u2014";
+        $("ceePracticeWrong").textContent = practice.available ? practice.wrong.toLocaleString() : "\u2014";
+        $("ceePracticeStatsNotice").hidden = practice.available;
+        $("ceeAnswerTrack").setAttribute("aria-label", `${totalCorrect} correct and ${totalWrong} incorrect from ${totalAnswered} attempted questions`);
+        $("ceeAnswerCorrectBar").style.width = totalAnswered ? totalCorrect / totalAnswered * 100 + "%" : "0%";
+        $("ceeAnswerWrongBar").style.width = totalAnswered ? totalWrong / totalAnswered * 100 + "%" : "0%";
         $("ceeChartEmpty").hidden = completed > 0 && !!chart;
         $("ceeChartMessage").textContent = completed ? "Score chart unavailable" : "No completed papers yet";
         renderDashboardPapers();
-        renderSubjectPerformance();
+        renderSubjectPerformance(practice);
         updateChart();
     }
 
-    function renderSubjectPerformance() {
+    function renderSubjectPerformance(practice) {
         const list = $("subjectList");
         if (!list) return;
         list.innerHTML = "";
 
         SUBJECTS.forEach(sub => {
-            let plannedTotal = 0, total = 0, correct = 0, anySub = false;
+            const practiceSubject = practice.subjects.find(subject => subject.name === sub.name);
+            let plannedTotal = 0, total = practiceSubject?.attempted || 0, correct = practiceSubject?.correct || 0;
             DAYS.forEach(day => {
                 const st = state.days[day.day];
                 day.chapters.filter(c => c.subject === sub.name).forEach(ch => {
                     plannedTotal += ch.questions.length;
                     if (st.submitted) {
-                        total += ch.questions.length;
+                        total += chAnswered(ch, st.answers);
                         correct += chScore(ch, st.answers);
-                        anySub = true;
                     }
                 });
             });
-            const hasQ = plannedTotal > 0;
-            const reveal = anySub && total > 0;
+            const hasQ = plannedTotal > 0 || total > 0;
+            const reveal = total > 0;
             const pct = total ? Math.round(correct / total * 100) : 0;
 
             let val;
@@ -1030,6 +1046,7 @@
         $("ceeReadNotesBtn").addEventListener("click", () => openStudy("notes"));
         $("ceePracticeBtn").addEventListener("click", () => openStudy("practice"));
         $("ceeStartPracticeBtn").addEventListener("click", () => openStudy("practice"));
+        window.addEventListener("cee:practice-updated", updateDashboard);
         $("ceeBrowseBtn").addEventListener("click", () => openPapers());
         $("ceeResultsBtn").addEventListener("click", () => openPapers("done"));
         $("ceeNextBtn").addEventListener("click", () => { if (suggestedDay) openDay(suggestedDay.day); });

@@ -34,6 +34,15 @@
         catch { notify("This browser could not save practice progress. Keep this page open to retain the current session."); }
     }
 
+    function getSummary() {
+        try {
+            const data = initialized ? store : core.restore(localStorage.getItem(core.STORE_KEY));
+            return { ...core.summarizeProgress(data.progress, window.CEE_STUDY_CATALOG.topics), available: true };
+        } catch {
+            return { ...core.summarizeProgress({}), available: false };
+        }
+    }
+
     function init() {
         if (initialized) return;
         initialized = true;
@@ -113,13 +122,16 @@
         screen = "builder";
         document.body.classList.remove("cee-practicing");
         const subjects = [...new Set(bank.topics.filter(topic => topic.count).map(topic => topic.subject))];
-        const attempted = bank.records.filter(item => store.progress[item.id]);
-        const correct = attempted.filter(item => store.progress[item.id].correct).length;
+        const summary = getSummary();
         const saved = bank.records.filter(item => store.bookmarks[item.id]).length;
-        $("ceePracticeBody").innerHTML = `<div class="cee-page-heading"><div><h1>Practice</h1><p>${format(bank.records.length)} questions / ${format(bank.records.filter(item => item.origin === "notes").length)} generated from notes / ${format(bank.records.filter(item => item.origin === "pdf").length)} original PDF MCQs</p></div><span class="cee-practice-mode">Untimed</span></div>
-            <dl class="cee-practice-stats"><div><dt>Practised</dt><dd>${format(attempted.length)}<small> / ${format(bank.records.length)}</small></dd></div><div><dt>Latest accuracy</dt><dd>${attempted.length ? Math.round(correct / attempted.length * 100) + "%" : "Not yet attempted"}</dd></div><div><dt>Saved questions</dt><dd>${format(saved)}</dd></div></dl>
-            ${store.draft ? `<section class="cee-resume"><div><h2>Unfinished practice</h2><p>${Object.keys(store.draft.answers).length} / ${store.draft.ids.length} answered</p></div><button type="button" class="btn-primary" data-practice-action="resume">Resume${icon("arrow-right")}</button></section>` : ""}
-            <form id="ceePracticeForm" class="cee-practice-builder"><div class="cee-builder-topics"><div class="cee-section-heading"><h2>Topics</h2><div class="cee-topic-actions"><button type="button" class="cee-text-action" data-practice-action="select-visible">Select visible</button><button type="button" class="cee-text-action" data-practice-action="clear-topics">Clear</button></div></div><div class="cee-topic-filters"><label><span class="sr-only">Subject</span><select id="ceePracticeSubject"><option value="all">All subjects</option>${subjects.map(value => `<option>${esc(value)}</option>`).join("")}</select></label><label><span class="sr-only">Find topics</span><input type="search" id="ceePracticeTopicSearch" placeholder="Find a topic" value="${esc(topicQuery)}" /></label></div><div id="ceePracticeTopics" class="cee-topic-checks"></div><p id="ceePracticeSelected" class="cee-study-status"></p></div>
+        const covered = Math.min(summary.attempted, bank.records.length);
+        const correctShare = Math.min(100, summary.correct / bank.records.length * 100);
+        const coveredShare = Math.min(100, covered / bank.records.length * 100);
+        $("ceePracticeBody").innerHTML = `<div class="cee-page-heading"><div><span class="cee-overline">Question bank</span><h1>Practice</h1><p>${format(bank.records.length)} questions</p></div><span class="cee-practice-mode"><span class="cee-status-dot"></span>Untimed practice</span></div>
+            <dl class="cee-practice-stats cee-practice-overview" aria-label="Practice performance"><div><dt>${icon("clipboard")}Attempted</dt><dd id="ceePracticeStatAttempted">${format(summary.attempted)}</dd><small>Unique questions</small></div><div><dt>${icon("check")}Correct</dt><dd id="ceePracticeStatCorrect">${format(summary.correct)}</dd><small>Latest answers</small></div><div><dt>${icon("close")}Incorrect</dt><dd id="ceePracticeStatWrong">${format(summary.wrong)}</dd><small>Latest answers</small></div><div><dt>${icon("grid")}Accuracy</dt><dd id="ceePracticeStatAccuracy">${summary.attempted ? summary.accuracy + "%" : "&mdash;"}</dd><small>Correct / attempted</small></div></dl>
+            <section class="cee-practice-coverage" aria-labelledby="ceePracticeCoverageTitle"><div class="cee-practice-ring" role="img" aria-label="${summary.correct} correct, ${summary.wrong} incorrect, ${Math.max(0, bank.records.length - covered)} not attempted" style="--correct-share:${correctShare}%;--covered-share:${coveredShare}%"><span><b>${Math.round(coveredShare)}%</b><small>covered</small></span></div><div class="cee-coverage-copy"><h2 id="ceePracticeCoverageTitle">Question coverage</h2><p>${summary.attempted ? `${format(covered)} of ${format(bank.records.length)} questions practised` : "No practice answers yet"}</p><div class="cee-coverage-legend"><span class="correct">Correct</span><span class="wrong">Incorrect</span><span class="unseen">Not attempted</span></div></div><div class="cee-practice-shortcuts"><button type="button" class="btn" data-practice-quick="wrong" ${summary.wrong ? "" : "disabled"}>${icon("close")}Review incorrect<span>${format(summary.wrong)}</span></button><button type="button" class="btn" data-practice-quick="saved" ${saved ? "" : "disabled"}>${icon("bookmark")}Saved questions<span>${format(saved)}</span></button></div></section>
+            ${store.draft ? `<section class="cee-resume"><span class="cee-resume-icon">${icon("clipboard")}</span><div><h2>Continue your practice</h2><p>${Object.keys(store.draft.answers).length} / ${store.draft.ids.length} answered</p></div><button type="button" class="btn-primary" data-practice-action="resume">Resume${icon("arrow-right")}</button></section>` : ""}
+            <form id="ceePracticeForm" class="cee-practice-builder"><div class="cee-builder-topics"><div class="cee-section-heading"><h2>Choose topics</h2><div class="cee-topic-actions"><button type="button" class="cee-text-action" data-practice-action="select-visible">Select visible</button><button type="button" class="cee-text-action" data-practice-action="clear-topics">Clear</button></div></div><div class="cee-topic-filters"><label><span class="sr-only">Subject</span><select id="ceePracticeSubject"><option value="all">All subjects</option>${subjects.map(value => `<option>${esc(value)}</option>`).join("")}</select></label><label><span class="sr-only">Find topics</span><input type="search" id="ceePracticeTopicSearch" placeholder="Find a topic" value="${esc(topicQuery)}" /></label></div><div id="ceePracticeTopics" class="cee-topic-checks"></div><p id="ceePracticeSelected" class="cee-study-status"></p></div>
             <div class="cee-builder-settings"><h2>Session</h2><label>Question source<select id="ceePracticeSource"><option value="all">All CEE questions</option><option value="notes">Generated from notes</option><option value="pdf">Original PDF MCQs</option><option value="papers">Daily papers only</option></select></label><label>Question pool<select id="ceePracticeFilter"><option value="all">All questions</option><option value="unseen">Not yet practised</option><option value="wrong">Previously incorrect</option><option value="saved">Saved questions</option></select></label><label>Number of questions<input type="number" id="ceePracticeCount" min="1" step="1" inputmode="numeric" value="${count}" required /></label><div class="cee-count-presets">${[10, 20, 50, 100].map(value => `<button type="button" data-practice-count="${value}" aria-label="Set ${value} questions">${value}</button>`).join("")}</div><p id="ceePracticePool" role="status"></p><p id="ceePracticeCountError" class="cee-count-error" role="alert" hidden></p><button class="btn-primary cee-start-practice" id="ceePracticeStart" type="submit">Start practice${icon("arrow-right")}</button></div></form>
             ${store.history.length ? `<section class="cee-practice-history"><div class="cee-section-heading"><h2>Recent sessions</h2><span>${store.history.length} sessions</span></div>${store.history.map((run, index) => `<button type="button" class="cee-history-row" data-practice-history="${index}"><span>${esc(new Date(run.finishedAt).toLocaleDateString(undefined, { month: "short", day: "numeric" }))}<small>${run.ids.length} questions</small></span><span>${run.summary?.correct ?? 0} correct<small>${run.summary?.wrong ?? 0} incorrect</small></span>${icon("arrow-right")}</button>`).join("")}</section>` : ""}`;
         $("ceePracticeSubject").value = subject;
@@ -138,9 +150,11 @@
 
     function renderTopics() {
         const visible = availableTopics();
+        const topicProgress = new Map(core.summarizeProgress(store.progress, bank.topics).topics.map(topic => [topic.id, topic]));
         $("ceePracticeTopics").innerHTML = visible.length ? visible.map(topic => {
             const available = core.filterPool(bank.records, { topics: [topic.id], source, filter }, store).length;
-            return `<label class="cee-topic-check"><input type="checkbox" data-practice-topic="${topic.id}" ${selected.has(topic.id) ? "checked" : ""} /><span><strong>${esc(topic.title)}</strong><small>${esc(topic.subject)}</small></span><span class="cee-topic-count">${available}</span></label>`;
+            const progress = topicProgress.get(topic.id);
+            return `<label class="cee-topic-check"><input type="checkbox" data-practice-topic="${topic.id}" ${selected.has(topic.id) ? "checked" : ""} /><span><strong>${esc(topic.title)}</strong><small>${esc(topic.subject)}${progress ? " / " + progress.attempted + " attempted" : ""}</small>${progress ? `<span class="cee-topic-progress" aria-hidden="true"><span style="width:${Math.min(100, progress.correct / topic.count * 100)}%"></span><span style="width:${Math.min(100, progress.wrong / topic.count * 100)}%"></span></span>` : ""}</span><span class="cee-topic-count">${available}<small>questions</small></span></label>`;
         }).join("") : '<p class="cee-study-status">No matching topics.</p>';
         $("ceePracticeSelected").textContent = selected.size + " topics selected";
     }
@@ -155,6 +169,7 @@
         $("ceePracticeCountError").textContent = error;
         $("ceePracticeCountError").hidden = !error;
         $("ceePracticeStart").disabled = !!error;
+        $("ceePracticeStart").innerHTML = `${Number.isInteger(count) && count > 0 && count <= available ? "Start " + format(count) + " question" + (count === 1 ? "" : "s") : "Start practice"}${icon("arrow-right")}`;
         document.querySelectorAll("[data-practice-count]").forEach(button => {
             button.disabled = Number(button.dataset.practiceCount) > available;
             button.setAttribute("aria-pressed", String(Number(button.dataset.practiceCount) === count));
@@ -184,6 +199,16 @@
     }
 
     function onClick(event) {
+        const quick = event.target.closest("[data-practice-quick]");
+        if (quick) {
+            filter = quick.dataset.practiceQuick;
+            source = "all"; subject = "all"; topicQuery = "";
+            selected = new Set(bank.topics.filter(topic => topic.count).map(topic => topic.id));
+            count = Math.max(1, Math.min(20, pool().length));
+            renderBuilder();
+            $("ceePracticeForm").scrollIntoView({ behavior: "smooth", block: "start" });
+            return;
+        }
         const option = event.target.closest("[data-practice-answer]");
         if (option) { chooseAnswer(option.dataset.practiceAnswer); return; }
         const preset = event.target.closest("[data-practice-count]");
@@ -265,6 +290,7 @@
         const item = bank.byId.get(active.ids[active.index]);
         if (!core.answer(store, active, item, key)) return;
         save(); renderSession();
+        window.dispatchEvent(new Event("cee:practice-updated"));
         $("ceePracticeNext")?.focus({ preventScroll: true });
     }
 
@@ -322,5 +348,5 @@
         }
     }
 
-    window.CEE_PRACTICE = Object.freeze({ open, suspend });
+    window.CEE_PRACTICE = Object.freeze({ open, suspend, getSummary });
 })();

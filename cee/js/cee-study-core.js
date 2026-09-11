@@ -107,6 +107,31 @@
         return { version: 1, progress: {}, bookmarks: {}, draft: null, history: [] };
     }
 
+    function summarizeProgress(progress, topics = []) {
+        const summary = { attempted: 0, correct: 0, wrong: 0, accuracy: 0, subjects: [], topics: [] };
+        const topicMap = new Map(topics.map(topic => [topic.id, topic]));
+        const subjectTotals = new Map();
+        const topicTotals = new Map();
+        const mixedSubjects = { "physics-mixed": "Physics", "chemistry-mixed": "Chemistry", "botany-mixed": "Botany",
+            "zoology-mixed": "Zoology", "mat-mixed": "MAT", "mathematics-mixed": "Mathematics" };
+        for (const record of Object.values(validObject(progress) ? progress : {})) {
+            if (!validObject(record) || typeof record.correct !== "boolean" || !/^[abcd]$/.test(record.answer || "")) continue;
+            const name = topicMap.get(record.topicId)?.subject || mixedSubjects[record.topicId] || "Other";
+            const topicId = typeof record.topicId === "string" ? record.topicId : "unknown";
+            if (!subjectTotals.has(name)) subjectTotals.set(name, { name, attempted: 0, correct: 0, wrong: 0 });
+            if (!topicTotals.has(topicId)) topicTotals.set(topicId, { id: topicId, attempted: 0, correct: 0, wrong: 0 });
+            for (const total of [summary, subjectTotals.get(name), topicTotals.get(topicId)]) {
+                total.attempted++;
+                if (record.correct) total.correct++;
+                else total.wrong++;
+            }
+        }
+        summary.accuracy = summary.attempted ? Math.round(summary.correct / summary.attempted * 100) : 0;
+        summary.subjects = [...subjectTotals.values()];
+        summary.topics = [...topicTotals.values()];
+        return summary;
+    }
+
     function restore(raw) {
         if (raw == null) return freshStore();
         const data = typeof raw === "string" ? JSON.parse(raw) : raw;
@@ -170,5 +195,5 @@
         return true;
     }
 
-    window.CEE_STUDY_CORE = Object.freeze({ STORE_KEY, plain, createBank, filterPool, sample, freshStore, restore, createRun, answer, grade, finish });
+    window.CEE_STUDY_CORE = Object.freeze({ STORE_KEY, plain, createBank, filterPool, sample, freshStore, summarizeProgress, restore, createRun, answer, grade, finish });
 })();
