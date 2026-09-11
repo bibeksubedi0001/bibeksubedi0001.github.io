@@ -195,7 +195,11 @@
         }
         if (input.id === "ceePracticeFilter") { filter = input.value; renderTopics(); updatePool(); }
         if (input.id === "ceePracticeReviewFilter") { reviewFilter = input.value; reviewPage = 0; renderResults(); }
-        if (input.id === "ceePracticeJump") { active.index = Number(input.value); save(); renderSession(true); }
+        if (input.id === "ceePracticeJump") {
+            active.index = Number(input.value);
+            if (window.matchMedia("(max-width: 900px)").matches) $("ceePracticeNavigator").open = false;
+            save(); renderSession(true);
+        }
     }
 
     function onClick(event) {
@@ -214,7 +218,11 @@
         const preset = event.target.closest("[data-practice-count]");
         if (preset) { count = Number(preset.dataset.practiceCount); $("ceePracticeCount").value = String(count); updatePool(); return; }
         const question = event.target.closest("[data-practice-index]");
-        if (question) { active.index = Number(question.dataset.practiceIndex); save(); renderSession(true); return; }
+        if (question) {
+            active.index = Number(question.dataset.practiceIndex);
+            if (window.matchMedia("(max-width: 900px)").matches) $("ceePracticeNavigator").open = false;
+            save(); renderSession(true); return;
+        }
         const saved = event.target.closest("[data-practice-save]");
         if (saved) {
             const id = saved.dataset.practiceSave;
@@ -237,6 +245,13 @@
         if (action === "pause") { save(); renderBuilder(); }
         if (action === "previous") go(-1);
         if (action === "next") go(1);
+        if (action === "navigator") {
+            const navigator = $("ceePracticeNavigator");
+            navigator.open = true;
+            navigator.scrollIntoView({ behavior: "instant", block: "center" });
+            navigator.querySelector("summary").focus({ preventScroll: true });
+            $("ceePracticeMapToggle").setAttribute("aria-expanded", "true");
+        }
         if (action === "flag") {
             const id = active.ids[active.index];
             if (active.flags[id]) delete active.flags[id]; else active.flags[id] = true;
@@ -302,16 +317,27 @@
         const picked = active.answers[item.id];
         const summary = core.grade(items, active.answers);
         const start = Math.floor(active.index / 100) * 100;
-        $("ceePracticeBody").innerHTML = `<header class="cee-practice-session-bar"><button type="button" class="cee-icon-button" data-practice-action="pause" title="Save and pause" aria-label="Save and pause">${icon("arrow-left")}</button><div><h1>Topic practice</h1><span>${esc(item.subject)} / ${esc(item.topicTitle)}</span></div><span class="cee-session-count">${summary.answered} / ${summary.total}<small>answered</small></span><button type="button" class="btn" data-practice-action="finish">Finish</button></header>
+        const completed = Math.round(summary.answered / summary.total * 100);
+        const navigatorOpen = $("ceePracticeNavigator")?.open ?? window.matchMedia("(min-width: 901px)").matches;
+        $("ceePracticeBody").innerHTML = `<header class="cee-practice-session-bar cee-exam-toolbar"><button type="button" class="cee-icon-button" data-practice-action="pause" title="Save and pause" aria-label="Save and pause">${icon("arrow-left")}</button><div class="cee-session-heading"><span class="cee-session-eyebrow">${esc(item.subject)} <span aria-hidden="true">/</span> Practice</span><h1>${esc(item.topicTitle)}</h1></div><span class="cee-session-mode">Untimed</span><span class="cee-session-count"><b>${summary.answered}</b><span> / ${summary.total}</span><small>answered</small></span><button type="button" class="btn cee-session-finish" data-practice-action="finish">${icon("check")}Finish</button></header>
             <div class="cee-session-progress" role="progressbar" aria-label="Questions answered" aria-valuemin="0" aria-valuemax="${summary.total}" aria-valuenow="${summary.answered}"><span style="width:${summary.answered / summary.total * 100}%"></span></div>
-            <div class="cee-focus-layout"><article class="cee-focus-question"><div class="cee-question-heading"><span>Question ${active.index + 1} / ${items.length}</span><div><button type="button" class="cee-icon-button" data-practice-save="${esc(item.id)}" aria-pressed="${!!store.bookmarks[item.id]}" title="Save question" aria-label="Save question">${icon("bookmark")}</button><button type="button" class="cee-icon-button" data-practice-action="flag" aria-pressed="${!!active.flags[item.id]}" title="Flag for review" aria-label="Flag for review">${icon("flag")}</button></div></div><small class="cee-question-source">${esc(item.sourceLabel)}${item.q.source?.adapted ? " (adapted)" : ""}</small><div id="ceePracticeQuestion" class="cee-question-text" tabindex="-1">${item.q.text}</div><div class="cee-answer-options">${item.q.options.map(option => `<button type="button" class="cee-answer ${picked != null && option.key === item.q.answer ? "is-correct" : ""} ${picked === option.key && picked !== item.q.answer ? "is-wrong" : ""}" data-practice-answer="${option.key}" ${picked == null ? "" : "disabled"}><span class="cee-answer-key">${esc(option.key.toUpperCase())}</span><span>${option.text}</span>${picked != null && option.key === item.q.answer ? icon("check") : ""}</button>`).join("")}</div>${picked == null ? "" : ui.solution(item, picked)}<div class="cee-focus-actions"><button type="button" class="btn" data-practice-action="previous" ${active.index ? "" : "disabled"}>${icon("arrow-left")}Previous</button>${active.index === items.length - 1 ? `<button type="button" class="btn-primary" id="ceePracticeNext" data-practice-action="finish">Finish practice${icon("check")}</button>` : `<button type="button" class="btn-primary" id="ceePracticeNext" data-practice-action="next">${picked == null ? "Skip" : "Next"}${icon("arrow-right")}</button>`}</div></article>
-            <aside class="cee-practice-map"><h2>Session progress</h2><div class="cee-session-totals"><span>${summary.correct}<small>Correct</small></span><span>${summary.wrong}<small>Incorrect</small></span><span>${summary.skipped}<small>Unanswered</small></span></div><label>Go to question<select id="ceePracticeJump">${items.map((record, index) => `<option value="${index}">Question ${index + 1}${active.answers[record.id] != null ? " - answered" : ""}</option>`).join("")}</select></label><div class="cee-question-map">${items.slice(start, start + 100).map((record, offset) => {
+            <div class="cee-focus-layout cee-exam-workspace"><article class="cee-focus-question"><div class="cee-question-heading"><div class="cee-question-identifier"><b>${String(active.index + 1).padStart(2, "0")}</b><span>Question<small>of ${items.length}</small></span></div><div class="cee-question-tools"><button type="button" class="cee-icon-button" data-practice-save="${esc(item.id)}" aria-pressed="${!!store.bookmarks[item.id]}" title="Save question" aria-label="Save question">${icon("bookmark")}</button><button type="button" class="cee-icon-button" data-practice-action="flag" aria-pressed="${!!active.flags[item.id]}" title="Flag for review" aria-label="Flag for review">${icon("flag")}</button></div></div><small class="cee-question-source">${icon("library")}<span>${esc(item.sourceLabel)}${item.q.source?.adapted ? " (adapted)" : ""}</span></small><div id="ceePracticeQuestion" class="cee-question-text" tabindex="-1">${item.q.text}</div><div class="cee-answer-options cee-exam-options">${item.q.options.map(option => {
+                const correct = picked != null && option.key === item.q.answer;
+                const chosen = picked === option.key;
+                const wrong = chosen && !correct;
+                return `<button type="button" class="cee-answer ${correct ? "is-correct" : ""} ${wrong ? "is-wrong" : ""} ${chosen ? "is-selected" : ""}" data-practice-answer="${option.key}" ${picked == null ? "" : "disabled"}><span class="cee-answer-key">${esc(option.key.toUpperCase())}</span><span class="cee-answer-content">${option.text}${correct || wrong ? `<small class="cee-choice-caption">${correct ? chosen ? "Your answer is correct" : "Correct answer" : "Your answer"}</small>` : ""}</span><span class="cee-choice-mark" aria-hidden="true">${correct ? icon("check") : wrong ? icon("close") : ""}</span></button>`;
+            }).join("")}</div>${picked == null ? "" : `<div class="cee-session-review">${ui.solution(item, picked)}</div>`}</article>
+            <aside class="cee-practice-map"><div class="cee-session-overview"><div class="cee-session-dial" style="--session-correct:${summary.correct / summary.total * 100}%;--session-answered:${summary.answered / summary.total * 100}%" role="img" aria-label="${completed}% answered, ${summary.correct} correct and ${summary.wrong} incorrect"><span>${completed}<small>%</small></span></div><div><h2>Session progress</h2><p>${summary.answered} of ${summary.total} answered</p></div></div><dl class="cee-session-totals"><div class="correct"><dt>${icon("check")}Correct</dt><dd>${summary.correct}</dd></div><div class="wrong"><dt>${icon("close")}Incorrect</dt><dd>${summary.wrong}</dd></div><div class="unanswered"><dt>${icon("minus")}Unanswered</dt><dd>${summary.skipped}</dd></div></dl><details id="ceePracticeNavigator" class="cee-question-navigator" ${navigatorOpen ? "open" : ""}><summary><span>${icon("grid")}Questions</span>${icon("chevron-right")}</summary><label>Go to question<select id="ceePracticeJump">${items.map((record, index) => `<option value="${index}">Question ${index + 1}${active.answers[record.id] != null ? " - answered" : ""}</option>`).join("")}</select></label><div class="cee-question-map">${items.slice(start, start + 100).map((record, offset) => {
                 const index = start + offset;
                 const answer = active.answers[record.id];
                 const status = answer == null ? "unanswered" : answer === record.q.answer ? "correct" : "wrong";
-                return `<button type="button" data-practice-index="${index}" class="${status} ${active.flags[record.id] ? "is-flagged" : ""}" ${index === active.index ? 'aria-current="step"' : ""} aria-label="Question ${index + 1}, ${status}${active.flags[record.id] ? ", flagged" : ""}">${index + 1}</button>`;
-            }).join("")}</div>${items.length > 100 ? `<p class="cee-study-status">${start + 1}-${Math.min(start + 100, items.length)} / ${items.length}</p>` : ""}</aside></div>`;
+                return `<button type="button" data-practice-index="${index}" class="${status} ${active.flags[record.id] ? "is-flagged" : ""}" ${index === active.index ? 'aria-current="step"' : ""} aria-label="Question ${index + 1}, ${status}${active.flags[record.id] ? ", flagged" : ""}"><span>${index + 1}</span>${answer == null ? "" : `<span class="cee-map-result" aria-hidden="true">${icon(status === "correct" ? "check" : "close")}</span>`}</button>`;
+            }).join("")}</div><div class="cee-map-legend"><span>${icon("check")}Correct</span><span>${icon("close")}Incorrect</span><span>${icon("flag")}Flagged</span></div>${items.length > 100 ? `<p class="cee-study-status">${start + 1}-${Math.min(start + 100, items.length)} / ${items.length}</p>` : ""}</details></aside></div>
+            <footer class="cee-session-dock"><div class="cee-focus-actions"><button type="button" class="btn" data-practice-action="previous" aria-label="Previous question" title="Previous question" ${active.index ? "" : "disabled"}>${icon("arrow-left")}<span>Previous</span></button><button type="button" class="cee-dock-position" id="ceePracticeMapToggle" data-practice-action="navigator" aria-controls="ceePracticeNavigator" aria-expanded="${navigatorOpen}" title="Show question navigator" aria-label="Show question navigator, question ${active.index + 1} of ${items.length}">${icon("grid")}<span>${active.index + 1} / ${items.length}</span></button>${active.index === items.length - 1 ? `<button type="button" class="btn-primary" id="ceePracticeNext" data-practice-action="finish"><span>Finish practice</span>${icon("check")}</button>` : `<button type="button" class="btn-primary" id="ceePracticeNext" data-practice-action="next"><span>${picked == null ? "Skip question" : "Next question"}</span>${icon("arrow-right")}</button>`}</div></footer>`;
         $("ceePracticeJump").value = String(active.index);
+        $("ceePracticeNavigator").addEventListener("toggle", event => {
+            if (event.target.isConnected) $("ceePracticeMapToggle")?.setAttribute("aria-expanded", String(event.target.open));
+        });
         ui.typeset($("ceePracticeBody"));
         if (focus) { $("ceePracticeQuestion").focus({ preventScroll: true }); $("ceePracticeBody").scrollIntoView({ behavior: "instant", block: "start" }); }
     }
