@@ -19,7 +19,7 @@
             options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea'] }
         };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg-full.js"></script>
 
     <!-- Chart.js for the aggregate progress tracker -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -31,14 +31,14 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/styles.css?v=73" />
+    <link rel="stylesheet" href="css/styles.css?v=74" />
     
     
     
     
-    <link rel="stylesheet" href="css/ui-icons.css?v=73" />
-    <link rel="stylesheet" href="css/cee.css?v=73" />
-    <link rel="stylesheet" href="css/cee-study.css?v=73" />
+    <link rel="stylesheet" href="css/ui-icons.css?v=74" />
+    <link rel="stylesheet" href="css/cee.css?v=74" />
+    <link rel="stylesheet" href="css/cee-study.css?v=74" />
 
     <!-- PWA: installable app -->
     <link rel="manifest" href="manifest.webmanifest" />
@@ -121,7 +121,8 @@
                 <div class="cee-next-copy"><span class="cee-overline" id="ceeNextStatus">Latest paper</span><h2 id="ceeNextTitle"></h2><p id="ceeNextMeta"></p></div>
                 <button type="button" class="btn-primary" id="ceeNextBtn"><span id="ceeNextLabel">Open paper</span><span data-cee-icon="arrow-right"></span></button>
             </section>
-            <div class="cee-study-launch"><button type="button" class="btn" id="ceeReadNotesBtn"><span data-cee-icon="library"></span>Read notes</button><button type="button" class="btn" id="ceeStartPracticeBtn"><span data-cee-icon="check"></span>Topic practice</button></div>
+            <div class="cee-study-launch"><button type="button" class="btn" id="ceeReadNotesBtn"><span data-cee-icon="library"></span>Read notes</button><button type="button" class="btn" id="ceeStartPracticeBtn"><span data-cee-icon="check"></span>Topic practice</button><button type="button" class="btn" id="ceeOfflineOpen" aria-haspopup="dialog" aria-controls="ceeOfflineDialog"><span data-cee-icon="library"></span><span id="ceeOfflineLabel">Download offline</span></button></div>
+            <dialog id="ceeOfflineDialog" class="cee-offline-dialog" aria-labelledby="ceeOfflineTitle"><div class="cee-dialog-bar"><h2 id="ceeOfflineTitle">Offline library</h2><button type="button" class="cee-icon-button" id="ceeOfflineClose" aria-label="Close offline library" title="Close"><span data-cee-icon="close"></span></button></div><dl class="cee-offline-meta"><div><dt>Contents</dt><dd>Papers, practice and typed notes</dd></div><div><dt>Note topics</dt><dd>75</dd></div><div><dt>Storage estimate</dt><dd>About 15 MB</dd></div><div><dt>Connection</dt><dd id="ceeOfflineConnection"></dd></div></dl><p id="ceeOfflineStatus" role="status" aria-live="polite">Checking offline storage...</p><progress id="ceeOfflineProgress" max="1" value="0" aria-label="Offline download progress" hidden></progress><div class="cee-dialog-actions"><button type="button" class="btn" id="ceeOfflineCancel" hidden><span data-cee-icon="close"></span>Cancel download</button><button type="button" class="btn-primary" id="ceeOfflineSave" disabled><span data-cee-icon="library"></span><span>Download all</span></button></div></dialog>
             <div class="cee-performance">
                 <section class="cee-panel cee-trend" aria-labelledby="ceeProgressTitle">
                     <div class="cee-section-heading"><h2 id="ceeProgressTitle">Score trend</h2><span class="cee-legend"><span></span>Net score (%)</span></div>
@@ -422,43 +423,43 @@
         <p class="foot">Prakriti Subedi · CEE 2026 <span>Progress saved on this device</span></p>
     </main>
 
-    <script src="js/day18.js?v=73"></script>
-    <script src="js/day19.js?v=73"></script>
-    <script src="js/day20.js?v=73"></script>
-    <script src="js/day21.js?v=73"></script>
-    <script src="js/day22.js?v=73"></script>
-    <script src="js/day23.js?v=73"></script>
-    <script src="js/day24.js?v=73"></script>
-    <script src="js/day25.js?v=73"></script>
-    <script src="js/day26.js?v=73"></script>
-    <script src="js/day27.js?v=73"></script>
-    <script src="js/day28.js?v=73"></script>
-    <script src="js/day29.js?v=73"></script>
-    <script src="js/day30.js?v=73"></script>
-    <script src="js/day31.js?v=73"></script>
-    <script src="js/day32.js?v=73"></script>
-    <script src="js/day33.js?v=73"></script>
-    <script src="js/day34.js?v=73"></script>
-    <script src="js/day35.js?v=73"></script>
-    <script src="js/day36.js?v=73"></script>
+    <script src="js/day18.js?v=74"></script>
+    <script src="js/day19.js?v=74"></script>
+    <script src="js/day20.js?v=74"></script>
+    <script src="js/day21.js?v=74"></script>
+    <script src="js/day22.js?v=74"></script>
+    <script src="js/day23.js?v=74"></script>
+    <script src="js/day24.js?v=74"></script>
+    <script src="js/day25.js?v=74"></script>
+    <script src="js/day26.js?v=74"></script>
+    <script src="js/day27.js?v=74"></script>
+    <script src="js/day28.js?v=74"></script>
+    <script src="js/day29.js?v=74"></script>
+    <script src="js/day30.js?v=74"></script>
+    <script src="js/day31.js?v=74"></script>
+    <script src="js/day32.js?v=74"></script>
+    <script src="js/day33.js?v=74"></script>
+    <script src="js/day34.js?v=74"></script>
+    <script src="js/day35.js?v=74"></script>
+    <script src="js/day36.js?v=74"></script>
     
-    <script src="js/syllabus.js?v=73"></script>
-    <script src="js/questions.js?v=73"></script>
-    <script src="js/ui-icons.js?v=73"></script>
-    <script src="js/cee-study-catalog.js?v=73"></script>
-    <script src="js/cee-study-core.js?v=73"></script>
-    <script src="js/cee-study.js?v=73"></script>
-    <script src="js/cee-practice.js?v=73"></script>
-    <script src="js/app.js?v=73"></script>
-    <script src="js/omr.js?v=73"></script>
-    
-    
+    <script src="js/syllabus.js?v=74"></script>
+    <script src="js/questions.js?v=74"></script>
+    <script src="js/ui-icons.js?v=74"></script>
+    <script src="js/cee-study-catalog.js?v=74"></script>
+    <script src="js/cee-study-core.js?v=74"></script>
+    <script src="js/cee-study.js?v=74"></script>
+    <script src="js/cee-practice.js?v=74"></script>
+    <script src="js/app.js?v=74"></script>
+    <script src="js/omr.js?v=74"></script>
     
     
     
     
     
-    <script src="js/install-app.js?v=73"></script>
+    
+    
+    <script src="js/install-app.js?v=74"></script>
 </body>
 
 </html>

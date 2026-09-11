@@ -838,9 +838,61 @@
         updateChart();
     }
 
+    let subjectTopicBank = null;
+
+    function subjectTopicProgress(bank, subject, practice, papers) {
+        const practiceTopics = new Map((practice.topics || []).map(topic => [topic.id, topic]));
+        const topics = bank.topics.filter(topic => topic.subject === subject).map(topic => ({ ...topic,
+            attempted: practiceTopics.get(topic.id)?.attempted || 0, correct: practiceTopics.get(topic.id)?.correct || 0 }));
+        const totals = new Map(topics.map(topic => [topic.id, topic]));
+        for (const item of bank.records) {
+            if (item.origin !== "papers" || item.subject !== subject) continue;
+            const paper = papers[item.source.day];
+            const answer = paper?.answers[item.q.id];
+            if (!paper?.submitted || answer == null) continue;
+            const topic = totals.get(item.topicId);
+            topic.attempted++;
+            if (answer === item.q.answer) topic.correct++;
+        }
+        return topics;
+    }
+
+    async function renderSubjectTopics(group, subject) {
+        if (group.dataset.topicState === "loading") return;
+        const body = group.querySelector(".cee-subject-topic-body");
+        group.dataset.topicState = "loading";
+        body.innerHTML = '<p class="cee-study-status" role="status">Loading topics...</p>';
+        try {
+            if (!subjectTopicBank) {
+                await new Promise(resolve => requestAnimationFrame(resolve));
+                if (!subjectTopicBank) subjectTopicBank = window.CEE_STUDY_CORE.createBank(DAYS, [], window.CEE_STUDY_CATALOG);
+            }
+            if (!group.isConnected) return;
+            const topics = window.CEE_PRACTICE.arrangeTopics(subjectTopicProgress(subjectTopicBank, subject, window.CEE_PRACTICE.getSummary(), state.days));
+            const units = new Map();
+            for (const topic of topics) {
+                const title = (topic.syllabus.number == null ? "" : "Unit " + topic.syllabus.number + ": ") + topic.syllabus.title;
+                if (!units.has(title)) units.set(title, []);
+                units.get(title).push(topic);
+            }
+            const esc = window.CEE_STUDY.esc;
+            body.innerHTML = [...units].map(([title, entries]) => `<section class="cee-subject-unit"><h4>${esc(title)}</h4><dl>${entries.map(topic => {
+                const accuracy = topic.attempted ? Math.round(topic.correct / topic.attempted * 100) : 0;
+                return `<div class="cee-subject-topic-row" data-topic-id="${esc(topic.id)}" data-correct="${topic.correct}" data-attempted="${topic.attempted}"><dt>${esc(topic.title)}</dt><dd class="${topic.attempted ? "" : "muted"}"><b>${topic.correct}/${topic.attempted}</b>${topic.attempted ? ` <span>${accuracy}%</span>` : ""}</dd><div class="subj-bar" aria-hidden="true"><span style="width:${accuracy}%"></span></div></div>`;
+            }).join("")}</dl></section>`).join("");
+            group.dataset.topicState = "ready";
+        } catch {
+            if (!group.isConnected) return;
+            group.dataset.topicState = "error";
+            body.innerHTML = '<p class="cee-study-status" role="status">Topic progress could not be loaded.</p><button type="button" class="cee-text-action">Retry</button>';
+            body.querySelector("button").addEventListener("click", () => renderSubjectTopics(group, subject));
+        }
+    }
+
     function renderSubjectPerformance(practice) {
         const list = $("subjectList");
         if (!list) return;
+        const expanded = new Set([...list.querySelectorAll("details[open]")].map(group => group.dataset.subject));
         list.innerHTML = "";
 
         SUBJECTS.forEach(sub => {
@@ -848,7 +900,8 @@
             let plannedTotal = 0, total = practiceSubject?.attempted || 0, correct = practiceSubject?.correct || 0;
             DAYS.forEach(day => {
                 const st = state.days[day.day];
-                day.chapters.filter(c => c.subject === sub.name).forEach(ch => {
+                day.chapters.filter(chapter => chapter.subject === sub.name || sub.name === "MAT"
+                    && ["Logical", "Quantitative", "Analytical", "Non-verbal"].includes(chapter.subject)).forEach(ch => {
                     plannedTotal += ch.questions.length;
                     if (st.submitted) {
                         total += chAnswered(ch, st.answers);
@@ -865,15 +918,25 @@
             else if (reveal) val = `<span class="subj-val"><b>${correct}/${total}</b> \u00B7 ${pct}%</span>`;
             else val = `<span class="subj-val muted">${plannedTotal} questions</span>`;
 
-            const row = el("div", "subj-row" + (hasQ ? "" : " muted"));
+            const group = el("details", "cee-subject-group");
+            group.dataset.subject = sub.name;
+            group.dataset.accent = sub.accent;
+            const row = el("summary", "subj-row");
             row.dataset.accent = sub.accent;
+            row.dataset.correct = correct;
+            row.dataset.attempted = total;
             row.innerHTML =
                 `<span class="subj-ico"><svg viewBox="0 0 24 24">${SUBJECT_ICON[sub.name] || ""}</svg></span>` +
                 `<div class="subj-body">` +
                     `<div class="subj-top"><b>${sub.name}</b>${val}</div>` +
                     `<div class="subj-bar"><span style="width:${reveal ? pct : 0}%"></span></div>` +
-                `</div>`;
-            list.appendChild(row);
+                `</div>${window.CEE_UI_ICONS.svg("chevron-right")}`;
+            group.append(row, el("div", "cee-subject-topic-body"));
+            group.addEventListener("toggle", () => {
+                if (group.isConnected && group.open && group.dataset.topicState !== "ready") renderSubjectTopics(group, sub.name);
+            });
+            list.appendChild(group);
+            group.open = expanded.has(sub.name);
         });
     }
 

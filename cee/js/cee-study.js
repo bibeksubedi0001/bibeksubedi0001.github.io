@@ -7,11 +7,10 @@
     const $ = id => document.getElementById(id);
     const esc = value => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
     const icon = name => window.CEE_UI_ICONS.svg(name);
-    const topics = catalog.topics.filter(topic => topic.ranges.length);
+    const topics = catalog.topics.filter(topic => topic.ranges.length && topic.subject !== "Reference");
     let serial = 0;
     let initialized = false;
     let currentTopic = "nervous-system";
-    let currentPage = 0;
     let currentMode = "guide";
     let sourceFilter = "all";
     let questionOffset = 0;
@@ -19,7 +18,6 @@
     let selectedSection = null;
     let query = "";
     let searchOffset = 0;
-    let lastSearch = [];
     let bankPromise = null;
     let typesetQueue = Promise.resolve();
     const answers = new Map();
@@ -82,8 +80,7 @@
     function sourceLink(source) {
         const documentSource = catalog.sources.find(item => item.id === source.document);
         if (!documentSource || !Number.isInteger(source.page) || source.page < 1 || source.page > documentSource.pages) return "";
-        const image = `assets/cee-notes/${documentSource.id}/${String(source.page).padStart(3, "0")}.webp`;
-        return `<a href="${image}" target="_blank" rel="noopener" title="Open source page image">${esc(documentSource.title)} p.${source.page}${icon("arrow-up-right")}</a>`;
+        return `<span class="cee-source-reference">${esc(documentSource.title)} p.${source.page}</span>`;
     }
 
     function solution(item, picked) {
@@ -95,20 +92,19 @@
     function init() {
         if (initialized) return;
         initialized = true;
-        $("ceeNotesView").innerHTML = `<div class="cee-page-heading"><div><h1>Notes</h1><p>75 topics <span aria-hidden="true">/</span> 506 source pages</p></div><button type="button" class="btn" id="ceeNotesPractice">${icon("arrow-right")}Practice topic</button></div>
+        $("ceeNotesView").innerHTML = `<div class="cee-page-heading"><div><h1>Notes</h1><p>${topics.length} topics</p></div><button type="button" class="btn" id="ceeNotesPractice">${icon("arrow-right")}Practice topic</button></div>
             <div class="cee-study-controls"><label>Subject<select id="ceeNotesSubject"></select></label><label class="cee-topic-control">Topic<select id="ceeNotesTopic"></select></label><label>Source<select id="ceeNotesSource"><option value="all">Both PDFs</option>${catalog.sources.map(source => `<option value="${source.id}">${esc(source.title)}</option>`).join("")}</select></label></div>
             <form class="cee-note-search" id="ceeNotesSearchForm"><label for="ceeNotesSearch" class="sr-only">Search all notes</label><input type="search" id="ceeNotesSearch" placeholder="Search notes" autocomplete="off" /><button type="submit" class="btn">Search</button><button type="button" class="cee-icon-button" id="ceeNotesClear" aria-label="Clear search" title="Clear search" hidden>${icon("close")}</button></form>
-            <div class="cee-reader-tabs" role="tablist" aria-label="Topic content"><button type="button" role="tab" id="ceeGuideTab" data-note-mode="guide" aria-controls="ceeNoteBody" aria-selected="true">Digital notes</button><button type="button" role="tab" id="ceePagesTab" data-note-mode="pages" aria-controls="ceeNoteBody" aria-selected="false">Source pages</button><button type="button" role="tab" id="ceeQuestionsTab" data-note-mode="questions" aria-controls="ceeNoteBody" aria-selected="false">MCQs</button></div>
+            <div class="cee-reader-tabs" role="tablist" aria-label="Topic content"><button type="button" role="tab" id="ceeGuideTab" data-note-mode="guide" aria-controls="ceeNoteBody" aria-selected="true">Digital notes</button><button type="button" role="tab" id="ceeQuestionsTab" data-note-mode="questions" aria-controls="ceeNoteBody" aria-selected="false">MCQs</button></div>
             <div id="ceeNoteBody" class="cee-note-body" role="tabpanel" aria-labelledby="ceeGuideTab" aria-live="polite"></div>
-            <nav class="cee-topic-pagination" aria-label="Note topics"><button type="button" class="btn" id="ceeNotePreviousTopic">${icon("arrow-left")}Previous topic</button><button type="button" class="btn" id="ceeNoteNextTopic">Next topic${icon("arrow-right")}</button></nav>
-            <dialog id="ceeSourceImageDialog" class="cee-image-dialog"><div class="cee-dialog-bar"><strong id="ceeImageTitle"></strong><button type="button" class="cee-icon-button" id="ceeCloseImage" aria-label="Close source image" title="Close">${icon("close")}</button></div><div class="cee-image-scroll"><img id="ceeFullImage" alt="" /></div></dialog>`;
+            <nav class="cee-topic-pagination" aria-label="Note topics"><button type="button" class="btn" id="ceeNotePreviousTopic">${icon("arrow-left")}Previous topic</button><button type="button" class="btn" id="ceeNoteNextTopic">Next topic${icon("arrow-right")}</button></nav>`;
         $("ceeNotesSubject").innerHTML = [...new Set(topics.map(topic => topic.subject))].map(subject => `<option>${esc(subject)}</option>`).join("");
         $("ceeNotesSubject").addEventListener("change", () => {
             const subject = $("ceeNotesSubject").value;
             chooseTopic(topics.find(topic => topic.subject === subject).id);
         });
         $("ceeNotesTopic").addEventListener("change", event => chooseTopic(event.target.value));
-        $("ceeNotesSource").addEventListener("change", event => { sourceFilter = event.target.value; currentPage = 0; render(); });
+        $("ceeNotesSource").addEventListener("change", event => { sourceFilter = event.target.value; render(); });
         $("ceeNotesPractice").addEventListener("click", () => window.CEE_APP.openStudy("practice", currentTopic));
         $("ceeNotesSearchForm").addEventListener("submit", event => {
             event.preventDefault(); query = $("ceeNotesSearch").value.trim(); searchOffset = 0; render();
@@ -120,12 +116,9 @@
             if (mode) { currentMode = mode.dataset.noteMode; query = ""; $("ceeNotesSearch").value = ""; questionOffset = 0; render(); }
             const target = event.target.closest("[data-note-topic]");
             if (target) {
-                currentMode = target.dataset.noteGuide ? "guide" : "pages";
-                if (!target.dataset.noteGuide) sourceFilter = "all";
-                chooseTopic(target.dataset.noteTopic, target.dataset.noteSource, Number(target.dataset.notePage), target.dataset.noteSection);
+                currentMode = "guide";
+                chooseTopic(target.dataset.noteTopic, target.dataset.noteSection);
             }
-            const move = event.target.closest("[data-note-page-step]");
-            if (move) { currentPage += Number(move.dataset.notePageStep); render(); }
             const questionMove = event.target.closest("[data-note-question-step]");
             if (questionMove) { questionOffset += Number(questionMove.dataset.noteQuestionStep); render(); }
             const searchMove = event.target.closest("[data-note-search-step]");
@@ -134,27 +127,19 @@
             if (option && !answers.has(option.dataset.noteQuestion)) {
                 answers.set(option.dataset.noteQuestion, option.dataset.noteAnswer); render();
             }
-            if (event.target.closest("[data-note-image]")) openImage();
             if (event.target.closest("[data-note-retry]")) render();
         });
         $("ceeNotesView").addEventListener("change", event => {
-            if (event.target.id === "ceeNotePageSelect") { currentPage = Number(event.target.value); render(); }
             if (event.target.id === "ceeNoteSectionSelect") focusSection(event.target.value);
             if (event.target.id === "ceeNoteQuestionSource") { questionSource = event.target.value; questionOffset = 0; render(); }
         });
         $("ceeNotePreviousTopic").addEventListener("click", () => stepTopic(-1));
         $("ceeNoteNextTopic").addEventListener("click", () => stepTopic(1));
-        $("ceeCloseImage").addEventListener("click", () => $("ceeSourceImageDialog").close());
-        $("ceeSourceImageDialog").addEventListener("click", event => { if (event.target === $("ceeSourceImageDialog")) event.target.close(); });
-        $("ceeSourceImageDialog").addEventListener("keydown", event => {
-            if (event.key === "Escape") { event.preventDefault(); $("ceeSourceImageDialog").close(); }
-        });
-        $("ceeSourceImageDialog").addEventListener("close", () => { $("ceeFullImage").removeAttribute("src"); });
         $("ceeNotesView").addEventListener("keydown", event => {
             if (event.target.matches("[role='tab']") && ["ArrowLeft", "ArrowRight"].includes(event.key)) {
                 event.preventDefault();
                 const tabs = [...$("ceeNotesView").querySelectorAll("[data-note-mode]")];
-                const index = (tabs.indexOf(event.target) + (event.key === "ArrowRight" ? 1 : 2)) % 3;
+                const index = (tabs.indexOf(event.target) + (event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length;
                 tabs[index].click(); tabs[index].focus();
             }
         });
@@ -164,24 +149,19 @@
         query = ""; $("ceeNotesSearch").value = ""; render();
     }
 
-    function chooseTopic(id, source, page, sectionId) {
+    function chooseTopic(id, sectionId) {
         currentTopic = topics.some(topic => topic.id === id) ? id : topics[0].id;
-        currentPage = 0;
         questionOffset = 0;
         selectedSection = sectionId || null;
         query = "";
         $("ceeNotesSearch").value = "";
-        render(source, page);
+        render();
     }
 
     function stepTopic(direction) {
         const group = topics.filter(topic => topic.subject === topics.find(item => item.id === currentTopic).subject);
         const index = group.findIndex(topic => topic.id === currentTopic) + direction;
         if (group[index]) chooseTopic(group[index].id);
-    }
-
-    function visiblePages() {
-        return (window.CEE_NOTE_PAGES?.[currentTopic] || []).filter(page => sourceFilter === "all" || page.source === sourceFilter);
     }
 
     function focusSection(sectionId) {
@@ -193,17 +173,7 @@
         if ($("ceeNoteSectionSelect")) $("ceeNoteSectionSelect").value = sectionId;
     }
 
-    function openImage() {
-        const page = visiblePages()[currentPage];
-        if (!page) return;
-        const source = catalog.sources.find(item => item.id === page.source);
-        $("ceeImageTitle").textContent = source.title + " - page " + page.page;
-        $("ceeFullImage").src = page.image;
-        $("ceeFullImage").alt = source.title + ", page " + page.page;
-        $("ceeSourceImageDialog").showModal();
-    }
-
-    async function render(source, pageNumber) {
+    async function render() {
         const ticket = ++serial;
         const topic = topics.find(item => item.id === currentTopic);
         $("ceeNotesSubject").value = topic.subject;
@@ -211,7 +181,6 @@
         $("ceeNotesTopic").innerHTML = group.map(item => `<option value="${item.id}">${esc(item.title)}</option>`).join("");
         $("ceeNotesTopic").value = topic.id;
         $("ceeNotesSource").value = sourceFilter;
-        $("ceeNotesPractice").disabled = topic.subject === "Reference";
         $("ceeNotePreviousTopic").disabled = group[0].id === topic.id;
         $("ceeNoteNextTopic").disabled = group[group.length - 1].id === topic.id;
         $("ceeNotesClear").hidden = !query;
@@ -226,7 +195,7 @@
         body.innerHTML = '<p class="cee-study-status">Loading notes...</p>';
         try {
             if (query) {
-                await Promise.all([loadScript("js/cee-notes/search-index.js"), loadDigital()]);
+                await loadDigital();
                 if (ticket !== serial) return;
                 showSearch();
                 return;
@@ -236,14 +205,9 @@
                 if (ticket !== serial) return;
                 showQuestions(bank, topic);
             } else {
-                if (currentMode === "guide" && topic.subject !== "Reference") await loadDigital([topic.id]);
-                else await loadScript("js/cee-notes/" + topic.id + ".js");
+                await loadDigital([topic.id]);
                 if (ticket !== serial) return;
-                const pages = visiblePages();
-                if (source && pageNumber) currentPage = Math.max(0, pages.findIndex(page => page.source === source && page.page === pageNumber));
-                currentPage = Math.max(0, Math.min(currentPage, pages.length - 1));
-                if (currentMode === "guide" && topic.subject !== "Reference") showGuide(topic);
-                else showPage(topic, pages);
+                showGuide(topic);
             }
             body.setAttribute("aria-busy", "false");
             await typeset(body);
@@ -255,20 +219,34 @@
         }
     }
 
+    function typedNoteHtml(html) {
+        const template = document.createElement("template");
+        template.innerHTML = html;
+        const scanRoot = new URL("assets/cee-notes/", document.baseURI);
+        for (const element of template.content.querySelectorAll("img[src], a[href]")) {
+            const url = new URL(element.getAttribute(element.tagName === "IMG" ? "src" : "href"), document.baseURI);
+            if (url.origin !== scanRoot.origin || !url.pathname.startsWith(scanRoot.pathname)) continue;
+            if (element.tagName === "A") { element.replaceWith(document.createTextNode(element.textContent)); continue; }
+            const container = element.closest("figure") || element;
+            const disclosure = container.closest("details");
+            container.remove();
+            if (disclosure && [...disclosure.childNodes].every(node => node.nodeName === "SUMMARY" || node.nodeType === 3 && !node.textContent.trim())) disclosure.remove();
+        }
+        return template.innerHTML;
+    }
+
     function showGuide(topic) {
         const data = window.CEE_DIGITAL_TOPICS[topic.id];
         const matchesSource = source => sourceFilter === "all" || source.document === sourceFilter;
         const sections = data.sections.filter(section => section.sources.some(matchesSource));
         const coverage = data.pageCoverage.filter(matchesSource);
         const partial = coverage.filter(page => page.status === "partial");
-        const blank = coverage.filter(page => page.status === "blank");
         const questionCount = data.questions.filter(question => matchesSource(question.source)).length;
         $("ceeNoteBody").setAttribute("aria-labelledby", "ceeGuideTab");
-        $("ceeNoteBody").innerHTML = `<article class="cee-reading cee-digital-reading"><header><span class="cee-overline">${esc(topic.subject)}</span><h2>${esc(topic.title)}</h2><p class="cee-study-status">${sections.length} sections / ${coverage.length} source pages / ${questionCount} generated MCQs</p></header>
+        $("ceeNoteBody").innerHTML = `<article class="cee-reading cee-digital-reading"><header><span class="cee-overline">${esc(topic.subject)}</span><h2>${esc(topic.title)}</h2><p class="cee-study-status">${sections.length} sections / ${questionCount} generated MCQs</p></header>
             ${sections.length ? `<label class="cee-note-contents">On this page<select id="ceeNoteSectionSelect"><option value="">Select a section</option>${sections.map(section => `<option value="${esc(section.id)}">${esc(section.title)}</option>`).join("")}</select></label>` : '<p class="cee-study-status">No digital sections from this source in the selected topic.</p>'}
             ${partial.length ? `<details class="cee-note-gaps"><summary>${partial.length} source ${partial.length === 1 ? "page needs" : "pages need"} clarification</summary>${partial.map(page => `<div class="cee-note-gap"><h3>${sourceLink(page)}</h3><ul>${page.unresolved.map(text => `<li>${esc(text)}</li>`).join("")}</ul></div>`).join("")}</details>` : ""}
-            ${sections.map(section => `<section class="cee-reading-section" id="digital-${topic.id}-${section.id}" data-digital-section="${esc(section.id)}" tabindex="-1"><h3>${esc(section.title)}</h3><div class="cee-digital-prose">${section.html}</div><div class="cee-section-sources">${section.sources.filter(matchesSource).map(sourceLink).join("")}</div></section>`).join("")}
-            <details class="cee-reading-sources"><summary>Source-page coverage${blank.length ? " / " + blank.length + " blank pages" : ""}</summary>${coverage.map(page => `<div class="cee-coverage-row">${sourceLink(page)}<span>${page.status === "transcribed" ? "Transcribed" : page.status === "blank" ? "Blank" : "Partially transcribed"}</span></div>`).join("")}</details></article>`;
+            ${sections.map(section => `<section class="cee-reading-section" id="digital-${topic.id}-${section.id}" data-digital-section="${esc(section.id)}" tabindex="-1"><h3>${esc(section.title)}</h3><div class="cee-digital-prose">${typedNoteHtml(section.html)}</div><div class="cee-section-sources">${section.sources.filter(matchesSource).map(sourceLink).join("")}</div></section>`).join("")}</article>`;
         $("ceeNoteBody").querySelectorAll(".cee-digital-prose table").forEach(table => {
             const wrapper = document.createElement("div");
             wrapper.className = "cee-note-table";
@@ -278,23 +256,6 @@
             table.replaceWith(wrapper);
             wrapper.appendChild(table);
         });
-    }
-
-    function showPage(topic, pages) {
-        $("ceeNoteBody").setAttribute("aria-labelledby", "ceePagesTab");
-        if (!pages.length) { $("ceeNoteBody").innerHTML = '<p class="cee-study-status">No pages from this PDF in the selected topic.</p>'; return; }
-        const page = pages[currentPage];
-        const source = catalog.sources.find(item => item.id === page.source);
-        const options = pages.map((item, index) => `<option value="${index}">${esc(catalog.sources.find(source => source.id === item.source).title)} - p.${item.page}</option>`).join("");
-        $("ceeNoteBody").innerHTML = `<div class="cee-page-controls"><button class="cee-icon-button" type="button" data-note-page-step="-1" ${currentPage ? "" : "disabled"} title="Previous page" aria-label="Previous page">${icon("arrow-left")}</button><label><span class="sr-only">Source page</span><select id="ceeNotePageSelect">${options}</select></label><button class="cee-icon-button" type="button" data-note-page-step="1" ${currentPage === pages.length - 1 ? "disabled" : ""} title="Next page" aria-label="Next page">${icon("arrow-right")}</button><span>${currentPage + 1} / ${pages.length}</span></div>
-            <p class="cee-source-warning">Original source, not an independently verified textbook. Scanned text may contain recognition errors.</p>
-            <figure class="cee-source-page"><button type="button" data-note-image aria-label="Enlarge source page ${page.page}" title="Enlarge source page"><img id="ceeCurrentPageImage" src="${page.image}" width="${page.width}" height="${page.height}" alt="${esc(source.title)} page ${page.page}: ${esc(topic.title)}" /></button><figcaption>${esc(source.title)} - page ${page.page} ${sourceLink({ document: page.source, page: page.page })}</figcaption></figure>
-            <details class="cee-transcript tex2jax_ignore"><summary>${page.method === "pdf-text" ? "Extracted text" : "Machine transcription (unverified)"}</summary><div class="cee-transcript-text"></div></details>`;
-        $("ceeNotePageSelect").value = String(currentPage);
-        $("ceeNoteBody").querySelector(".cee-transcript-text").textContent = page.text || "No text was detected on this source page. The original page is retained above.";
-        $("ceeCurrentPageImage").addEventListener("error", event => {
-            event.target.closest("figure").insertAdjacentHTML("beforeend", '<p role="alert">The page image could not load. Try opening the source page link or reload to retry.</p>');
-        }, { once: true });
     }
 
     function showQuestions(bank, topic) {
@@ -312,32 +273,28 @@
     function showSearch() {
         const needle = query.toLowerCase();
         if (!needle) return;
-        lastSearch = (window.CEE_NOTE_SEARCH || []).filter(item => (sourceFilter === "all" || item.source === sourceFilter)
-            && (item.text.toLowerCase().includes(needle) || topics.find(topic => topic.id === item.topicId)?.title.toLowerCase().includes(needle)));
-        const guideHits = Object.values(window.CEE_DIGITAL_TOPICS || {}).flatMap(topic => topic.sections
+        const hits = Object.values(window.CEE_DIGITAL_TOPICS || {}).flatMap(topic => topic.sections
             .filter(section => section.sources.some(source => sourceFilter === "all" || source.document === sourceFilter))
             .map(section => ({ topicId: topic.id, sectionId: section.id, sectionTitle: section.title, guide: true,
-                text: core.plain(section.title + " " + section.html) }))
+                text: core.plain(topic.title + " " + section.title + " " + typedNoteHtml(section.html)) }))
             .filter(section => section.text.toLowerCase().includes(needle)));
-        const hits = [...guideHits, ...lastSearch];
         searchOffset = Math.max(0, Math.min(searchOffset, Math.max(0, Math.ceil(hits.length / 30) - 1) * 30));
         $("ceeNoteBody").setAttribute("aria-busy", "false");
         $("ceeNoteBody").innerHTML = `<h2>Search results</h2><p class="cee-study-status">${hits.length} matches for "${esc(query)}"</p><div class="cee-search-results">${hits.slice(searchOffset, searchOffset + 30).map(hit => {
             const topic = topics.find(topic => topic.id === hit.topicId);
             const position = Math.max(0, hit.text.toLowerCase().indexOf(needle) - 60);
-            return `<button type="button" class="cee-search-result" data-note-topic="${hit.topicId}" ${hit.guide ? `data-note-guide="true" data-note-section="${esc(hit.sectionId)}"` : `data-note-source="${hit.source}" data-note-page="${hit.page}"`}><strong>${esc(topic.title)}</strong><small>${esc(topic.subject)} / ${hit.guide ? "Digital notes: " + esc(hit.sectionTitle) : esc(catalog.sources.find(source => source.id === hit.source).title) + " p." + hit.page}</small><span>${esc(hit.text.slice(position, position + 210))}</span></button>`;
+            return `<button type="button" class="cee-search-result" data-note-topic="${hit.topicId}" data-note-guide="true" data-note-section="${esc(hit.sectionId)}"><strong>${esc(topic.title)}</strong><small>${esc(topic.subject)} / ${esc(hit.sectionTitle)}</small><span>${esc(hit.text.slice(position, position + 210))}</span></button>`;
         }).join("")}</div>${hits.length > 30 ? `<div class="cee-page-controls"><button type="button" class="btn" data-note-search-step="-30" ${searchOffset ? "" : "disabled"}>${icon("arrow-left")}Previous</button><span>${searchOffset + 1}-${Math.min(searchOffset + 30, hits.length)} / ${hits.length}</span><button type="button" class="btn" data-note-search-step="30" ${searchOffset + 30 >= hits.length ? "disabled" : ""}>Next${icon("arrow-right")}</button></div>` : ""}`;
     }
 
     function open(topicId) {
         init();
-        if (topicId && topics.some(topic => topic.id === topicId)) { currentTopic = topicId; currentPage = 0; questionOffset = 0; }
+        if (topicId && topics.some(topic => topic.id === topicId)) { currentTopic = topicId; questionOffset = 0; }
         render();
     }
 
     function suspend() {
         serial++;
-        if ($("ceeSourceImageDialog")?.open) $("ceeSourceImageDialog").close();
     }
 
     window.CEE_STUDY = Object.freeze({ open, suspend, loadScript, loadDigital, loadBank, esc, icon, typeset, solution, sourceLink });

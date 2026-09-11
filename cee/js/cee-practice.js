@@ -433,5 +433,5 @@
         }
     }
 
-    window.CEE_PRACTICE = Object.freeze({ open, suspend, getSummary });
+    window.CEE_PRACTICE = Object.freeze({ open, suspend, getSummary, arrangeTopics });
 })();
