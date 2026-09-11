@@ -5,6 +5,33 @@
     const { esc, icon } = ui;
     const $ = id => document.getElementById(id);
     const format = value => Number(value).toLocaleString("en-US");
+    const syllabusTopics = {
+        Physics: [
+            ["dynamics", "rotation", "fluids", "circular-motion", "oscillations", "gravitation", "elasticity"],
+            ["thermal-physics"], ["wave-optics", "ray-optics"],
+            ["electricity", "alternating-current", "magnetism"], ["electrostatics"],
+            ["modern-physics", "semiconductors"]
+        ],
+        Chemistry: [
+            ["stoichiometry", "periodicity", "bonding", "gases", "solutions", "solid-state", "chemical-equilibrium", "kinetics", "electrochemistry", "thermochemistry"],
+            ["s-block", "p-block", "d-block"],
+            ["organic-basics", "hydrocarbons", "haloalkanes", "alcohols", "carbonyl", "carboxylic-acids", "amines", "organic-biomolecules"],
+            ["applied-chemistry", "polymers"], ["analytical-chemistry"]
+        ],
+        Zoology: [
+            ["evolution"], ["animal-diversity", "protozoa"], ["animal-tissues"],
+            ["plasmodium", "earthworm", "frog"],
+            ["digestion", "nutrition", "human-respiration", "circulation", "excretion", "nervous-system", "senses", "endocrine", "human-reproduction", "embryology", "skeleton"],
+            ["diseases"], ["applied-zoology"], ["adaptation"]
+        ],
+        Botany: [
+            ["biomolecules"], ["microbes", "fungi", "algae", "bryophytes", "pteridophytes", "gymnosperms", "flowering-plants"],
+            ["ecology"], ["cell-biology"], ["genetics"], ["plant-anatomy"],
+            ["plant-transport", "photosynthesis", "plant-respiration", "plant-growth", "plant-minerals"],
+            ["plant-reproduction"], ["biotechnology"]
+        ],
+        MAT: [["verbal-reasoning"], ["numerical-reasoning"], ["logical-reasoning"], ["spatial-reasoning"]]
+    };
     let store = core.freshStore();
     let readable = true;
     let initialized = false;
@@ -121,7 +148,7 @@
     function renderBuilder() {
         screen = "builder";
         document.body.classList.remove("cee-practicing");
-        const subjects = [...new Set(bank.topics.filter(topic => topic.count).map(topic => topic.subject))];
+        const subjects = [...new Set(arrangeTopics(bank.topics).filter(topic => topic.count).map(topic => topic.subject))];
         const summary = getSummary();
         const saved = bank.records.filter(item => store.bookmarks[item.id]).length;
         const covered = Math.min(summary.attempted, bank.records.length);
@@ -141,20 +168,52 @@
         updatePool();
     }
 
+    function arrangeTopics(topics) {
+        const placements = new Map();
+        const subjects = new Map();
+        CEE_SYLLABUS.subjects.forEach((entry, subjectIndex) => {
+            subjects.set(entry.name, subjectIndex);
+            entry.units.forEach((unit, unitIndex) => {
+                (syllabusTopics[entry.name]?.[unitIndex] || []).forEach((id, topicIndex) => {
+                    placements.set(id, { subjectIndex, unitIndex, topicIndex, title: unit.title, number: unit.n });
+                });
+            });
+        });
+        return topics.map((topic, topicIndex) => ({ ...topic, syllabus: placements.get(topic.id) || {
+            subjectIndex: subjects.get(topic.subject) ?? subjects.size,
+            unitIndex: Number.MAX_SAFE_INTEGER - (topic.id.endsWith("-mixed") ? 0 : 1),
+            topicIndex, title: topic.id.endsWith("-mixed") ? "Mixed topics" : "Additional topics", number: null
+        } })).sort((first, second) => first.syllabus.subjectIndex - second.syllabus.subjectIndex
+            || first.subject.localeCompare(second.subject) || first.syllabus.unitIndex - second.syllabus.unitIndex
+            || first.syllabus.topicIndex - second.syllabus.topicIndex);
+    }
+
     function availableTopics() {
         const needle = topicQuery.toLowerCase();
-        return bank.topics.filter(topic => topic.count && (subject === "all" || topic.subject === subject)
+        return arrangeTopics(bank.topics).filter(topic => topic.count && (subject === "all" || topic.subject === subject)
             && (source === "all" || bank.records.some(item => item.topicId === topic.id && item.origin === source))
-            && (topic.title + " " + topic.subject).toLowerCase().includes(needle));
+            && (topic.title + " " + topic.subject + " " + topic.syllabus.title).toLowerCase().includes(needle));
     }
 
     function renderTopics() {
         const visible = availableTopics();
         const topicProgress = new Map(core.summarizeProgress(store.progress, bank.topics).topics.map(topic => [topic.id, topic]));
+        let previousSubject = null;
+        let previousUnit = null;
         $("ceePracticeTopics").innerHTML = visible.length ? visible.map(topic => {
+            let headings = "";
+            if (topic.subject !== previousSubject) {
+                headings += `<h3 class="cee-topic-subject-heading">${esc(topic.subject)}</h3>`;
+                previousSubject = topic.subject;
+                previousUnit = null;
+            }
+            if (topic.syllabus.title !== previousUnit) {
+                headings += `<h4 class="cee-topic-unit-heading">${topic.syllabus.number == null ? "" : `<span>Unit ${topic.syllabus.number}</span>`}<span>${esc(topic.syllabus.title)}</span></h4>`;
+                previousUnit = topic.syllabus.title;
+            }
             const available = core.filterPool(bank.records, { topics: [topic.id], source, filter }, store).length;
             const progress = topicProgress.get(topic.id);
-            return `<label class="cee-topic-check"><input type="checkbox" data-practice-topic="${topic.id}" ${selected.has(topic.id) ? "checked" : ""} /><span><strong>${esc(topic.title)}</strong><small>${esc(topic.subject)}${progress ? " / " + progress.attempted + " attempted" : ""}</small>${progress ? `<span class="cee-topic-progress" aria-hidden="true"><span style="width:${Math.min(100, progress.correct / topic.count * 100)}%"></span><span style="width:${Math.min(100, progress.wrong / topic.count * 100)}%"></span></span>` : ""}</span><span class="cee-topic-count">${available}<small>questions</small></span></label>`;
+            return `${headings}<label class="cee-topic-check"><input type="checkbox" data-practice-topic="${topic.id}" ${selected.has(topic.id) ? "checked" : ""} /><span><strong>${esc(topic.title)}</strong><small>${esc(topic.subject)}${progress ? " / " + progress.attempted + " attempted" : ""}</small>${progress ? `<span class="cee-topic-progress" aria-hidden="true"><span style="width:${Math.min(100, progress.correct / topic.count * 100)}%"></span><span style="width:${Math.min(100, progress.wrong / topic.count * 100)}%"></span></span>` : ""}</span><span class="cee-topic-count">${available}<small>questions</small></span></label>`;
         }).join("") : '<p class="cee-study-status">No matching topics.</p>';
         $("ceePracticeSelected").textContent = selected.size + " topics selected";
     }
