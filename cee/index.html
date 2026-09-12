@@ -31,14 +31,14 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/styles.css?v=76" />
+    <link rel="stylesheet" href="css/styles.css?v=77" />
     
     
     
     
-    <link rel="stylesheet" href="css/ui-icons.css?v=76" />
-    <link rel="stylesheet" href="css/cee.css?v=76" />
-    <link rel="stylesheet" href="css/cee-study.css?v=76" />
+    <link rel="stylesheet" href="css/ui-icons.css?v=77" />
+    <link rel="stylesheet" href="css/cee.css?v=77" />
+    <link rel="stylesheet" href="css/cee-study.css?v=77" />
 
     <!-- PWA: installable app -->
     <link rel="manifest" href="manifest.webmanifest" />
@@ -193,12 +193,29 @@
                         </div>
                     </div>
                 </div>
+                <div class="cee-exam-navigation">
+                    <button type="button" class="btn cee-exam-remaining" id="ceeExamUnanswered" aria-haspopup="dialog" aria-controls="ceeExamNavigator" title="Unanswered questions"><span data-cee-icon="grid"></span><span>Unanswered</span><b id="ceeExamUnansweredCount">0</b></button>
+                    <button type="button" class="btn" id="ceeExamNextUnanswered"><span>Next unanswered</span><span data-cee-icon="arrow-right"></span></button>
+                </div>
                 <div class="test-progress"><span id="testProgressBar"></span></div>
             </div>
 
             <div class="quiz-panel">
                 <div class="questions" id="quizContainer"></div>
             </div>
+
+            <dialog id="ceeExamNavigator" class="cee-exam-dialog" aria-labelledby="ceeExamMapTitle" aria-describedby="ceeExamMapSummary">
+                <div class="cee-exam-map-heading"><h2 id="ceeExamMapTitle">Questions</h2><button type="button" class="cee-icon-button" id="ceeExamMapClose" aria-label="Close question navigator" title="Close"><span data-cee-icon="close"></span></button></div>
+                <p id="ceeExamMapSummary" class="cee-exam-map-summary" role="status" aria-live="polite"></p>
+                <fieldset id="ceeExamMapFilters" class="cee-exam-map-filters">
+                    <legend class="sr-only">Show questions</legend>
+                    <label><input type="radio" name="ceeExamMapFilter" value="unanswered" checked /><span>Unanswered</span></label>
+                    <label><input type="radio" name="ceeExamMapFilter" value="all" /><span>All questions</span></label>
+                </fieldset>
+                <div id="ceeExamQuestionMap" class="cee-exam-question-map" role="group" aria-label="Question numbers"></div>
+                <p id="ceeExamMapEmpty" class="cee-exam-map-empty" hidden>All questions answered.</p>
+                <div class="cee-exam-map-legend"><span><i aria-hidden="true"></i>Unanswered</span><span><span data-cee-icon="check"></span>Answered</span></div>
+            </dialog>
 
             <div class="submit-bar" id="submitBar">
                 <div class="sb-info">
@@ -423,44 +440,44 @@
         <p class="foot">Prakriti Subedi · CEE 2026 <span>Progress saved on this device</span></p>
     </main>
 
-    <script src="js/day18.js?v=76"></script>
-    <script src="js/day19.js?v=76"></script>
-    <script src="js/day20.js?v=76"></script>
-    <script src="js/day21.js?v=76"></script>
-    <script src="js/day22.js?v=76"></script>
-    <script src="js/day23.js?v=76"></script>
-    <script src="js/day24.js?v=76"></script>
-    <script src="js/day25.js?v=76"></script>
-    <script src="js/day26.js?v=76"></script>
-    <script src="js/day27.js?v=76"></script>
-    <script src="js/day28.js?v=76"></script>
-    <script src="js/day29.js?v=76"></script>
-    <script src="js/day30.js?v=76"></script>
-    <script src="js/day31.js?v=76"></script>
-    <script src="js/day32.js?v=76"></script>
-    <script src="js/day33.js?v=76"></script>
-    <script src="js/day34.js?v=76"></script>
-    <script src="js/day35.js?v=76"></script>
-    <script src="js/day36.js?v=76"></script>
-    <script src="js/day37.js?v=76"></script>
+    <script src="js/day18.js?v=77"></script>
+    <script src="js/day19.js?v=77"></script>
+    <script src="js/day20.js?v=77"></script>
+    <script src="js/day21.js?v=77"></script>
+    <script src="js/day22.js?v=77"></script>
+    <script src="js/day23.js?v=77"></script>
+    <script src="js/day24.js?v=77"></script>
+    <script src="js/day25.js?v=77"></script>
+    <script src="js/day26.js?v=77"></script>
+    <script src="js/day27.js?v=77"></script>
+    <script src="js/day28.js?v=77"></script>
+    <script src="js/day29.js?v=77"></script>
+    <script src="js/day30.js?v=77"></script>
+    <script src="js/day31.js?v=77"></script>
+    <script src="js/day32.js?v=77"></script>
+    <script src="js/day33.js?v=77"></script>
+    <script src="js/day34.js?v=77"></script>
+    <script src="js/day35.js?v=77"></script>
+    <script src="js/day36.js?v=77"></script>
+    <script src="js/day37.js?v=77"></script>
     
-    <script src="js/syllabus.js?v=76"></script>
-    <script src="js/questions.js?v=76"></script>
-    <script src="js/ui-icons.js?v=76"></script>
-    <script src="js/cee-study-catalog.js?v=76"></script>
-    <script src="js/cee-study-core.js?v=76"></script>
-    <script src="js/cee-study.js?v=76"></script>
-    <script src="js/cee-practice.js?v=76"></script>
-    <script src="js/app.js?v=76"></script>
-    <script src="js/omr.js?v=76"></script>
-    
-    
+    <script src="js/syllabus.js?v=77"></script>
+    <script src="js/questions.js?v=77"></script>
+    <script src="js/ui-icons.js?v=77"></script>
+    <script src="js/cee-study-catalog.js?v=77"></script>
+    <script src="js/cee-study-core.js?v=77"></script>
+    <script src="js/cee-study.js?v=77"></script>
+    <script src="js/cee-practice.js?v=77"></script>
+    <script src="js/app.js?v=77"></script>
+    <script src="js/omr.js?v=77"></script>
     
     
     
     
     
-    <script src="js/install-app.js?v=76"></script>
+    
+    
+    <script src="js/install-app.js?v=77"></script>
 </body>
 
 </html>

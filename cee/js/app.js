@@ -175,6 +175,7 @@
     let currentView = "dashboard";
 
     function showView(name) {
+        if (name !== "test" && $("ceeExamNavigator")?.open) $("ceeExamNavigator").close();
         if (name !== "notes") window.CEE_STUDY?.suspend();
         if (name !== "practice") window.CEE_PRACTICE?.suspend();
         currentView = name;
@@ -430,6 +431,9 @@
         const ans = curState().answers;
         const card = el("div", "question");
         card.dataset.id = q.id;
+        card.tabIndex = -1;
+        card.setAttribute("role", "group");
+        card.setAttribute("aria-label", `Question ${no}, ${ch.subject}`);
 
         const top = el("div", "q-top");
         top.appendChild(el("div", "q-no", String(no)));
@@ -466,8 +470,74 @@
         updateTestProgress();
     }
 
+    let examJump = null;
+
+    function jumpToExamQuestion(index) {
+        if (currentView !== "test" || curState().submitted) return;
+        const card = $("quizContainer").children[index];
+        if (!card) return;
+        if ($("ceeExamNavigator")?.open) $("ceeExamNavigator").close();
+        const header = $("testView").querySelector(".exam-bar");
+        const offset = header.getBoundingClientRect().height + 12;
+        card.focus({ preventScroll: true });
+        window.scrollTo({ top: Math.max(0, window.scrollY + card.getBoundingClientRect().top - offset), behavior: "instant" });
+        examJump = { index, scrollY: window.scrollY };
+    }
+
+    function nextUnanswered() {
+        if (currentView !== "test" || curState().submitted || !examOrder.length) return;
+        const answers = curState().answers;
+        const cards = $("quizContainer").children;
+        const edge = $("testView").querySelector(".exam-bar").getBoundingClientRect().bottom + 13;
+        let current = -1;
+        for (let index = 0; index < cards.length; index++) {
+            if (cards[index].getBoundingClientRect().top > edge) break;
+            current = index;
+        }
+        if (examJump && Math.abs(window.scrollY - examJump.scrollY) <= 1) current = examJump.index;
+        for (let step = 1; step <= examOrder.length; step++) {
+            const index = (current + step) % examOrder.length;
+            if (answers[examOrder[index].q.id] == null) {
+                jumpToExamQuestion(index);
+                return;
+            }
+        }
+    }
+
+    function renderExamNavigator() {
+        const answers = curState().answers;
+        const filter = $("ceeExamMapFilters").querySelector("input:checked").value;
+        const grid = $("ceeExamQuestionMap");
+        grid.replaceChildren();
+        let remaining = 0;
+        examOrder.forEach((item, index) => {
+            const answered = answers[item.q.id] != null;
+            if (!answered) remaining++;
+            if (filter === "unanswered" && answered) return;
+            const button = el("button", "cee-exam-map-question");
+            button.type = "button";
+            button.dataset.examIndex = index;
+            button.dataset.status = answered ? "answered" : "unanswered";
+            button.setAttribute("aria-label", `Question ${index + 1}, ${item.ch.subject}, ${answered ? "answered" : "unanswered"}`);
+            button.innerHTML = `<span>${index + 1}</span>${answered ? uiIcon("check") : ""}`;
+            grid.appendChild(button);
+        });
+        $("ceeExamMapSummary").textContent = `${remaining} unanswered / ${examOrder.length} questions`;
+        $("ceeExamMapEmpty").hidden = filter !== "unanswered" || remaining > 0;
+    }
+
+    function openExamNavigator() {
+        if (currentView !== "test" || curState().submitted) return;
+        $("ceeExamMapFilters").querySelector("input[value='unanswered']").checked = true;
+        renderExamNavigator();
+        $("ceeExamNavigator").showModal();
+        $("ceeExamQuestionMap").scrollTop = 0;
+        ($("ceeExamQuestionMap").querySelector("button") || $("ceeExamMapClose")).focus({ preventScroll: true });
+    }
+
     function renderTest() {
         const day = curDayObj();
+        examJump = null;
         $("testTitle").textContent = day.title + " \u00B7 " + day.subtitle;
         const badge = day.badge || { top: "Day", main: day.day };
         $("testDayLabel").textContent = badge.top;
@@ -492,6 +562,10 @@
         $("sbCount").textContent = `${answered} / ${total} answered`;
 
         const remaining = total - answered;
+        $("ceeExamUnansweredCount").textContent = remaining;
+        $("ceeExamNextUnanswered").disabled = remaining === 0;
+        $("ceeExamUnanswered").setAttribute("aria-label", `Show ${remaining} unanswered questions`);
+        if ($("ceeExamNavigator").open) renderExamNavigator();
         const hint = $("sbHint");
         if (submitArmed && remaining > 0) {
             hint.textContent = `${remaining} unanswered \u2014 tap Submit again to finish.`;
@@ -1107,6 +1181,17 @@
         $("backFromResults").addEventListener("click", () => openPapers());
         $("toDashboardBtn").addEventListener("click", backToDashboard);
         $("submitBtn").addEventListener("click", attemptSubmit);
+        $("ceeExamNextUnanswered").addEventListener("click", nextUnanswered);
+        $("ceeExamUnanswered").addEventListener("click", openExamNavigator);
+        $("ceeExamMapClose").addEventListener("click", () => $("ceeExamNavigator").close());
+        $("ceeExamMapFilters").addEventListener("change", renderExamNavigator);
+        $("ceeExamQuestionMap").addEventListener("click", event => {
+            const button = event.target.closest("button[data-exam-index]");
+            if (button) jumpToExamQuestion(Number(button.dataset.examIndex));
+        });
+        $("ceeExamNavigator").addEventListener("keydown", event => {
+            if (event.key === "Escape") { event.preventDefault(); $("ceeExamNavigator").close(); }
+        });
         $("retakeBtn").addEventListener("click", retake);
         $("syllabusOpenBtn").addEventListener("click", openSyllabus);
         $("syllabusBack").addEventListener("click", backToDashboard);
