@@ -219,6 +219,13 @@
         scrollToEl($("papersView"));
     }
 
+    function openPaperPractice(dayNumber) {
+        leaveScanner();
+        showView("practice");
+        window.CEE_PRACTICE.openPaper(dayNumber);
+        scrollToEl($("ceePracticeView"));
+    }
+
     function openDay(n) {
         state.activeDay = n;
         state.filter = "all";
@@ -371,8 +378,9 @@
             <h2>${day.subtitle}</h2>
             <div class="cee-paper-subjects">${Array.from(subjects, ([name, count]) => `<span data-subject="${name}">${name}<b>${count}</b></span>`).join("")}</div>
             <div class="cee-paper-progress">${status === "done" ? `<span>Net marks</span><b>${fmt(dayMarks(day, record.answers))}<small> / ${total}</small></b>` : `<span>${answered} / ${total} answered</span><div class="dc-bar" role="progressbar" aria-label="${dayTag(day)} answered" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${answered}"><span style="width:${answered / total * 100}%"></span></div>`}</div>
-            <div class="dc-foot"><div class="dc-meta"><span>${total} questions</span><span>${dayDurationMs(day) / 60000} min</span></div><button type="button" class="cee-open-paper" aria-label="${action} ${dayTag(day)}">${action}${uiIcon("arrow-right")}</button></div>`;
+            <div class="dc-foot"><div class="dc-meta"><span>${total} questions</span><span>${dayDurationMs(day) / 60000} min exam</span></div><div class="cee-paper-actions" role="group" aria-label="${dayTag(day)} modes"><button type="button" class="cee-practice-paper" aria-label="Practice ${dayTag(day)}">${uiIcon("check")}Practice</button><button type="button" class="cee-open-paper" aria-label="${action} ${dayTag(day)}">${action} exam${uiIcon("arrow-right")}</button></div></div>`;
             card.querySelector(".cee-open-paper").addEventListener("click", () => openDay(day.day));
+            card.querySelector(".cee-practice-paper").addEventListener("click", () => openPaperPractice(day.day));
             card.querySelector(".dc-scan").addEventListener("click", () => {
                 if (window.CEE_OMR) window.CEE_OMR.open(day.day);
             });
@@ -1041,6 +1049,7 @@
        ============================================================ */
     window.CEE_APP = {
         openStudy,
+        openPapers,
         openOmr() {
             showView("omr");
             scrollToEl($("omrView"));

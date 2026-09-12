@@ -876,6 +876,8 @@ body[data-app="cee"] .dc-bar > span {
 }
 
 body[data-app="cee"] .dc-foot {
+    flex-direction: column;
+    align-items: stretch;
     padding-top: 14px;
     margin-top: 12px;
     gap: 12px;
@@ -884,19 +886,26 @@ body[data-app="cee"] .dc-foot {
 
 body[data-app="cee"] .dc-meta {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
     color: var(--ink-soft);
     font-size: 10px;
 }
 
-body[data-app="cee"] .cee-open-paper {
+body[data-app="cee"] .cee-paper-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+body[data-app="cee"] :is(.cee-open-paper, .cee-practice-paper) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    min-height: 38px;
+    gap: 8px;
+    min-width: 0;
+    min-height: 42px;
     padding: 8px 12px;
     border: 0;
     border-radius: 5px;
@@ -904,6 +913,7 @@ body[data-app="cee"] .cee-open-paper {
     color: var(--brand-600);
     font-size: 11px;
     font-weight: 700;
+    line-height: 1.35;
     cursor: pointer;
 }
 
@@ -911,9 +921,24 @@ body[data-app="cee"] .cee-open-paper:hover {
     background: #dbeafb;
 }
 
-body[data-app="cee"] .cee-open-paper svg {
+body[data-app="cee"] .cee-practice-paper {
+    background: #e7f4ec;
+    color: #196645;
+}
+
+body[data-app="cee"] .cee-practice-paper:hover {
+    background: #d5ecdf;
+}
+
+body[data-app="cee"] :is(.cee-open-paper, .cee-practice-paper):focus-visible {
+    outline: 2px solid var(--brand-600);
+    outline-offset: 3px;
+}
+
+body[data-app="cee"] :is(.cee-open-paper, .cee-practice-paper) svg {
     width: 16px;
     height: 16px;
+    flex: 0 0 16px;
 }
 
 body[data-app="cee"] .cee-empty {
