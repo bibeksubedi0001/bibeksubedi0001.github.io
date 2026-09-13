@@ -6,6 +6,7 @@
     const slug = value => plain(value).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     const validObject = value => value && typeof value === "object" && !Array.isArray(value);
     const has = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+    const validProgress = record => validObject(record) && typeof record.correct === "boolean" && /^[abcd]$/.test(record.answer || "");
 
     function matchScore(value, topic) {
         const text = " " + plain(value).toLowerCase().replace(/[^a-z0-9]+/g, " ") + " ";
@@ -115,7 +116,7 @@
         const mixedSubjects = { "physics-mixed": "Physics", "chemistry-mixed": "Chemistry", "botany-mixed": "Botany",
             "zoology-mixed": "Zoology", "mat-mixed": "MAT", "mathematics-mixed": "Mathematics" };
         for (const record of Object.values(validObject(progress) ? progress : {})) {
-            if (!validObject(record) || typeof record.correct !== "boolean" || !/^[abcd]$/.test(record.answer || "")) continue;
+            if (!validProgress(record)) continue;
             const name = topicMap.get(record.topicId)?.subject || mixedSubjects[record.topicId] || "Other";
             const topicId = typeof record.topicId === "string" ? record.topicId : "unknown";
             if (!subjectTotals.has(name)) subjectTotals.set(name, { name, attempted: 0, correct: 0, wrong: 0 });
@@ -130,6 +131,48 @@
         summary.subjects = [...subjectTotals.values()];
         summary.topics = [...topicTotals.values()];
         return summary;
+    }
+
+    function summarizePaperProgress(days, progress, topics = []) {
+        const records = validObject(progress) ? progress : {};
+        const topicMap = new Map(topics.map(topic => [topic.id, topic]));
+        const aliases = { Logical: "MAT", Quantitative: "MAT", Analytical: "MAT", "Non-verbal": "MAT" };
+        const counts = () => ({ attempted: 0, correct: 0, wrong: 0, accuracy: 0, netMarks: 0 });
+        const complete = entry => {
+            entry.accuracy = entry.attempted ? Math.round(entry.correct / entry.attempted * 100) : 0;
+            entry.netMarks = entry.correct - entry.wrong * 0.25;
+            return entry;
+        };
+        return days.map(day => {
+            const summary = { day: day.day, total: 0, ...counts(), updatedAt: 0, subjects: [] };
+            const subjects = new Map();
+            const mappedSubjects = new Map();
+            for (const subject of day.syllabus || []) for (const topic of subject.topics || []) {
+                for (const subtopic of topic.subs || []) for (const id of subtopic.ids || []) mappedSubjects.set(id, subject.subject);
+            }
+            for (const chapter of day.chapters) for (const question of chapter.questions) {
+                const rawSubject = mappedSubjects.get(question.id) || chapter.subject || "Other";
+                const name = aliases[rawSubject] || rawSubject;
+                if (!subjects.has(name)) subjects.set(name, { name, total: 0, ...counts(), topics: new Map() });
+                const subject = subjects.get(name);
+                summary.total++;
+                subject.total++;
+                const record = records[`day-${day.day}:${question.id}`];
+                if (!validProgress(record) || !question.options.some(option => option.key === record.answer)) continue;
+                const topicId = typeof record.topicId === "string" ? record.topicId : slug(name) + "-mixed";
+                if (!subject.topics.has(topicId)) subject.topics.set(topicId, {
+                    id: topicId, title: topicMap.get(topicId)?.title || "Mixed " + name.toLowerCase(), subject: name, ...counts()
+                });
+                for (const total of [summary, subject, subject.topics.get(topicId)]) {
+                    total.attempted++;
+                    if (record.correct) total.correct++;
+                    else total.wrong++;
+                }
+                if (Number.isFinite(record.updatedAt)) summary.updatedAt = Math.max(summary.updatedAt, record.updatedAt);
+            }
+            summary.subjects = [...subjects.values()].map(subject => ({ ...complete(subject), topics: [...subject.topics.values()].map(complete) }));
+            return complete(summary);
+        });
     }
 
     function restore(raw) {
@@ -167,21 +210,27 @@
     }
 
     function grade(items, answers) {
-        const summary = { total: items.length, correct: 0, wrong: 0, skipped: 0, answered: 0, accuracy: 0, netMarks: 0, topics: [] };
+        const summary = { total: items.length, correct: 0, wrong: 0, skipped: 0, answered: 0, accuracy: 0, netMarks: 0, topics: [], subjects: [] };
         const topics = new Map();
+        const subjects = new Map();
         for (const item of items) {
             if (!topics.has(item.topicId)) topics.set(item.topicId, { id: item.topicId, title: item.topicTitle, total: 0, correct: 0, wrong: 0, skipped: 0 });
             const topic = topics.get(item.topicId);
-            topic.total++;
+            const name = item.subject || "Other";
+            if (!subjects.has(name)) subjects.set(name, { name, total: 0, correct: 0, wrong: 0, skipped: 0, answered: 0, accuracy: 0, netMarks: 0 });
+            const subject = subjects.get(name);
             const key = answers[item.id];
-            if (!item.q.options.some(option => option.key === key)) { summary.skipped++; topic.skipped++; }
-            else if (key === item.q.answer) { summary.correct++; topic.correct++; }
-            else { summary.wrong++; topic.wrong++; }
+            const result = !item.q.options.some(option => option.key === key) ? "skipped" : key === item.q.answer ? "correct" : "wrong";
+            summary[result]++;
+            for (const group of [topic, subject]) { group.total++; group[result]++; }
         }
         summary.answered = summary.correct + summary.wrong;
         summary.accuracy = summary.answered ? Math.round(summary.correct / summary.answered * 100) : 0;
         summary.netMarks = summary.correct - summary.wrong * 0.25;
         summary.topics = [...topics.values()];
+        summary.subjects = [...subjects.values()].map(subject => ({ ...subject, answered: subject.correct + subject.wrong,
+            accuracy: subject.correct + subject.wrong ? Math.round(subject.correct / (subject.correct + subject.wrong) * 100) : 0,
+            netMarks: subject.correct - subject.wrong * 0.25 }));
         return summary;
     }
 
@@ -195,5 +244,5 @@
         return true;
     }
 
-    window.CEE_STUDY_CORE = Object.freeze({ STORE_KEY, plain, createBank, filterPool, sample, freshStore, summarizeProgress, restore, createRun, answer, grade, finish });
+    window.CEE_STUDY_CORE = Object.freeze({ STORE_KEY, plain, createBank, filterPool, sample, freshStore, summarizeProgress, summarizePaperProgress, restore, createRun, answer, grade, finish });
 })();

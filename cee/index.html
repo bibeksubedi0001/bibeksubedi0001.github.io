@@ -31,14 +31,14 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/styles.css?v=77" />
+    <link rel="stylesheet" href="css/styles.css?v=78" />
     
     
     
     
-    <link rel="stylesheet" href="css/ui-icons.css?v=77" />
-    <link rel="stylesheet" href="css/cee.css?v=77" />
-    <link rel="stylesheet" href="css/cee-study.css?v=77" />
+    <link rel="stylesheet" href="css/ui-icons.css?v=78" />
+    <link rel="stylesheet" href="css/cee.css?v=78" />
+    <link rel="stylesheet" href="css/cee-study.css?v=78" />
 
     <!-- PWA: installable app -->
     <link rel="manifest" href="manifest.webmanifest" />
@@ -104,18 +104,18 @@
                 <span class="cee-session-label"><span class="cee-status-dot"></span>CEE 2026</span>
             </div>
             <dl class="cee-stats cee-answer-stats" aria-label="Paper and practice performance">
-                <div><dt><span data-cee-icon="clipboard"></span>Attempted</dt><dd id="statAtt">0</dd><span class="cee-stat-detail">Papers + practice</span></div>
+                <div><dt><span data-cee-icon="clipboard"></span>Attempted</dt><dd id="statAtt">0</dd><span class="cee-stat-detail">Exams + practice</span></div>
                 <div><dt><span data-cee-icon="check"></span>Correct</dt><dd id="statCorrect">0</dd><span class="cee-stat-detail">Correct answers</span></div>
                 <div><dt><span data-cee-icon="close"></span>Incorrect</dt><dd id="statWrong">0</dd><span class="cee-stat-detail">Answers to revisit</span></div>
                 <div><dt><span data-cee-icon="grid"></span>Accuracy</dt><dd id="statAcc">&mdash;</dd><span class="cee-stat-detail">Correct / attempted</span></div>
             </dl>
             <section class="cee-answer-overview" aria-labelledby="ceeAnswersHeading">
-                <div class="cee-answer-overview-heading"><h2 id="ceeAnswersHeading">Answer overview</h2><span>Submitted papers + latest practice answers</span></div>
+                <div class="cee-answer-overview-heading"><h2 id="ceeAnswersHeading">Answer overview</h2><span>Submitted exams + latest practice answers</span></div>
                 <div id="ceeAnswerTrack" class="cee-answer-track" role="img" aria-label="No answers yet"><span id="ceeAnswerCorrectBar"></span><span id="ceeAnswerWrongBar"></span></div>
-                <table class="cee-answer-breakdown"><caption class="sr-only">Attempted, correct and incorrect answers by source</caption><thead><tr><th scope="col">Source</th><th scope="col">Attempted</th><th scope="col">Correct</th><th scope="col">Incorrect</th></tr></thead><tbody><tr><th scope="row">Completed papers</th><td id="ceePaperAttempted">0</td><td id="ceePaperCorrect">0</td><td id="ceePaperWrong">0</td></tr><tr><th scope="row">Practice<small>Latest answer per question</small></th><td id="ceePracticeAttempted">0</td><td id="ceePracticeCorrect">0</td><td id="ceePracticeWrong">0</td></tr></tbody></table>
+                <table class="cee-answer-breakdown"><caption class="sr-only">Attempted, correct and incorrect answers by source</caption><thead><tr><th scope="col">Source</th><th scope="col">Attempted</th><th scope="col">Correct</th><th scope="col">Incorrect</th></tr></thead><tbody><tr><th scope="row">Completed exams</th><td id="ceePaperAttempted">0</td><td id="ceePaperCorrect">0</td><td id="ceePaperWrong">0</td></tr><tr><th scope="row">Practice<small>Latest answer per question</small></th><td id="ceePracticeAttempted">0</td><td id="ceePracticeCorrect">0</td><td id="ceePracticeWrong">0</td></tr></tbody></table>
                 <p id="ceePracticeStatsNotice" class="cee-study-status" role="status" hidden>Practice progress could not be read. Paper results are still available.</p>
             </section>
-            <dl class="cee-paper-summary" aria-label="Submitted paper statistics"><div><dt>Completed papers</dt><dd id="statDone">0</dd><span class="cee-stat-track" id="ceeCompletionTrack" role="progressbar" aria-label="Papers completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="ceeCompletionBar"></span></span></div><div><dt>Paper net marks</dt><dd id="statScore">&mdash;</dd><span class="cee-stat-detail">After negative marking</span></div></dl>
+            <dl class="cee-paper-summary" aria-label="Exam and paper practice statistics"><div><dt>Completed exams</dt><dd id="statDone">0</dd><span class="cee-stat-track" id="ceeCompletionTrack" role="progressbar" aria-label="Exams completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="ceeCompletionBar"></span></span></div><div><dt>Exam net marks</dt><dd id="statScore">&mdash;</dd><span class="cee-stat-detail">After negative marking</span></div><div><dt>Papers practised</dt><dd id="statPractisedPapers">0</dd></div></dl>
             <section class="cee-next" aria-labelledby="ceeNextTitle">
                 <span class="cee-next-mark" data-cee-icon="clipboard"></span>
                 <div class="cee-next-copy"><span class="cee-overline" id="ceeNextStatus">Latest paper</span><h2 id="ceeNextTitle"></h2><p id="ceeNextMeta"></p></div>
@@ -125,7 +125,7 @@
             <dialog id="ceeOfflineDialog" class="cee-offline-dialog" aria-labelledby="ceeOfflineTitle"><div class="cee-dialog-bar"><h2 id="ceeOfflineTitle">Offline library</h2><button type="button" class="cee-icon-button" id="ceeOfflineClose" aria-label="Close offline library" title="Close"><span data-cee-icon="close"></span></button></div><dl class="cee-offline-meta"><div><dt>Contents</dt><dd>Papers, practice and typed notes</dd></div><div><dt>Note topics</dt><dd>75</dd></div><div><dt>Storage estimate</dt><dd>About 15 MB</dd></div><div><dt>Connection</dt><dd id="ceeOfflineConnection"></dd></div></dl><p id="ceeOfflineStatus" role="status" aria-live="polite">Checking offline storage...</p><progress id="ceeOfflineProgress" max="1" value="0" aria-label="Offline download progress" hidden></progress><div class="cee-dialog-actions"><button type="button" class="btn" id="ceeOfflineCancel" hidden><span data-cee-icon="close"></span>Cancel download</button><button type="button" class="btn-primary" id="ceeOfflineSave" disabled><span data-cee-icon="library"></span><span>Download all</span></button></div></dialog>
             <div class="cee-performance">
                 <section class="cee-panel cee-trend" aria-labelledby="ceeProgressTitle">
-                    <div class="cee-section-heading"><h2 id="ceeProgressTitle">Score trend</h2><span class="cee-legend"><span></span>Net score (%)</span></div>
+                    <div class="cee-section-heading"><h2 id="ceeProgressTitle">Paper score trend</h2><span class="cee-score-legend"><span><i class="exam"></i>Exam</span><span><i class="practice"></i>Practice</span></span></div>
                     <div class="chart-wrap">
                         <canvas id="progressChart" aria-label="Daily net scores as a percentage" role="img"></canvas>
                         <div id="ceeChartEmpty" class="cee-chart-empty"><span data-cee-icon="clipboard"></span><span id="ceeChartMessage">No completed papers yet</span></div>
@@ -440,44 +440,44 @@
         <p class="foot">Prakriti Subedi · CEE 2026 <span>Progress saved on this device</span></p>
     </main>
 
-    <script src="js/day18.js?v=77"></script>
-    <script src="js/day19.js?v=77"></script>
-    <script src="js/day20.js?v=77"></script>
-    <script src="js/day21.js?v=77"></script>
-    <script src="js/day22.js?v=77"></script>
-    <script src="js/day23.js?v=77"></script>
-    <script src="js/day24.js?v=77"></script>
-    <script src="js/day25.js?v=77"></script>
-    <script src="js/day26.js?v=77"></script>
-    <script src="js/day27.js?v=77"></script>
-    <script src="js/day28.js?v=77"></script>
-    <script src="js/day29.js?v=77"></script>
-    <script src="js/day30.js?v=77"></script>
-    <script src="js/day31.js?v=77"></script>
-    <script src="js/day32.js?v=77"></script>
-    <script src="js/day33.js?v=77"></script>
-    <script src="js/day34.js?v=77"></script>
-    <script src="js/day35.js?v=77"></script>
-    <script src="js/day36.js?v=77"></script>
-    <script src="js/day37.js?v=77"></script>
+    <script src="js/day18.js?v=78"></script>
+    <script src="js/day19.js?v=78"></script>
+    <script src="js/day20.js?v=78"></script>
+    <script src="js/day21.js?v=78"></script>
+    <script src="js/day22.js?v=78"></script>
+    <script src="js/day23.js?v=78"></script>
+    <script src="js/day24.js?v=78"></script>
+    <script src="js/day25.js?v=78"></script>
+    <script src="js/day26.js?v=78"></script>
+    <script src="js/day27.js?v=78"></script>
+    <script src="js/day28.js?v=78"></script>
+    <script src="js/day29.js?v=78"></script>
+    <script src="js/day30.js?v=78"></script>
+    <script src="js/day31.js?v=78"></script>
+    <script src="js/day32.js?v=78"></script>
+    <script src="js/day33.js?v=78"></script>
+    <script src="js/day34.js?v=78"></script>
+    <script src="js/day35.js?v=78"></script>
+    <script src="js/day36.js?v=78"></script>
+    <script src="js/day37.js?v=78"></script>
     
-    <script src="js/syllabus.js?v=77"></script>
-    <script src="js/questions.js?v=77"></script>
-    <script src="js/ui-icons.js?v=77"></script>
-    <script src="js/cee-study-catalog.js?v=77"></script>
-    <script src="js/cee-study-core.js?v=77"></script>
-    <script src="js/cee-study.js?v=77"></script>
-    <script src="js/cee-practice.js?v=77"></script>
-    <script src="js/app.js?v=77"></script>
-    <script src="js/omr.js?v=77"></script>
-    
-    
+    <script src="js/syllabus.js?v=78"></script>
+    <script src="js/questions.js?v=78"></script>
+    <script src="js/ui-icons.js?v=78"></script>
+    <script src="js/cee-study-catalog.js?v=78"></script>
+    <script src="js/cee-study-core.js?v=78"></script>
+    <script src="js/cee-study.js?v=78"></script>
+    <script src="js/cee-practice.js?v=78"></script>
+    <script src="js/app.js?v=78"></script>
+    <script src="js/omr.js?v=78"></script>
     
     
     
     
     
-    <script src="js/install-app.js?v=77"></script>
+    
+    
+    <script src="js/install-app.js?v=78"></script>
 </body>
 
 </html>

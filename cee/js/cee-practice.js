@@ -65,9 +65,12 @@
     function getSummary() {
         try {
             const data = initialized ? store : core.restore(localStorage.getItem(core.STORE_KEY));
-            return { ...core.summarizeProgress(data.progress, window.CEE_STUDY_CATALOG.topics), available: true };
+            const topics = window.CEE_STUDY_CATALOG.topics;
+            return { ...core.summarizeProgress(data.progress, topics),
+                papers: core.summarizePaperProgress(typeof DAYS === "undefined" ? [] : DAYS, data.progress, topics),
+                draftPaperDay: data.draft?.settings?.paperDay ?? null, available: readable };
         } catch {
-            return { ...core.summarizeProgress({}), available: false };
+            return { ...core.summarizeProgress({}), papers: [], draftPaperDay: null, available: false };
         }
     }
 
@@ -443,6 +446,7 @@
         let items;
         try { items = runItems(active); } catch (error) { notify(error.message); renderBuilder(); return; }
         const summary = active.summary || core.grade(items, active.answers);
+        const subjects = summary.subjects || core.grade(items, active.answers).subjects;
         const filtered = items.filter(item => {
             const picked = active.answers[item.id];
             if (reviewFilter === "wrong") return picked != null && picked !== item.q.answer;
@@ -454,6 +458,7 @@
         const title = paperTitle(active);
         $("ceePracticeBody").innerHTML = `<div class="cee-page-heading"><div><h1>${title ? esc(title) + " practice results" : "Practice results"}</h1><p>${format(summary.total)} questions</p></div><button type="button" class="btn" data-practice-action="${title ? "papers" : "builder"}">${icon("arrow-left")}${title ? "Papers" : "Practice"}</button></div><dl class="cee-practice-stats cee-result-stats"><div><dt>Correct</dt><dd>${summary.correct}</dd></div><div><dt>Incorrect</dt><dd>${summary.wrong}</dd></div><div><dt>Skipped</dt><dd>${summary.skipped}</dd></div><div><dt>CEE net marks</dt><dd>${summary.netMarks}<small> / ${summary.total}</small></dd></div></dl><p class="cee-study-status">+1 correct / -0.25 incorrect / 0 skipped</p>
             <div class="cee-results-actions"><button type="button" class="btn-primary" data-practice-action="retry-wrong" ${summary.wrong ? "" : "disabled"}>Retry incorrect${icon("arrow-right")}</button><label>Review<select id="ceePracticeReviewFilter"><option value="all">All questions</option><option value="wrong">Incorrect</option><option value="skipped">Skipped</option><option value="saved">Saved</option></select></label></div>
+            <section class="cee-topic-results cee-practice-subject-results"><h2>By subject</h2>${subjects.map(subject => `<div data-practice-subject-result="${esc(subject.name)}" data-correct="${subject.correct}" data-wrong="${subject.wrong}" data-attempted="${subject.answered}"><span>${esc(subject.name)}<small>${subject.answered} / ${subject.total} attempted</small></span><span>${subject.correct} correct<small>${subject.wrong} incorrect / ${subject.skipped} skipped</small></span><progress max="${subject.total}" value="${subject.correct}" aria-label="${esc(subject.name)} correct"></progress></div>`).join("")}</section>
             <section class="cee-topic-results"><h2>By topic</h2>${summary.topics.map(topic => `<div><span>${esc(topic.title)}</span><span>${topic.correct} / ${topic.total}</span><progress max="${topic.total}" value="${topic.correct}" aria-label="${esc(topic.title)} correct"></progress></div>`).join("")}</section>
             <section class="cee-practice-review"><h2>Question review</h2>${filtered.slice(reviewPage * 10, reviewPage * 10 + 10).map(item => `<article class="cee-source-mcq"><header><span>${esc(item.sourceLabel)}</span><button type="button" class="cee-icon-button" data-practice-save="${esc(item.id)}" aria-pressed="${!!store.bookmarks[item.id]}" title="Save question" aria-label="Save question">${icon("bookmark")}</button></header><div class="cee-question-text">${item.q.text}</div><ol class="cee-review-options" type="a">${item.q.options.map(option => `<li class="${option.key === item.q.answer ? "is-correct" : active.answers[item.id] === option.key ? "is-wrong" : ""}">${option.text}${option.key === item.q.answer ? icon("check") : active.answers[item.id] === option.key ? icon("close") : ""}</li>`).join("")}</ol>${ui.solution(item, active.answers[item.id])}</article>`).join("") || '<p class="cee-study-status">No questions in this review filter.</p>'}</section>
             ${filtered.length > 10 ? `<div class="cee-page-controls"><button type="button" class="btn" data-practice-action="review-previous" ${reviewPage ? "" : "disabled"}>${icon("arrow-left")}Previous</button><span>${reviewPage * 10 + 1}-${Math.min(reviewPage * 10 + 10, filtered.length)} / ${filtered.length}</span><button type="button" class="btn" data-practice-action="review-next" ${reviewPage * 10 + 10 >= filtered.length ? "disabled" : ""}>Next${icon("arrow-right")}</button></div>` : ""}`;

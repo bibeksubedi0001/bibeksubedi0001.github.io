@@ -341,6 +341,16 @@
         return { done: "Review", progress: "Resume", new: "Start" }[status];
     }
 
+    function paperPracticeStats(paper, total, available) {
+        if (!available) return '<span class="muted">Progress unavailable</span>';
+        return `<b>${paper?.attempted || 0} / ${total} attempted</b><small>${paper?.correct || 0} correct &middot; ${paper?.wrong || 0} incorrect${paper?.attempted ? ` &middot; ${paper.accuracy}% accuracy` : ""}</small>`;
+    }
+
+    function paperPracticeBreakdown(paper) {
+        const esc = window.CEE_STUDY.esc;
+        return (paper?.subjects || []).map(subject => `<section class="cee-paper-subject-progress" data-paper-subject="${esc(subject.name)}" data-attempted="${subject.attempted}" data-correct="${subject.correct}" data-wrong="${subject.wrong}"><div class="cee-paper-subject-heading"><h4>${esc(subject.name)}</h4><span>${subject.attempted} / ${subject.total} attempted</span></div><p>${subject.correct} correct &middot; ${subject.wrong} incorrect${subject.attempted ? ` &middot; ${subject.accuracy}% accuracy` : ""}</p>${subject.topics.length ? `<dl>${window.CEE_PRACTICE.arrangeTopics(subject.topics).map(topic => `<div data-paper-topic="${esc(topic.id)}" data-attempted="${topic.attempted}" data-correct="${topic.correct}" data-wrong="${topic.wrong}"><dt>${esc(topic.title)}</dt><dd>${topic.attempted} attempted<small>${topic.correct} correct &middot; ${topic.wrong} incorrect</small></dd></div>`).join("")}</dl>` : ""}</section>`).join("");
+    }
+
     function visiblePapers() {
         const search = paperQuery.toLowerCase().trim();
         return DAYS.filter(day => {
@@ -354,6 +364,8 @@
         const grid = $("modulesGrid");
         grid.replaceChildren();
         const papers = visiblePapers();
+        const practice = window.CEE_PRACTICE.getSummary();
+        const practised = new Map(practice.papers.map(paper => [paper.day, paper]));
         $("ceePaperInventory").textContent = `${DAYS.length} papers in your study plan`;
         $("ceePapersCount").textContent = `${papers.length} of ${DAYS.length} papers`;
         $("ceePapersEmpty").hidden = papers.length > 0;
@@ -363,6 +375,7 @@
             const answered = dayAnsweredN(day, record.answers);
             const status = paperState(day);
             const action = paperAction(status);
+            const practiceAction = practice.draftPaperDay === day.day ? "Resume practice" : "Practice";
             const subjects = new Map();
             day.chapters.forEach(chapter => subjects.set(chapter.subject, (subjects.get(chapter.subject) || 0) + chapter.questions.length));
             const badge = day.badge || { top: "Day", main: day.day };
@@ -379,7 +392,8 @@
             <h2>${day.subtitle}</h2>
             <div class="cee-paper-subjects">${Array.from(subjects, ([name, count]) => `<span data-subject="${name}">${name}<b>${count}</b></span>`).join("")}</div>
             <div class="cee-paper-progress">${status === "done" ? `<span>Net marks</span><b>${fmt(dayMarks(day, record.answers))}<small> / ${total}</small></b>` : `<span>${answered} / ${total} answered</span><div class="dc-bar" role="progressbar" aria-label="${dayTag(day)} answered" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${answered}"><span style="width:${answered / total * 100}%"></span></div>`}</div>
-            <div class="dc-foot"><div class="dc-meta"><span>${total} questions</span><span>${dayDurationMs(day) / 60000} min exam</span></div><div class="cee-paper-actions" role="group" aria-label="${dayTag(day)} modes"><button type="button" class="cee-practice-paper" aria-label="Practice ${dayTag(day)}">${uiIcon("check")}Practice</button><button type="button" class="cee-open-paper" aria-label="${action} ${dayTag(day)}">${action} exam${uiIcon("arrow-right")}</button></div></div>`;
+            <div class="cee-paper-practice-progress"><span>Practice</span><span>${paperPracticeStats(practised.get(day.day), total, practice.available)}</span></div>
+            <div class="dc-foot"><div class="dc-meta"><span>${total} questions</span><span>${dayDurationMs(day) / 60000} min exam</span></div><div class="cee-paper-actions" role="group" aria-label="${dayTag(day)} modes"><button type="button" class="cee-practice-paper" aria-label="Practice ${dayTag(day)}">${uiIcon("check")}${practiceAction}</button><button type="button" class="cee-open-paper" aria-label="${action} ${dayTag(day)}">${action} exam${uiIcon("arrow-right")}</button></div></div>`;
             card.querySelector(".cee-open-paper").addEventListener("click", () => openDay(day.day));
             card.querySelector(".cee-practice-paper").addEventListener("click", () => openPaperPractice(day.day));
             card.querySelector(".dc-scan").addEventListener("click", () => {
@@ -389,30 +403,37 @@
         });
     }
 
-    function renderDashboardPapers() {
+    function renderDashboardPapers(practice) {
         const papers = DAYS.slice().sort((first, second) => second.day - first.day);
+        const practised = new Map(practice.papers.map(paper => [paper.day, paper]));
         const active = getDayObj(state.activeDay);
         suggestedDay = active && paperState(active) === "progress" ? active : papers.find(day => paperState(day) === "progress") || papers.find(day => paperState(day) === "new") || papers[0];
         if (suggestedDay) {
             const status = paperState(suggestedDay);
             const answered = dayAnsweredN(suggestedDay, state.days[suggestedDay.day].answers);
-            $("ceeNextStatus").textContent = status === "progress" ? "Continue your paper" : status === "done" ? "Latest result" : "Next paper";
+            $("ceeNextStatus").textContent = status === "progress" ? "Continue your exam" : status === "done" ? "Latest exam result" : "Next exam";
             $("ceeNextTitle").textContent = `${dayTag(suggestedDay)} \u00b7 ${suggestedDay.subtitle}`;
             $("ceeNextMeta").textContent = `${dayTotalN(suggestedDay)} questions \u00b7 ${dayDurationMs(suggestedDay) / 60000} min${status === "progress" ? ` \u00b7 ${answered} answered` : ""}`;
-            $("ceeNextLabel").textContent = `${paperAction(status)} ${dayTag(suggestedDay)}`;
+            $("ceeNextLabel").textContent = `${paperAction(status)} ${dayTag(suggestedDay)} exam`;
         }
         const list = $("ceeLatestPapers");
+        const expanded = new Set([...list.querySelectorAll("details[open]")].map(detail => detail.dataset.paperBreakdown));
         list.replaceChildren();
-        papers.slice(0, 4).forEach(day => {
+        papers.sort((first, second) => (practised.get(second.day)?.updatedAt || 0) - (practised.get(first.day)?.updatedAt || 0) || second.day - first.day).slice(0, 4).forEach(day => {
             const status = paperState(day);
             const total = dayTotalN(day);
             const record = state.days[day.day];
-            const row = el("button", "cee-paper-row");
-            row.type = "button";
-            row.dataset.openDay = day.day;
-            row.setAttribute("aria-label", `${paperAction(status)} ${dayTag(day)}: ${day.subtitle}`);
-            row.innerHTML = `<span class="cee-row-day">${dayTag(day)}</span><span class="cee-row-main"><b>${day.subtitle}</b><small>${total} questions \u00b7 ${dayDurationMs(day) / 60000} min</small></span><span class="cee-row-result">${status === "done" ? `<b>${fmt(dayMarks(day, record.answers))}<small> / ${total}</small></b>` : `<span class="day-status ${status}">${paperLabel(status)}</span>`}</span>${uiIcon("arrow-up-right")}`;
-            row.addEventListener("click", () => openDay(day.day));
+            const paper = practised.get(day.day);
+            const practiceAction = practice.draftPaperDay === day.day ? "Resume practice" : "Practice";
+            const row = el("article", "cee-latest-paper");
+            row.dataset.day = day.day;
+            row.setAttribute("aria-label", `${dayTag(day)}: ${day.subtitle}`);
+            row.innerHTML = `<div class="cee-paper-row"><span class="cee-row-day">${dayTag(day)}</span><span class="cee-row-main"><b>${day.subtitle}</b><small>${total} questions \u00b7 ${dayDurationMs(day) / 60000} min exam</small></span></div>
+                <div class="cee-latest-mode" data-mode="exam"><span class="cee-mode-name">Exam</span><span class="cee-mode-progress">${status === "done" ? `<b>${fmt(dayMarks(day, record.answers))} / ${total} net marks</b><small>${dayCorrect(day, record.answers)} correct &middot; ${dayWrong(day, record.answers)} incorrect</small>` : `<b>${paperLabel(status)}</b><small>${dayAnsweredN(day, record.answers)} / ${total} answered</small>`}</span><button type="button" class="cee-text-action" data-latest-exam="${day.day}" aria-label="${paperAction(status)} ${dayTag(day)} exam">${paperAction(status)} exam${uiIcon("arrow-up-right")}</button></div>
+                <div class="cee-latest-mode" data-mode="practice" data-attempted="${paper?.attempted || 0}" data-correct="${paper?.correct || 0}" data-wrong="${paper?.wrong || 0}"><span class="cee-mode-name">Practice</span><span class="cee-mode-progress">${paperPracticeStats(paper, total, practice.available)}</span><button type="button" class="cee-text-action" data-latest-practice="${day.day}" aria-label="Practice ${dayTag(day)}">${practiceAction}${uiIcon("arrow-right")}</button></div>
+                ${practice.available ? `<details class="cee-paper-breakdown" data-paper-breakdown="${day.day}" ${expanded.has(String(day.day)) ? "open" : ""}><summary><span>Practice by subject and topic</span>${uiIcon("chevron-right")}</summary><div class="cee-paper-breakdown-body">${paperPracticeBreakdown(paper)}</div></details>` : ""}`;
+            row.querySelector("[data-latest-exam]").addEventListener("click", () => openDay(day.day));
+            row.querySelector("[data-latest-practice]").addEventListener("click", () => openPaperPractice(day.day));
             list.appendChild(row);
         });
     }
@@ -899,6 +920,7 @@
         $("ceeCompletionBar").style.width = `${completed / DAYS.length * 100}%`;
         $("ceeCompletionTrack").setAttribute("aria-valuenow", Math.round(completed / DAYS.length * 100));
         $("statScore").innerHTML = completed ? `${fmt(marks)}<small> / ${gradedTotal}</small>` : "\u2014";
+        $("statPractisedPapers").innerHTML = practice.available ? `${practice.papers.filter(paper => paper.attempted).length}<small> / ${DAYS.length}</small>` : "\u2014";
         $("statAtt").textContent = totalAnswered.toLocaleString();
         $("statCorrect").textContent = totalCorrect.toLocaleString();
         $("statWrong").textContent = totalWrong.toLocaleString();
@@ -913,11 +935,12 @@
         $("ceeAnswerTrack").setAttribute("aria-label", `${totalCorrect} correct and ${totalWrong} incorrect from ${totalAnswered} attempted questions`);
         $("ceeAnswerCorrectBar").style.width = totalAnswered ? totalCorrect / totalAnswered * 100 + "%" : "0%";
         $("ceeAnswerWrongBar").style.width = totalAnswered ? totalWrong / totalAnswered * 100 + "%" : "0%";
-        $("ceeChartEmpty").hidden = completed > 0 && !!chart;
-        $("ceeChartMessage").textContent = completed ? "Score chart unavailable" : "No completed papers yet";
-        renderDashboardPapers();
+        const hasScores = completed > 0 || practice.papers.some(paper => paper.attempted > 0);
+        $("ceeChartEmpty").hidden = hasScores && !!chart;
+        $("ceeChartMessage").textContent = hasScores ? "Score chart unavailable" : "No graded paper attempts yet";
+        renderDashboardPapers(practice);
         renderSubjectPerformance(practice);
-        updateChart();
+        updateChart(practice);
     }
 
     let subjectTopicBank = null;
@@ -1039,21 +1062,39 @@
         return arr;
     }
 
+    function practiceChartData(practice) {
+        const values = new Array(PLANNED_DAYS).fill(null);
+        for (const paper of practice.papers) {
+            if (paper.day >= 1 && paper.day <= PLANNED_DAYS && paper.attempted && paper.total) {
+                values[paper.day - 1] = Math.round(paper.netMarks / paper.total * 10000) / 100;
+            }
+        }
+        return values;
+    }
+
     function buildChart() {
         if (typeof Chart === "undefined") return;
         const ctx = $("progressChart").getContext("2d");
         const labels = [];
         for (let i = 1; i <= PLANNED_DAYS; i++) labels.push("Day " + i);
+        const practiceValues = practiceChartData(window.CEE_PRACTICE.getSummary());
 
         chart = new Chart(ctx, {
             type: "bar",
             data: {
                 labels,
                 datasets: [{
-                    label: "Daily score (%)",
+                    label: "Exam net score (%)",
                     data: chartData(),
                     borderColor: "#2467ac",
                     backgroundColor: "#5288ba",
+                    borderRadius: 3,
+                    maxBarThickness: 18,
+                    borderWidth: 0
+                }, {
+                    label: "Practice net score (%)",
+                    data: practiceValues,
+                    backgroundColor: "#318463",
                     borderRadius: 3,
                     maxBarThickness: 18,
                     borderWidth: 0
@@ -1067,7 +1108,7 @@
                     y: {
                         beginAtZero: true,
                         max: chartMax(),
-                        min: chartData().some(value => value < 0) ? -25 : 0,
+                        min: [...chartData(), ...practiceValues].some(value => value < 0) ? -25 : 0,
                         ticks: { stepSize: 25, color: "#677884", font: { family: "Plus Jakarta Sans", size: 11 }, callback: (v) => v + "%" },
                         grid: { color: "rgba(148,163,184,0.16)", drawTicks: false },
                         border: { display: false },
@@ -1091,6 +1132,10 @@
                             label: (item) => {
                                 const day = getDayObj(item.dataIndex + 1);
                                 if (!day) return " Upcoming";
+                                if (item.datasetIndex === 1) {
+                                    const paper = window.CEE_PRACTICE.getSummary().papers.find(paper => paper.day === day.day);
+                                    return paper?.attempted ? ` Practice: ${fmt(paper.netMarks)}/${paper.total} net marks (${paper.attempted} attempted)` : " Not practised yet";
+                                }
                                 const st = state.days[day.day];
                                 if (st.submitted) {
                                     const t = dayTotalN(day);
@@ -1107,14 +1152,18 @@
         });
     }
 
-    function updateChart() {
+    function updateChart(practice) {
         const values = chartData();
-        $("progressChart").setAttribute("aria-label", `Daily net scores: ${DAYS.filter(day => state.days[day.day].submitted).map(day => `${dayTag(day)} ${values[day.day - 1]}%`).join(", ") || "no completed papers"}`);
+        const practiceValues = practiceChartData(practice);
+        const examScores = DAYS.filter(day => state.days[day.day].submitted).map(day => `${dayTag(day)} exam ${values[day.day - 1]}%`);
+        const practiceScores = practice.papers.filter(paper => paper.attempted).map(paper => `Day ${paper.day} practice ${practiceValues[paper.day - 1]}%, ${paper.attempted} attempted`);
+        $("progressChart").setAttribute("aria-label", `Paper net scores: ${[...examScores, ...practiceScores].join(", ") || "no graded paper attempts"}`);
         if (!chart) return;
         chart.data.datasets[0].data = values;
         chart.data.datasets[0].backgroundColor = "#5288ba";
+        chart.data.datasets[1].data = practiceValues;
         chart.options.scales.y.max = chartMax();
-        chart.options.scales.y.min = values.some(value => value < 0) ? -25 : 0;
+        chart.options.scales.y.min = [...values, ...practiceValues].some(value => value < 0) ? -25 : 0;
         chart.update();
     }
 
