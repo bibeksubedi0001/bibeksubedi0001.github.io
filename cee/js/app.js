@@ -220,10 +220,11 @@
         scrollToEl($("papersView"));
     }
 
-    function openPaperPractice(dayNumber) {
+    function openPaperPractice(dayNumber, review = false) {
         leaveScanner();
         showView("practice");
-        window.CEE_PRACTICE.openPaper(dayNumber);
+        if (review) window.CEE_PRACTICE.reviewPaper(dayNumber);
+        else window.CEE_PRACTICE.openPaper(dayNumber);
         scrollToEl($("ceePracticeView"));
     }
 
@@ -375,6 +376,7 @@
             const answered = dayAnsweredN(day, record.answers);
             const status = paperState(day);
             const action = paperAction(status);
+            const paper = practised.get(day.day);
             const practiceAction = practice.draftPaperDay === day.day ? "Resume practice" : "Practice";
             const subjects = new Map();
             day.chapters.forEach(chapter => subjects.set(chapter.subject, (subjects.get(chapter.subject) || 0) + chapter.questions.length));
@@ -392,10 +394,11 @@
             <h2>${day.subtitle}</h2>
             <div class="cee-paper-subjects">${Array.from(subjects, ([name, count]) => `<span data-subject="${name}">${name}<b>${count}</b></span>`).join("")}</div>
             <div class="cee-paper-progress">${status === "done" ? `<span>Net marks</span><b>${fmt(dayMarks(day, record.answers))}<small> / ${total}</small></b>` : `<span>${answered} / ${total} answered</span><div class="dc-bar" role="progressbar" aria-label="${dayTag(day)} answered" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${answered}"><span style="width:${answered / total * 100}%"></span></div>`}</div>
-            <div class="cee-paper-practice-progress"><span>Practice</span><span>${paperPracticeStats(practised.get(day.day), total, practice.available)}</span></div>
-            <div class="dc-foot"><div class="dc-meta"><span>${total} questions</span><span>${dayDurationMs(day) / 60000} min exam</span></div><div class="cee-paper-actions" role="group" aria-label="${dayTag(day)} modes"><button type="button" class="cee-practice-paper" aria-label="Practice ${dayTag(day)}">${uiIcon("check")}${practiceAction}</button><button type="button" class="cee-open-paper" aria-label="${action} ${dayTag(day)}">${action} exam${uiIcon("arrow-right")}</button></div></div>`;
+            <div class="cee-paper-practice-progress"><span>Practice</span><span>${paperPracticeStats(paper, total, practice.available)}</span></div>
+            <div class="dc-foot"><div class="dc-meta"><span>${total} questions</span><span>${dayDurationMs(day) / 60000} min exam</span></div><div class="cee-paper-actions" role="group" aria-label="${dayTag(day)} modes"><button type="button" class="cee-practice-paper" aria-label="Practice ${dayTag(day)}">${uiIcon("check")}${practiceAction}</button><button type="button" class="cee-open-paper" aria-label="${action} ${dayTag(day)}">${action} exam${uiIcon("arrow-right")}</button>${practice.available && paper?.attempted ? `<button type="button" class="cee-review-practice" aria-label="Review ${dayTag(day)} practice">${uiIcon("library")}Review practice</button>` : ""}</div></div>`;
             card.querySelector(".cee-open-paper").addEventListener("click", () => openDay(day.day));
             card.querySelector(".cee-practice-paper").addEventListener("click", () => openPaperPractice(day.day));
+            card.querySelector(".cee-review-practice")?.addEventListener("click", () => openPaperPractice(day.day, true));
             card.querySelector(".dc-scan").addEventListener("click", () => {
                 if (window.CEE_OMR) window.CEE_OMR.open(day.day);
             });
@@ -430,10 +433,11 @@
             row.setAttribute("aria-label", `${dayTag(day)}: ${day.subtitle}`);
             row.innerHTML = `<div class="cee-paper-row"><span class="cee-row-day">${dayTag(day)}</span><span class="cee-row-main"><b>${day.subtitle}</b><small>${total} questions \u00b7 ${dayDurationMs(day) / 60000} min exam</small></span></div>
                 <div class="cee-latest-mode" data-mode="exam"><span class="cee-mode-name">Exam</span><span class="cee-mode-progress">${status === "done" ? `<b>${fmt(dayMarks(day, record.answers))} / ${total} net marks</b><small>${dayCorrect(day, record.answers)} correct &middot; ${dayWrong(day, record.answers)} incorrect</small>` : `<b>${paperLabel(status)}</b><small>${dayAnsweredN(day, record.answers)} / ${total} answered</small>`}</span><button type="button" class="cee-text-action" data-latest-exam="${day.day}" aria-label="${paperAction(status)} ${dayTag(day)} exam">${paperAction(status)} exam${uiIcon("arrow-up-right")}</button></div>
-                <div class="cee-latest-mode" data-mode="practice" data-attempted="${paper?.attempted || 0}" data-correct="${paper?.correct || 0}" data-wrong="${paper?.wrong || 0}"><span class="cee-mode-name">Practice</span><span class="cee-mode-progress">${paperPracticeStats(paper, total, practice.available)}</span><button type="button" class="cee-text-action" data-latest-practice="${day.day}" aria-label="Practice ${dayTag(day)}">${practiceAction}${uiIcon("arrow-right")}</button></div>
+                <div class="cee-latest-mode" data-mode="practice" data-attempted="${paper?.attempted || 0}" data-correct="${paper?.correct || 0}" data-wrong="${paper?.wrong || 0}"><span class="cee-mode-name">Practice</span><span class="cee-mode-progress">${paperPracticeStats(paper, total, practice.available)}</span><div class="cee-latest-practice-actions">${practice.available && paper?.attempted ? `<button type="button" class="cee-text-action" data-latest-review="${day.day}" aria-label="Review ${dayTag(day)} practice">${uiIcon("library")}Review practice</button>` : ""}<button type="button" class="cee-text-action" data-latest-practice="${day.day}" aria-label="Practice ${dayTag(day)}">${practiceAction}${uiIcon("arrow-right")}</button></div></div>
                 ${practice.available ? `<details class="cee-paper-breakdown" data-paper-breakdown="${day.day}" ${expanded.has(String(day.day)) ? "open" : ""}><summary><span>Practice by subject and topic</span>${uiIcon("chevron-right")}</summary><div class="cee-paper-breakdown-body">${paperPracticeBreakdown(paper)}</div></details>` : ""}`;
             row.querySelector("[data-latest-exam]").addEventListener("click", () => openDay(day.day));
             row.querySelector("[data-latest-practice]").addEventListener("click", () => openPaperPractice(day.day));
+            row.querySelector("[data-latest-review]")?.addEventListener("click", () => openPaperPractice(day.day, true));
             list.appendChild(row);
         });
     }

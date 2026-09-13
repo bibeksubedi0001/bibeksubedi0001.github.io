@@ -50,6 +50,7 @@
     let resumeFocus = null;
     let pendingConfirmation = null;
     let requestedPaper = null;
+    let requestedReview = false;
 
     function notify(message) {
         $("ceePracticeNotice").textContent = message;
@@ -121,10 +122,11 @@
         $("ceePracticeConfirm").showModal();
     }
 
-    async function open(topicId, paperDay = null) {
+    async function open(topicId, paperDay = null, review = false) {
         init();
         const ticket = ++serial;
         requestedPaper = paperDay;
+        requestedReview = review;
         screen = "builder";
         document.body.classList.remove("cee-practicing");
         $("ceePracticeBody").innerHTML = '<p class="cee-study-status" role="status">Loading question bank...</p>';
@@ -136,7 +138,7 @@
                 filter = "all"; source = "all"; topicQuery = "";
             } else if (!selected.size) selected = new Set(bank.topics.filter(topic => topic.count).map(topic => topic.id));
             renderBuilder();
-            if (paperDay != null) requestPaper(paperDay);
+            if (paperDay != null) requestPaper(paperDay, review);
         } catch (error) {
             if (ticket !== serial) return;
             $("ceePracticeBody").innerHTML = `<div class="cee-study-status" role="alert"><h1>Practice</h1><p>${esc(error.message)}</p><button class="btn" type="button" data-practice-action="retry">Retry</button></div>`;
@@ -157,20 +159,33 @@
         return paper ? paper.kind === "model" ? paper.title : "Day " + paper.day : "";
     }
 
-    function requestPaper(dayNumber) {
+    function requestPaper(dayNumber, review = false) {
         const paper = DAYS.find(day => day.day === dayNumber);
         if (!paper) throw new Error("This paper is not available for practice.");
         const items = paper.chapters.flatMap(chapter => chapter.questions.map(question => bank.byId.get(`day-${paper.day}:${question.id}`)));
         if (!items.length || items.some(item => !item)) throw new Error("Some paper questions are not available. Reload the page and retry.");
+        const configuration = { topics: [...new Set(items.map(item => item.topicId))], source: "papers", filter: "all", paperDay: paper.day };
+        if (review) {
+            const answers = Object.fromEntries(items.flatMap(item => {
+                const record = store.progress[item.id];
+                return record && typeof record.correct === "boolean" && item.q.options.some(option => option.key === record.answer)
+                    ? [[item.id, record.answer]] : [];
+            }));
+            if (!Object.keys(answers).length) throw new Error("No saved practice answers for this paper yet.");
+            active = { ids: items.map(item => item.id), answers, flags: {}, index: 0, settings: configuration, latestPractice: true };
+            reviewFilter = "all";
+            reviewPage = 0;
+            renderResults();
+            $("ceePracticeBody").scrollIntoView({ behavior: "instant", block: "start" });
+            return;
+        }
         if (store.draft?.settings?.paperDay === paper.day && !store.draft.finishedAt) {
             runItems(store.draft);
             active = store.draft;
             renderSession(true);
             return;
         }
-        const begin = () => startItems(items, {
-            topics: [...new Set(items.map(item => item.topicId))], source: "papers", filter: "all", paperDay: paper.day
-        });
+        const begin = () => startItems(items, configuration);
         if (store.draft) {
             $("ceePracticeStart").focus({ preventScroll: true });
             confirm("Replace unfinished practice?", "Your earlier answers remain in practice progress, but the unfinished session will be replaced.", "Start paper practice", begin);
@@ -326,7 +341,7 @@
         if (history) { active = store.history[Number(history.dataset.practiceHistory)]; reviewFilter = "all"; reviewPage = 0; renderResults(); return; }
         const action = event.target.closest("[data-practice-action]")?.dataset.practiceAction;
         if (!action) return;
-        if (action === "retry") open(null, requestedPaper);
+        if (action === "retry") open(null, requestedPaper, requestedReview);
         if (action === "clear-topics") { selected.clear(); renderTopics(); updatePool(); }
         if (action === "select-visible") { availableTopics().forEach(topic => selected.add(topic.id)); renderTopics(); updatePool(); }
         if (action === "resume") {
@@ -456,10 +471,14 @@
         });
         reviewPage = Math.max(0, Math.min(reviewPage, Math.max(0, Math.ceil(filtered.length / 10) - 1)));
         const title = paperTitle(active);
-        $("ceePracticeBody").innerHTML = `<div class="cee-page-heading"><div><h1>${title ? esc(title) + " practice results" : "Practice results"}</h1><p>${format(summary.total)} questions</p></div><button type="button" class="btn" data-practice-action="${title ? "papers" : "builder"}">${icon("arrow-left")}${title ? "Papers" : "Practice"}</button></div><dl class="cee-practice-stats cee-result-stats"><div><dt>Correct</dt><dd>${summary.correct}</dd></div><div><dt>Incorrect</dt><dd>${summary.wrong}</dd></div><div><dt>Skipped</dt><dd>${summary.skipped}</dd></div><div><dt>CEE net marks</dt><dd>${summary.netMarks}<small> / ${summary.total}</small></dd></div></dl><p class="cee-study-status">+1 correct / -0.25 incorrect / 0 skipped</p>
-            <div class="cee-results-actions"><button type="button" class="btn-primary" data-practice-action="retry-wrong" ${summary.wrong ? "" : "disabled"}>Retry incorrect${icon("arrow-right")}</button><label>Review<select id="ceePracticeReviewFilter"><option value="all">All questions</option><option value="wrong">Incorrect</option><option value="skipped">Skipped</option><option value="saved">Saved</option></select></label></div>
-            <section class="cee-topic-results cee-practice-subject-results"><h2>By subject</h2>${subjects.map(subject => `<div data-practice-subject-result="${esc(subject.name)}" data-correct="${subject.correct}" data-wrong="${subject.wrong}" data-attempted="${subject.answered}"><span>${esc(subject.name)}<small>${subject.answered} / ${subject.total} attempted</small></span><span>${subject.correct} correct<small>${subject.wrong} incorrect / ${subject.skipped} skipped</small></span><progress max="${subject.total}" value="${subject.correct}" aria-label="${esc(subject.name)} correct"></progress></div>`).join("")}</section>
+        const unanswered = active.latestPractice ? "Unanswered" : "Skipped";
+        const breakdownOpen = $("ceePracticeReviewBreakdown")?.open;
+        $("ceePracticeBody").innerHTML = `<div class="cee-page-heading"><div><h1>${title ? esc(title) + (active.latestPractice ? " practice review" : " practice results") : "Practice results"}</h1><p>${active.latestPractice ? "Latest practice answers / " : ""}${format(summary.total)} questions</p></div><button type="button" class="btn" data-practice-action="${title ? "papers" : "builder"}">${icon("arrow-left")}${title ? "Papers" : "Practice"}</button></div><dl class="cee-practice-stats cee-result-stats"><div><dt>Correct</dt><dd>${summary.correct}</dd></div><div><dt>Incorrect</dt><dd>${summary.wrong}</dd></div><div><dt>${unanswered}</dt><dd>${summary.skipped}</dd></div><div><dt>CEE net marks</dt><dd>${summary.netMarks}<small> / ${summary.total}</small></dd></div></dl><p class="cee-study-status">+1 correct / -0.25 incorrect / 0 ${unanswered.toLowerCase()}</p>
+            <div class="cee-results-actions"><button type="button" class="btn-primary" data-practice-action="retry-wrong" ${summary.wrong ? "" : "disabled"}>Retry incorrect${icon("arrow-right")}</button><label>Review<select id="ceePracticeReviewFilter"><option value="all">All questions</option><option value="wrong">Incorrect</option><option value="skipped">${unanswered}</option><option value="saved">Saved</option></select></label></div>
+            ${active.latestPractice ? `<details id="ceePracticeReviewBreakdown" class="cee-paper-breakdown cee-review-breakdown" ${breakdownOpen ? "open" : ""}><summary><span>By subject and topic</span>${icon("chevron-right")}</summary>` : ""}
+            <section class="cee-topic-results cee-practice-subject-results"><h2>By subject</h2>${subjects.map(subject => `<div data-practice-subject-result="${esc(subject.name)}" data-correct="${subject.correct}" data-wrong="${subject.wrong}" data-attempted="${subject.answered}"><span>${esc(subject.name)}<small>${subject.answered} / ${subject.total} attempted</small></span><span>${subject.correct} correct<small>${subject.wrong} incorrect / ${subject.skipped} ${unanswered.toLowerCase()}</small></span><progress max="${subject.total}" value="${subject.correct}" aria-label="${esc(subject.name)} correct"></progress></div>`).join("")}</section>
             <section class="cee-topic-results"><h2>By topic</h2>${summary.topics.map(topic => `<div><span>${esc(topic.title)}</span><span>${topic.correct} / ${topic.total}</span><progress max="${topic.total}" value="${topic.correct}" aria-label="${esc(topic.title)} correct"></progress></div>`).join("")}</section>
+            ${active.latestPractice ? "</details>" : ""}
             <section class="cee-practice-review"><h2>Question review</h2>${filtered.slice(reviewPage * 10, reviewPage * 10 + 10).map(item => `<article class="cee-source-mcq"><header><span>${esc(item.sourceLabel)}</span><button type="button" class="cee-icon-button" data-practice-save="${esc(item.id)}" aria-pressed="${!!store.bookmarks[item.id]}" title="Save question" aria-label="Save question">${icon("bookmark")}</button></header><div class="cee-question-text">${item.q.text}</div><ol class="cee-review-options" type="a">${item.q.options.map(option => `<li class="${option.key === item.q.answer ? "is-correct" : active.answers[item.id] === option.key ? "is-wrong" : ""}">${option.text}${option.key === item.q.answer ? icon("check") : active.answers[item.id] === option.key ? icon("close") : ""}</li>`).join("")}</ol>${ui.solution(item, active.answers[item.id])}</article>`).join("") || '<p class="cee-study-status">No questions in this review filter.</p>'}</section>
             ${filtered.length > 10 ? `<div class="cee-page-controls"><button type="button" class="btn" data-practice-action="review-previous" ${reviewPage ? "" : "disabled"}>${icon("arrow-left")}Previous</button><span>${reviewPage * 10 + 1}-${Math.min(reviewPage * 10 + 10, filtered.length)} / ${filtered.length}</span><button type="button" class="btn" data-practice-action="review-next" ${reviewPage * 10 + 10 >= filtered.length ? "disabled" : ""}>Next${icon("arrow-right")}</button></div>` : ""}`;
         $("ceePracticeReviewFilter").value = reviewFilter;
@@ -475,5 +494,5 @@
         }
     }
 
-    window.CEE_PRACTICE = Object.freeze({ open, openPaper: dayNumber => open(null, dayNumber), suspend, getSummary, arrangeTopics });
+    window.CEE_PRACTICE = Object.freeze({ open, openPaper: dayNumber => open(null, dayNumber), reviewPaper: dayNumber => open(null, dayNumber, true), suspend, getSummary, arrangeTopics });
 })();
