@@ -17,6 +17,15 @@
         }, 0);
     }
 
+    function resolvePaper(day, answers = {}) {
+        if (!day?.previousVersion) return day;
+        const currentIds = new Set(day.chapters.flatMap(chapter => chapter.questions.map(question => question.id)));
+        for (let previous = day.previousVersion; previous; previous = previous.previousVersion) {
+            if (previous.chapters.some(chapter => chapter.questions.some(question => !currentIds.has(question.id) && has(answers, question.id)))) return previous;
+        }
+        return day;
+    }
+
     function createBank(days, imported, catalog, digital = {}) {
         const topics = catalog.topics.filter(topic => topic.subject !== "Reference").map(topic => ({ ...topic }));
         const records = [];
@@ -79,7 +88,14 @@
         }
         if (new Set(records.map(item => item.id)).size !== records.length) throw new Error("Duplicate practice question identity");
         topics.forEach(topic => { topic.count = records.filter(item => item.topicId === topic.id).length; });
-        return { records, topics, byId: new Map(records.map(item => [item.id, item])) };
+        const byId = new Map(records.map(item => [item.id, item]));
+        for (const day of days.filter(day => day.previousVersion)) {
+            const previous = createBank([day.previousVersion], [], catalog);
+            for (const [id, record] of previous.byId) {
+                if (!byId.has(id)) byId.set(id, { ...record, archived: true });
+            }
+        }
+        return { records, topics, byId };
     }
 
     function filterPool(records, { topics = [], source = "all", filter = "all" }, store) {
@@ -244,5 +260,5 @@
         return true;
     }
 
-    window.CEE_STUDY_CORE = Object.freeze({ STORE_KEY, plain, createBank, filterPool, sample, freshStore, summarizeProgress, summarizePaperProgress, restore, createRun, answer, grade, finish });
+    window.CEE_STUDY_CORE = Object.freeze({ STORE_KEY, plain, resolvePaper, createBank, filterPool, sample, freshStore, summarizeProgress, summarizePaperProgress, restore, createRun, answer, grade, finish });
 })();

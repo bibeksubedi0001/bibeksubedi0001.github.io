@@ -156,7 +156,8 @@
     function paperTitle(run) {
         if (run?.settings?.paperDay == null) return "";
         const paper = DAYS.find(day => day.day === run.settings.paperDay);
-        return paper ? paper.kind === "model" ? paper.title : "Day " + paper.day : "";
+        const title = paper ? paper.kind === "model" ? paper.title : "Day " + paper.day : "";
+        return title && run.ids.some(id => bank?.byId.get(id)?.archived) ? title + " (previous version)" : title;
     }
 
     function requestPaper(dayNumber, review = false) {
@@ -179,7 +180,8 @@
             $("ceePracticeBody").scrollIntoView({ behavior: "instant", block: "start" });
             return;
         }
-        if (store.draft?.settings?.paperDay === paper.day && !store.draft.finishedAt) {
+        if (store.draft?.settings?.paperDay === paper.day && !store.draft.finishedAt
+            && store.draft.ids.every(id => items.some(item => item.id === id))) {
             runItems(store.draft);
             active = store.draft;
             renderSession(true);

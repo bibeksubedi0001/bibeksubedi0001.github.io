@@ -142,7 +142,10 @@
     }
 
     /* ---------- lookups ---------- */
-    const getDayObj = (n) => DAYS.find(d => d.day === n);
+    const getDayObj = (n) => {
+        const day = DAYS.find(d => d.day === n);
+        return window.CEE_STUDY_CORE.resolvePaper(day, state.days[n]?.answers);
+    };
     const curDayObj = () => getDayObj(state.activeDay);
     const curState = () => state.days[state.activeDay];
 
@@ -150,9 +153,9 @@
     const chWrong = (ch, ans) => ch.questions.reduce((s, q) => s + (ans[q.id] != null && ans[q.id] !== q.answer ? 1 : 0), 0);
     const chAnswered = (ch, ans) => ch.questions.reduce((n, q) => n + (ans[q.id] != null ? 1 : 0), 0);
 
-    const dayCorrect = (day, ans) => day.chapters.reduce((s, ch) => s + chScore(ch, ans), 0);
-    const dayWrong = (day, ans) => day.chapters.reduce((s, ch) => s + chWrong(ch, ans), 0);
-    const dayAnsweredN = (day, ans) => day.chapters.reduce((s, ch) => s + chAnswered(ch, ans), 0);
+    const dayCorrect = (day, ans) => window.CEE_STUDY_CORE.resolvePaper(day, ans).chapters.reduce((s, ch) => s + chScore(ch, ans), 0);
+    const dayWrong = (day, ans) => window.CEE_STUDY_CORE.resolvePaper(day, ans).chapters.reduce((s, ch) => s + chWrong(ch, ans), 0);
+    const dayAnsweredN = (day, ans) => window.CEE_STUDY_CORE.resolvePaper(day, ans).chapters.reduce((s, ch) => s + chAnswered(ch, ans), 0);
     const dayTotalN = (day) => day.chapters.reduce((s, ch) => s + ch.questions.length, 0);
     function dayMarks(day, ans) {
         return dayCorrect(day, ans) - dayWrong(day, ans) * (day.negativeMarking || 0);
@@ -954,7 +957,7 @@
         const topics = bank.topics.filter(topic => topic.subject === subject).map(topic => ({ ...topic,
             attempted: practiceTopics.get(topic.id)?.attempted || 0, correct: practiceTopics.get(topic.id)?.correct || 0 }));
         const totals = new Map(topics.map(topic => [topic.id, topic]));
-        for (const item of bank.records) {
+        for (const item of bank.byId.values()) {
             if (item.origin !== "papers" || item.subject !== subject) continue;
             const paper = papers[item.source.day];
             const answer = paper?.answers[item.q.id];
@@ -1009,7 +1012,7 @@
             let plannedTotal = 0, total = practiceSubject?.attempted || 0, correct = practiceSubject?.correct || 0;
             DAYS.forEach(day => {
                 const st = state.days[day.day];
-                day.chapters.filter(chapter => chapter.subject === sub.name || sub.name === "MAT"
+                window.CEE_STUDY_CORE.resolvePaper(day, st.answers).chapters.filter(chapter => chapter.subject === sub.name || sub.name === "MAT"
                     && ["Logical", "Quantitative", "Analytical", "Non-verbal"].includes(chapter.subject)).forEach(ch => {
                     plannedTotal += ch.questions.length;
                     if (st.submitted) {

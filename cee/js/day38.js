@@ -14,7 +14,7 @@ const DAY38 = {
             questions: [
                 {
                     id: "d38c1",
-                    text: "How many moles of carbon dioxide are present in 11.0 g of pure CO<sub>2</sub>? Use relative atomic masses C = 12 and O = 16.",
+                    text: "How many moles of carbon dioxide are present in 11.0 g of pure CO<sub>2</sub>?",
                     options: [
                         { key: "a", text: "0.125 mol" },
                         { key: "b", text: "0.250 mol" },
@@ -26,7 +26,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c2",
-                    text: "What is the mass of 0.150 mol of anhydrous Al<sub>2</sub>(SO<sub>4</sub>)<sub>3</sub>? Use Al = 27, S = 32 and O = 16.",
+                    text: "What is the mass of 0.150 mol of anhydrous Al<sub>2</sub>(SO<sub>4</sub>)<sub>3</sub>?",
                     options: [
                         { key: "a", text: "17.1 g" },
                         { key: "b", text: "34.2 g" },
@@ -38,7 +38,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c3",
-                    text: "How many water molecules are present in 9.0 g of H<sub>2</sub>O? Use H = 1, O = 16 and $N_A=6.022\\times10^{23}$ mol$^{-1}$.",
+                    text: "How many water molecules are present in 9.0 g of H<sub>2</sub>O? Take $N_A=6.022\\times10^{23}$ mol$^{-1}$.",
                     options: [
                         { key: "a", text: "$3.011\\times10^{23}$" },
                         { key: "b", text: "$6.022\\times10^{23}$" },
@@ -86,7 +86,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c7",
-                    text: "Which pure gas sample contains the greatest number of molecules? Use H = 1, C = 12, N = 14 and O = 16.",
+                    text: "Which pure gas sample contains the greatest number of molecules?",
                     options: [
                         { key: "a", text: "4.0 g of O<sub>2</sub>" },
                         { key: "b", text: "4.0 g of H<sub>2</sub>" },
@@ -146,7 +146,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c12",
-                    text: "What is the percentage by mass of oxygen in pure CaCO<sub>3</sub>? Use Ca = 40, C = 12 and O = 16.",
+                    text: "What is the percentage by mass of oxygen in pure CaCO<sub>3</sub>?",
                     options: [
                         { key: "a", text: "48%" },
                         { key: "b", text: "16%" },
@@ -158,7 +158,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c13",
-                    text: "What is the nitrogen percentage by mass in NH<sub>4</sub>NO<sub>3</sub>? Use N = 14, H = 1 and O = 16.",
+                    text: "What is the nitrogen percentage by mass in NH<sub>4</sub>NO<sub>3</sub>?",
                     options: [
                         { key: "a", text: "17.5%" },
                         { key: "b", text: "35.0%" },
@@ -170,7 +170,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c14",
-                    text: "A compound contains approximately 40.00% carbon, 6.67% hydrogen and 53.33% oxygen by mass. What is its empirical formula? Use C = 12, H = 1 and O = 16.",
+                    text: "A compound contains approximately 40.00% carbon, 6.67% hydrogen and 53.33% oxygen by mass. What is its empirical formula?",
                     options: [
                         { key: "a", text: "CH<sub>2</sub>O" },
                         { key: "b", text: "C<sub>2</sub>H<sub>4</sub>O" },
@@ -182,7 +182,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c15",
-                    text: "A compound has empirical formula CH<sub>2</sub>O and molar mass 180 g/mol. What is its molecular formula? Use C = 12, H = 1 and O = 16.",
+                    text: "A compound has empirical formula CH<sub>2</sub>O and molar mass 180 g/mol. What is its molecular formula?",
                     options: [
                         { key: "a", text: "C<sub>2</sub>H<sub>4</sub>O<sub>2</sub>" },
                         { key: "b", text: "C<sub>3</sub>H<sub>6</sub>O<sub>3</sub>" },
@@ -194,7 +194,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c16",
-                    text: "Complete combustion of 3.00 g of a compound containing only C, H and O gives 4.40 g of CO<sub>2</sub> and 1.80 g of H<sub>2</sub>O. What is the compound's empirical formula? Use C = 12, H = 1 and O = 16.",
+                    text: "Complete combustion of 3.00 g of a compound containing only C, H and O gives 4.40 g of CO<sub>2</sub> and 1.80 g of H<sub>2</sub>O. What is the compound's empirical formula?",
                     options: [
                         { key: "a", text: "C<sub>2</sub>H<sub>6</sub>O" },
                         { key: "b", text: "CHO" },
@@ -206,7 +206,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c17",
-                    text: "A 2.50 g sample of CuSO<sub>4</sub>&middot;<i>x</i>H<sub>2</sub>O loses only its water of crystallization on heating and leaves 1.60 g of anhydrous CuSO<sub>4</sub>. Find <i>x</i>. Use Cu = 64, S = 32, O = 16 and H = 1.",
+                    text: "A 2.50 g sample of CuSO<sub>4</sub>&middot;<i>x</i>H<sub>2</sub>O loses only its water of crystallization on heating and leaves 1.60 g of anhydrous CuSO<sub>4</sub>. Find <i>x</i>.",
                     options: [
                         { key: "a", text: "5" },
                         { key: "b", text: "2" },
@@ -218,7 +218,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c18",
-                    text: "Pure CaCO<sub>3</sub> decomposes completely according to CaCO<sub>3</sub> &rarr; CaO + CO<sub>2</sub>. What volume of CO<sub>2</sub> is obtained from 25.0 g of CaCO<sub>3</sub> at 273.15 K and 1 atm? Use Ca = 40, C = 12, O = 16 and molar gas volume = 22.4 L/mol.",
+                    text: "Pure CaCO<sub>3</sub> decomposes completely according to CaCO<sub>3</sub> &rarr; CaO + CO<sub>2</sub>. What volume of CO<sub>2</sub> is obtained from 25.0 g of CaCO<sub>3</sub> at 273.15 K and 1 atm? Use a molar gas volume of 22.4 L/mol.",
                     options: [
                         { key: "a", text: "2.80 L" },
                         { key: "b", text: "11.2 L" },
@@ -230,7 +230,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c19",
-                    text: "What mass of oxygen is required for the complete combustion of 3.20 g of methane? The reaction is CH<sub>4</sub> + 2O<sub>2</sub> &rarr; CO<sub>2</sub> + 2H<sub>2</sub>O. Use C = 12, H = 1 and O = 16.",
+                    text: "What mass of oxygen is required for the complete combustion of 3.20 g of methane? The reaction is CH<sub>4</sub> + 2O<sub>2</sub> &rarr; CO<sub>2</sub> + 2H<sub>2</sub>O.",
                     options: [
                         { key: "a", text: "6.40 g" },
                         { key: "b", text: "12.8 g" },
@@ -242,7 +242,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c20",
-                    text: "A 5.40 g sample of aluminium reacts completely with excess oxygen: 4Al + 3O<sub>2</sub> &rarr; 2Al<sub>2</sub>O<sub>3</sub>. What mass of Al<sub>2</sub>O<sub>3</sub> forms? Use Al = 27 and O = 16.",
+                    text: "A 5.40 g sample of aluminium reacts completely with excess oxygen: 4Al + 3O<sub>2</sub> &rarr; 2Al<sub>2</sub>O<sub>3</sub>. What mass of Al<sub>2</sub>O<sub>3</sub> forms?",
                     options: [
                         { key: "a", text: "5.10 g" },
                         { key: "b", text: "8.10 g" },
@@ -266,7 +266,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c22",
-                    text: "Hydrogen and oxygen react completely to the extent allowed by 2H<sub>2</sub> + O<sub>2</sub> &rarr; 2H<sub>2</sub>O. Initially there are 4.0 g H<sub>2</sub> and 40.0 g O<sub>2</sub>. What mass of oxygen remains? Use H = 1 and O = 16.",
+                    text: "Hydrogen and oxygen react completely to the extent allowed by 2H<sub>2</sub> + O<sub>2</sub> &rarr; 2H<sub>2</sub>O. Initially there are 4.0 g H<sub>2</sub> and 40.0 g O<sub>2</sub>. What mass of oxygen remains?",
                     options: [
                         { key: "a", text: "0 g" },
                         { key: "b", text: "8.0 g" },
@@ -290,7 +290,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c24",
-                    text: "A mixture of 16.0 g Fe<sub>2</sub>O<sub>3</sub> and 5.60 g CO reacts by Fe<sub>2</sub>O<sub>3</sub> + 3CO &rarr; 2Fe + 3CO<sub>2</sub>. What is the maximum mass of iron formed, to three significant figures? Use Fe = 56, C = 12 and O = 16.",
+                    text: "A mixture of 16.0 g Fe<sub>2</sub>O<sub>3</sub> and 5.60 g CO reacts by Fe<sub>2</sub>O<sub>3</sub> + 3CO &rarr; 2Fe + 3CO<sub>2</sub>. What is the maximum mass of iron formed, to three significant figures?",
                     options: [
                         { key: "a", text: "11.2 g" },
                         { key: "b", text: "5.60 g" },
@@ -314,7 +314,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c26",
-                    text: "A 12.5 g limestone sample contains 80.0% CaCO<sub>3</sub> by mass; the remaining material is inert and releases no gas. On complete decomposition, CaCO<sub>3</sub> &rarr; CaO + CO<sub>2</sub>, what mass of CO<sub>2</sub> is obtained? Use Ca = 40, C = 12 and O = 16.",
+                    text: "A 12.5 g limestone sample contains 80.0% CaCO<sub>3</sub> by mass; the remaining material is inert and releases no gas. On complete decomposition, CaCO<sub>3</sub> &rarr; CaO + CO<sub>2</sub>, what mass of CO<sub>2</sub> is obtained?",
                     options: [
                         { key: "a", text: "2.20 g" },
                         { key: "b", text: "5.50 g" },
@@ -326,7 +326,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c27",
-                    text: "Heating 25.0 g of pure CaCO<sub>3</sub> gives an isolated CaO yield of 11.2 g through CaCO<sub>3</sub> &rarr; CaO + CO<sub>2</sub>. What is the percentage yield of CaO? Use Ca = 40, C = 12 and O = 16.",
+                    text: "Heating 25.0 g of pure CaCO<sub>3</sub> gives an isolated CaO yield of 11.2 g through CaCO<sub>3</sub> &rarr; CaO + CO<sub>2</sub>. What is the percentage yield of CaO?",
                     options: [
                         { key: "a", text: "44.8%" },
                         { key: "b", text: "70.0%" },
@@ -338,7 +338,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c28",
-                    text: "Potassium chlorate decomposes by 2KClO<sub>3</sub> &rarr; 2KCl + 3O<sub>2</sub>. What mass of oxygen is collected from 24.5 g of pure KClO<sub>3</sub> if the oxygen yield is 70.0% of theoretical? Use K = 39, Cl = 35.5 and O = 16.",
+                    text: "Potassium chlorate decomposes by 2KClO<sub>3</sub> &rarr; 2KCl + 3O<sub>2</sub>. What mass of oxygen is collected from 24.5 g of pure KClO<sub>3</sub> if the oxygen yield is 70.0% of theoretical?",
                     options: [
                         { key: "a", text: "6.72 g" },
                         { key: "b", text: "9.60 g" },
@@ -350,7 +350,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c29",
-                    text: "An 18.4 g mixture contains only CaCO<sub>3</sub> and MgCO<sub>3</sub>. Excess acid releases 4.48 L of CO<sub>2</sub> at 273.15 K and 1 atm, with one mole of CO<sub>2</sub> formed per mole of either carbonate. What mass of CaCO<sub>3</sub> was in the mixture? Use Ca = 40, Mg = 24, C = 12, O = 16 and molar gas volume = 22.4 L/mol.",
+                    text: "An 18.4 g mixture contains only CaCO<sub>3</sub> and MgCO<sub>3</sub>. Excess acid releases 4.48 L of CO<sub>2</sub> at 273.15 K and 1 atm, with one mole of CO<sub>2</sub> formed per mole of either carbonate. What mass of CaCO<sub>3</sub> was in the mixture? Use a molar gas volume of 22.4 L/mol.",
                     options: [
                         { key: "a", text: "8.40 g" },
                         { key: "b", text: "9.20 g" },
@@ -362,7 +362,7 @@ const DAY38 = {
                 },
                 {
                     id: "d38c30",
-                    text: "An 8.00 g ore sample contains Fe<sub>2</sub>O<sub>3</sub> and inert impurities only. Complete reduction with excess CO gives 4.48 g of pure iron by Fe<sub>2</sub>O<sub>3</sub> + 3CO &rarr; 2Fe + 3CO<sub>2</sub>. What is the percentage by mass of Fe<sub>2</sub>O<sub>3</sub> in the ore? Use Fe = 56 and O = 16.",
+                    text: "An 8.00 g ore sample contains Fe<sub>2</sub>O<sub>3</sub> and inert impurities only. Complete reduction with excess CO gives 4.48 g of pure iron by Fe<sub>2</sub>O<sub>3</sub> + 3CO &rarr; 2Fe + 3CO<sub>2</sub>. What is the percentage by mass of Fe<sub>2</sub>O<sub>3</sub> in the ore?",
                     options: [
                         { key: "a", text: "56.0%" },
                         { key: "b", text: "64.0%" },
@@ -653,3 +653,282 @@ const DAY38_SYLLABUS = [
     ] }
 ];
 DAY38.syllabus = DAY38_SYLLABUS;
+
+DAY38.previousVersion = { ...DAY38 };
+DAY38.subtitle = "Mole Concept and Advanced MAT";
+DAY38.chapters = [DAY38.chapters[0], {
+    ...DAY38.chapters[1],
+    name: "MAT - Advanced Reasoning",
+    blurb: "Twenty multi-step problems: five each in verbal, numerical, logical, and spatial reasoning.",
+    questions: [
+        {
+            id: "d38m131",
+            revisionOf: { day: 38, id: "d38m31" },
+            text: "A code first moves letters in odd-numbered positions two places forward and letters in even-numbered positions one place backward, then reverses the resulting string. Alphabet positions wrap after Z and before A. Thus PLANT becomes VMCKR. How is GRASP coded?",
+            options: [
+                { key: "a", text: "RRCQH" },
+                { key: "b", text: "RQCRI" },
+                { key: "c", text: "RRCQI" },
+                { key: "d", text: "QRCRI" }
+            ],
+            answer: "c",
+            explanation: "Apply the alternating shifts to the original positions: G becomes I, R becomes Q, A becomes C, S becomes R and P becomes R. This gives IQCRR. Reversing the string gives RRCQI. Applying the same shift to every letter or omitting the final reversal produces a different code."
+        },
+        {
+            id: "d38m132",
+            revisionOf: { day: 38, id: "d38m32" },
+            text: "Each word has one distinct, fixed code, but the code order in a statement may differ from the word order. 'ka lu mi' means 'quiet green room'; 'mi so pa' means 'room near garden'; 'lu pa te' means 'green garden gate'; and 'so ne te' means 'near wide gate'. What are the codes for quiet, wide and garden, in that order?",
+            options: [
+                { key: "a", text: "ka ne pa" },
+                { key: "b", text: "ne ka lu" },
+                { key: "c", text: "ka so pa" },
+                { key: "d", text: "ka ne te" }
+            ],
+            answer: "a",
+            explanation: "The first and second statements identify mi as room; the first and third identify lu as green, leaving ka as quiet. The second and third identify pa as garden, leaving so as near and te as gate. In the fourth statement, ne must therefore mean wide. The requested order is ka ne pa."
+        },
+        {
+            id: "d38m133",
+            revisionOf: { day: 38, id: "d38m33" },
+            text: "Complete the letter-pair series: AZ, CX, FU, JQ, OL, ...",
+            options: [
+                { key: "a", text: "UG" },
+                { key: "b", text: "VF" },
+                { key: "c", text: "UE" },
+                { key: "d", text: "UF" }
+            ],
+            answer: "d",
+            explanation: "The first letters occupy positions 1, 3, 6, 10 and 15, increasing by 2, 3, 4 and 5. The next increase is 6, giving position 21, U. The second letters occupy 26, 24, 21, 17 and 12, decreasing by the same successive amounts. Subtracting 6 gives position 6, F. Hence the pair is UF."
+        },
+        {
+            id: "d38m134",
+            revisionOf: { day: 38, id: "d38m34" },
+            text: "Arun and Bina are full siblings. Arun is a man and Bina is a woman. Chandra is Arun's father, Deepa is Chandra's mother, and Esha is Bina's daughter. How is Deepa related to Esha?",
+            options: [
+                { key: "a", text: "Grandmother" },
+                { key: "b", text: "Great-grandmother" },
+                { key: "c", text: "Maternal aunt" },
+                { key: "d", text: "Mother" }
+            ],
+            answer: "b",
+            explanation: "Full siblings share both parents, so Chandra is also Bina's father. The generational chain is Deepa, her son Chandra, his daughter Bina, and Bina's daughter Esha. Deepa is three generations above Esha and is therefore her great-grandmother, not her grandmother."
+        },
+        {
+            id: "d38m135",
+            revisionOf: { day: 38, id: "d38m35" },
+            text: "In a row, Rima is 20th from the left and Suman is 24th from the right. They exchange places, after which Rima is 35th from the left. Before the exchange, Mina stood nine positions to Rima's right and Mina does not move. What is Mina's rank from the right?",
+            options: [
+                { key: "a", text: "30th" },
+                { key: "b", text: "29th" },
+                { key: "c", text: "34th" },
+                { key: "d", text: "35th" }
+            ],
+            answer: "a",
+            explanation: "Suman's original position was 35th from the left and 24th from the right. The row therefore has $35+24-1=58$ people. Mina's unchanged left rank is $20+9=29$. Her right rank is $58-29+1=30$. The exchange changes Rima's rank, not Mina's."
+        },
+        {
+            id: "d38m136",
+            revisionOf: { day: 38, id: "d38m36" },
+            text: "A vessel contains 40 L of milk and water in the ratio 7:3. A 10 L portion of the well-mixed liquid is removed and replaced with 10 L of water. After stirring thoroughly, the same removal-and-replacement operation is performed once more. What is the final milk-to-water ratio?",
+            options: [
+                { key: "a", text: "49:51" },
+                { key: "b", text: "63:97" },
+                { key: "c", text: "21:19" },
+                { key: "d", text: "7:9" }
+            ],
+            answer: "b",
+            explanation: "Initially there are $40(7/10)=28$ L of milk. Each removal retains three quarters of the milk present, so after two operations the milk volume is $28(3/4)^2=15.75$ L. Total volume remains 40 L, leaving 24.25 L water. The ratio $15.75:24.25$ simplifies to $63:97$."
+        },
+        {
+            id: "d38m137",
+            revisionOf: { day: 38, id: "d38m37" },
+            text: "The price per kilogram of rice falls by 25%, while a household increases its rice budget by 20%. However, 10% of the newly purchased rice is unusable; none of its previous purchase was unusable. Relative to the previous purchase, by what percentage does the usable quantity increase?",
+            options: [
+                { key: "a", text: "60%" },
+                { key: "b", text: "20%" },
+                { key: "c", text: "50%" },
+                { key: "d", text: "44%" }
+            ],
+            answer: "d",
+            explanation: "The new budget is 1.20 times the old budget and the new unit price is 0.75 times the old price. Purchased quantity is therefore multiplied by $1.20/0.75=1.60$. Only 90% is usable, giving a usable-quantity factor of $1.60(0.90)=1.44$. The increase is 44%; 60% ignores the unusable portion."
+        },
+        {
+            id: "d38m138",
+            revisionOf: { day: 38, id: "d38m38" },
+            text: "Inlet A fills a tank in 12 hours, inlet B in 18 hours, and an outlet empties a full tank in 36 hours. All rates are constant. All three operate together for the first 3 hours from an empty tank. Then A is closed, while B and the outlet remain open. How many hours after the start does the tank become full?",
+            options: [
+                { key: "a", text: "24 hours" },
+                { key: "b", text: "9 hours" },
+                { key: "c", text: "27 hours" },
+                { key: "d", text: "15 hours" }
+            ],
+            answer: "c",
+            explanation: "Initially the net rate is $1/12+1/18-1/36=1/9$ tank per hour, so one third fills in 3 hours. After A closes, the net rate is $1/18-1/36=1/36$. Filling the remaining two thirds takes $(2/3)36=24$ more hours. Total elapsed time is $3+24=27$ hours."
+        },
+        {
+            id: "d38m139",
+            revisionOf: { day: 38, id: "d38m39" },
+            text: "At constant speed, a train passes a stationary pole completely in 12 seconds and a 180 m platform completely in 24 seconds. A second train, 120 m long, approaches it on a parallel track at 36 km/h. How long do they take to pass each other completely, measured from when their fronts meet?",
+            options: [
+                { key: "a", text: "7.2 seconds" },
+                { key: "b", text: "12 seconds" },
+                { key: "c", text: "10 seconds" },
+                { key: "d", text: "20 seconds" }
+            ],
+            answer: "b",
+            explanation: "The extra 12 seconds needed for the platform corresponds to its 180 m length, so the first train's speed is $180/12=15$ m/s. Its length is $15(12)=180$ m. The other speed is 10 m/s, making the opposite-direction relative speed 25 m/s. Combined length is 300 m, so passing takes $300/25=12$ seconds."
+        },
+        {
+            id: "d38m140",
+            revisionOf: { day: 38, id: "d38m40" },
+            text: "Each correct answer earns 1 mark and each incorrect answer loses 0.25 mark. Every attempted question has one recorded answer. Using the table, find the student's combined accuracy across the three quizzes, to two decimal places.<svg class='q-fig' viewBox='0 0 310 170' width='310' height='170' role='img' aria-label='Table: Quiz I, 20 attempted and 10.00 net marks; Quiz II, 30 attempted and 18.75 net marks; Quiz III, 25 attempted and 18.75 net marks'><g fill='none' stroke='currentColor' stroke-width='1.2'><path d='M8 8H302V160H8ZM8 46H302M8 84H302M8 122H302M83 8V160M190 8V160'/></g><g fill='currentColor' font-family='sans-serif' font-size='15' text-anchor='middle'><text x='45' y='33'>Quiz</text><text x='136' y='33'>Attempted</text><text x='246' y='33'>Net marks</text><text x='45' y='71'>I</text><text x='136' y='71'>20</text><text x='246' y='71'>10.00</text><text x='45' y='109'>II</text><text x='136' y='109'>30</text><text x='246' y='109'>18.75</text><text x='45' y='147'>III</text><text x='136' y='147'>25</text><text x='246' y='147'>18.75</text></g></svg>",
+            options: [
+                { key: "a", text: "70.00%" },
+                { key: "b", text: "72.00%" },
+                { key: "c", text: "68.00%" },
+                { key: "d", text: "70.67%" }
+            ],
+            answer: "d",
+            explanation: "For $C$ correct answers among $A$ attempts, the net score is $S=C-0.25(A-C)$. Hence $C=(S+0.25A)/1.25$. The three correct counts are 12, 21 and 20. Combined accuracy is $53/75$ expressed as a percentage, or 70.67%. Averaging quiz percentages without weighting would give the wrong result."
+        },
+        {
+            id: "d38m141",
+            revisionOf: { day: 38, id: "d38m41" },
+            text: "Asha, Bina, Chetan, Dipak, Esha, Farah, Gita and Hina occupy eight equally spaced seats around a circular table, all facing the centre. Asha is opposite Esha. Bina is second to Dipak's right. Chetan is immediately to Bina's left. Gita is opposite Chetan, and Farah is immediately to Gita's right. Dipak is adjacent to Esha. Who is third to Farah's left?",
+            options: [
+                { key: "a", text: "Hina" },
+                { key: "b", text: "Esha" },
+                { key: "c", text: "Asha" },
+                { key: "d", text: "Bina" }
+            ],
+            answer: "c",
+            explanation: "Fix Asha at the top to remove rotational duplicates. For people facing the centre, left is clockwise. The clues give the unique clockwise order Asha, Bina, Chetan, Dipak, Esha, Farah, Gita, Hina. Dipak's adjacency to Esha rules out the alternative placement of the linked group. Three places left of Farah are Gita, Hina, then Asha."
+        },
+        {
+            id: "d38m142",
+            revisionOf: { day: 38, id: "d38m42" },
+            text: "Use only these statements: All surgeons are doctors. No doctor is a pilot. Some researchers are surgeons. Conclusions: I. Some researchers are not pilots. II. No pilot is a surgeon. III. Some doctors are not researchers. Which conclusions follow necessarily?",
+            options: [
+                { key: "a", text: "Only I and II" },
+                { key: "b", text: "Only I and III" },
+                { key: "c", text: "Only II and III" },
+                { key: "d", text: "All three" }
+            ],
+            answer: "a",
+            explanation: "The researchers who are surgeons must be doctors and therefore cannot be pilots, proving I. Since every surgeon is a doctor and doctors exclude pilots, II also follows. III is not guaranteed: all doctors could be researchers without contradicting any premise. The statements do not establish a doctor outside the researcher set."
+        },
+        {
+            id: "d38m143",
+            revisionOf: { day: 38, id: "d38m43" },
+            text: "A candidate is shortlisted if and only if the candidate passed the written test and either holds a valid permit or passed the practical test. Everyone who passed the practical test completed induction. Nira was shortlisted but did not complete induction. What must be true?",
+            options: [
+                { key: "a", text: "She failed the written test." },
+                { key: "b", text: "She passed the practical test." },
+                { key: "c", text: "She holds a permit, but her written-test result cannot be inferred." },
+                { key: "d", text: "She passed the written test and holds a valid permit." }
+            ],
+            answer: "d",
+            explanation: "Not completing induction rules out passing the practical test, by the contrapositive of the second rule. Being shortlisted still requires passing the written test and meeting at least one of the permit-or-practical conditions. Since practical success is ruled out, Nira must hold a valid permit as well as have passed the written test."
+        },
+        {
+            id: "d38m144",
+            revisionOf: { day: 38, id: "d38m44" },
+            text: "Six presentations P, Q, R, S, T and U occupy consecutive slots, one presentation per slot. U is last. Exactly two presentations occur between R and T, with R earlier. P is earlier than R, and Q is immediately before S. Which presentation is third?",
+            options: [
+                { key: "a", text: "R" },
+                { key: "b", text: "S" },
+                { key: "c", text: "Q" },
+                { key: "d", text: "T" }
+            ],
+            answer: "c",
+            explanation: "T is three slots after R. R cannot be first because P must precede it; R cannot be third because that would place T in the last slot, occupied by U. Therefore R is second and T fifth. P is first, leaving adjacent slots three and four for Q and S. The unique order is P, R, Q, S, T, U."
+        },
+        {
+            id: "d38m145",
+            revisionOf: { day: 38, id: "d38m45" },
+            text: "Exactly one of four boxes contains a token. Red's label says, 'The token is in blue or black.' Blue's label says, 'The token is not in green.' Green's label says, 'The token is not in black.' Black's label says, 'The token is in red.' Exactly two labels are true. Which box contains the token?",
+            options: [
+                { key: "a", text: "Black" },
+                { key: "b", text: "Red" },
+                { key: "c", text: "Blue" },
+                { key: "d", text: "Green" }
+            ],
+            answer: "a",
+            explanation: "Test each possible location against all four labels. A token in red makes three labels true; blue also makes three true; green makes only one true. A token in black makes the red and blue labels true, and the green and black labels false. Thus black is the only location giving exactly two true labels."
+        },
+        {
+            id: "d38m146",
+            revisionOf: { day: 38, id: "d38m46" },
+            text: "The square card shows an upward arrow and a dot near its lower-left corner. The whole card is rotated 90 degrees clockwise, reflected left-to-right across a vertical line, then rotated 180 degrees. Which description gives the final arrow and dot?<svg class='q-fig' viewBox='0 0 170 155' width='170' height='155' role='img' aria-label='Square card with an upward-pointing arrow through its centre and a dot near the lower-left corner'><g fill='none' stroke='currentColor' stroke-width='2'><path d='M30 25H130V125H30Z'/><path d='M80 108V44M66 58L80 44L94 58' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></g><circle cx='45' cy='110' r='5' fill='currentColor'/></svg>",
+            options: [
+                { key: "a", text: "Arrow right; dot upper right" },
+                { key: "b", text: "Arrow right; dot lower left" },
+                { key: "c", text: "Arrow left; dot lower right" },
+                { key: "d", text: "Arrow left; dot upper left" }
+            ],
+            answer: "b",
+            explanation: "Track both features through every operation. The arrow changes from up to right, then left, then right. The dot moves from lower left to upper left, then upper right, then lower left. A choice with the correct arrow but the wrong dot has applied only part of the transformation sequence."
+        },
+        {
+            id: "d38m147",
+            revisionOf: { day: 38, id: "d38m47" },
+            text: "The net is folded into a cube with the letters outside. The cube is then oriented so that C is on top and E faces you. Which letter is on the right face?<svg class='q-fig' viewBox='0 0 260 195' width='260' height='195' role='img' aria-label='Cube net: horizontal row A, B, C, D, with E directly above B and F directly below B'><g fill='none' stroke='currentColor' stroke-width='1.8'><path d='M30 72H230V122H30ZM80 72V122M130 72V122M180 72V122M80 72V22H130V72M80 122V172H130V122'/></g><g fill='currentColor' font-family='sans-serif' font-size='22' text-anchor='middle'><text x='55' y='105'>A</text><text x='105' y='105'>B</text><text x='155' y='105'>C</text><text x='205' y='105'>D</text><text x='105' y='55'>E</text><text x='105' y='155'>F</text></g></svg>",
+            options: [
+                { key: "a", text: "D" },
+                { key: "b", text: "A" },
+                { key: "c", text: "B" },
+                { key: "d", text: "F" }
+            ],
+            answer: "c",
+            explanation: "With B initially in front, the folded net has C right, A left, E top, F bottom and D back. Turn the cube so E comes to the front; B is then below and C remains right. Keeping E in front, rotate so C moves to the top. B moves from below to the right. Opposite-face pairs alone do not determine this handed orientation."
+        },
+        {
+            id: "d38m148",
+            revisionOf: { day: 38, id: "d38m48" },
+            text: "One pair of opposite faces of a large cube is painted red and another pair of opposite faces blue. Its remaining two faces are unpainted. The cube is cut into 125 identical cubes in a regular cubical grid. How many small cubes have exactly two painted faces, one red and one blue?",
+            options: [
+                { key: "a", text: "12" },
+                { key: "b", text: "20" },
+                { key: "c", text: "24" },
+                { key: "d", text: "36" }
+            ],
+            answer: "b",
+            explanation: "Since $125=5^3$, there are five small cubes along each edge. A red face meets a blue face along four parallel edges. Every one of the five cubes on each such edge qualifies, including its endpoints: the third outer face at an endpoint is unpainted. Hence the count is $4(5)=20$, not the usual all-six-faces-painted edge formula."
+        },
+        {
+            id: "d38m149",
+            revisionOf: { day: 38, id: "d38m49" },
+            text: "A square sheet has side 16 cm, with its lower-left corner at (0, 0), horizontal coordinates increasing rightwards and vertical coordinates upwards. Fold the left half onto the right along x = 8, then the bottom half onto the top along y = 8. A tiny hole is punched at (11, 13) through all layers of the final packet, using the original coordinate system. After unfolding, what is the greatest distance between two hole centres?",
+            options: [
+                { key: "a", text: "$2\\sqrt{34}$ cm" },
+                { key: "b", text: "$2\\sqrt{26}$ cm" },
+                { key: "c", text: "$4\\sqrt{17}$ cm" },
+                { key: "d", text: "$10$ cm" }
+            ],
+            answer: "a",
+            explanation: "Unfolding reflects the hole across both crease lines. Its possible horizontal coordinates are 11 and $16-11=5$, and vertical coordinates are 13 and $16-13=3$. The four holes form a rectangle of side lengths 6 cm and 10 cm. The greatest separation is a diagonal: $\\sqrt{6^2+10^2}=2\\sqrt{34}$ cm."
+        },
+        {
+            id: "d38m150",
+            revisionOf: { day: 38, id: "d38m50" },
+            text: "The shaded quarter and the small outlined dot follow separate regular cycles. Which figure continues both cycles?<svg class='q-fig' viewBox='0 0 290 90' width='290' height='90' role='img' aria-label='Three divided squares: upper-left quarter shaded with dot lower right; upper-right quarter shaded with dot upper right; lower-right quarter shaded with dot upper left'><g fill='currentColor'><path d='M10 15H40V45H10Z'/><path d='M140 15H170V45H140Z'/><path d='M240 45H270V75H240Z'/></g><g fill='none' stroke='currentColor' stroke-width='1.6'><path d='M10 15H70V75H10ZM40 15V75M10 45H70M110 15H170V75H110ZM140 15V75M110 45H170M210 15H270V75H210ZM240 15V75M210 45H270'/></g><g fill='white' stroke='currentColor' stroke-width='1.6'><circle cx='55' cy='60' r='4'/><circle cx='155' cy='30' r='4'/><circle cx='225' cy='30' r='4'/></g></svg>",
+            options: [
+                { key: "a", text: "<svg class='opt-fig' viewBox='0 0 70 70' width='70' height='70' role='img' aria-label='Lower-left quarter shaded; dot upper right'><path d='M5 35H35V65H5Z' fill='currentColor'/><path d='M5 5H65V65H5ZM35 5V65M5 35H65' fill='none' stroke='currentColor' stroke-width='1.6'/><circle cx='55' cy='15' r='4' fill='white' stroke='currentColor' stroke-width='1.6'/></svg>" },
+                { key: "b", text: "<svg class='opt-fig' viewBox='0 0 70 70' width='70' height='70' role='img' aria-label='Upper-left quarter shaded; dot lower left'><path d='M5 5H35V35H5Z' fill='currentColor'/><path d='M5 5H65V65H5ZM35 5V65M5 35H65' fill='none' stroke='currentColor' stroke-width='1.6'/><circle cx='15' cy='55' r='4' fill='white' stroke='currentColor' stroke-width='1.6'/></svg>" },
+                { key: "c", text: "<svg class='opt-fig' viewBox='0 0 70 70' width='70' height='70' role='img' aria-label='Lower-left quarter shaded; dot upper left'><path d='M5 35H35V65H5Z' fill='currentColor'/><path d='M5 5H65V65H5ZM35 5V65M5 35H65' fill='none' stroke='currentColor' stroke-width='1.6'/><circle cx='15' cy='15' r='4' fill='white' stroke='currentColor' stroke-width='1.6'/></svg>" },
+                { key: "d", text: "<svg class='opt-fig' viewBox='0 0 70 70' width='70' height='70' role='img' aria-label='Lower-left quarter shaded; dot lower left'><path d='M5 35H35V65H5Z' fill='currentColor'/><path d='M5 5H65V65H5ZM35 5V65M5 35H65' fill='none' stroke='currentColor' stroke-width='1.6'/><circle cx='15' cy='55' r='4' fill='white' stroke='currentColor' stroke-width='1.6'/></svg>" }
+            ],
+            answer: "d",
+            explanation: "The shaded quarter travels clockwise: upper left, upper right, lower right, then lower left. Independently, the dot travels anticlockwise: lower right, upper right, upper left, then lower left. The next figure therefore has both features in the lower-left quarter. A figure matching only the shading cycle is insufficient."
+        }
+    ]
+}];
+
+const DAY38_MAT_REPLACEMENTS = new Map(DAY38.chapters[1].questions.map(question => [question.revisionOf.id, question.id]));
+DAY38.syllabus = DAY38_SYLLABUS.map(subject => subject.subject !== "MAT" ? subject : {
+    ...subject,
+    topics: subject.topics.map(topic => ({
+        ...topic,
+        subs: topic.subs.map(sub => ({ ...sub, ids: sub.ids.map(id => DAY38_MAT_REPLACEMENTS.get(id)) }))
+    }))
+});
