@@ -10,7 +10,7 @@
     /* ---------- constants ---------- */
     const STORAGE_KEY = "cee_dashboard_prakriti";
     const LEGACY_KEYS = ["cee_dashboard_prakriti_v3", "cee_dashboard_prakriti_v2", "cee_dashboard_prakriti_v1"];
-    const PLANNED_DAYS = 41;
+    const PLANNED_DAYS = 60;
     const TEST_DURATION_MS = 36 * 60 * 1000; // default 36 minutes per test
     // Per-day override via day.durationMinutes (e.g. Day 14 mock test = 180 min).
     const dayDurationMs = (day) => (day && day.durationMinutes ? day.durationMinutes : 36) * 60 * 1000;
@@ -1079,6 +1079,23 @@
         return values;
     }
 
+    function applyChartTheme() {
+        if (!chart) return;
+        const colors = getComputedStyle(document.body);
+        const color = name => colors.getPropertyValue(name).trim();
+        chart.options.scales.x.ticks.color = color("--ink-faint");
+        chart.options.scales.y.ticks.color = color("--ink-faint");
+        chart.options.scales.y.grid.color = color("--cee-chart-grid");
+        chart.data.datasets[0].backgroundColor = color("--cee-chart-exam");
+        chart.data.datasets[1].backgroundColor = color("--cee-chart-practice");
+        chart.options.plugins.tooltip.backgroundColor = color("--cee-chart-tooltip");
+        chart.options.plugins.tooltip.titleColor = color("--cee-chart-tooltip-ink");
+        chart.options.plugins.tooltip.bodyColor = color("--cee-chart-tooltip-ink");
+        chart.update("none");
+    }
+
+    window.addEventListener("study:themechange", applyChartTheme);
+
     function buildChart() {
         if (typeof Chart === "undefined") return;
         const ctx = $("progressChart").getContext("2d");
@@ -1157,6 +1174,7 @@
                 }
             }
         });
+        applyChartTheme();
     }
 
     function updateChart(practice) {
@@ -1167,7 +1185,6 @@
         $("progressChart").setAttribute("aria-label", `Paper net scores: ${[...examScores, ...practiceScores].join(", ") || "no graded paper attempts"}`);
         if (!chart) return;
         chart.data.datasets[0].data = values;
-        chart.data.datasets[0].backgroundColor = "#5288ba";
         chart.data.datasets[1].data = practiceValues;
         chart.options.scales.y.max = chartMax();
         chart.options.scales.y.min = [...values, ...practiceValues].some(value => value < 0) ? -25 : 0;

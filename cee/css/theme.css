@@ -1,0 +1,413 @@
+body[data-app="cee"] {
+    --cee-chart-exam: #5288ba;
+    --cee-chart-practice: #318463;
+    --cee-chart-grid: rgba(148, 163, 184, .16);
+    --cee-chart-tooltip: #0f172a;
+    --cee-chart-tooltip-ink: #fff;
+}
+
+body:is([data-app="cee"], [data-app="nec"]) .theme-toggle {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    padding: 0;
+    border: 1px solid var(--line, #dbe3e9);
+    border-radius: 6px;
+    background: var(--surface, #fff);
+    color: var(--ink, #25323b);
+    cursor: pointer;
+    touch-action: manipulation;
+    box-shadow: none;
+}
+
+body:is([data-app="cee"], [data-app="nec"]) .theme-toggle:hover {
+    background: var(--brand-50, #eaf2fc);
+}
+
+body:is([data-app="cee"], [data-app="nec"]) .theme-toggle:focus-visible {
+    outline: 3px solid var(--brand, #2467ac);
+    outline-offset: 3px;
+}
+
+[data-theme-toggle][hidden] { display: none !important; }
+.theme-toggle > .ui-icon { width: 20px; height: 20px; }
+.theme-toggle-tooltip {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 100;
+    width: max-content;
+    max-width: 220px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    background: var(--ink, #25323b);
+    color: var(--surface, #fff);
+    font: 500 12px/1.5 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+.theme-toggle:is(:hover, :focus-visible) .theme-toggle-tooltip { visibility: visible; }
+.theme-gate-actions { display: flex; justify-content: flex-end; max-width: 1120px; margin-inline: auto; }
+body[data-app="nec"] #civilSection .theme-toggle { background: transparent; color: var(--cs-muted); }
+
+html[data-theme="dark"],
+html[data-theme="dark"] body:is([data-app="cee"], [data-app="nec"]) {
+    --bg: #17191d;
+    --bg-grid: transparent;
+    --surface: #202328;
+    --surface-2: #292d33;
+    --ink: #edf0f3;
+    --ink-soft: #c0c7cf;
+    --ink-faint: #a5afb9;
+    --line: #424a55;
+    --line-soft: #343b44;
+    --brand: #92bff1;
+    --brand-600: #bbd8fa;
+    --brand-50: #26384d;
+    --good: #8cd5af;
+    --good-bg: #233c31;
+    --bad: #f0a4b1;
+    --bad-bg: #442b34;
+    --blue: #92bff1;
+    --blue-soft: #26384d;
+    --cyan: #86d1df;
+    --cyan-soft: #223b42;
+    --emerald: #8cd5af;
+    --emerald-soft: #233c31;
+    --amber: #ebc37d;
+    --amber-soft: #423725;
+    --rose: #eca4bd;
+    --rose-soft: #432d3a;
+    --slate: #c0c7cf;
+    --slate-soft: #343b44;
+    --nm-dk: #111316;
+    --nm-lt: #292d33;
+    --shadow-sm: 0 2px 6px rgb(0 0 0 / 15%);
+    --shadow: 0 4px 18px rgb(0 0 0 / 18%);
+    --shadow-lg: 0 18px 48px rgb(0 0 0 / 35%);
+    --nm-inset: none;
+    --nm-inset-sm: none;
+    --theme-primary: #28649f;
+    --theme-primary-hover: #3278b9;
+    --theme-green: #216544;
+    --theme-green-hover: #2b7952;
+    --cee-chart-exam: var(--blue);
+    --cee-chart-practice: var(--good);
+    --cee-chart-grid: var(--line-soft);
+    --cee-chart-tooltip: var(--surface-2);
+    --cee-chart-tooltip-ink: var(--ink);
+    --cs-page: var(--bg);
+    color-scheme: dark;
+    color: var(--ink);
+    background: var(--bg);
+}
+
+html[data-theme="dark"] body[data-app="cee"] {
+    background: linear-gradient(180deg, #22272d 0, var(--bg) 300px);
+}
+
+html[data-theme="dark"] body:is([data-app="cee"], [data-app="nec"]) :is(input, select, textarea) {
+    color-scheme: dark;
+    accent-color: var(--brand);
+}
+
+html[data-theme="dark"] body:is([data-app="cee"], [data-app="nec"]) ::selection {
+    background: #405e81;
+    color: #fff;
+}
+
+html[data-theme="dark"] body[data-app="cee"] :is(.topbar, .install-btn, .btn, .icon-back, .cee-icon-button, .exam-bar, .question, .option, .submit-bar, .result-hero, .cee-exam-dialog, .cee-image-dialog, .cee-practice-dialog, .cee-offline-dialog, .cee-answer, .dc-scan) {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--line);
+}
+html[data-theme="dark"] body[data-app="cee"] :is(input[type="search"], input[type="number"], select) { background: var(--surface); color: var(--ink); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"] :is(.btn-primary, .quiz-panel .option.selected .key) { background: var(--theme-primary); color: #fff; border-color: var(--theme-primary); }
+html[data-theme="dark"] body[data-app="cee"] .btn-primary:hover:not(:disabled) { background: var(--theme-primary-hover); color: #fff; }
+html[data-theme="dark"] body[data-app="cee"] :is(.btn, .option, .cee-answer):hover:not(:disabled),
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-nav button:hover, .cee-icon-button:hover, .install-btn:hover, .icon-back:hover) { background: var(--surface-2); color: var(--ink); border-color: var(--brand); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-nav [aria-current="page"], .quiz-panel .option.selected, .cee-icon-button[aria-pressed="true"]) { background: var(--brand-50); color: var(--brand-600); border-color: var(--brand); }
+html[data-theme="dark"] body[data-app="cee"] :is(.q-no, .option .key, .cee-answer-key, .test-timer, .cee-exam-map-filters, .cee-note-table th) { background: var(--surface-2); color: var(--ink-soft); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"] .cee-exam-map-filters input:checked + span { background: var(--surface); color: var(--ink); }
+html[data-theme="dark"] body[data-app="cee"] :is(.test-progress, .cee-stat-track, .cee-answer-track, .cee-session-progress, .cee-topic-progress) { background: var(--line-soft); }
+html[data-theme="dark"] body[data-app="cee"] :is(.avatar, .cee-practice-paper) { background: var(--good-bg); color: var(--good); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-practice-paper, .cee-review-practice):hover { background: #2e4c3d; color: var(--good); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-paper-practice-progress > span:first-child, .cee-answer-breakdown td:nth-child(3)) { color: var(--good); }
+html[data-theme="dark"] body[data-app="cee"] .cee-answer-breakdown td:last-child { color: var(--bad); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-answer-stats, .cee-practice-overview) > div:nth-child(n) { background: var(--surface); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"] .cee-stats.cee-answer-stats > div:nth-child(n) { border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-answer-stats, .cee-practice-overview) > div:first-child { background: var(--good-bg); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-answer-stats, .cee-practice-overview) dt { color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-answer-stats, .cee-practice-overview) dd { color: var(--ink); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-answer-stats, .cee-practice-overview) > div:nth-child(2) :is(dd, .ui-icon) { color: var(--good); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-answer-stats, .cee-practice-overview) > div:nth-child(3) :is(dd, .ui-icon) { color: var(--bad); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-answer-stats, .cee-practice-overview) > div:nth-child(4) :is(dd, .ui-icon) { color: var(--cyan); }
+html[data-theme="dark"] body[data-app="cee"] .cee-practice-overview > div > small { color: var(--ink-faint); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-reading-section p, .cee-digital-prose, .cee-explanation, .cee-transcript-text) { color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-note-gaps > summary, .cee-source-warning, .cee-source-correction summary, .cee-storage-notice) { color: var(--amber); border-color: var(--amber); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-exam-remaining, .cee-exam-map-question, .cee-exam-map-legend i) { background: var(--amber-soft); color: var(--amber); border-color: #8e754e; }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-exam-map-question[data-status="answered"], .cee-answer.is-correct) { background: var(--good-bg); color: var(--good); border-color: #518b6f; }
+html[data-theme="dark"] body[data-app="cee"] .cee-answer.is-wrong { background: var(--bad-bg); color: var(--bad); border-color: #b17181; }
+html[data-theme="dark"] body[data-app="cee"] .cee-offline-meta dt { color: var(--ink-faint); }
+html[data-theme="dark"] body[data-app="cee"] .cee-offline-meta > div { border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"] .cee-next { background: var(--good-bg); }
+html[data-theme="dark"] body[data-app="cee"] .cee-chart-empty { background: rgb(23 25 29 / 90%); }
+html[data-theme="dark"] body[data-app="cee"] .cee-latest-mode[data-mode="practice"] :is(.cee-mode-name, .cee-text-action) { color: var(--good); }
+html[data-theme="dark"] body[data-app="cee"] #ceePaperStatus { background: var(--surface-2); }
+html[data-theme="dark"] body[data-app="cee"] #ceePaperStatus input:checked + span { background: var(--surface); color: var(--ink); box-shadow: none; }
+html[data-theme="dark"] body[data-app="cee"] :is(.omr-frame, .omr-chip, .syl-ref-stat, .analytic, .analysis-item, .pill, .btn-primary.light, .btn.ghost) { background: var(--surface); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"] :is(.pill span, .ai-exp) { background: var(--surface-2); color: var(--ink-soft); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"] .pill.active { background: var(--brand-50); color: var(--brand); border-color: var(--brand); }
+html[data-theme="dark"] body[data-app="cee"] .result-ring .bg { stroke: var(--line-soft); }
+html[data-theme="dark"] body[data-app="cee"] :is(.option.correct, .analysis .option.correct) { background: var(--good-bg); color: var(--ink); border-color: #518b6f; }
+html[data-theme="dark"] body[data-app="cee"] :is(.option.incorrect, .analysis .option.incorrect) { background: var(--bad-bg); color: var(--ink); border-color: #b17181; }
+html[data-theme="dark"] body[data-app="cee"] .option.correct .key { background: var(--theme-green); color: #fff; }
+html[data-theme="dark"] body[data-app="cee"] .option.incorrect .key { background: #923f54; color: #fff; }
+html[data-theme="dark"] body[data-app="cee"] .ai-chip.skip { background: var(--amber-soft); color: var(--amber); }
+html[data-theme="dark"] body[data-app="cee"] .cee-score-legend .exam { background: var(--cee-chart-exam); }
+html[data-theme="dark"] body[data-app="cee"] .cee-score-legend .practice { background: var(--cee-chart-practice); }
+
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView :is(.btn, .cee-icon-button, select, input[type="search"], input[type="number"], .cee-builder-settings, .cee-topic-check, .cee-count-presets button, .cee-focus-question, .cee-answer, .cee-question-map button) { background: var(--surface); color: var(--ink); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView .btn-primary { background: var(--theme-green); color: #fff; border-color: var(--theme-green); }
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView .btn-primary:hover:not(:disabled) { background: var(--theme-green-hover); color: #fff; }
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView :is(.btn, .cee-answer):hover:not(:disabled),
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView :is(.cee-topic-check:hover, .cee-history-row:hover) { background: var(--surface-2); border-color: var(--good); }
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView :is(.cee-icon-button[aria-pressed="true"], .cee-topic-check:has(input:checked), .cee-count-presets [aria-pressed="true"], .cee-resume) { background: var(--good-bg); color: var(--good); border-color: #518b6f; }
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView :is(.cee-builder-settings label, .cee-topic-unit-heading, .cee-topic-unit-heading > span:first-child:not(:last-child)) { color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView :is(.cee-topic-subject-heading, .cee-topic-count, #ceePracticeSelected) { color: var(--good); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView .cee-topic-count small { color: var(--ink-faint); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-coverage-copy p, .cee-coverage-legend, .cee-practice-ring small, .cee-topic-count small) { color: var(--ink-faint); }
+html[data-theme="dark"] body[data-app="cee"] .cee-practice-ring { background: conic-gradient(var(--good) 0 var(--correct-share), var(--bad) var(--correct-share) var(--covered-share), var(--line-soft) var(--covered-share) 100%); }
+html[data-theme="dark"] body[data-app="cee"] .cee-practice-ring > span { background: var(--bg); }
+html[data-theme="dark"] body[data-app="cee"] :is(.cee-practice-ring b, .cee-resume-icon) { color: var(--good); }
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView :is(.cee-answer-key, .cee-question-map button) { background: var(--surface-2); color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView :is(.cee-answer.is-correct, .cee-answer.is-correct .cee-answer-key, .cee-question-map button.correct) { background: var(--good-bg); color: var(--good); border-color: #518b6f; }
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView :is(.cee-answer.is-wrong, .cee-answer.is-wrong .cee-answer-key, .cee-question-map button.wrong) { background: var(--bad-bg); color: var(--bad); border-color: #b17181; }
+html[data-theme="dark"] body[data-app="cee"] #ceePracticeView :is(.cee-practice-session-bar, .cee-feedback, .cee-practice-coverage) { border-color: var(--line); }
+
+html[data-theme="dark"] body[data-app="cee"].cee-practicing { background: var(--bg); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView :is(.cee-focus-question, .cee-practice-map, .cee-question-navigator, .cee-session-dock, .cee-session-finish, .cee-exam-options .cee-answer, #ceePracticeJump) { background: var(--surface); color: var(--ink); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView :is(.cee-session-heading h1, .cee-question-text, .cee-session-overview h2) { color: var(--ink); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView :is(.cee-session-eyebrow, .cee-session-mode, .cee-session-count, .cee-question-identifier > span, .cee-question-identifier small, .cee-question-source, .cee-session-review .cee-explanation, .cee-session-overview p, .cee-session-totals dt, .cee-question-navigator > summary, .cee-question-navigator label, .cee-map-legend > span, .cee-dock-position, .cee-session-totals .unanswered) { color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView :is(.cee-session-count b, .cee-session-totals .correct) { color: var(--good); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView .cee-session-totals .wrong { color: var(--bad); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView :is(.cee-question-identifier > b, .cee-session-dial > span) { background: var(--good-bg); color: var(--good); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView .cee-session-dial { background: conic-gradient(var(--good) 0 var(--session-correct), var(--bad) var(--session-correct) var(--session-answered), var(--line-soft) var(--session-answered) 100%); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView :is(.cee-exam-options .cee-answer-key, .cee-question-map button) { background: var(--surface-2); color: var(--ink-soft); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView .cee-exam-options .cee-answer:hover:not(:disabled) { background: var(--surface-2); border-color: var(--good); box-shadow: none; }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView :is(.cee-exam-options .cee-answer.is-correct, .cee-question-map button.correct) { background: var(--good-bg); color: var(--good); border-color: #518b6f; }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView :is(.cee-exam-options .cee-answer.is-wrong, .cee-question-map button.wrong) { background: var(--bad-bg); color: var(--bad); border-color: #b17181; }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView .cee-exam-options .is-correct :is(.cee-answer-key, .cee-choice-mark) { background: var(--theme-green); color: #fff; }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView .cee-exam-options .is-wrong :is(.cee-answer-key, .cee-choice-mark) { background: #923f54; color: #fff; }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView :is(.cee-question-tools .cee-icon-button, .cee-question-map button:hover, .cee-dock-position:hover) { background: var(--surface-2); color: var(--ink-soft); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView .cee-question-tools [aria-pressed="true"] { background: var(--good-bg); color: var(--good); border-color: var(--good); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView .cee-question-tools [data-practice-action="flag"][aria-pressed="true"] { background: var(--amber-soft); color: var(--amber); border-color: var(--amber); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView :is(.cee-session-totals, .cee-session-totals > div, .cee-session-review, .cee-map-legend, .cee-session-mode, .cee-choice-mark:empty) { border-color: var(--line); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView .cee-session-progress { background: var(--line-soft); }
+html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView .cee-session-dock .btn-primary { background: var(--theme-green); color: #fff; border-color: var(--theme-green); }
+
+html[data-theme="dark"] body[data-app="nec"] #civilSection {
+    --cs-ink: var(--ink);
+    --cs-muted: var(--ink-faint);
+    --cs-teal: var(--good);
+    --cs-forest: #1c4937;
+    --cs-mint: var(--good-bg);
+    --cs-page: var(--bg);
+    --cs-line: var(--line);
+    --cs-control-line: #778492;
+    --nec-blue: var(--blue);
+    --nec-blue-soft: var(--blue-soft);
+    --nec-amber: var(--amber);
+    --nec-amber-soft: var(--amber-soft);
+    --nec-red: var(--bad);
+    --cv-ink: var(--ink);
+    --cv-muted: var(--ink-faint);
+    --cv-line: var(--line);
+    --cv-page: var(--bg);
+    --cv-teal: #86d1df;
+    --cv-teal-dark: #a4dce6;
+    --cv-teal-banner: #265669;
+    --cv-teal-soft: var(--cyan-soft);
+    --cv-blue: var(--blue);
+    --cv-blue-dark: #a4caf5;
+    --cv-blue-deep: #bbd8fa;
+    --cv-orange: var(--amber);
+    --cv-orange-dark: var(--amber);
+    --cv-green: var(--good);
+    --cv-red: var(--bad);
+    --cv-gold: var(--amber);
+    --cv-gold-dark: var(--amber);
+    --cv-gold-soft: var(--amber-soft);
+    --cv-violet: var(--blue);
+    --cv-violet-soft: var(--blue-soft);
+    --cv-focus: var(--brand);
+    --cv-control-line: #778492;
+    --cv-shadow: var(--shadow-sm);
+    color-scheme: dark;
+}
+html[data-theme="dark"] body[data-app="nec"].civil-open { background: var(--bg); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(#cvApp, #cvGate) :is(input:not([type="radio"]):not([type="checkbox"]), select, textarea) { background: var(--surface); color: var(--ink); border-color: var(--cs-control-line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(input, textarea)::placeholder { color: var(--ink-faint); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvGate :is(.cs-welcome, .cv-gate.cs-welcome-form) { background: var(--surface); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvGate .cv-gate-err { background: var(--bad-bg); color: var(--bad); border-color: #b17181; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.nec-launch, .nec-utilities > .nec-tools) { background: var(--surface); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .nec-launch:hover { background: var(--surface-2); border-color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cs-brand > span { background: var(--good-bg); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNav > button:hover { background: var(--surface-2); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNav > button:is(.active, [aria-current="page"]) { background: var(--good-bg); color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNav #cvSavedCount { background: var(--surface-2); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .nec-coverage-ring { background: conic-gradient(var(--good) 0 var(--correct-share), var(--amber) var(--correct-share) var(--attempted-share), var(--line-soft) var(--attempted-share) 100%); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.nec-chapter-track, .nec-key-unseen) { background: var(--line-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .nec-coverage-row { background: var(--surface); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .nec-coverage-row:hover { border-color: var(--good); box-shadow: none; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .nec-review-wrong { border-color: #6c5631; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .nec-review-wrong:hover { border-color: var(--amber); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(#cvGate, #cvDash, #cvPractice, #cvChapters, #cvSets, #cvResult, #cvLearning) :is(.cv-btn, .cs-paper-actions > button) { background: var(--theme-green); color: #fff; border-color: var(--theme-green); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(#cvGate, #cvDash, #cvPractice, #cvChapters, #cvSets, #cvResult, #cvLearning) :is(.cv-btn-ghost, .cs-paper-actions > button:last-child) { background: var(--surface); color: var(--good); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(#cvGate, #cvDash, #cvPractice, #cvChapters, #cvSets, #cvResult, #cvLearning) :is(.cv-btn, .cs-paper-actions > button):hover:not(:disabled) { background: var(--theme-green-hover); color: #fff; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvApp :is(.cv-panel, .cv-chapter, .cs-paper, .cv-builder-summary, .cv-builder-chapter, .cv-pick-subchapter, .cs-session-mode label, .cs-saved-question, .cv-break, .cv-exam, .cv-viewer-tools, .cv-empty, .cv-subj-table, .cv-res-stat, .cv-result-chapter, .cv-subchapter-result) { background: var(--surface); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvSets .cs-capsule-heading h3 { color: var(--ink); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvSets .cs-capsule-heading p { color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvPractice .cv-selection-summary { background: var(--surface-2); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvPractice .cv-selection-chip { background: var(--surface); border-color: var(--line); color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(#cvChapters, #cvPractice) :is(.cv-count, .cv-selection-count, .cv-count-chip, .cv-switch-line, .cv-selected-chips span, .cv-builder-hint) { background: var(--surface-2); color: var(--ink-soft); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(#cvChapters, #cvPractice) :is(.cv-chapter-icon, .cv-additional .cv-chapter-icon) { background: var(--blue-soft); color: var(--blue); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvApp :is(.cv-chapter, .cv-builder-chapter)[open] > summary { background: var(--surface-2); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvApp .cv-additional > summary { background: var(--amber-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvPractice :is(.cv-pick-subchapter:is(.on, :has(input:checked)), .cs-session-mode label:is(.is-active, :has(input:checked))) { background: var(--good-bg); color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cv-source-option { background: var(--surface); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cv-source-option:has(input:checked) { background: var(--good-bg); color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvPractice .cv-count-chip:is(.active, [aria-pressed="true"]) { background: var(--theme-green); color: #fff; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvApp :is(.cv-progress-track, .cv-break-bar, .cs-paper-progress, .cv-subj-meter) { background: var(--line-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvSets .cs-paper .cv-pill.done { color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvSets .cs-paper .cv-pill.live { color: var(--amber); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvApp :is(.cv-page-intro, .cv-solution) { background: var(--surface-2); color: var(--ink-soft); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvApp .cv-save-button { background: var(--surface); color: var(--ink-soft); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvApp .cv-save-button:is(.on, :hover) { background: var(--good-bg); color: var(--good); border-color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cv-modal, .cv-ei-popup, .cv-pager-num, .cv-fpill) { background: var(--surface); color: var(--ink); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cv-modal p, .cv-res-stat.gray .cv-res-badge) { color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cv-btn, .cv-infobox, .cv-pager-num.active, .cv-fpill.active) { background: #265669; color: #fff; border-color: #467988; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cv-btn-ghost { background: var(--surface); color: var(--ink); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cv-btn-green { background: var(--theme-green); color: #fff; border-color: var(--theme-green); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cv-pager-num.flagged, .cv-q.flagged, .cv-notice-warn) { background: var(--amber-soft); color: var(--ink); border-color: var(--amber); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cv-pager-num.active.flagged { background: #265669; color: #fff; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cv-ei-photo, .cv-opt:hover, .cv-notice-info) { background: var(--surface-2); color: var(--ink); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cv-opt.selected { background: var(--cyan-soft); border-color: var(--cyan); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cv-opt.correct { background: var(--good-bg); color: var(--ink); border-color: #518b6f; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cv-opt.wrong { background: var(--bad-bg); color: var(--ink); border-color: #b17181; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cv-q, .cv-subj-row, .cv-break-row) { border-color: var(--line-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(#cvResult, #cvLearning[data-learning-view="result"]) > .cv-review-filters .cv-fpill.active { background: var(--theme-green); color: #fff; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(#cvResult, #cvLearning[data-learning-view="result"]) > .cv-res-stats .red .cv-res-badge { color: var(--bad); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(#cvResult, #cvLearning[data-learning-view="result"]) > .cv-res-stats .gold .cv-res-badge { color: var(--amber); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvLearning[data-learning-view="result"] > .cv-panel .cv-result-chapter[open] > summary { background: var(--surface-2); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvSets .cs-paper:hover { border-color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cn-search-result, .cn-empty, .cn-source-dialog, .cn-close, .cn-figure-corner, .cn-figure-zoom) { background: var(--surface); color: var(--ink); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-button { background: var(--theme-green); color: #fff; border-color: var(--theme-green); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-button.cn-secondary { background: var(--surface); color: var(--good); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-button:hover:not(:disabled) { background: var(--theme-green-hover); color: #fff; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes .cn-library { background: var(--surface-2); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes .cn-library > button { color: var(--ink); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes .cn-library > button span { color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes .cn-library > button[aria-pressed="true"] { background: var(--surface); border-color: var(--good); color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes :is(.cn-field input, .cn-field select) { background: var(--surface); color: var(--ink); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-prose :is(thead, tbody th) { background: var(--surface-2); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-gaps { background: var(--surface-2); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes :is(.cn-f, [id$="-formulas"].cn-revision) { background: var(--good-bg); color: var(--ink); border-color: #518b6f; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cn-caution, .cn-source-check) { background: var(--amber-soft); border-color: var(--amber); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-caution[data-check-status="corrected"] { background: var(--good-bg); border-color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-lesson .cn-caution:is([data-check-kind="clarification"], [data-check-kind="context"], [data-check-kind="notation"], [data-check-kind="scope"]) { background: var(--surface-2); border-color: var(--ink-faint); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-lesson .cn-caution[data-check-kind="answer-review"] { background: var(--bad-bg); border-color: var(--bad); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-option-btn.is-correct { background: var(--good-bg); color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-option-btn.is-wrong { background: var(--bad-bg); color: var(--bad); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cn-summary, .cn-keypoints, .cn-formula) { background: var(--surface-2); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-formula { border-top-color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-example { background: var(--blue-soft); border-color: var(--line); border-left-color: var(--blue); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes .cn-example > h5 { color: var(--blue); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cn-sheet-item, .cn-point-ref) { background: var(--surface); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-point-ref:hover { background: var(--good-bg); border-color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-v2 :is(.cn-formula-where, .cn-sheet-note) { color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-v2 .cn-prose em { color: var(--ink); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-keypoints li.is-highlighted { background: var(--amber-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cn-study, .cn-quiz-result) { background: var(--surface); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz { background: var(--surface-2); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cn-quiz-q, .cn-quiz-foot) { border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cn-quiz-title, .cn-quiz-score) { color: var(--blue); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz > summary::before { border-color: var(--blue); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cn-quiz-count, .cn-quiz-meta) { color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-status { background: var(--surface); color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-status[data-state="done"] { background: var(--good-bg); color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-status[data-state="review"] { background: var(--bad-bg); color: var(--bad); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-stem { color: var(--ink); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes .cn-quiz-option { background: var(--surface); border-color: var(--line); color: var(--ink); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes .cn-quiz-option:hover:not([aria-disabled="true"]) { background: var(--good-bg); border-color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-key { background: var(--surface-2); border-color: var(--line); color: var(--ink-soft); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes .cn-quiz-option.is-correct { background: var(--good-bg); border-color: var(--good); color: var(--ink); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes .cn-quiz-option.is-wrong { background: var(--bad-bg); border-color: var(--bad); color: var(--ink); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-option.is-correct .cn-quiz-key { background: var(--good); border-color: var(--good); color: var(--bg); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-option.is-wrong .cn-quiz-key { background: var(--bad); border-color: var(--bad); color: var(--bg); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-q[data-answered="correct"] .cn-quiz-verdict { color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-q[data-answered="wrong"] .cn-quiz-verdict { color: var(--bad); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-check { background: var(--amber-soft); border-color: var(--amber); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-check > b { color: var(--amber); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-keyfact { background: var(--surface-2); border-color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-quiz-keyfact > b { color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-progress { background: var(--surface-2); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-progress-correct { background: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-progress-wrong { background: var(--bad); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .cn-study .cn-button[aria-pressed="true"] { background: var(--good-bg); border-color: var(--good); color: var(--good); box-shadow: inset 0 0 0 1px var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes .cn-drill .cn-reveal { background: var(--surface); border-color: var(--line); color: var(--good); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvNotes .cn-drill .cn-reveal:hover { background: var(--good-bg); border-color: var(--good); }
+
+html[data-theme="dark"] body[data-app="nec"] #civilSection[data-session-mode="practice"],
+html[data-theme="dark"] body[data-app="nec"] #civilSection[data-session-mode="practice"]::before { background: var(--bg); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .fp-app {
+    --fp-bg: var(--bg);
+    --fp-surface: var(--surface);
+    --fp-ink: var(--ink);
+    --fp-muted: var(--ink-faint);
+    --fp-line: var(--line);
+    --fp-control: #778492;
+    --fp-teal: #8fd6c8;
+    --fp-teal-hover: #b4e8de;
+    --fp-teal-soft: #223c39;
+    --fp-good: var(--good);
+    --fp-good-soft: var(--good-bg);
+    --fp-bad: var(--bad);
+    --fp-bad-soft: var(--bad-bg);
+    --fp-flag: var(--amber);
+    --fp-flag-soft: var(--amber-soft);
+    color-scheme: dark;
+}
+html[data-theme="dark"] body[data-app="nec"] #civilSection .fp-primary { background: var(--theme-green); color: #fff; border-color: var(--theme-green); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .fp-primary:hover:not(:disabled) { background: var(--theme-green-hover); color: #fff; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.fp-map-filter select, .fp-app .cv-save-button, .fp-choice:is(.correct, .wrong) .fp-letter) { background: var(--surface); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.fp-number, .fp-number.unanswered) { background: var(--surface-2); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .fp-number.correct { background: var(--good-bg); color: var(--good); border-color: #518b6f; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .fp-number.wrong { background: var(--bad-bg); color: var(--bad); border-color: #b17181; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .fp-explanation { border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.fp-button, .fp-icon-button):hover:not(:disabled) { background: var(--surface-2); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection .fp-primary:hover:not(:disabled) { background: var(--theme-green-hover); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.fp-button, .fp-icon-button, .fp-text-button, .cn-button, .cv-btn):disabled { background: var(--surface-2); color: var(--ink-faint); border-color: var(--line); }
+
+html[data-theme="dark"] body:is([data-app="cee"], [data-app="nec"]) :is(.install-help, .nec-transfer-dialog) { background: var(--surface); color: var(--ink); border-color: var(--line); box-shadow: var(--shadow-lg); }
+html[data-theme="dark"] body:is([data-app="cee"], [data-app="nec"]) dialog::backdrop { background: rgb(0 0 0 / 65%); }
+html[data-theme="dark"] body[data-app="nec"] .nec-transfer-actions button { background: var(--surface-2); color: var(--ink); border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] .nec-transfer-actions button:last-child { background: var(--theme-green); color: #fff; }
+html[data-theme="dark"] body[data-app="nec"] .nec-offline-meta > div { border-color: var(--line); }
+html[data-theme="dark"] body[data-app="nec"] .nec-offline-meta dt { color: var(--ink-faint); }
+html[data-theme="dark"] body[data-app="nec"] #civilSection #cvDash .nec-offline-open[data-state="ready"] { border-color: #518b6f; color: var(--good); }
+html[data-theme="dark"] body[data-app="cee"] :is(.q-fig, .opt-fig, .cee-digital-prose svg:not(mjx-container svg), .cee-question-text img, .cee-explanation img) { background: #f5f7f9; color: #25323b; color-scheme: light; border-radius: 4px; }
+html[data-theme="dark"] body[data-app="nec"] #civilSection :is(.cn-figure-open, .cn-figure-viewport, .cn-explanation-figure > a) { background: #f5f7f9; color-scheme: light; }
+
+@media (max-width: 900px) {
+    html[data-theme="dark"] body[data-app="cee"].cee-practicing #ceePracticeView .cee-practice-map { background: transparent; }
+}
+
+@media (max-width: 700px) {
+    body[data-app="nec"]:not(.civil-session) #civilSection #cvTopbar .cs-exit-actions { gap: 2px; padding-left: 0; border-left: 0; }
+}
