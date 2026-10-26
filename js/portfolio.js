@@ -250,26 +250,26 @@
   const MOUSE_RADIUS = 210;
 
   // Theme-aware colors
-  let BEAM_COLOR = [45, 156, 219];
-  let NODE_COLOR = [45, 156, 219];
-  let ORANGE = [30, 143, 208];
-  let GRID_COLOR = 'rgba(45, 156, 219, 0.035)';
-  let SUB_GRID_COLOR = 'rgba(45, 156, 219, 0.015)';
+  let BEAM_COLOR = [82, 183, 136];
+  let NODE_COLOR = [82, 183, 136];
+  let ORANGE = [64, 145, 108];
+  let GRID_COLOR = 'rgba(82, 183, 136, 0.035)';
+  let SUB_GRID_COLOR = 'rgba(82, 183, 136, 0.015)';
   let GRID_LINE_W = 0.5;
 
   function updateCanvasTheme(theme) {
     if (theme === 'light') {
-      BEAM_COLOR = [24, 118, 168];
-      NODE_COLOR = [24, 118, 168];
-      ORANGE = [24, 118, 168];
-      GRID_COLOR = 'rgba(24, 118, 168, 0.06)';
-      SUB_GRID_COLOR = 'rgba(24, 118, 168, 0.025)';
+      BEAM_COLOR = [47, 133, 90];
+      NODE_COLOR = [47, 133, 90];
+      ORANGE = [47, 133, 90];
+      GRID_COLOR = 'rgba(47, 133, 90, 0.06)';
+      SUB_GRID_COLOR = 'rgba(47, 133, 90, 0.025)';
     } else {
-      BEAM_COLOR = [45, 156, 219];
-      NODE_COLOR = [45, 156, 219];
-      ORANGE = [30, 143, 208];
-      GRID_COLOR = 'rgba(45, 156, 219, 0.035)';
-      SUB_GRID_COLOR = 'rgba(45, 156, 219, 0.015)';
+      BEAM_COLOR = [82, 183, 136];
+      NODE_COLOR = [82, 183, 136];
+      ORANGE = [64, 145, 108];
+      GRID_COLOR = 'rgba(82, 183, 136, 0.035)';
+      SUB_GRID_COLOR = 'rgba(82, 183, 136, 0.015)';
     }
   }
   // Apply saved theme to canvas on load
