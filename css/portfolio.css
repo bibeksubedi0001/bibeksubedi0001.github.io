@@ -948,6 +948,14 @@ button{border:none;background:none;cursor:pointer;font-family:inherit;}
   .app-showcase-inner{grid-template-columns:1fr;}
   .app-showcase{padding:32px;}
 }
+/* keep the inline nav on one row between the mobile breakpoint and full desktop width */
+@media(min-width:769px) and (max-width:1100px){
+  .nav-link{padding:8px 9px;font-size:.82rem;}
+}
+@media(min-width:769px) and (max-width:900px){
+  .nav-links{gap:2px;}
+  .nav-link{padding:6px 5px;font-size:.78rem;}
+}
 @media(max-width:768px){
   .nav-links{
     position:fixed;top:0;right:-100%;width:280px;height:100vh;
