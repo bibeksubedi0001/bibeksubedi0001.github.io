@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bibek Subedi — Civil Engineering · GIS · Applied ML</title>
+  <meta name="description"
+    content="Laboratory notebook of Bibek Subedi — Civil Engineering graduate of IOE Pulchowk Campus working on flood and hydrological modelling, earthquake hazard, GIS and applied machine learning.">
+  <meta name="author" content="Bibek Subedi">
+  <link rel="canonical" href="https://bibeksubedi0001.com.np/site2/">
+  <link rel="icon" type="image/png" href="../images/profile_.jpg">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Bibek Subedi — Civil Engineering · GIS · Applied ML">
+  <meta property="og:description"
+    content="Flood and hydrological modelling, earthquake hazard, GIS and applied machine learning. IOE Pulchowk Campus, Nepal.">
+  <meta property="og:image" content="../images/profile_.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script>
+    // set the theme before first paint so the page never flashes the wrong plate
+    (function () {
+      try {
+        var t = localStorage.getItem("bs-theme");
+        if (t === "dark") document.documentElement.classList.add("dark");
+      } catch (e) { }
+    })();
+  </script>
+</head>
+
+<body>
+
+  <!-- ===== icon sprite ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+        stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+      </symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round">
+        <path d="M4 7h16M4 12h16M4 17h16" />
+      </symbol>
+      <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round">
+        <path d="M6 6l12 12M18 6L6 18" />
+      </symbol>
+      <symbol id="i-github" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M12 .5C5.73.5.9 5.33.9 11.6c0 4.9 3.17 9.05 7.57 10.52.55.1.75-.24.75-.53v-2.05c-3.08.67-3.73-1.3-3.73-1.3-.5-1.29-1.23-1.63-1.23-1.63-1-.69.08-.67.08-.67 1.11.08 1.7 1.14 1.7 1.14.99 1.7 2.6 1.21 3.23.93.1-.72.39-1.21.7-1.49-2.46-.28-5.05-1.23-5.05-5.48 0-1.21.43-2.2 1.14-2.98-.11-.28-.5-1.41.11-2.94 0 0 .93-.3 3.05 1.14a10.5 10.5 0 0 1 5.56 0c2.12-1.44 3.05-1.14 3.05-1.14.61 1.53.22 2.66.11 2.94.71.78 1.14 1.77 1.14 2.98 0 4.26-2.6 5.19-5.07 5.47.4.35.76 1.03.76 2.08v3.08c0 .3.2.64.76.53A11.11 11.11 0 0 0 23.1 11.6C23.1 5.33 18.27.5 12 .5z" />
+      </symbol>
+      <symbol id="i-linkedin" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm7 0h3.8v1.64h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.02-3.06-1.9-3.06-1.9 0-2.19 1.45-2.19 2.96V21h-4V9z" />
+      </symbol>
+      <symbol id="i-youtube" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M23.5 6.9a3 3 0 0 0-2.1-2.1C19.5 4.3 12 4.3 12 4.3s-7.5 0-9.4.5A3 3 0 0 0 .5 6.9C0 8.8 0 12 0 12s0 3.2.5 5.1a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.1.5-5.1s0-3.2-.5-5.1zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z" />
+      </symbol>
+      <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8 5.5v13l11-6.5-11-6.5z" />
+      </symbol>
+      <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+      </symbol>
+      <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7l-4-4z" />
+        <path d="M14 3v4h4M9 13h6M9 17h4" />
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M13 6l6 6-6 6" />
+      </symbol>
+      <symbol id="i-chev-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 5l-7 7 7 7" />
+      </symbol>
+      <symbol id="i-chev-r" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 5l7 7-7 7" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ===== nav ===== -->
+  <div class="progress" id="progress"></div>
+  <nav class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a href="#top" class="nav-mark">
+        <span class="dot-halo"><span class="node-dot live-dot"></span></span>
+        <span>bibek<span class="grad-text">.</span>subedi</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about"><span class="idx">01</span>About</a></li>
+        <li><a href="#projects"><span class="idx">02</span>Projects</a></li>
+        <li><a href="#experience"><span class="idx">03</span>Experience</a></li>
+        <li><a href="#education"><span class="idx">04</span>Education</a></li>
+        <li><a href="#skills"><span class="idx">05</span>Skills</a></li>
+        <li><a href="#certificates"><span class="idx">06</span>Certificates</a></li>
+        <li><a href="#youtube"><span class="idx">07</span>Channel</a></li>
+        <li><a href="#contact"><span class="idx">08</span>Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle colour scheme">
+          <svg class="i-moon"><use href="#i-moon" /></svg>
+          <svg class="i-sun"><use href="#i-sun" /></svg>
+        </button>
+        <button class="icon-btn nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"
+          aria-controls="navDrawer">
+          <svg><use href="#i-menu" /></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-drawer" id="navDrawer" hidden>
+      <ul>
+        <li><a href="#about">01 — About</a></li>
+        <li><a href="#projects">02 — Projects</a></li>
+        <li><a href="#experience">03 — Experience</a></li>
+        <li><a href="#education">04 — Education</a></li>
+        <li><a href="#skills">05 — Skills</a></li>
+        <li><a href="#certificates">06 — Certificates</a></li>
+        <li><a href="#youtube">07 — Channel</a></li>
+        <li><a href="#contact">08 — Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="top">
+
+    <!-- ===== hero ===== -->
+    <header class="hero">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div>
+            <p class="hero-eyebrow">
+              <span class="chip">
+                <span class="node-dot live-dot" style="width:6px;height:6px;margin-right:.5rem"></span>
+                <span data-spike>civil engineering · GIS · applied ML</span>
+              </span>
+            </p>
+
+            <h1 class="hero-name"><span data-spike>Bibek</span> <span class="grad-text" data-spike>Subedi</span></h1>
+
+            <p class="hero-tagline">
+              Ground, water and structures — and the maps, models and code that make their
+              behaviour legible. Civil Engineering graduate of IOE Pulchowk Campus (2026).
+            </p>
+
+            <p class="hero-role">
+              Flood &amp; hydrological modelling · Earthquake hazard<br>
+              GIS &amp; remote sensing · Machine learning
+            </p>
+
+            <div class="hero-cta">
+              <a class="btn btn-solid" href="#projects">View the work</a>
+              <a class="btn" href="#contact">Get in touch</a>
+              <a class="btn" href="../images/Resume.pdf" download="Bibek_Subedi_Resume.pdf">Curriculum vitae</a>
+            </div>
+          </div>
+
+          <!-- Fig. 1: how the valley was microzoned, plate by plate -->
+          <figure class="hero-plate fig-plate fade-rise" id="fig1">
+            <span class="plate-corner tl"></span>
+            <span class="plate-corner tr"></span>
+            <span class="plate-corner bl"></span>
+            <span class="plate-corner br"></span>
+
+            <button class="fig-stage" id="figStage" aria-label="Enlarge figure">
+              <img class="fig-slide is-on" src="images/fyp/vs30.jpg"
+                alt="Vs30 microzonation map of Kathmandu Valley">
+              <img class="fig-slide" data-src="images/fyp/siteclass.jpg" alt="NEHRP site classification map">
+              <img class="fig-slide" data-src="images/fyp/amplification.jpg"
+                alt="Site amplification factor map for the Gorkha 2015 earthquake">
+              <img class="fig-slide" data-src="images/fyp/pga.jpg" alt="Surface peak ground acceleration map">
+              <img class="fig-slide" data-src="images/fyp/period.jpg" alt="Predominant period map">
+              <span class="fig-zoom">Click to enlarge</span>
+            </button>
+
+            <ol class="fig-rail" id="figRail" aria-label="Figure steps"></ol>
+
+            <figcaption class="fig-cap">
+              <span class="fig-no" id="figNo">Fig. 1a</span>
+              <strong class="fig-title" id="figTitle">Vs30 surface</strong>
+              <span class="fig-note" id="figNote">Borehole logs across the valley reduced to a 30 m shear-wave
+                velocity surface.</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- measurements readout -->
+        <dl class="measurements">
+          <div class="measurement fade-rise">
+            <dt class="tag">projects</dt>
+            <dd class="val">16</dd>
+            <dd class="note">catalogued</dd>
+          </div>
+          <div class="measurement fade-rise">
+            <dt class="tag">students mentored</dt>
+            <dd class="val">5K+</dd>
+            <dd class="note">since 2021</dd>
+          </div>
+          <div class="measurement fade-rise">
+            <dt class="tag">subscribers</dt>
+            <dd class="val">3K+</dd>
+            <dd class="note">YouTube</dd>
+          </div>
+          <div class="measurement fade-rise">
+            <dt class="tag">certificates</dt>
+            <dd class="val">15</dd>
+            <dd class="note">workshops &amp; awards</dd>
+          </div>
+        </dl>
+      </div>
+    </header>
+
+    <!-- ===== 01 about ===== -->
+    <section class="section" id="about">
+      <div class="wrap">
+        <header class="section-head fade-rise">
+          <div class="head-rule">
+            <span class="head-no">01</span><span class="head-dash"></span><span class="tag">/ about</span>
+          </div>
+          <h2 class="section-title" data-spike>About</h2>
+          <p class="section-sub">Profile, field of interest and working languages.</p>
+        </header>
+
+        <div class="about-grid">
+          <div class="prose fade-rise">
+            <p>
+              I'm <strong>Bibek Subedi</strong>, a Civil Engineering graduate of
+              <strong>IOE Pulchowk Campus</strong> (B.E. 2026) and a prospective graduate student. I work
+              on flood and debris-flow reconstruction, hydrological modelling with machine-learning
+              diagnostics, design rainfall, and earthquake hazard in the Kathmandu Valley. HEC-RAS, SWAT,
+              mHM, OpenSees, Google Earth Engine and Python are tools I've learned through research
+              rather than coursework.
+            </p>
+            <p>
+              Four of my papers (three as first author) are accepted for <strong>GeoMandu 2027</strong>,
+              and two journal manuscripts have been submitted. I am a research cohort member at
+              <strong>Kathmandu Geo Lab</strong>, and I lead an eco-friendly sanitation project in
+              Dhading under WorldLink's CSR programme.
+            </p>
+            <p>
+              Away from the drawing board I teach. Over 2,000 students a year sit the IOE entrance exam
+              with my guidance, and a community of more than 3,000 follows the engineering and
+              mentorship videos I make on YouTube. I sketch, I trek, and I photograph the mountains I
+              walk through.
+            </p>
+          </div>
+
+          <div>
+            <div class="about-side fade-rise">
+              <h3>Field of interest</h3>
+              <div class="chip-row">
+                <span class="chip">Flood &amp; Debris-Flow Hazard</span>
+                <span class="chip">Hydrological Modelling</span>
+                <span class="chip">Seismic Hazard</span>
+                <span class="chip">Geotechnical Modelling</span>
+                <span class="chip">GIS &amp; Remote Sensing</span>
+                <span class="chip">Machine Learning</span>
+                <span class="chip">Data Analytics</span>
+              </div>
+            </div>
+
+            <div class="about-side fade-rise">
+              <h3>Particulars</h3>
+              <dl class="kv">
+                <dt>Profile</dt>
+                <dd>Researcher, IOE entrance mentor &amp; content creator</dd>
+                <dt>Education</dt>
+                <dd>B.E. Civil Engineering, IOE Pulchowk (2026)</dd>
+                <dt>Location</dt>
+                <dd>Lalitpur, Nepal</dd>
+                <dt>Languages</dt>
+                <dd>Nepali (native) · English (fluent) · Hindi (fluent)</dd>
+                <dt>Interests</dt>
+                <dd>Trekking, travel photography, teaching, cricket</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 02 projects ===== -->
+    <section class="section" id="projects">
+      <div class="wrap">
+        <header class="section-head fade-rise">
+          <div class="head-rule">
+            <span class="head-no">02</span><span class="head-dash"></span><span class="tag">/ projects</span>
+          </div>
+          <h2 class="section-title" data-spike>Projects</h2>
+          <p class="section-sub">Catalogued work, grouped by series. Methods and results as noted.</p>
+        </header>
+
+        <div class="series">
+          <div class="series-head fade-rise">
+            <span class="series-no">series R</span>
+            <span class="hairline" style="flex:1"></span>
+            <h3>Research Studies</h3>
+          </div>
+          <div class="card-grid">
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">RES-01</span>
+                <span class="project-note">Aug 2026 — present</span>
+              </div>
+              <h3>Rasuwa Rock-Ice Avalanche and Debris Flood</h3>
+              <p class="summary">Two-dimensional reconstruction of the 26 August 2026 debris flood over 195 km from
+                Rasuwagadhi to Devghat, checked against a satellite-mapped footprint (critical success index about
+                0.72) and six DHM gauge timings, with exposure screening of buildings, roads and hydropower.</p>
+              <p class="method">HEC-RAS 6.6 2D · Sentinel-1 SAR (Earth Engine) · DEM differencing · r.avaflow · Python</p>
+            </article>
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">RES-02</span>
+                <span class="project-note">Lead author · submitted</span>
+              </div>
+              <h3>Residual Learning as a Model Diagnostic, Arun Basin</h3>
+              <p class="summary">Gradient-boosting correction of a calibrated multi-site SWAT model raised
+                Nash–Sutcliffe efficiency from 0.53–0.66 to 0.70–0.81 at three gauges and showed that small pooled
+                biases hid 21–33% overestimation of the lowest flows; mHM/mRM calibrated to KGE 0.847 (validation
+                0.836).</p>
+              <p class="method">SWAT-CUP · gradient boosting · LSTM baseline · SHAP · mHM 5.13 / mRM</p>
+              <p class="project-links"><a class="link" href="https://doi.org/10.5281/zenodo.22734296" target="_blank"
+                  rel="noreferrer">Code (Zenodo) ↗</a></p>
+            </article>
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">RES-03</span>
+                <span class="project-note">Lead author · submitted</span>
+              </div>
+              <h3>Design Rainfall for Urban Storm Drains, 52 Indian Cities</h3>
+              <p class="summary">Located a 1975 gauge-network jump in IMD gridded rainfall and separated it from trend;
+                Monte Carlo tests showed the drainage manual's decadal-update rule raises 5-year design depths in half
+                of trend-free records, while a one-sided likelihood-ratio test kept false alarms near 7%.</p>
+              <p class="method">Break tests · GEV / L-moments · nonstationary GEV · Monte Carlo · Python</p>
+            </article>
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">RES-04</span>
+                <span class="project-note">4 papers accepted</span>
+              </div>
+              <h3>Earthquake Hazard in the Kathmandu Valley</h3>
+              <p class="summary">Borehole-driven Newmark atlas of earthquake-induced slope displacement, Saltelli–Sobol
+                sensitivity of nonlinear site amplification (6,144 OpenSees runs) and GIS-AHP / maximal-coverage siting
+                of early-warning sensors, accepted for GeoMandu 2027.</p>
+              <p class="method">OpenSees · Newmark · Sobol · GIS-AHP · maximal coverage</p>
+              <p class="project-links"><a class="link" href="#publications">Publications ↓</a></p>
+            </article>
+
+          </div>
+        </div>
+
+        <div class="series" id="publications">
+          <div class="series-head fade-rise">
+            <span class="series-no">series P</span>
+            <span class="hairline" style="flex:1"></span>
+            <h3>Publications &amp; Posters</h3>
+          </div>
+          <ol class="timeline">
+            <li class="tl-item fade-rise">
+              <p class="tl-period">Accepted October 2026</p>
+              <h3>Conference papers — GeoMandu 2027</h3>
+              <p class="tl-org">11th AYGEC and 1st SACG · Springer proceedings</p>
+              <ul>
+                <li><strong>Subedi, B.</strong> A borehole-driven nonlinear Newmark atlas of earthquake-induced slope
+                  displacement in the Kathmandu Valley.</li>
+                <li><strong>Subedi, B.</strong>, &amp; Acharya, J. Saltelli–Sobol global sensitivity of nonlinear site
+                  amplification under the 2015 Gorkha earthquake motion.</li>
+                <li><strong>Subedi, B.</strong>, Gautam, H., Jaishi, H., &amp; Shah, K. R. Optimal siting of earthquake
+                  early-warning sensors in the Kathmandu Valley using multi-criteria decision analysis.</li>
+                <li>Karki, K., Sijapati, M. K., &amp; <strong>Subedi, B.</strong> Nonlinear site-response assessment of
+                  rubber–soil caps and cushions for geotechnical seismic isolation.</li>
+              </ul>
+            </li>
+            <li class="tl-item fade-rise">
+              <p class="tl-period">Submitted 2026</p>
+              <h3>Journal articles</h3>
+              <p class="tl-org">Manuscripts submitted for peer review</p>
+              <ul>
+                <li><strong>Subedi, B.</strong>, Karki, K., &amp; Sijapati, M. K. Residual learning as a model diagnostic:
+                  discharge correction and recession mismatch in a calibrated SWAT model, Arun basin, eastern Nepal.
+                  Submitted to <em>Hydrological Sciences Journal</em>.</li>
+                <li><strong>Subedi, B.</strong>, Bista, M., &amp; Suwar, A. Storm-drain design rainfall in Indian
+                  million-plus cities: gauge-network inhomogeneity and the reliability of decadal updates. Submitted to
+                  <em>Journal of Hydrologic Engineering</em> (ASCE).</li>
+              </ul>
+            </li>
+            <li class="tl-item fade-rise">
+              <p class="tl-period">Submitted 2026</p>
+              <h3>Conference abstract — INFRASURE 2027</h3>
+              <p class="tl-org">IIT Kharagpur</p>
+              <ul>
+                <li><strong>Subedi, B.</strong>, Bista, M., &amp; Suwar, A. Changes in the 5-year design rainfall for urban
+                  storm-water drains in India's 52 million-plus cities, 1975–2024. Extended abstract.</li>
+              </ul>
+            </li>
+            <li class="tl-item fade-rise">
+              <p class="tl-period">22 May 2026</p>
+              <h3>Research posters</h3>
+              <p class="tl-org">Kathmandu Geo Lab Student Research Symposium with Duke University Bass Connections,
+                Lalitpur</p>
+              <ul>
+                <li><strong>Subedi, B.</strong> <a class="link" href="../My Certificates/Poster 2026 - Nonlinear Site Response and Co-seismic Slope Displacement, Kathmandu Valley - KTM Geo Lab Symposium.jpg"
+                    target="_blank" rel="noreferrer">Nonlinear 1D site response and co-seismic slope displacement
+                    hazard in the Kathmandu Valley</a>.</li>
+                <li>Parajuli, R., <strong>Subedi, B.</strong>, &amp; Acharya, J. <a class="link" href="../My Certificates/Poster 2026 - Stochastic Site Response, Kathmandu Valley - KTM Geo Lab Symposium.jpg"
+                    target="_blank" rel="noreferrer">Stochastic site response of Kathmandu Valley: variance-based
+                    global sensitivity quantification</a>.</li>
+                <li>Jaishi, H., Gautam, H., <strong>Subedi, B.</strong>, &amp; Shah, K. R. <a class="link" href="../My Certificates/Poster 2026 - Earthquake Early-Warning Sensor Placement, Kathmandu Valley - KTM Geo Lab Symposium.pdf"
+                    target="_blank" rel="noreferrer">Optimized seismic sensor placement for earthquake early warning
+                    in Kathmandu Valley using Vs30-adjusted fault criticality analysis</a>.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+
+        <div class="series">
+          <div class="series-head fade-rise">
+            <span class="series-no">series A</span>
+            <span class="hairline" style="flex:1"></span>
+            <h3>Geotechnical &amp; Seismic</h3>
+          </div>
+          <div class="card-grid">
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-01</span>
+                <span class="project-note">Final year project</span>
+              </div>
+              <h3>Seismic Microzonation of Kathmandu Valley</h3>
+              <p class="summary">Non-linear 1D site response analysis characterising local soil amplification
+                across the valley, output as microzonation maps for earthquake-resilient urban planning.</p>
+              <p class="method">OpenSees · non-linear 1D site response · Python · GIS</p>
+              <p class="project-links project-links-spacer"><a class="link" href="#top">See Fig. 1 ↗</a></p>
+            </article>
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-02</span>
+                <span class="project-note">Kathmandu Geo Lab</span>
+              </div>
+              <h3>Shear Wave Velocity Prediction</h3>
+              <p class="summary">Machine learning models predicting shear wave velocity from geological,
+                geotechnical and geographical inputs, for faster and broader seismic hazard assessment.</p>
+              <p class="method">Python · regression &amp; ensemble models · multi-source geodata</p>
+            </article>
+
+          </div>
+        </div>
+
+        <div class="series">
+          <div class="series-head fade-rise">
+            <span class="series-no">series B</span>
+            <span class="hairline" style="flex:1"></span>
+            <h3>Water &amp; Hydrology</h3>
+          </div>
+          <div class="card-grid">
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-03</span>
+                <span class="project-note">In progress</span>
+              </div>
+              <h3>Flood Prediction from High-Resolution DEM</h3>
+              <p class="summary">Flood extent and risk mapping driven by high-resolution digital elevation data,
+                aimed at producing usable hazard layers for exposed settlements.</p>
+              <p class="method">Python · DEM processing · GIS · HEC-RAS</p>
+              <p class="project-links"><a class="link" href="https://github.com/bibeksubedi0001/Project-Flood"
+                  target="_blank" rel="noreferrer">Code ↗</a></p>
+            </article>
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-04</span>
+              </div>
+              <h3>Rainwater Harvesting Model</h3>
+              <p class="summary">Visualises collection potential, seasonal contribution and efficiency of a
+                harvesting system simulated across a range of runoff coefficients.</p>
+              <p class="method">Python · hydrological simulation · Matplotlib</p>
+              <p class="project-links"><a class="link" href="https://github.com/bibeksubedi0001/Rainfall-Harvesting"
+                  target="_blank" rel="noreferrer">Code ↗</a></p>
+            </article>
+
+          </div>
+        </div>
+
+        <div class="series">
+          <div class="series-head fade-rise">
+            <span class="series-no">series C</span>
+            <span class="hairline" style="flex:1"></span>
+            <h3>Structures &amp; Monitoring</h3>
+          </div>
+          <div class="card-grid">
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-05</span>
+              </div>
+              <h3>1D Finite Element Solver</h3>
+              <p class="summary">A Python finite element analysis solver computing displacements, strains and
+                stresses in one-dimensional structures, written from the formulation up.</p>
+              <p class="method">Python · NumPy · finite element formulation</p>
+              <p class="project-links"><a class="link" href="https://github.com/bibeksubedi0001/Finite-Element-Method"
+                  target="_blank" rel="noreferrer">Code ↗</a></p>
+            </article>
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-06</span>
+              </div>
+              <h3>Structural Health Monitor</h3>
+              <p class="summary">Reads sensor streams from bridges and buildings, flags anomalies, compares
+                sensor responses and renders the condition history as a readable series.</p>
+              <p class="method">Python · anomaly detection · IoT sensor data</p>
+              <p class="project-links"><a class="link"
+                  href="https://github.com/bibeksubedi0001/Structure-Health-Analysis" target="_blank"
+                  rel="noreferrer">Code ↗</a></p>
+            </article>
+
+          </div>
+        </div>
+
+        <div class="series">
+          <div class="series-head fade-rise">
+            <span class="series-no">series D</span>
+            <span class="hairline" style="flex:1"></span>
+            <h3>Data &amp; Tools</h3>
+          </div>
+          <div class="card-grid">
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-07</span>
+                <span class="project-note">1,700+ users</span>
+              </div>
+              <h3>IOE Internal Marks Calculator</h3>
+              <p class="summary">A web app for IOE students that calculates internal assessment marks, predicts
+                grades and renders a print-ready TU-format grade sheet, with reverse calculation and export.</p>
+              <p class="method">JavaScript · client-side grading engine · static hosting</p>
+              <p class="project-links">
+                <a class="link" href="https://ioe.bibeksubedi0001.com.np/" target="_blank" rel="noreferrer">Live ↗</a>
+                <a class="link" href="https://github.com/bibeksubedi0001" target="_blank" rel="noreferrer">Code ↗</a>
+              </p>
+            </article>
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-08</span>
+              </div>
+              <h3>Accident Data Analysis</h3>
+              <p class="summary">Identifies accident hotspots across Kathmandu, traces temporal trends, and
+                models accident severity to support targeted road-safety intervention.</p>
+              <p class="method">Python · Pandas · spatial clustering · predictive modelling</p>
+              <p class="project-links"><a class="link"
+                  href="https://github.com/bibeksubedi0001/Accident-Data_Analysis" target="_blank"
+                  rel="noreferrer">Code ↗</a></p>
+            </article>
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-09</span>
+                <span class="project-note">Free portal</span>
+              </div>
+              <h3>IOE Entrance Preparation</h3>
+              <p class="summary">Free portal for the IOE B.E./B.Arch. entrance examination: past questions, mock tests,
+                chapter notes, a rank predictor and the 2083 syllabus.</p>
+              <p class="method">JavaScript · static web app</p>
+              <p class="project-links"><a class="link" href="https://ioe-entrance.bibeksubedi0001.com.np/" target="_blank"
+                  rel="noreferrer">Live ↗</a></p>
+            </article>
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-10</span>
+                <span class="project-note">Interactive course</span>
+              </div>
+              <h3>The Civil Engineer's Guide to AI</h3>
+              <p class="summary">Interactive masterclass on AI and machine learning for civil engineers: 7 chapters,
+                62 lessons, 120+ demos and 240+ quizzes.</p>
+              <p class="method">JavaScript · interactive demos · teaching</p>
+              <p class="project-links"><a class="link" href="https://civil-learning.bibeksubedi0001.com.np/" target="_blank"
+                  rel="noreferrer">Live ↗</a></p>
+            </article>
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-11</span>
+                <span class="project-note">Field tool</span>
+              </div>
+              <h3>Timure &amp; Chhekmi Lakes Field Portal</h3>
+              <p class="summary">Offline field portal for investigating the declining water levels of Timure and
+                Chhekmi lakes, Gulmi: bilingual community questionnaire, engineering survey, map and records.</p>
+              <p class="method">Offline PWA · field survey · GIS</p>
+              <p class="project-links"><a class="link" href="https://gulmi.bibeksubedi0001.com.np/" target="_blank"
+                  rel="noreferrer">Live ↗</a></p>
+            </article>
+
+            <article class="project-card fade-rise">
+              <div class="project-top">
+                <span class="project-id">EXP-12</span>
+                <span class="project-note">13 subjects</span>
+              </div>
+              <h3>Final-Semester Study Notes</h3>
+              <p class="summary">Study material for final-semester civil engineering subjects: theory, numericals and
+                exam preparation, with 80+ chapters and 200+ diagrams.</p>
+              <p class="method">Static site · notes · exam preparation</p>
+              <p class="project-links"><a class="link" href="https://note.bibeksubedi0001.com.np/" target="_blank"
+                  rel="noreferrer">Live ↗</a></p>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 03 experience ===== -->
+    <section class="section" id="experience">
+      <div class="wrap">
+        <header class="section-head fade-rise">
+          <div class="head-rule">
+            <span class="head-no">03</span><span class="head-dash"></span><span class="tag">/ work</span>
+          </div>
+          <h2 class="section-title" data-spike>Experience</h2>
+          <p class="section-sub">Research, leadership and service, plotted against the calendar.</p>
+        </header>
+
+        <div class="gantt fade-rise">
+          <div class="gantt-inner">
+            <div class="gantt-grid" id="gantt"></div>
+          </div>
+          <p class="gantt-legend"><b>▪</b> concluded · <em>▪</em> ongoing</p>
+        </div>
+
+        <div class="tabs fade-rise" id="expTabs" style="margin-top:2.5rem">
+          <button class="filter-btn is-active" data-tab="professional">Professional</button>
+          <button class="filter-btn" data-tab="volunteering">Volunteering</button>
+        </div>
+
+        <div class="tab-panel" id="tab-professional">
+          <ol class="timeline">
+            <li class="tl-item is-current fade-rise">
+              <p class="tl-period">May 2025 — present</p>
+              <h3>Research Cohort Member</h3>
+              <p class="tl-org">Kathmandu Geo Lab</p>
+              <ul>
+                <li>Developed a borehole-driven nonlinear Newmark atlas of earthquake-induced slope displacement for the
+                  Kathmandu Valley.</li>
+                <li>First author of a Saltelli–Sobol sensitivity analysis of nonlinear site amplification (6,144 OpenSees
+                  runs) and of multi-criteria siting of earthquake early-warning sensors; all accepted for GeoMandu 2027.</li>
+                <li>Contributed to shear-wave velocity prediction with random forest, gradient boosting and support
+                  vector regression.</li>
+              </ul>
+            </li>
+
+            <li class="tl-item fade-rise">
+              <p class="tl-period">2026</p>
+              <h3>Intern, Geospatial and Field Engineering</h3>
+              <p class="tl-org">Kathmandu Upatyaka Khanepani Limited (KUKL)</p>
+              <ul>
+                <li>Field surveys to verify water-supply connections and building numbers against records.</li>
+                <li>Built a GIS database for utility planning and an offline field-survey app (GPS, photographs, Excel
+                  export).</li>
+              </ul>
+            </li>
+
+            <li class="tl-item is-current fade-rise">
+              <p class="tl-period">Jan 2025 — present</p>
+              <h3>Project Lead, Eco-Friendly Sanitation</h3>
+              <p class="tl-org">WorldLink CSR Initiative · Bhadaure, Dhading</p>
+              <ul>
+                <li>Leading the design of eco-friendly toilet and sanitation facilities for an underserved village under
+                  WorldLink's CSR programme.</li>
+                <li>Co-ran a baseline survey of all 25 households on remote, sloping terrain and prepared an NPR 1.57
+                  million Phase-I design and cost estimate with rooftop rainwater harvesting.</li>
+                <li>Also design and costing lead for a community park plantation with the Manjushree CFUG, Chobhar (2026).</li>
+              </ul>
+            </li>
+
+            <li class="tl-item is-current fade-rise">
+              <p class="tl-period">Jul 2025 — present</p>
+              <h3>Research Wing Correspondent</h3>
+              <p class="tl-org">CESS-Nepal</p>
+              <ul>
+                <li>Guiding peers through research methodology to build a culture of evidence-based decisions.</li>
+                <li>Supporting students in presenting and publishing civil engineering research.</li>
+                <li>Organised a 15-day Machine Learning &amp; AI workshop for civil engineering students.</li>
+              </ul>
+            </li>
+
+            <li class="tl-item fade-rise">
+              <p class="tl-period">Dec 2024 — Dec 2025</p>
+              <h3>Vice President</h3>
+              <p class="tl-org">MAPS Pulchowk — Mathematics and Physics Society</p>
+              <ul>
+                <li>Ran the annual Integration Bee with roughly 500 student participants.</li>
+                <li>Hosted Physics and Mathematics Olympiads for engineering students.</li>
+                <li>Arranged talk shows with established physicists and mathematicians.</li>
+              </ul>
+            </li>
+
+            <li class="tl-item is-current fade-rise">
+              <p class="tl-period">2021 — present</p>
+              <h3>IOE Entrance Mentor</h3>
+              <p class="tl-org">Clamphook Academy</p>
+              <ul>
+                <li>Prepare over 2,000 students a year for the IOE entrance examination.</li>
+                <li>Guide students toward the engineering college that actually fits them.</li>
+                <li>Run scholarship programmes for economically disadvantaged students.</li>
+              </ul>
+            </li>
+
+            <li class="tl-item fade-rise">
+              <p class="tl-period">Dec 2023 — Dec 2024</p>
+              <h3>Deputy Secretary</h3>
+              <p class="tl-org">MAPS Pulchowk</p>
+              <ul>
+                <li>Organised the Integration Bee, Physics and Mathematics Olympiads, and academic talk shows.</li>
+              </ul>
+            </li>
+
+            <li class="tl-item fade-rise">
+              <p class="tl-period">Jun 2023 — Aug 2024</p>
+              <h3>Marketing Member</h3>
+              <p class="tl-org">PDSC</p>
+              <ul>
+                <li>Organised workshops on Python, data science and machine learning.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+
+        <div class="tab-panel" id="tab-volunteering" hidden>
+          <ol class="timeline">
+            <li class="tl-item fade-rise">
+              <p class="tl-period">Nov 2024 — Jan 2025</p>
+              <h3>Event Coordinator</h3>
+              <p class="tl-org">Civil Engineering Hackathon · CESS Nepal</p>
+              <ul>
+                <li>Bridged the gap between civil engineering practice and programming.</li>
+                <li>Equipped students with the interdisciplinary footing modern engineering demands.</li>
+              </ul>
+            </li>
+
+            <li class="tl-item fade-rise">
+              <p class="tl-period">Jan 2025</p>
+              <h3>Event Sub-Coordinator</h3>
+              <p class="tl-org">Research Colloquium · CESS Nepal</p>
+              <ul>
+                <li>Facilitated the exchange of ideas across civil engineering research groups.</li>
+              </ul>
+            </li>
+
+            <li class="tl-item fade-rise">
+              <p class="tl-period">Nov 2023 — Feb 2024</p>
+              <h3>Startup Mentor</h3>
+              <p class="tl-org">Hult Prize, Pulchowk Campus</p>
+              <ul>
+                <li>Coached young entrepreneurs on sustainable business models built for social impact.</li>
+              </ul>
+            </li>
+
+            <li class="tl-item fade-rise">
+              <p class="tl-period">Jul 2022 — Sep 2023</p>
+              <h3>Event Manager</h3>
+              <p class="tl-org">Kathmandu Valley Leo Club</p>
+              <ul>
+                <li>Created service and leadership opportunities for engineering students at IOE Pulchowk.</li>
+              </ul>
+            </li>
+
+            <li class="tl-item fade-rise">
+              <p class="tl-period">2014 — 2019</p>
+              <h3>Scout</h3>
+              <p class="tl-org">Nepal Scout</p>
+              <ul>
+                <li>Ran educational programmes developing disciplined, service-oriented students.</li>
+                <li>Engaged youth in community development work.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 04 education ===== -->
+    <section class="section" id="education">
+      <div class="wrap">
+        <header class="section-head fade-rise">
+          <div class="head-rule">
+            <span class="head-no">04</span><span class="head-dash"></span><span class="tag">/ education</span>
+          </div>
+          <h2 class="section-title" data-spike>Education</h2>
+          <p class="section-sub">Academic record.</p>
+        </header>
+
+        <ol class="timeline">
+          <li class="tl-item fade-rise">
+            <p class="tl-period">2022 — 2026</p>
+            <h3>Bachelor of Engineering, Civil Engineering</h3>
+            <p class="tl-org">IOE Pulchowk Campus, Tribhuvan University</p>
+            <p>Completed 2026. Percentage 77.3%.</p>
+          </li>
+
+          <li class="tl-item fade-rise">
+            <p class="tl-period">2019 — 2021</p>
+            <h3>Higher Secondary, Science</h3>
+            <p class="tl-org">SOS Hermann Gmeiner Secondary School</p>
+            <p>GPA 3.78 / 4.00</p>
+          </li>
+
+          <li class="tl-item fade-rise">
+            <p class="tl-period">2018</p>
+            <h3>Secondary Education Examination</h3>
+            <p class="tl-org">Prembasti Secondary School</p>
+            <p>GPA 3.80 / 4.00</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===== 05 skills ===== -->
+    <section class="section" id="skills">
+      <div class="wrap">
+        <header class="section-head fade-rise">
+          <div class="head-rule">
+            <span class="head-no">05</span><span class="head-dash"></span><span class="tag">/ skills</span>
+          </div>
+          <h2 class="section-title" data-spike>Skills</h2>
+          <p class="section-sub">Tools and software, scheduled by discipline.</p>
+        </header>
+
+        <div class="schedule fade-rise">
+          <p class="schedule-title">Schedule of technical skills &amp; tools — Rev. A</p>
+
+          <div class="schedule-scroll">
+            <table class="schedule-table">
+              <thead>
+                <tr>
+                  <th class="col-no">S.N.</th>
+                  <th>Item description</th>
+                  <th class="col-spec">Specification</th>
+                  <th class="col-prof">Proficiency</th>
+                  <th class="col-lvl">Level</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="cat-row">
+                  <th colspan="5" scope="colgroup">A — GIS &amp; Mapping</th>
+                </tr>
+                <tr>
+                  <td class="col-no">A.1</td>
+                  <td>ArcGIS Pro / QGIS</td>
+                  <td class="col-spec">v3.x / v3.34</td>
+                  <td class="col-prof"><span class="prof adv" style="--amp:90%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-adv">Advanced</span></td>
+                </tr>
+                <tr>
+                  <td class="col-no">A.2</td>
+                  <td>Google Earth Engine</td>
+                  <td class="col-spec">JavaScript API</td>
+                  <td class="col-prof"><span class="prof lrn" style="--amp:40%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-lrn">Learning</span></td>
+                </tr>
+
+                <tr class="cat-row">
+                  <th colspan="5" scope="colgroup">B — Engineering Software</th>
+                </tr>
+                <tr>
+                  <td class="col-no">B.1</td>
+                  <td>AutoCAD</td>
+                  <td class="col-spec">2024 LT</td>
+                  <td class="col-prof"><span class="prof adv" style="--amp:92%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-adv">Advanced</span></td>
+                </tr>
+                <tr>
+                  <td class="col-no">B.2</td>
+                  <td>HEC-RAS</td>
+                  <td class="col-spec">v6.x 2D</td>
+                  <td class="col-prof"><span class="prof int" style="--amp:70%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-int">Intermediate</span></td>
+                </tr>
+                <tr>
+                  <td class="col-no">B.3</td>
+                  <td>OpenSees</td>
+                  <td class="col-spec">Tcl / Python</td>
+                  <td class="col-prof"><span class="prof int" style="--amp:65%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-int">Intermediate</span></td>
+                </tr>
+                <tr>
+                  <td class="col-no">B.4</td>
+                  <td>PLAXIS 2D</td>
+                  <td class="col-spec">v2024</td>
+                  <td class="col-prof"><span class="prof int" style="--amp:60%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-int">Intermediate</span></td>
+                </tr>
+                <tr>
+                  <td class="col-no">B.5</td>
+                  <td>SWAT</td>
+                  <td class="col-spec">ArcSWAT</td>
+                  <td class="col-prof"><span class="prof int" style="--amp:62%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-int">Intermediate</span></td>
+                </tr>
+                <tr>
+                  <td class="col-no">B.6</td>
+                  <td>ETABS</td>
+                  <td class="col-spec">v21</td>
+                  <td class="col-prof"><span class="prof lrn" style="--amp:35%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-lrn">Learning</span></td>
+                </tr>
+                <tr>
+                  <td class="col-no">B.7</td>
+                  <td>Revit</td>
+                  <td class="col-spec">BIM</td>
+                  <td class="col-prof"><span class="prof lrn" style="--amp:30%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-lrn">Learning</span></td>
+                </tr>
+
+                <tr class="cat-row">
+                  <th colspan="5" scope="colgroup">C — Programming &amp; Data</th>
+                </tr>
+                <tr>
+                  <td class="col-no">C.1</td>
+                  <td>Python</td>
+                  <td class="col-spec">NumPy, Pandas, ML</td>
+                  <td class="col-prof"><span class="prof int" style="--amp:72%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-int">Intermediate</span></td>
+                </tr>
+                <tr>
+                  <td class="col-no">C.2</td>
+                  <td>C Programming</td>
+                  <td class="col-spec">ANSI C</td>
+                  <td class="col-prof"><span class="prof int" style="--amp:65%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-int">Intermediate</span></td>
+                </tr>
+                <tr>
+                  <td class="col-no">C.3</td>
+                  <td>MS Excel</td>
+                  <td class="col-spec">Advanced formulas</td>
+                  <td class="col-prof"><span class="prof adv" style="--amp:88%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-adv">Advanced</span></td>
+                </tr>
+
+                <tr class="cat-row">
+                  <th colspan="5" scope="colgroup">D — Design &amp; Media</th>
+                </tr>
+                <tr>
+                  <td class="col-no">D.1</td>
+                  <td>Canva Pro</td>
+                  <td class="col-spec">Graphics</td>
+                  <td class="col-prof"><span class="prof adv" style="--amp:88%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-adv">Advanced</span></td>
+                </tr>
+                <tr>
+                  <td class="col-no">D.2</td>
+                  <td>DaVinci Resolve</td>
+                  <td class="col-spec">Video editing</td>
+                  <td class="col-prof"><span class="prof lrn" style="--amp:35%"></span></td>
+                  <td class="col-lvl"><span class="lvl lvl-lrn">Learning</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="schedule-note">Note — proficiency levels are self-assessed. Last revised 2026-04-02.
+            Prepared by B. Subedi.</p>
+          <p class="schedule-note">Also used in research — mHM / mRM, SWAT-CUP, r.avaflow, GRASS GIS, GDAL, Sentinel-1
+            SAR (SNAP), scikit-learn, LightGBM, SHAP, xarray, GeoPandas, Git, Linux / WSL, LaTeX.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 06 certificates ===== -->
+    <section class="section" id="certificates">
+      <div class="wrap">
+        <header class="section-head fade-rise">
+          <div class="head-rule">
+            <span class="head-no">06</span><span class="head-dash"></span><span class="tag">/ certificates</span>
+          </div>
+          <h2 class="section-title" data-spike>Certificates</h2>
+          <p class="section-sub">Certifications, workshops and recognitions. Select a plate to enlarge.</p>
+        </header>
+
+        <div class="cert-grid fade-rise" id="certGrid">
+          <button class="cert-card" data-src="../My Certificates/Certificate 2026 - Software Fellowship, 9 days - LOCUS 2026, IOE Pulchowk.png"
+            data-title="Software Fellowship" data-org="LOCUS 2026 · IOE Pulchowk">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2026 - Software Fellowship, 9 days - LOCUS 2026, IOE Pulchowk.png" alt="Software Fellowship"
+                loading="lazy"></div>
+            <h4>Software Fellowship</h4>
+            <p class="org">LOCUS 2026 · IOE Pulchowk</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2025-26 - Machine Learning and AI with Python, 15-day Workshop - CESS Nepal (AADHAR 2082).png"
+            data-title="Machine Learning &amp; AI with Python" data-org="15-day workshop · CESS Nepal">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2025-26 - Machine Learning and AI with Python, 15-day Workshop - CESS Nepal (AADHAR 2082).png" alt="Machine Learning and AI with Python workshop"
+                loading="lazy"></div>
+            <h4>Machine Learning &amp; AI with Python</h4>
+            <p class="org">15-day workshop · CESS Nepal</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2024-25 - Building Design and Analysis Workshop (AutoCAD, ETABS) - CESS Nepal (AADHAR 2081).jpeg"
+            data-title="Building Design &amp; Analysis Workshop" data-org="CESS Nepal · AADHAR 2081">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2024-25 - Building Design and Analysis Workshop (AutoCAD, ETABS) - CESS Nepal (AADHAR 2081).jpeg"
+                alt="AutoCAD and ETABS workshop" loading="lazy"></div>
+            <h4>Building Design &amp; Analysis Workshop</h4>
+            <p class="org">CESS Nepal · AADHAR 2081</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2024 - Autodesk AutoCAD for Design and Drafting Exam Prep - Coursera.jpeg"
+            data-title="AutoCAD for Design &amp; Drafting (Exam Prep)" data-org="Coursera · Autodesk">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2024 - Autodesk AutoCAD for Design and Drafting Exam Prep - Coursera.jpeg" alt="AutoCAD for Design and Drafting Exam Prep"
+                loading="lazy"></div>
+            <h4>AutoCAD for Design &amp; Drafting (Exam Prep)</h4>
+            <p class="org">Coursera · Autodesk</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2024-25 - Coordinator, Civil Engineering Hackathon - CESS Nepal (AADHAR 2081).jpeg"
+            data-title="Hackathon Coordinator" data-org="CESS Nepal · AADHAR 2081">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2024-25 - Coordinator, Civil Engineering Hackathon - CESS Nepal (AADHAR 2081).jpeg"
+                alt="Hackathon coordination" loading="lazy"></div>
+            <h4>Hackathon Coordinator</h4>
+            <p class="org">CESS Nepal · AADHAR 2081</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2024-25 - Poster Presentation, Melamchi Water Treatment Plant - CESS Nepal (AADHAR 2081).jpeg"
+            data-title="Poster Presentation" data-org="CESS Nepal · AADHAR 2081">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2024-25 - Poster Presentation, Melamchi Water Treatment Plant - CESS Nepal (AADHAR 2081).jpeg" alt="Poster presentation"
+                loading="lazy"></div>
+            <h4>Poster Presentation</h4>
+            <p class="org">CESS Nepal · AADHAR 2081</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2024-25 - Sub-Coordinator, Research Colloquium - CESS Nepal (AADHAR 2081).jpeg"
+            data-title="Research Colloquium Sub-Coordinator" data-org="CESS Nepal · AADHAR 2081">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2024-25 - Sub-Coordinator, Research Colloquium - CESS Nepal (AADHAR 2081).jpeg" alt="Research colloquium"
+                loading="lazy"></div>
+            <h4>Research Colloquium Sub-Coordinator</h4>
+            <p class="org">CESS Nepal · AADHAR 2081</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2023 - Autodesk Revit, 6-day Workshop - CESS Nepal (AADHAR 2080).jpeg" data-title="Autodesk Revit Workshop"
+            data-org="CESS Nepal · AADHAR 2080">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2023 - Autodesk Revit, 6-day Workshop - CESS Nepal (AADHAR 2080).jpeg" alt="Autodesk Revit workshop"
+                loading="lazy"></div>
+            <h4>Autodesk Revit Workshop</h4>
+            <p class="org">CESS Nepal · AADHAR 2080</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2024-25 - Website Designer - CESS Nepal (AADHAR 2081).jpeg" data-title="Website Designer"
+            data-org="CESS Nepal · AADHAR 2081">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2024-25 - Website Designer - CESS Nepal (AADHAR 2081).jpeg" alt="Website designer"
+                loading="lazy"></div>
+            <h4>Website Designer</h4>
+            <p class="org">CESS Nepal · AADHAR 2081</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2026 - Mentor (Winning Team), Geotechnical Model Competition, 3rd GeoMandu - Nepal Geotechnical Society.png"
+            data-title="Geotechnical Model Competition — Winning Team Mentor" data-org="3rd GeoMandu · Nepal Geotechnical Society">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2026 - Mentor (Winning Team), Geotechnical Model Competition, 3rd GeoMandu - Nepal Geotechnical Society.png" alt="GeoMandu winning team mentor" loading="lazy">
+            </div>
+            <h4>Geotechnical Model Competition — Winning Team Mentor</h4>
+            <p class="org">3rd GeoMandu · Nepal Geotechnical Society</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2025 - Flood Hazard and Exposure Mapping - UNESCO Open Learning.png"
+            data-title="Flood Hazard &amp; Exposure Mapping" data-org="UNESCO Open Learning · 2025">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2025 - Flood Hazard and Exposure Mapping - UNESCO Open Learning.png"
+                alt="UNESCO flood hazard mapping" loading="lazy"></div>
+            <h4>Flood Hazard &amp; Exposure Mapping</h4>
+            <p class="org">UNESCO Open Learning · 2025</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2025 - Vice President, Maths and Physics Society (MAPS) - Pulchowk Campus.jpg"
+            data-title="Vice President" data-org="MAPS Pulchowk · 2025">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2025 - Vice President, Maths and Physics Society (MAPS) - Pulchowk Campus.jpg"
+                alt="Vice President, Maths and Physics Society" loading="lazy" style="object-fit:contain"></div>
+            <h4>Vice President</h4>
+            <p class="org">MAPS Pulchowk · 2025</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2024 - Volunteer, Hult Prize OnCampus Program - IOE Pulchowk.jpg"
+            data-title="Hult Prize OnCampus Volunteer" data-org="IOE Pulchowk · 2024">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2024 - Volunteer, Hult Prize OnCampus Program - IOE Pulchowk.jpg"
+                alt="Hult Prize OnCampus volunteer" loading="lazy"></div>
+            <h4>Hult Prize OnCampus Volunteer</h4>
+            <p class="org">IOE Pulchowk · 2024</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2022-23 - Appreciation, Kathmandu Valley Leo Club (KVLC) - Pulchowk Campus.png"
+            data-title="Leo Club Appreciation" data-org="KVLC, Pulchowk Campus · 2022/23">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2022-23 - Appreciation, Kathmandu Valley Leo Club (KVLC) - Pulchowk Campus.png"
+                alt="Kathmandu Valley Leo Club appreciation" loading="lazy"></div>
+            <h4>Leo Club Appreciation</h4>
+            <p class="org">KVLC, Pulchowk Campus · 2022/23</p>
+          </button>
+
+          <button class="cert-card" data-src="../My Certificates/Certificate 2022-23 - Class Representative - CESS Nepal (AADHAR 2079).jpg"
+            data-title="Class Representative" data-org="CESS Nepal · AADHAR 2079">
+            <div class="cert-thumb"><img src="../My Certificates/Certificate 2022-23 - Class Representative - CESS Nepal (AADHAR 2079).jpg"
+                alt="Class representative" loading="lazy"></div>
+            <h4>Class Representative</h4>
+            <p class="org">CESS Nepal · AADHAR 2079</p>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 07 youtube ===== -->
+    <section class="section" id="youtube">
+      <div class="wrap">
+        <header class="section-head fade-rise">
+          <div class="head-rule">
+            <span class="head-no">07</span><span class="head-dash"></span><span class="tag">/ channel</span>
+          </div>
+          <h2 class="section-title" data-spike>Channel</h2>
+          <p class="section-sub">Tutorials, mentorship and honest commentary on engineering education in Nepal.
+            Over 3,000 subscribers.</p>
+        </header>
+
+        <div class="yt-grid fade-rise" id="ytGrid">
+          <button class="yt-card" data-video="lUaM7gZBdW8" data-title="The Pulchowk Campus Makes Me Fail?">
+            <div class="yt-thumb">
+              <img src="https://img.youtube.com/vi/lUaM7gZBdW8/hqdefault.jpg" alt="" loading="lazy">
+              <span class="yt-play"><span><svg><use href="#i-play" /></svg></span></span>
+            </div>
+            <h4>The Pulchowk Campus Makes Me Fail?</h4>
+          </button>
+
+          <button class="yt-card" data-video="5oDgm3PoLaw" data-title="The Silent Failure of Nepal's Education">
+            <div class="yt-thumb">
+              <img src="https://img.youtube.com/vi/5oDgm3PoLaw/hqdefault.jpg" alt="" loading="lazy">
+              <span class="yt-play"><span><svg><use href="#i-play" /></svg></span></span>
+            </div>
+            <h4>The Silent Failure of Nepal's Education</h4>
+          </button>
+
+          <button class="yt-card" data-video="lBSE7xX5N5E" data-title="My Relation With Pulchowk Campus">
+            <div class="yt-thumb">
+              <img src="https://img.youtube.com/vi/lBSE7xX5N5E/hqdefault.jpg" alt="" loading="lazy">
+              <span class="yt-play"><span><svg><use href="#i-play" /></svg></span></span>
+            </div>
+            <h4>My Relation With Pulchowk Campus</h4>
+          </button>
+
+          <button class="yt-card" data-video="xRhl7OuUF4I" data-title="Dark Reality of Pulchowk Campus">
+            <div class="yt-thumb">
+              <img src="https://img.youtube.com/vi/xRhl7OuUF4I/hqdefault.jpg" alt="" loading="lazy">
+              <span class="yt-play"><span><svg><use href="#i-play" /></svg></span></span>
+            </div>
+            <h4>Dark Reality of Pulchowk Campus</h4>
+          </button>
+
+          <button class="yt-card" data-video="Kf_Yn-eNXlw" data-title="Past Questions for IOE Entrance Preparation">
+            <div class="yt-thumb">
+              <img src="https://img.youtube.com/vi/Kf_Yn-eNXlw/hqdefault.jpg" alt="" loading="lazy">
+              <span class="yt-play"><span><svg><use href="#i-play" /></svg></span></span>
+            </div>
+            <h4>Past Questions for IOE Entrance Preparation</h4>
+          </button>
+
+          <button class="yt-card" data-video="5teCltSAlHo" data-title="Who will be Elected? FSU Election 2081">
+            <div class="yt-thumb">
+              <img src="https://img.youtube.com/vi/5teCltSAlHo/hqdefault.jpg" alt="" loading="lazy">
+              <span class="yt-play"><span><svg><use href="#i-play" /></svg></span></span>
+            </div>
+            <h4>Who will be Elected? FSU Election 2081</h4>
+          </button>
+        </div>
+
+        <p class="fade-rise" style="margin-top:2rem">
+          <a class="btn" href="https://www.youtube.com/@bibeksubedii0001" target="_blank" rel="noopener noreferrer">
+            <svg><use href="#i-youtube" /></svg>
+            Visit the channel
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== 08 contact ===== -->
+    <section class="section" id="contact">
+      <div class="wrap">
+        <header class="section-head fade-rise">
+          <div class="head-rule">
+            <span class="head-no">08</span><span class="head-dash"></span><span class="tag">/ contact</span>
+          </div>
+          <h2 class="section-title" data-spike>Contact</h2>
+          <p class="section-sub">Open to research, collaborations, and good problems.</p>
+        </header>
+
+        <div class="fade-rise">
+          <a class="contact-lead" href="mailto:078bce035.bibek@pcampus.edu.np" data-spike>Start a conversation →</a>
+
+          <dl class="contact-list">
+            <div class="contact-row">
+              <dt class="tag">email</dt>
+              <dd><a class="link" href="mailto:078bce035.bibek@pcampus.edu.np">078bce035.bibek@pcampus.edu.np</a></dd>
+            </div>
+            <div class="contact-row">
+              <dt class="tag">phone</dt>
+              <dd><a class="link" href="tel:+9779845092439">+977-9845092439</a></dd>
+            </div>
+            <div class="contact-row">
+              <dt class="tag">location</dt>
+              <dd>Lalitpur, Nepal</dd>
+            </div>
+            <div class="contact-row">
+              <dt class="tag">campus</dt>
+              <dd>IOE Pulchowk, Lalitpur</dd>
+            </div>
+            <div class="contact-row">
+              <dt class="tag">github</dt>
+              <dd><a class="link" href="https://github.com/bibeksubedi0001" target="_blank"
+                  rel="noreferrer">github.com/bibeksubedi0001</a></dd>
+            </div>
+            <div class="contact-row">
+              <dt class="tag">linkedin</dt>
+              <dd><a class="link" href="https://www.linkedin.com/in/bibek-subediiii/" target="_blank"
+                  rel="noreferrer">bibek-subediiii</a></dd>
+            </div>
+            <div class="contact-row">
+              <dt class="tag">youtube</dt>
+              <dd><a class="link" href="https://www.youtube.com/@bibeksubedii0001" target="_blank"
+                  rel="noreferrer">@bibeksubedii0001</a></dd>
+            </div>
+            <div class="contact-row">
+              <dt class="tag">résumé</dt>
+              <dd><a class="link" href="../images/Resume.pdf" download="Bibek_Subedi_Resume.pdf">Download CV ↗</a></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== footer ===== -->
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <figure>
+        <blockquote>
+          “Any man could, if he were so inclined, be the sculptor of his own brain.”
+        </blockquote>
+        <figcaption>— Santiago Ramón y Cajal</figcaption>
+      </figure>
+
+      <div class="footer-meta">
+        <div><a class="link" href="../index.html">← Main portfolio</a></div>
+        <div>Kathmandu · Nepal</div>
+        <div>© <span id="year">2026</span> Bibek Subedi</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== overlays ===== -->
+  <div class="overlay" id="certLightbox" role="dialog" aria-modal="true" aria-label="Certificate viewer" hidden>
+    <div class="overlay-body">
+      <button class="icon-btn overlay-close" data-close aria-label="Close"><svg><use href="#i-close" /></svg></button>
+      <button class="overlay-nav prev" data-prev aria-label="Previous"><svg><use href="#i-chev-l" /></svg></button>
+      <button class="overlay-nav next" data-next aria-label="Next"><svg><use href="#i-chev-r" /></svg></button>
+      <img id="certImg" src="" alt="">
+      <div class="overlay-cap">
+        <h3 id="certTitle"></h3>
+        <p class="tag" id="certOrg"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ytModal" role="dialog" aria-modal="true" aria-label="Video player" hidden>
+    <div class="overlay-body">
+      <button class="icon-btn overlay-close" data-close aria-label="Close"><svg><use href="#i-close" /></svg></button>
+      <iframe id="ytFrame" src="" title="YouTube video" allow="accelerometer; autoplay; clipboard-write;
+        encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div class="overlay-cap">
+        <h3 id="ytTitle"></h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== cursor instrument ===== -->
+  <canvas class="cur-cv" id="curCv" width="76" height="30" aria-hidden="true"></canvas>
+  <span class="cur-tag" id="curTag" aria-hidden="true"></span>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>

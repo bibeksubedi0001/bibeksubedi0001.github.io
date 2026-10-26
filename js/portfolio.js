@@ -70,11 +70,12 @@
   const typedEl = document.getElementById('typed');
   const words = [
     'Civil Engineer',
+    'Researcher',
+    'Hydrological Modeler',
     'Data Analyst',
     'Content Creator',
     'IOE Entrance Mentor',
-    'GIS Specialist',
-    'Hydrological Modeler'
+    'GIS Specialist'
   ];
   let wordIdx = 0, charIdx = 0, deleting = false;
 

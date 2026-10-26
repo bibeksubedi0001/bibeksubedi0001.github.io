@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bibek Subedi | Civil Engineer &amp; Data Analyst</title>
   <meta name="description" content="Portfolio of Bibek Subedi - Civil Engineering graduate of IOE Pulchowk Campus working on flood, hydrological and earthquake-hazard modelling with HEC-RAS, SWAT, mHM, OpenSees, GIS and Python.">
-  <meta name="keywords" content="Bibek Subedi, Civil Engineer Nepal, GIS Specialist, IOE Pulchowk, Python for Civil Engineering, Data Analysis">
+  <meta name="keywords" content="Bibek Subedi, Civil Engineer Nepal, IOE Pulchowk, flood modelling, HEC-RAS, hydrological modelling, mHM, SWAT, earthquake hazard, OpenSees, GIS, remote sensing, machine learning, Python">
   <meta name="author" content="Bibek Subedi">
   <link rel="icon" type="image/png" href="images/profile_.jpg">
 
@@ -43,7 +43,7 @@
         <li><a href="#resume" class="nav-link">Resume</a></li>
         <li><a href="#publications" class="nav-link">Publications</a></li>
         <li><a href="#projects" class="nav-link">Projects</a></li>
-        <li><a href="#app" class="nav-link">App</a></li>
+        <li><a href="#app" class="nav-link">Apps</a></li>
         <li><a href="#youtube" class="nav-link">YouTube</a></li>
         <li><a href="#gallery" class="nav-link">Gallery</a></li>
         <li><a href="#certificates" class="nav-link">Certificates</a></li>
@@ -72,6 +72,7 @@
         <div class="hero-cta">
           <a href="https://www.youtube.com/@bibeksubedii0001" target="_blank" rel="noopener noreferrer" class="btn btn-primary"><i class="fab fa-youtube"></i> YouTube</a>
           <a href="https://github.com/bibeksubedi0001" target="_blank" rel="noopener noreferrer" class="btn btn-outline"><i class="fab fa-github"></i> My Works</a>
+          <a href="site2/index.html" class="btn btn-outline"><i class="fas fa-book-open"></i> Notebook</a>
         </div>
         <div class="hero-social">
           <a href="https://www.linkedin.com/in/bibek-subediiii/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
@@ -99,7 +100,7 @@
     <div class="container">
       <h2 class="section-title" data-animate="fade-up"><i class="fas fa-drafting-compass"></i> About <span class="accent">Me</span></h2>
       <div class="about-stats-row-top" data-animate="fade-up">
-        <div class="mini-stat"><i class="fas fa-project-diagram"></i><strong>7+</strong><span>Projects</span></div>
+        <div class="mini-stat"><i class="fas fa-project-diagram"></i><strong>15</strong><span>Projects &amp; Apps</span></div>
         <div class="mini-stat"><i class="fas fa-users"></i><strong>5K+</strong><span>Students Mentored</span></div>
         <div class="mini-stat"><i class="fab fa-youtube"></i><strong>3K+</strong><span>YT Subscribers</span></div>
         <div class="mini-stat"><i class="fas fa-award"></i><strong>15</strong><span>Certificates</span></div>
@@ -234,6 +235,12 @@
               </tbody>
             </table>
             <p class="schedule-note">NOTE: Proficiency levels are self-assessed. Last updated: 2026-04-02. Prepared by: B. Subedi.</p>
+            <div class="research-tools">
+              <p class="schedule-title">Also used in research</p>
+              <div class="project-tags">
+                <span>mHM / mRM</span><span>SWAT-CUP</span><span>r.avaflow</span><span>GRASS GIS</span><span>GDAL</span><span>Sentinel-1 SAR (SNAP)</span><span>scikit-learn</span><span>LightGBM</span><span>SHAP</span><span>xarray</span><span>GeoPandas</span><span>Git</span><span>Linux / WSL</span><span>LaTeX</span>
+              </div>
+            </div>
           </div>
 
           <div class="text-center mt-2">
@@ -287,7 +294,7 @@
               <span class="timeline-org">Kathmandu Upatyaka Khanepani Limited (KUKL)</span>
               <ul>
                 <li>Field surveys to verify water-supply connections and building numbers against records.</li>
-                <li>Built a GIS database for utility planning.</li>
+                <li>Built a GIS database for utility planning and an offline field-survey app (GPS, photographs, Excel export).</li>
               </ul>
             </div>
           </div>
@@ -595,8 +602,76 @@
   <section class="section" id="projects">
     <div class="container">
       <h2 class="section-title" data-animate="fade-up"><i class="fas fa-project-diagram"></i> My <span class="accent">Projects</span></h2>
-      <p class="section-subtitle" data-animate="fade-up">Data Analytics projects using Python, Machine Learning &amp; ArcGIS.</p>
+      <p class="section-subtitle" data-animate="fade-up">Research studies and data-analytics projects using numerical models, Python, machine learning and GIS.</p>
       <div class="projects-grid">
+
+        <article class="project-card" data-animate="fade-up">
+          <div class="project-img">
+            <img src="images/research/rasuwa_debris_flood_inundation.jpg" alt="Simulated inundation of the 2026 Rasuwa debris flood" loading="lazy">
+            <span class="project-badge">Research 2026</span>
+            <div class="project-overlay">
+              <span class="project-link" aria-label="Research project"><i class="fas fa-water"></i></span>
+            </div>
+          </div>
+          <div class="project-info">
+            <h3>Rasuwa Debris-Flood Reconstruction</h3>
+            <p>HEC-RAS 2D reconstruction of the 26 August 2026 rock-ice avalanche debris flood over 195 km from Rasuwagadhi to Devghat, checked against a satellite-mapped footprint (critical success index about 0.72) and six DHM gauges.</p>
+            <div class="project-tags">
+              <span>HEC-RAS 2D</span><span>Sentinel-1 SAR</span><span>Earth Engine</span><span>Python</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-animate="fade-up">
+          <div class="project-img">
+            <img src="images/research/arun_basin_map.jpg" alt="Topography and gauging network of the Arun basin" loading="lazy">
+            <span class="project-badge">Submitted</span>
+            <div class="project-overlay">
+              <a href="https://doi.org/10.5281/zenodo.22734296" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="Analysis code on Zenodo"><i class="fas fa-code"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <h3>Residual Learning as a Model Diagnostic (Arun Basin)</h3>
+            <p>Gradient-boosting correction of a calibrated multi-site SWAT model raised Nash&ndash;Sutcliffe efficiency from 0.53&ndash;0.66 to 0.70&ndash;0.81 and exposed low-flow and recession errors; mHM/mRM calibrated to KGE 0.847 (validation 0.836).</p>
+            <div class="project-tags">
+              <span>SWAT</span><span>mHM / mRM</span><span>Gradient Boosting</span><span>SHAP</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-animate="fade-up">
+          <div class="project-img">
+            <img src="images/research/storm_drain_52_cities.jpg" alt="Study area: 52 Indian million-plus cities on the IMD rainfall grid" loading="lazy">
+            <span class="project-badge">Submitted</span>
+            <div class="project-overlay">
+              <span class="project-link" aria-label="Research project"><i class="fas fa-cloud-rain"></i></span>
+            </div>
+          </div>
+          <div class="project-info">
+            <h3>Design Rainfall for Urban Storm Drains (52 Indian Cities)</h3>
+            <p>Break tests, GEV/L-moment and nonstationary analysis of the 5-year design rainfall; Monte Carlo tests showed the drainage manual's decadal-update rule raises design depths in half of trend-free records.</p>
+            <div class="project-tags">
+              <span>GEV / L-moments</span><span>Nonstationary</span><span>Monte Carlo</span><span>Python</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-animate="fade-up">
+          <div class="project-img">
+            <img src="images/research/kathmandu_eew_sensor_priority.jpg" alt="Earthquake early-warning sensor priority map of the Kathmandu Valley" loading="lazy">
+            <span class="project-badge">4 papers accepted</span>
+            <div class="project-overlay">
+              <a href="#publications" class="project-link" aria-label="See publications"><i class="fas fa-book-open"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <h3>Earthquake Hazard in the Kathmandu Valley</h3>
+            <p>Newmark slope-displacement atlas, Saltelli&ndash;Sobol sensitivity of nonlinear site amplification (6,144 OpenSees runs) and GIS-AHP siting of earthquake early-warning sensors, accepted for GeoMandu 2027.</p>
+            <div class="project-tags">
+              <span>OpenSees</span><span>Sobol</span><span>GIS-AHP</span><span>Python</span>
+            </div>
+          </div>
+        </article>
 
         <article class="project-card" data-animate="fade-up">
           <div class="project-img">
@@ -739,6 +814,79 @@
           </div>
         </div>
       </div>
+
+      <h3 class="more-heading" data-animate="fade-up">More Web Apps &amp; Learning Tools</h3>
+      <div class="projects-grid">
+
+        <article class="project-card" data-animate="fade-up">
+          <div class="project-img">
+            <img src="images/apps/ioe_entrance_preparation.jpg" alt="IOE Entrance Preparation portal" loading="lazy">
+            <span class="project-badge">Free portal</span>
+            <div class="project-overlay">
+              <a href="https://ioe-entrance.bibeksubedi0001.com.np/" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="Open IOE Entrance Preparation"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <h3>IOE Entrance Preparation</h3>
+            <p>Free portal for the IOE B.E./B.Arch. entrance examination: past questions, mock tests, chapter notes, a rank predictor and the 2083 syllabus.</p>
+            <div class="project-tags">
+              <span>Web App</span><span>Education</span><span>Mock Tests</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-animate="fade-up">
+          <div class="project-img">
+            <img src="images/apps/civil_engineers_guide_to_ai.jpg" alt="The Civil Engineer's Guide to AI" loading="lazy">
+            <span class="project-badge">Interactive course</span>
+            <div class="project-overlay">
+              <a href="https://civil-learning.bibeksubedi0001.com.np/" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="Open The Civil Engineer's Guide to AI"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <h3>The Civil Engineer's Guide to AI</h3>
+            <p>Interactive masterclass on AI and machine learning for civil engineers: 7 chapters, 62 lessons, 120+ demos and 240+ quizzes.</p>
+            <div class="project-tags">
+              <span>Machine Learning</span><span>Teaching</span><span>JavaScript</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-animate="fade-up">
+          <div class="project-img">
+            <img src="images/apps/timure_chhekmi_field_portal.jpg" alt="Timure and Chhekmi Lakes field portal" loading="lazy">
+            <span class="project-badge">Field tool</span>
+            <div class="project-overlay">
+              <a href="https://gulmi.bibeksubedi0001.com.np/" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="Open Timure and Chhekmi Lakes Field Portal"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <h3>Timure &amp; Chhekmi Lakes Field Portal</h3>
+            <p>Offline field portal for investigating the declining water levels of Timure and Chhekmi lakes, Gulmi: bilingual community questionnaire, engineering survey, map and records.</p>
+            <div class="project-tags">
+              <span>Offline PWA</span><span>Field Survey</span><span>GIS</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-animate="fade-up">
+          <div class="project-img">
+            <img src="images/apps/study_notes.jpg" alt="Final-semester study notes" loading="lazy">
+            <span class="project-badge">Study notes</span>
+            <div class="project-overlay">
+              <a href="https://note.bibeksubedi0001.com.np/" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="Open the study notes"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <h3>Final-Semester Study Notes</h3>
+            <p>Study material for 13 final-semester civil engineering subjects: theory, numericals and exam preparation, with 80+ chapters and 200+ diagrams.</p>
+            <div class="project-tags">
+              <span>Civil Engineering</span><span>Notes</span><span>Exam Prep</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
     </div>
   </section>
 
@@ -813,6 +961,13 @@
     <div class="container">
       <h2 class="section-title" data-animate="fade-up"><i class="fas fa-camera-retro"></i> Photo <span class="accent">Gallery</span></h2>
       <p class="section-subtitle" data-animate="fade-up">A collection of travel photography, capturing moments from trekking and explorations in Nepal.</p>
+      <div class="project-tags trek-list" data-animate="fade-up" aria-label="High-altitude treks">
+        <span><i class="fas fa-mountain"></i> Mustang &middot; ~4,000 m &middot; Oct 2024</span>
+        <span><i class="fas fa-mountain"></i> Annapurna Base Camp &middot; ~4,130 m &middot; Nov 2024</span>
+        <span><i class="fas fa-mountain"></i> Langtang &amp; Kyanjin Ri &middot; ~4,600 m &middot; May 2025</span>
+        <span><i class="fas fa-mountain"></i> Tsho Rolpa &amp; Dudh Kunda &middot; ~4,780 m &middot; Dec 2025</span>
+        <span><i class="fas fa-mountain"></i> Mardi Himal &middot; ~4,200 m &middot; Feb 2026</span>
+      </div>
       <div class="gallery-masonry" id="galleryGrid">
         <figure class="gallery-item" data-animate="fade-up" data-desc="Marvel at the rugged peaks and serene vistas of Langtang Valley.">
           <img src="images/imagesphoto_8.JPG" alt="Langtang Valley" loading="lazy">
