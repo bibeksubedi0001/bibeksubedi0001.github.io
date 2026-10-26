@@ -703,11 +703,16 @@ button{border:none;background:none;cursor:pointer;font-family:inherit;}
 .gallery-group{margin-top:44px;}
 .gallery-group:first-child{margin-top:0;}
 .gallery-place{
-  display:flex;align-items:center;gap:12px;margin-bottom:18px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-bottom:18px;
   font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:var(--text-primary);
 }
 .gallery-place i{color:var(--accent-light);font-size:1rem;}
-.gallery-place::after{content:'';flex:1;height:1px;background:var(--border-strong);}
+.gallery-meta{
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;letter-spacing:.5px;
+  color:var(--accent-light);background:var(--accent-glow);border:1px solid var(--border-strong);
+  padding:3px 12px;border-radius:24px;
+}
+.gallery-place::after{content:'';flex:1 1 40px;height:1px;background:var(--border-strong);}
 .gallery-masonry{
   display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
 }
