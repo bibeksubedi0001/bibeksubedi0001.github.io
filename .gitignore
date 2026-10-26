@@ -1,0 +1,6 @@
+# original phone photos; the site uses the JPG copies saved next to them
+*.HEIC
+*.heic
+# local projects that are not part of the published website
+site/
+site2/
