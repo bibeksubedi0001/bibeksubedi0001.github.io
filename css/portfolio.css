@@ -548,13 +548,18 @@ button{border:none;background:none;cursor:pointer;font-family:inherit;}
   background:var(--orange);color:#fff;text-transform:uppercase;letter-spacing:1px;
 }
 .project-info{padding:24px;}
+.project-kicker{
+  display:block;margin-bottom:8px;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;
+  letter-spacing:1.2px;text-transform:uppercase;color:var(--accent-light);
+}
 .project-info h3{font-size:1.08rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;}
 .project-info p{font-family:var(--font-read);font-size:.96rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.65;}
-.project-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.project-tags{display:flex;flex-wrap:wrap;row-gap:4px;}
 .project-tags span{
-  padding:5px 14px;font-family:'JetBrains Mono',monospace;font-size:.68rem;border-radius:24px;font-weight:600;
-  background:var(--accent-glow);color:var(--accent-light);border:1px solid var(--border-strong);letter-spacing:.5px;
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;
+  color:var(--text-secondary);letter-spacing:.5px;
 }
+.project-tags span:not(:last-child)::after{content:'\00b7';margin:0 8px;color:var(--accent-light);}
 
 /* ===== FEATURED APP SHOWCASE ===== */
 .app-showcase{
@@ -708,11 +713,11 @@ button{border:none;background:none;cursor:pointer;font-family:inherit;}
 }
 .gallery-place i{color:var(--accent-light);font-size:1rem;}
 .gallery-meta{
-  font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;letter-spacing:.5px;
-  color:var(--accent-light);background:var(--accent-glow);border:1px solid var(--border-strong);
-  padding:3px 12px;border-radius:24px;
+  order:2;margin-left:auto;
+  font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;letter-spacing:.5px;
+  color:var(--accent-light);
 }
-.gallery-place::after{content:'';flex:1 1 40px;height:1px;background:var(--border-strong);}
+.gallery-place::after{content:'';order:1;flex:1 1 40px;height:1px;background:var(--border-strong);}
 .gallery-masonry{
   display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
 }
